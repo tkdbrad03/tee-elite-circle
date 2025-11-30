@@ -74,13 +74,10 @@ if (existing.rows.length > 0) {
 let redirectUrl;
 
 if (interest_level === 'Ready to secure my founding seat') {
-  // Direct to payment page
   redirectUrl = '/payment.html?email=' + encodeURIComponent(email);
 } else if (interest_level === 'Likely to join if dates and location align') {
-  // Warm lead - thank you page
   redirectUrl = '/thank-you-warm.html';
 } else {
-  // Curious - different thank you page
   redirectUrl = '/thank-you-curious.html';
 }
 
@@ -94,7 +91,6 @@ try {
   });
 } catch (emailErr) {
   console.error('Failed to send confirmation email:', emailErr);
-  // Don't fail the request if email fails
 }
 
 // Send notification email to admin
