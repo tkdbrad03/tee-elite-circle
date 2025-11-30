@@ -24,10 +24,16 @@
     .profile-photo-wrap {
       position: relative;
       margin-bottom: 24px;
+      width: 200px;
+      height: 200px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .profile-photo {
-      aspect-ratio: 1;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
       background: var(--tmac-blush-light);
       display: flex;
       align-items: center;
@@ -50,28 +56,30 @@
 
     .photo-upload-btn {
       position: absolute;
-      bottom: 12px;
-      right: 12px;
+      bottom: 8px;
+      right: 8px;
       background: var(--deep-forest);
       color: var(--tmac-blush);
       border: none;
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     .photo-upload-btn:hover {
       background: var(--charcoal);
+      transform: scale(1.05);
     }
 
     .photo-upload-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       stroke: currentColor;
       stroke-width: 2;
       fill: none;
@@ -262,17 +270,10 @@
 
       .profile-sidebar {
         position: static;
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 24px;
+        text-align: center;
         padding-bottom: 32px;
         border-bottom: 1px solid rgba(0,0,0,0.06);
         margin-bottom: 32px;
-      }
-
-      .profile-photo-wrap {
-        width: 150px;
-        margin-bottom: 0;
       }
 
       .profile-nav {
@@ -572,9 +573,13 @@
         if (res.ok) {
           const data = await res.json();
           document.getElementById('profile-photo').innerHTML = `<img src="${data.photo_url}" alt="Profile">`;
+        } else {
+          const err = await res.json();
+          alert('Upload failed: ' + (err.error || 'Unknown error'));
         }
       } catch (err) {
         console.error('Error uploading photo:', err);
+        alert('Error uploading photo');
       }
     });
 
