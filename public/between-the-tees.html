@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Between the Tees — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: #666;
+      max-width: 500px;
+    }
+
+    .discussion-intro {
+      background: var(--deep-forest);
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    .discussion-intro p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.8;
+      max-width: 700px;
+    }
+
+    .new-thread-btn {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      padding: 14px 28px;
+      text-decoration: none;
+      margin-bottom: 32px;
+      cursor: pointer;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .new-thread-btn:hover {
+      background: var(--tmac-blush-light);
+    }
+
+    /* Thread List */
+    .threads-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .thread-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .thread-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+
+    .thread-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .thread-category {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+    }
+
+    .thread-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      line-height: 1.3;
+    }
+
+    .thread-preview {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .thread-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .thread-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .thread-author-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--tmac-blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thread-author-avatar span {
+      font-size: 10px;
+      color: var(--deep-forest);
+    }
+
+    .thread-author-name {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .thread-date {
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .thread-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .thread-replies {
+      background: var(--tmac-blush-light);
+      padding: 8px 16px;
+      text-align: center;
+    }
+
+    .thread-replies-count {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+      line-height: 1;
+    }
+
+    .thread-replies-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    .thread-last-activity {
+      font-size: 11px;
+      color: #aaa;
+    }
+
+    /* New Thread Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .form-textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .modal-footer {
+      padding: 24px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+      background: none;
+      border: 1px solid #ddd;
+      padding: 12px 24px;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      border: none;
+      padding: 12px 24px;
+      cursor: pointer;
+    }
+
+    .empty-threads {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .empty-threads p {
+      font-size: 15px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .empty-threads span {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    @media (max-width: 600px) {
+      .thread-card {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .thread-stats {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link">Wins</a>
+        <a href="/resources.html" class="nav-link">Vault</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">FM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link">Wins</a>
+    <a href="/resources.html" class="mobile-nav-link">Vault</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    <div class="page-header">
+      <p class="page-label">The Space Where Growth Happens</p>
+      <h1 class="page-title">Between the Tees</h1>
+      <p class="page-subtitle">Bring your real dilemmas. Get real wisdom from the room.</p>
+    </div>
+
+    <div class="discussion-intro">
+      <p>This is where the magic happens between retreats. Ask questions. Share challenges. Get perspectives from women who understand the game you're playing. What's said here stays here.</p>
+    </div>
+
+    <button class="new-thread-btn" id="new-thread-btn">Start a Discussion</button>
+
+    <div class="threads-list" id="threads-list">
+      <div class="empty-threads">
+        <p>No discussions yet.</p>
+        <span>Be the first to start a conversation with the circle.</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- NEW THREAD MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Start a Discussion</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="thread-category">
+            <option value="business">Business & Strategy</option>
+            <option value="money">Money & Wealth</option>
+            <option value="golf">Golf & Game</option>
+            <option value="life">Life & Legacy</option>
+            <option value="general">General Discussion</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-input" id="thread-title" placeholder="What's on your mind?">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Question or Topic</label>
+          <textarea class="form-textarea" id="thread-content" placeholder="Share the context. What are you navigating? What input would help?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn-primary" id="submit-thread">Post Discussion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    // Logout
+    document.getElementById('logout-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+      window.location.href = '/member-login.html';
+    });
+
+    // Modal
+    const modal = document.getElementById('modal-overlay');
+    const newThreadBtn = document.getElementById('new-thread-btn');
+    const modalClose = document.getElementById('modal-close');
+    const modalCancel = document.getElementById('modal-cancel');
+
+    newThreadBtn.addEventListener('click', () => modal.classList.add('open'));
+    modalClose.addEventListener('click', () => modal.classList.remove('open'));
+    modalCancel.addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('open');
+    });
+
+    // Submit thread
+    document.getElementById('submit-thread').addEventListener('click', async () => {
+      const category = document.getElementById('thread-category').value;
+      const title = document.getElementById('thread-title').value.trim();
+      const content = document.getElementById('thread-content').value.trim();
+
+      if (!title || !content) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/posts/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            title,
+            content, 
+            category,
+            post_type: 'discussion' 
+          })
+        });
+
+        if (res.ok) {
+          modal.classList.remove('open');
+          document.getElementById('thread-title').value = '';
+          document.getElementById('thread-content').value = '';
+          loadThreads();
+        }
+      } catch (err) {
+        console.error('Error creating thread:', err);
+      }
+    });
+
+    // Load threads
+    async function loadThreads() {
+      try {
+        const res = await fetch('/api/posts/get?type=discussion');
+        if (!res.ok) return;
+        
+        const threads = await res.json();
+        const list = document.getElementById('threads-list');
+        
+        if (threads.length === 0) return;
+
+        list.innerHTML = threads.map(thread => `
+          <a href="/thread.html?id=${thread.id}" class="thread-card">
+            <div class="thread-content">
+              <span class="thread-category">${formatCategory(thread.category)}</span>
+              <h3 class="thread-title">${thread.title || 'Untitled'}</h3>
+              <p class="thread-preview">${thread.content}</p>
+              <div class="thread-meta">
+                <div class="thread-author">
+                  <div class="thread-author-avatar">
+                    <span>${getInitials(thread.author_name)}</span>
+                  </div>
+                  <span class="thread-author-name">${thread.author_name}</span>
+                </div>
+                <span class="thread-date">${formatDate(thread.created_at)}</span>
+              </div>
+            </div>
+            <div class="thread-stats">
+              <div class="thread-replies">
+                <div class="thread-replies-count">${thread.comment_count || 0}</div>
+                <div class="thread-replies-label">Replies</div>
+              </div>
+            </div>
+          </a>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading threads:', err);
+      }
+    }
+
+    function formatCategory(cat) {
+      const labels = {
+        business: 'Business & Strategy',
+        money: 'Money & Wealth',
+        golf: 'Golf & Game',
+        life: 'Life & Legacy',
+        general: 'General'
+      };
+      return labels[cat] || 'General';
+    }
+
+    function getInitials(name) {
+      if (!name) return 'FM';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Initialize
+    loadThreads();
+  </script>
+</body>
+</html>

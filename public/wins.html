@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wins — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: #666;
+      max-width: 500px;
+    }
+
+    .wins-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
+    }
+
+    /* Post Form */
+    .post-form-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .post-form-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .post-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--tmac-blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .post-avatar span {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    .post-prompt {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .post-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+      resize: vertical;
+      margin-bottom: 16px;
+    }
+
+    .post-textarea:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .post-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .post-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      border: none;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .post-btn:hover {
+      background: var(--tmac-blush-light);
+    }
+
+    .post-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Feed */
+    .wins-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .win-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .win-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .win-author-photo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--tmac-blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .win-author-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .win-author-photo .initials {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    .win-author-info {
+      flex: 1;
+    }
+
+    .win-author-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .win-author-pin {
+      font-size: 11px;
+      color: var(--tmac-bronze);
+    }
+
+    .win-date {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .win-content {
+      padding: 20px 24px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--charcoal);
+    }
+
+    .win-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    .win-footer {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 16px 24px;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .win-action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #888;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .win-action:hover {
+      color: var(--tmac-bronze);
+    }
+
+    .win-action.liked {
+      color: var(--tmac-bronze);
+    }
+
+    .win-action svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Comments */
+    .win-comments {
+      padding: 0 24px 20px;
+    }
+
+    .comment {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--tmac-blush-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .comment-avatar span {
+      font-size: 11px;
+      color: var(--tmac-bronze);
+    }
+
+    .comment-content {
+      flex: 1;
+    }
+
+    .comment-author {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .comment-text {
+      font-size: 13px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .comment-input {
+      flex: 1;
+      padding: 10px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    .comment-input:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .comment-submit {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      background: none;
+      border: 1px solid var(--tmac-bronze);
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .comment-submit:hover {
+      background: var(--tmac-bronze);
+      color: #fff;
+    }
+
+    /* Sidebar */
+    .wins-sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .sidebar-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .top-contributors {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contributor {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contributor-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--tmac-blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contributor-avatar span {
+      font-size: 12px;
+      color: var(--deep-forest);
+    }
+
+    .contributor-name {
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+
+    .contributor-wins {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .empty-feed {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .empty-feed p {
+      font-size: 15px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .empty-feed span {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    @media (max-width: 900px) {
+      .wins-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .wins-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .wins-sidebar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link active">Wins</a>
+        <a href="/resources.html" class="nav-link">Vault</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">FM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link active">Wins</a>
+    <a href="/resources.html" class="mobile-nav-link">Vault</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    <div class="page-header">
+      <p class="page-label">Celebrate Together</p>
+      <h1 class="page-title">Wins</h1>
+      <p class="page-subtitle">Share your victories. Celebrate each other. What we celebrate, we create more of.</p>
+    </div>
+
+    <div class="wins-layout">
+      <div class="wins-main">
+        <!-- POST FORM -->
+        <div class="post-form-card">
+          <div class="post-form-header">
+            <div class="post-avatar">
+              <span id="post-initials">FM</span>
+            </div>
+            <span class="post-prompt">Share a win with the circle...</span>
+          </div>
+          <textarea class="post-textarea" id="post-content" placeholder="What are you celebrating today?"></textarea>
+          <div class="post-actions">
+            <button class="post-btn" id="post-btn">Post Win</button>
+          </div>
+        </div>
+
+        <!-- FEED -->
+        <div class="wins-feed" id="wins-feed">
+          <div class="empty-feed">
+            <p>No wins posted yet.</p>
+            <span>Be the first to share a victory with the circle.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="wins-sidebar">
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">This Month</h3>
+          <p style="font-size: 13px; color: #888;">Stats coming soon</p>
+        </div>
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">Top Contributors</h3>
+          <div class="top-contributors" id="top-contributors">
+            <p style="font-size: 13px; color: #888;">Be the first to post</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    let currentMember = null;
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    // Logout
+    document.getElementById('logout-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+      window.location.href = '/member-login.html';
+    });
+
+    // Load current member
+    async function loadCurrentMember() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (!res.ok) {
+          window.location.href = '/member-login.html';
+          return;
+        }
+        currentMember = await res.json();
+        const initials = getInitials(currentMember.name);
+        document.getElementById('user-initials').textContent = initials;
+        document.getElementById('post-initials').textContent = initials;
+      } catch (err) {
+        console.error('Error loading member:', err);
+      }
+    }
+
+    // Load wins
+    async function loadWins() {
+      try {
+        const res = await fetch('/api/posts/get');
+        if (!res.ok) return;
+        
+        const posts = await res.json();
+        const feed = document.getElementById('wins-feed');
+        
+        if (posts.length === 0) {
+          return; // Keep empty state
+        }
+
+        feed.innerHTML = posts.map(post => `
+          <div class="win-card" data-post-id="${post.id}">
+            <div class="win-header">
+              <div class="win-author-photo">
+                ${post.author_photo 
+                  ? `<img src="${post.author_photo}" alt="${post.author_name}">`
+                  : `<span class="initials">${getInitials(post.author_name)}</span>`
+                }
+              </div>
+              <div class="win-author-info">
+                <p class="win-author-name">${post.author_name}</p>
+                <p class="win-author-pin">Founding Member #${String(post.author_pin || 1).padStart(2, '0')}</p>
+              </div>
+              <span class="win-date">${formatDate(post.created_at)}</span>
+            </div>
+            <div class="win-content">${post.content}</div>
+            ${post.image_url ? `<img src="${post.image_url}" class="win-image" alt="Win image">` : ''}
+            <div class="win-footer">
+              <button class="win-action ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                <svg viewBox="0 0 24 24" fill="${post.liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span>${post.like_count || 0}</span>
+              </button>
+              <button class="win-action" onclick="toggleComments(${post.id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>${post.comment_count || 0}</span>
+              </button>
+            </div>
+            <div class="win-comments" id="comments-${post.id}" style="display: none;">
+              <!-- Comments loaded here -->
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading wins:', err);
+      }
+    }
+
+    // Post a win
+    document.getElementById('post-btn').addEventListener('click', async () => {
+      const content = document.getElementById('post-content').value.trim();
+      if (!content) return;
+
+      const btn = document.getElementById('post-btn');
+      btn.disabled = true;
+      btn.textContent = 'Posting...';
+
+      try {
+        const res = await fetch('/api/posts/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content, post_type: 'win' })
+        });
+
+        if (res.ok) {
+          document.getElementById('post-content').value = '';
+          loadWins();
+        }
+      } catch (err) {
+        console.error('Error posting:', err);
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Post Win';
+    });
+
+    // Toggle like
+    async function toggleLike(postId) {
+      try {
+        await fetch('/api/posts/like', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: postId })
+        });
+        loadWins();
+      } catch (err) {
+        console.error('Error toggling like:', err);
+      }
+    }
+
+    // Toggle comments
+    function toggleComments(postId) {
+      const commentsDiv = document.getElementById(`comments-${postId}`);
+      if (commentsDiv.style.display === 'none') {
+        commentsDiv.style.display = 'block';
+        loadComments(postId);
+      } else {
+        commentsDiv.style.display = 'none';
+      }
+    }
+
+    // Load comments
+    async function loadComments(postId) {
+      try {
+        const res = await fetch(`/api/posts/comments?post_id=${postId}`);
+        if (!res.ok) return;
+        
+        const comments = await res.json();
+        const commentsDiv = document.getElementById(`comments-${postId}`);
+        
+        commentsDiv.innerHTML = `
+          ${comments.map(c => `
+            <div class="comment">
+              <div class="comment-avatar"><span>${getInitials(c.author_name)}</span></div>
+              <div class="comment-content">
+                <p class="comment-author">${c.author_name}</p>
+                <p class="comment-text">${c.content}</p>
+              </div>
+            </div>
+          `).join('')}
+          <div class="comment-form">
+            <input type="text" class="comment-input" id="comment-input-${postId}" placeholder="Add a comment...">
+            <button class="comment-submit" onclick="submitComment(${postId})">Post</button>
+          </div>
+        `;
+      } catch (err) {
+        console.error('Error loading comments:', err);
+      }
+    }
+
+    // Submit comment
+    async function submitComment(postId) {
+      const input = document.getElementById(`comment-input-${postId}`);
+      const content = input.value.trim();
+      if (!content) return;
+
+      try {
+        await fetch('/api/posts/comment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: postId, content })
+        });
+        loadComments(postId);
+        loadWins();
+      } catch (err) {
+        console.error('Error posting comment:', err);
+      }
+    }
+
+    function getInitials(name) {
+      if (!name) return 'FM';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = now - date;
+      
+      if (diff < 60000) return 'Just now';
+      if (diff < 3600000) return `${Math.floor(diff/60000)}m ago`;
+      if (diff < 86400000) return `${Math.floor(diff/3600000)}h ago`;
+      if (diff < 604800000) return `${Math.floor(diff/86400000)}d ago`;
+      
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Initialize
+    loadCurrentMember();
+    loadWins();
+  </script>
+</body>
+</html>

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Profile — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 48px;
+    }
+
+    /* Sidebar */
+    .profile-sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .profile-photo-wrap {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .profile-photo {
+      aspect-ratio: 1;
+      background: var(--tmac-blush-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-photo .initials {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 72px;
+      color: var(--tmac-bronze);
+      opacity: 0.5;
+    }
+
+    .photo-upload-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: var(--deep-forest);
+      color: var(--tmac-blush);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .photo-upload-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .photo-upload-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .profile-pin {
+      background: var(--deep-forest);
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .profile-pin-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 4px;
+    }
+
+    .profile-pin-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      color: var(--tmac-blush);
+    }
+
+    .profile-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .profile-nav-link {
+      font-size: 13px;
+      color: #666;
+      text-decoration: none;
+      padding: 12px 16px;
+      transition: all 0.3s ease;
+    }
+
+    .profile-nav-link:hover,
+    .profile-nav-link.active {
+      background: var(--tmac-blush-light);
+      color: var(--charcoal);
+    }
+
+    .logout-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: #888;
+      background: none;
+      border: none;
+      padding: 12px 16px;
+      cursor: pointer;
+      text-align: left;
+      margin-top: 16px;
+    }
+
+    .logout-btn:hover {
+      color: var(--charcoal);
+    }
+
+    /* Main Content */
+    .profile-main {
+      max-width: 600px;
+    }
+
+    .profile-section {
+      margin-bottom: 48px;
+    }
+
+    .profile-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-help {
+      font-size: 12px;
+      color: #999;
+      margin-top: 8px;
+    }
+
+    .save-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      border: none;
+      padding: 14px 32px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .save-btn:hover {
+      background: var(--tmac-blush-light);
+    }
+
+    .save-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .save-message {
+      display: inline-block;
+      margin-left: 16px;
+      font-size: 13px;
+      color: #4CAF50;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .save-message.visible {
+      opacity: 1;
+    }
+
+    /* Scorecard Section */
+    .scorecard-preview {
+      background: linear-gradient(135deg, var(--tmac-blush-light) 0%, #fff 100%);
+      border: 1px solid rgba(232, 204, 200, 0.3);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .scorecard-preview-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .scorecard-preview-text {
+      font-size: 15px;
+      color: var(--charcoal);
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    .scorecard-empty {
+      font-size: 14px;
+      color: #999;
+    }
+
+    @media (max-width: 900px) {
+      .profile-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 24px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        margin-bottom: 32px;
+      }
+
+      .profile-photo-wrap {
+        width: 150px;
+        margin-bottom: 0;
+      }
+
+      .profile-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link">Wins</a>
+        <a href="/resources.html" class="nav-link">Vault</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar active" id="user-avatar">
+          <span id="user-initials">FM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link">Wins</a>
+    <a href="/resources.html" class="mobile-nav-link">Vault</a>
+    <a href="/profile.html" class="mobile-nav-link active">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link-mobile">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    <div class="profile-layout">
+      <!-- SIDEBAR -->
+      <aside class="profile-sidebar">
+        <div class="profile-photo-wrap">
+          <div class="profile-photo" id="profile-photo">
+            <span class="initials" id="photo-initials">FM</span>
+          </div>
+          <button class="photo-upload-btn" id="photo-upload-btn">
+            <svg viewBox="0 0 24 24">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </button>
+          <input type="file" id="photo-input" accept="image/*" style="display: none;">
+        </div>
+
+        <div class="profile-pin">
+          <p class="profile-pin-label">Founding Member</p>
+          <p class="profile-pin-number" id="profile-pin">#01</p>
+        </div>
+
+        <nav class="profile-nav">
+          <a href="#info" class="profile-nav-link active">Basic Info</a>
+          <a href="#about" class="profile-nav-link">About Me</a>
+          <a href="#scorecard" class="profile-nav-link">The Finished Scorecard</a>
+          <a href="#password" class="profile-nav-link">Change Password</a>
+        </nav>
+
+        <button class="logout-btn" id="logout-link">Log Out</button>
+      </aside>
+
+      <!-- MAIN FORM -->
+      <div class="profile-main">
+        <form id="profile-form">
+          <!-- BASIC INFO -->
+          <section class="profile-section" id="info">
+            <h2 class="profile-section-title">Basic Info</h2>
+            
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="name" name="name" placeholder="Your name">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" id="email" name="email" placeholder="your@email.com" disabled>
+              <p class="form-help">Contact support to change your email.</p>
+            </div>
+          </section>
+
+          <!-- ABOUT -->
+          <section class="profile-section" id="about">
+            <h2 class="profile-section-title">About Me</h2>
+            
+            <div class="form-group">
+              <label class="form-label">Bio</label>
+              <textarea class="form-textarea" id="bio" name="bio" placeholder="Tell the circle about yourself..."></textarea>
+              <p class="form-help">This will appear on your member profile.</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What I Offer</label>
+              <input type="text" class="form-input" id="offering" name="offering" placeholder="Your expertise, connections, resources...">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What I'm Looking For</label>
+              <input type="text" class="form-input" id="looking_for" name="looking_for" placeholder="Collaborations, introductions, advice...">
+            </div>
+          </section>
+
+          <!-- THE FINISHED SCORECARD -->
+          <section class="profile-section" id="scorecard">
+            <h2 class="profile-section-title">The Finished Scorecard</h2>
+            
+            <div class="scorecard-preview">
+              <p class="scorecard-preview-label">Your Vision</p>
+              <p class="scorecard-preview-text" id="scorecard-preview">
+                <span class="scorecard-empty">You haven't set your vision yet. What does your win look like?</span>
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What Does Your Win Look Like?</label>
+              <textarea class="form-textarea" id="finished_scorecard" name="finished_scorecard" placeholder="Play from the end. You've already won. Describe it in vivid detail..."></textarea>
+              <p class="form-help">Write as if it's already happened. This is the vision you're playing toward.</p>
+            </div>
+          </section>
+
+          <button type="submit" class="save-btn" id="save-btn">Save Changes</button>
+          <span class="save-message" id="save-message">Saved successfully!</span>
+        </form>
+
+        <!-- PASSWORD SECTION -->
+        <section class="profile-section" id="password">
+          <h2 class="profile-section-title">Change Password</h2>
+          
+          <form id="password-form">
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" class="form-input" id="current_password" name="current_password">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" class="form-input" id="new_password" name="new_password">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input type="password" class="form-input" id="confirm_password" name="confirm_password">
+            </div>
+
+            <button type="submit" class="save-btn">Update Password</button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    let currentMember = null;
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    // Logout
+    document.querySelectorAll('#logout-link, #logout-link-mobile').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (err) {
+          console.error('Logout error:', err);
+        }
+        window.location.href = '/member-login.html';
+      });
+    });
+
+    // Load member data
+    async function loadMember() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (!res.ok) {
+          window.location.href = '/member-login.html';
+          return;
+        }
+        currentMember = await res.json();
+        populateForm(currentMember);
+      } catch (err) {
+        console.error('Error loading member:', err);
+      }
+    }
+
+    function populateForm(member) {
+      document.getElementById('name').value = member.name || '';
+      document.getElementById('email').value = member.email || '';
+      document.getElementById('bio').value = member.bio || '';
+      document.getElementById('offering').value = member.offering || '';
+      document.getElementById('looking_for').value = member.looking_for || '';
+      document.getElementById('finished_scorecard').value = member.finished_scorecard || '';
+
+      const initials = getInitials(member.name);
+      document.getElementById('user-initials').textContent = initials;
+      document.getElementById('photo-initials').textContent = initials;
+      document.getElementById('profile-pin').textContent = `#${String(member.pin_number || 1).padStart(2, '0')}`;
+
+      if (member.photo_url) {
+        document.getElementById('profile-photo').innerHTML = `<img src="${member.photo_url}" alt="${member.name}">`;
+      }
+
+      if (member.finished_scorecard) {
+        document.getElementById('scorecard-preview').innerHTML = member.finished_scorecard;
+      }
+    }
+
+    // Save profile
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const btn = document.getElementById('save-btn');
+      const message = document.getElementById('save-message');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const formData = {
+        name: document.getElementById('name').value,
+        bio: document.getElementById('bio').value,
+        offering: document.getElementById('offering').value,
+        looking_for: document.getElementById('looking_for').value,
+        finished_scorecard: document.getElementById('finished_scorecard').value
+      };
+
+      try {
+        const res = await fetch('/api/members/update-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        if (res.ok) {
+          message.classList.add('visible');
+          setTimeout(() => message.classList.remove('visible'), 3000);
+          
+          // Update scorecard preview
+          if (formData.finished_scorecard) {
+            document.getElementById('scorecard-preview').innerHTML = formData.finished_scorecard;
+          }
+        }
+      } catch (err) {
+        console.error('Error saving profile:', err);
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
+    });
+
+    // Photo upload
+    document.getElementById('photo-upload-btn').addEventListener('click', () => {
+      document.getElementById('photo-input').click();
+    });
+
+    document.getElementById('photo-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('photo', file);
+
+      try {
+        const res = await fetch('/api/members/upload-photo', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('profile-photo').innerHTML = `<img src="${data.photo_url}" alt="Profile">`;
+        }
+      } catch (err) {
+        console.error('Error uploading photo:', err);
+      }
+    });
+
+    // Change password
+    document.getElementById('password-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const current = document.getElementById('current_password').value;
+      const newPass = document.getElementById('new_password').value;
+      const confirm = document.getElementById('confirm_password').value;
+
+      if (newPass !== confirm) {
+        alert('New passwords do not match');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            current_password: current,
+            new_password: newPass 
+          })
+        });
+
+        if (res.ok) {
+          alert('Password updated successfully');
+          document.getElementById('password-form').reset();
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Failed to update password');
+        }
+      } catch (err) {
+        console.error('Error changing password:', err);
+      }
+    });
+
+    function getInitials(name) {
+      if (!name) return 'FM';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    // Initialize
+    loadMember();
+  </script>
+</body>
+</html>
