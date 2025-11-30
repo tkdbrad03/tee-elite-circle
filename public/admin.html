@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    /* Login Screen */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-box {
+      background: #fff;
+      padding: 48px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .login-box h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--deep-forest);
+      color: #fff;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .login-error {
+      color: #c0392b;
+      font-size: 13px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    /* Admin Dashboard */
+    .admin-dashboard {
+      display: none;
+    }
+
+    .admin-header {
+      background: var(--deep-forest);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .admin-header button {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+      padding: 8px 16px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .admin-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: #fff;
+      padding: 24px;
+      border: 1px solid rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      color: var(--deep-forest);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+
+    /* Filters */
+    .filters-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--deep-forest);
+      color: #fff;
+      border-color: var(--deep-forest);
+    }
+
+    /* Applications Table */
+    .applications-table {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      text-align: left;
+      padding: 16px;
+      background: var(--tmac-blush-light);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      font-weight: 500;
+    }
+
+    td {
+      padding: 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      vertical-align: top;
+    }
+
+    tr:hover {
+      background: rgba(232, 204, 200, 0.1);
+    }
+
+    .applicant-name {
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .applicant-email {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-new {
+      background: #e8f4fd;
+      color: #2980b9;
+    }
+
+    .status-deposit {
+      background: #fef3e2;
+      color: #d35400;
+    }
+
+    .status-paid {
+      background: #e8f8f0;
+      color: #27ae60;
+    }
+
+    .status-declined {
+      background: #fde8e8;
+      color: #c0392b;
+    }
+
+    .interest-badge {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .interest-ready {
+      color: #27ae60;
+      font-weight: 500;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      font-size: 10px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 4px;
+    }
+
+    .action-btn.primary {
+      background: var(--deep-forest);
+      color: #fff;
+    }
+
+    .action-btn.secondary {
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+    }
+
+    .action-btn.danger {
+      background: #fde8e8;
+      color: #c0392b;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 32px;
+    }
+
+    .modal h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    .modal-field {
+      margin-bottom: 16px;
+    }
+
+    .modal-field label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .modal-field p {
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    @media (max-width: 768px) {
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-box">
+      <h1>Admin Access</h1>
+      <p>The Tee Elite Circle</p>
+      <form id="login-form">
+        <input type="password" class="login-input" id="admin-password" placeholder="Enter admin password">
+        <button type="submit" class="login-btn">Enter</button>
+      </form>
+      <p class="login-error" id="login-error">Invalid password</p>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div class="admin-dashboard" id="admin-dashboard">
+    <header class="admin-header">
+      <h1>The Tee Elite Circle — Admin</h1>
+      <button onclick="logout()">Log Out</button>
+    </header>
+
+    <main class="admin-main">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-total">0</div>
+          <div class="stat-label">Total Applications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-ready">0</div>
+          <div class="stat-label">Ready to Join</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-deposit">0</div>
+          <div class="stat-label">Deposit Paid</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-members">0</div>
+          <div class="stat-label">Active Members</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="new">New</button>
+        <button class="filter-btn" data-filter="ready">Ready to Join</button>
+        <button class="filter-btn" data-filter="deposit">Deposit Paid</button>
+        <button class="filter-btn" data-filter="paid">Paid in Full</button>
+      </div>
+
+      <!-- Applications Table -->
+      <div class="applications-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th>Location</th>
+              <th>Interest</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="applications-tbody">
+            <tr>
+              <td colspan="6" style="text-align: center; color: #888;">Loading applications...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- APPLICATION DETAIL MODAL -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal" style="position: relative;">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <h2>Application Details</h2>
+      <div id="modal-content">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-actions" id="modal-actions">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple admin password (in production, use proper auth)
+    const ADMIN_PASSWORD = 'TeeElite2026Admin';
+    let applications = [];
+    let currentFilter = 'all';
+
+    // Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const password = document.getElementById('admin-password').value;
+      
+      if (password === ADMIN_PASSWORD) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'block';
+        sessionStorage.setItem('adminAuth', 'true');
+        loadApplications();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    });
+
+    // Check if already logged in
+    if (sessionStorage.getItem('adminAuth') === 'true') {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-dashboard').style.display = 'block';
+      loadApplications();
+    }
+
+    function logout() {
+      sessionStorage.removeItem('adminAuth');
+      window.location.reload();
+    }
+
+    // Load applications
+    async function loadApplications() {
+      try {
+        const res = await fetch('/api/admin/applications');
+        if (!res.ok) throw new Error('Failed to load');
+        applications = await res.json();
+        updateStats();
+        renderApplications();
+      } catch (err) {
+        console.error('Error loading applications:', err);
+        document.getElementById('applications-tbody').innerHTML = 
+          '<tr><td colspan="6" style="text-align: center; color: #c0392b;">Error loading applications</td></tr>';
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('stat-total').textContent = applications.length;
+      document.getElementById('stat-ready').textContent = 
+        applications.filter(a => a.interest_level === 'Ready to secure my founding seat').length;
+      document.getElementById('stat-deposit').textContent = 
+        applications.filter(a => a.deposit_paid).length;
+      document.getElementById('stat-members').textContent = 
+        applications.filter(a => a.paid_in_full).length;
+    }
+
+    function renderApplications() {
+      let filtered = applications;
+      
+      if (currentFilter === 'new') {
+        filtered = applications.filter(a => a.status === 'new');
+      } else if (currentFilter === 'ready') {
+        filtered = applications.filter(a => a.interest_level === 'Ready to secure my founding seat');
+      } else if (currentFilter === 'deposit') {
+        filtered = applications.filter(a => a.deposit_paid && !a.paid_in_full);
+      } else if (currentFilter === 'paid') {
+        filtered = applications.filter(a => a.paid_in_full);
+      }
+
+      const tbody = document.getElementById('applications-tbody');
+      
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #888;">No applications found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(app => `
+        <tr>
+          <td>
+            <div class="applicant-name">${app.full_name}</div>
+            <div class="applicant-email">${app.email}</div>
+          </td>
+          <td>${app.location}</td>
+          <td>
+            <span class="interest-badge ${app.interest_level.includes('Ready') ? 'interest-ready' : ''}">
+              ${app.interest_level.includes('Ready') ? '✓ Ready' : 
+                app.interest_level.includes('Likely') ? 'Likely' : 'Curious'}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge ${getStatusClass(app)}">
+              ${getStatusText(app)}
+            </span>
+          </td>
+          <td>${formatDate(app.created_at)}</td>
+          <td>
+            <button class="action-btn secondary" onclick="viewApplication(${app.id})">View</button>
+            ${!app.paid_in_full ? `
+              <button class="action-btn primary" onclick="markPaidInFull(${app.id})">Mark Paid</button>
+            ` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function getStatusClass(app) {
+      if (app.paid_in_full) return 'status-paid';
+      if (app.deposit_paid) return 'status-deposit';
+      if (app.status === 'declined') return 'status-declined';
+      return 'status-new';
+    }
+
+    function getStatusText(app) {
+      if (app.paid_in_full) return 'Member';
+      if (app.deposit_paid) return 'Deposit Paid';
+      if (app.status === 'declined') return 'Declined';
+      return 'New';
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderApplications();
+      });
+    });
+
+    // View application details
+    function viewApplication(id) {
+      const app = applications.find(a => a.id === id);
+      if (!app) return;
+
+      document.getElementById('modal-content').innerHTML = `
+        <div class="modal-field">
+          <label>Name</label>
+          <p>${app.full_name}</p>
+        </div>
+        <div class="modal-field">
+          <label>Email</label>
+          <p>${app.email}</p>
+        </div>
+        <div class="modal-field">
+          <label>Phone</label>
+          <p>${app.phone || 'Not provided'}</p>
+        </div>
+        <div class="modal-field">
+          <label>Location</label>
+          <p>${app.location}</p>
+        </div>
+        <div class="modal-field">
+          <label>Relationship with Golf</label>
+          <p>${app.golf_relationship}</p>
+        </div>
+        <div class="modal-field">
+          <label>Season of Life</label>
+          <p>${app.season_of_life}</p>
+        </div>
+        <div class="modal-field">
+          <label>What Draws You to The Circle?</label>
+          <p>${app.what_draws_you}</p>
+        </div>
+        <div class="modal-field">
+          <label>What Are You Ready to Elevate?</label>
+          <p>${app.what_to_elevate}</p>
+        </div>
+        <div class="modal-field">
+          <label>Interest Level</label>
+          <p>${app.interest_level}</p>
+        </div>
+        ${app.anything_else ? `
+          <div class="modal-field">
+            <label>Anything Else</label>
+            <p>${app.anything_else}</p>
+          </div>
+        ` : ''}
+      `;
+
+      document.getElementById('modal-actions').innerHTML = `
+        ${!app.deposit_paid ? `
+          <button class="action-btn secondary" onclick="markDepositPaid(${app.id})">Mark Deposit Paid</button>
+        ` : ''}
+        ${!app.paid_in_full ? `
+          <button class="action-btn primary" onclick="markPaidInFull(${app.id})">Mark Paid in Full</button>
+        ` : `
+          <span style="color: #27ae60; font-weight: 500;">✓ Active Member</span>
+        `}
+      `;
+
+      document.getElementById('detail-modal').classList.add('visible');
+    }
+
+    function closeModal() {
+      document.getElementById('detail-modal').classList.remove('visible');
+    }
+
+    // Mark deposit paid
+    async function markDepositPaid(id) {
+      if (!confirm('Mark this application as deposit paid?')) return;
+      
+      try {
+        const res = await fetch('/api/admin/update-application', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, deposit_paid: true })
+        });
+        
+        if (res.ok) {
+          loadApplications();
+          closeModal();
+        }
+      } catch (err) {
+        console.error('Error updating application:', err);
+      }
+    }
+
+    // Mark paid in full - creates member account
+    async function markPaidInFull(id) {
+      if (!confirm('Mark as PAID IN FULL? This will create their member account.')) return;
+      
+      try {
+        const res = await fetch('/api/admin/create-member', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ application_id: id })
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          alert(`Member account created!\n\nEmail: ${data.email}\nTemporary Password: ${data.temp_password}\nPin: #${String(data.pin_number).padStart(2, '0')}`);
+          loadApplications();
+          closeModal();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) {
+        console.error('Error creating member:', err);
+      }
+    }
+
+    // Close modal on overlay click
+    document.getElementById('detail-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'detail-modal') closeModal();
+    });
+  </script>
+
+</body>
+</html>

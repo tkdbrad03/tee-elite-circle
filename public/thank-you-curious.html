@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thank You — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .logo-header {
+      margin-bottom: 48px;
+    }
+
+    .logo-header img {
+      height: 50px;
+      margin-bottom: 16px;
+    }
+
+    .logo-header p {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+    }
+
+    .message-section {
+      margin-bottom: 48px;
+    }
+
+    .message-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 44px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+    }
+
+    .message-text {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--tmac-bronze);
+      margin: 32px auto;
+    }
+
+    .closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--charcoal);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 48px;
+      font-size: 12px;
+      color: var(--tmac-bronze);
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    
+    <!-- Logo -->
+    <div class="logo-header">
+      <img src="images/tmac-logo.png" alt="TMac Inspired">
+      <p>The Tee Elite Circle</p>
+    </div>
+
+    <!-- Message -->
+    <div class="message-section">
+      <h1 class="message-title">Thank You for Your Curiosity</h1>
+      <p class="message-text">
+        The Tee Elite Circle is by invitation and application only.
+      </p>
+      <p class="message-text">
+        If we feel there's alignment, we'll reach out personally.
+      </p>
+      
+      <div class="divider"></div>
+      
+      <p class="closing">
+        "When you're ready, the circle will be here."
+      </p>
+    </div>
+
+    <a href="/" class="back-link">← Return to Home</a>
+
+  </div>
+
+</body>
+</html>

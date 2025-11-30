@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure Your Seat — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    .page-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .logo-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .logo-header img {
+      height: 50px;
+      margin-bottom: 16px;
+    }
+
+    .logo-header p {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+    }
+
+    .congrats-section {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .congrats-label {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 16px;
+    }
+
+    .congrats-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 44px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .congrats-subtitle {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.7;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Video Section */
+    .video-section {
+      margin-bottom: 48px;
+    }
+
+    .video-container {
+      position: relative;
+      background: var(--deep-forest);
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-placeholder {
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .video-placeholder svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .video-placeholder p {
+      font-size: 14px;
+    }
+
+    /* Investment Details */
+    .investment-section {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .investment-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .investment-amount {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .investment-amount .amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      color: var(--deep-forest);
+    }
+
+    .investment-amount .label {
+      font-size: 13px;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    .investment-details {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .investment-details ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .investment-details li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .investment-details li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--tmac-bronze);
+    }
+
+    .disclaimer {
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* CTA Button */
+    .cta-section {
+      text-align: center;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--deep-forest);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 18px 48px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .cta-note {
+      font-size: 12px;
+      color: #999;
+      margin-top: 16px;
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      font-size: 11px;
+      color: #888;
+    }
+
+    .secure-badge svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .page-container {
+        padding: 40px 20px;
+      }
+
+      .investment-section {
+        padding: 24px;
+      }
+
+      .investment-amount .amount {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    
+    <!-- Logo -->
+    <div class="logo-header">
+      <img src="images/tmac-logo.png" alt="TMac Inspired">
+      <p>presents The Tee Elite Circle</p>
+    </div>
+
+    <!-- Congratulations -->
+    <div class="congrats-section">
+      <p class="congrats-label">You've Made the Decision</p>
+      <h1 class="congrats-title">Welcome to The Circle</h1>
+      <p class="congrats-subtitle">
+        You just said yes to yourself. Watch this quick message, then secure your founding seat below.
+      </p>
+    </div>
+
+    <!-- Video -->
+    <div class="video-section">
+      <div class="video-container" id="video-container">
+        <!-- Video will be inserted here, or placeholder shown -->
+        <div class="video-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"></polygon>
+          </svg>
+          <p>Welcome video coming soon</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investment Details -->
+    <div class="investment-section">
+      <h2 class="investment-title">Secure Your Founding Seat</h2>
+      
+      <div class="investment-amount">
+        <div class="amount">$2,000</div>
+        <div class="label">Initial Investment (Non-Refundable Deposit)</div>
+      </div>
+
+      <div class="investment-details">
+        <ul>
+          <li>Secures your position as one of 12 Founding Members</li>
+          <li>Applies toward your $15,000 annual investment</li>
+          <li>Remaining $13,000 due before retreat access</li>
+          <li>Payment plans available — we'll discuss on your welcome call</li>
+        </ul>
+      </div>
+
+      <p class="disclaimer">
+        This deposit is non-refundable and confirms your commitment to The Tee Elite Circle.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <a href="https://buy.stripe.com/00wdR98O37zT7ppaZh1Fe0K" class="cta-btn" id="payment-btn">
+        Pay $2,000 Deposit
+      </a>
+      <p class="cta-note">You'll be redirected to our secure payment page</p>
+      
+      <div class="secure-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>Secure payment powered by Stripe</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Get email from URL if passed from application
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+    
+    // You can append email to Stripe link for prefill if needed
+    // const paymentBtn = document.getElementById('payment-btn');
+    // if (email) {
+    //   paymentBtn.href += '?prefilled_email=' + encodeURIComponent(email);
+    // }
+  </script>
+
+</body>
+</html>
