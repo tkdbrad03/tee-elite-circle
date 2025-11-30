@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Circle — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .page-header {
+      margin-bottom: 48px;
+    }
+
+    .page-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: #666;
+      max-width: 500px;
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .member-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .member-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.08);
+    }
+
+    .member-photo {
+      aspect-ratio: 1;
+      background: var(--tmac-blush-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .member-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .member-photo .initials {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      color: var(--tmac-bronze);
+      opacity: 0.5;
+    }
+
+    .member-info {
+      padding: 24px;
+    }
+
+    .member-pin {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-blush);
+      background: var(--deep-forest);
+      display: inline-block;
+      padding: 4px 10px;
+      margin-bottom: 12px;
+    }
+
+    .member-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+
+    .member-bio {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .member-tags {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .member-tag {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .member-tag strong {
+      color: var(--charcoal);
+      font-weight: 500;
+    }
+
+    .view-profile-btn {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      text-decoration: none;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+    }
+
+    .view-profile-btn:hover {
+      background: var(--tmac-blush-light);
+      color: var(--charcoal);
+    }
+
+    .loading-state {
+      text-align: center;
+      padding: 80px 24px;
+      color: #888;
+    }
+
+    @media (max-width: 900px) {
+      .members-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .members-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link active">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link">Wins</a>
+        <a href="/resources.html" class="nav-link">Vault</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">FM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link active">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link">Wins</a>
+    <a href="/resources.html" class="mobile-nav-link">Vault</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    <div class="page-header">
+      <p class="page-label">12 Founding Members</p>
+      <h1 class="page-title">The Circle</h1>
+      <p class="page-subtitle">The women who said yes. Your collaborators, confidants, and co-conspirators.</p>
+    </div>
+
+    <div class="members-grid" id="members-grid">
+      <div class="loading-state">Loading members...</div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    // Logout
+    document.getElementById('logout-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+      window.location.href = '/member-login.html';
+    });
+
+    // Load members
+    async function loadMembers() {
+      try {
+        const res = await fetch('/api/members/get');
+        if (!res.ok) {
+          if (res.status === 401) {
+            window.location.href = '/member-login.html';
+            return;
+          }
+          throw new Error('Failed to load members');
+        }
+        
+        const members = await res.json();
+        const grid = document.getElementById('members-grid');
+        
+        if (members.length === 0) {
+          grid.innerHTML = '<div class="loading-state">No members yet.</div>';
+          return;
+        }
+
+        grid.innerHTML = members.map(member => `
+          <div class="member-card">
+            <div class="member-photo">
+              ${member.photo_url 
+                ? `<img src="${member.photo_url}" alt="${member.name}">`
+                : `<span class="initials">${getInitials(member.name)}</span>`
+              }
+            </div>
+            <div class="member-info">
+              <span class="member-pin">Founding Member #${String(member.pin_number).padStart(2, '0')}</span>
+              <h3 class="member-name">${member.name}</h3>
+              ${member.bio ? `<p class="member-bio">${member.bio}</p>` : ''}
+              <div class="member-tags">
+                ${member.offering ? `<p class="member-tag"><strong>I offer:</strong> ${member.offering}</p>` : ''}
+                ${member.looking_for ? `<p class="member-tag"><strong>Looking for:</strong> ${member.looking_for}</p>` : ''}
+              </div>
+            </div>
+            <a href="/profile.html?id=${member.id}" class="view-profile-btn">View Profile</a>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading members:', err);
+        document.getElementById('members-grid').innerHTML = 
+          '<div class="loading-state">Error loading members. Please refresh.</div>';
+      }
+    }
+
+    function getInitials(name) {
+      if (!name) return 'FM';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    // Initialize
+    loadMembers();
+  </script>
+</body>
+</html>
