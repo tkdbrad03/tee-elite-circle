@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { Client } = require('pg');
 const bcrypt = require('bcryptjs');
 const { generateSessionToken, createSessionCookie } = require('../../session-protection');
 
@@ -7,7 +7,14 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const client = new Client({
+    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+
   try {
+    await client.connect();
+    
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -15,11 +22,10 @@ module.exports = async (req, res) => {
     }
 
     // Find member by email
-    const result = await sql`
-      SELECT id, email, password_hash, name, pin_number
-      FROM members
-      WHERE email = ${email.toLowerCase()}
-    `;
+    const result = await client.query(
+      'SELECT id, email, password_hash, name, pin_number FROM members WHERE email = $1',
+      [email.toLowerCase()]
+    );
 
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Invalid email or password' });
@@ -29,6 +35,7 @@ module.exports = async (req, res) => {
 
     // Verify password
     const isValid = await bcrypt.compare(password, member.password_hash);
+
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
@@ -37,10 +44,10 @@ module.exports = async (req, res) => {
     const sessionToken = generateSessionToken();
 
     // Store session in database
-    await sql`
-      INSERT INTO sessions (token, member_id, expires_at)
-      VALUES (${sessionToken}, ${member.id}, NOW() + INTERVAL '7 days')
-    `;
+    await client.query(
+      'INSERT INTO sessions (token, member_id, expires_at) VALUES ($1, $2, NOW() + INTERVAL \'7 days\')',
+      [sessionToken, member.id]
+    );
 
     // Set session cookie
     res.setHeader('Set-Cookie', createSessionCookie(sessionToken));
@@ -57,5 +64,7 @@ module.exports = async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     return res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    await client.end();
   }
 };
