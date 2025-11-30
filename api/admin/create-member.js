@@ -1,5 +1,6 @@
 const { Client } = require('pg');
 const bcrypt = require('bcryptjs');
+const { sendEmail, welcomeEmail } = require('../lib/email');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -64,6 +65,19 @@ module.exports = async (req, res) => {
       `UPDATE applications SET paid_in_full = true, deposit_paid = true, status = 'member', updated_at = NOW() WHERE id = $1`,
       [application_id]
     );
+
+    // Send welcome email with login credentials
+    try {
+      const emailContent = welcomeEmail(application.full_name, application.email, tempPassword, nextPin);
+      await sendEmail({
+        to: application.email,
+        subject: emailContent.subject,
+        content: emailContent.content
+      });
+    } catch (emailErr) {
+      console.error('Failed to send welcome email:', emailErr);
+      // Don't fail the request if email fails
+    }
 
     return res.status(200).json({
       success: true,
