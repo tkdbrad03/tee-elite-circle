@@ -1,10 +1,15 @@
-const { sql } = require('@vercel/postgres');
+const { Client } = require('pg');
 const { getSessionFromRequest } = require('../../session-protection');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  const client = new Client({
+    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
 
   try {
     const sessionToken = getSessionFromRequest(req);
@@ -13,10 +18,12 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const sessionCheck = await sql`
-      SELECT member_id FROM sessions 
-      WHERE token = ${sessionToken} AND expires_at > NOW()
-    `;
+    await client.connect();
+
+    const sessionCheck = await client.query(
+      'SELECT member_id FROM sessions WHERE token = $1 AND expires_at > NOW()',
+      [sessionToken]
+    );
 
     if (sessionCheck.rows.length === 0) {
       return res.status(401).json({ error: 'Session expired' });
@@ -30,21 +37,24 @@ module.exports = async (req, res) => {
     }
 
     // Check if already liked
-    const existing = await sql`
-      SELECT id FROM likes WHERE post_id = ${post_id} AND member_id = ${memberId}
-    `;
+    const existing = await client.query(
+      'SELECT id FROM likes WHERE post_id = $1 AND member_id = $2',
+      [post_id, memberId]
+    );
 
     if (existing.rows.length > 0) {
       // Unlike
-      await sql`DELETE FROM likes WHERE post_id = ${post_id} AND member_id = ${memberId}`;
+      await client.query('DELETE FROM likes WHERE post_id = $1 AND member_id = $2', [post_id, memberId]);
       return res.status(200).json({ liked: false });
     } else {
       // Like
-      await sql`INSERT INTO likes (post_id, member_id) VALUES (${post_id}, ${memberId})`;
+      await client.query('INSERT INTO likes (post_id, member_id) VALUES ($1, $2)', [post_id, memberId]);
       return res.status(200).json({ liked: true });
     }
   } catch (error) {
     console.error('Like error:', error);
     return res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    await client.end();
   }
 };
