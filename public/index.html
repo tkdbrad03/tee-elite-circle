@@ -909,6 +909,12 @@
       transform: translateY(-2px);
     }
 
+    .form-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .form-note {
       font-size: 11px;
       color: rgba(255, 255, 255, 0.4);
@@ -1373,7 +1379,7 @@
                 <span>New to golf</span>
               </label>
               <label class="form-radio">
-                <input type="radio" name="golfStatus" value="Getting back into it">
+                <input type="radio" name="golfStatus" value="Returning to the game">
                 <span>Returning to the game</span>
               </label>
               <label class="form-radio">
@@ -1409,9 +1415,9 @@
             <label class="form-label">Your Level of Interest *</label>
             <select name="interestLevel" class="form-select" required>
               <option value="">Select one</option>
-              <option value="Curious - want more details">Curious — send me more details</option>
-              <option value="Likely to attend if aligned">Likely to join if dates and location align</option>
-              <option value="Ready - founding member">Ready to secure my founding seat</option>
+              <option value="Curious — send me more details">Curious — send me more details</option>
+              <option value="Likely to join if dates and location align">Likely to join if dates and location align</option>
+              <option value="Ready to secure my founding seat">Ready to secure my founding seat</option>
             </select>
           </div>
 
@@ -1474,27 +1480,53 @@
           return;
         }
 
-        // Collect form data
+        // Disable submit button
+        const submitBtn = form.querySelector('.form-submit');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        // Collect form data and map to API field names
         const formData = new FormData(form);
-        const payload = {};
-        formData.forEach((value, key) => {
-          payload[key] = value;
-        });
+        const payload = {
+          full_name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone') || '',
+          location: formData.get('location'),
+          golf_relationship: formData.get('golfStatus'),
+          season_of_life: formData.get('ageRange'),
+          what_draws_you: formData.get('drawnToCircle'),
+          what_to_elevate: formData.get('elevateNext'),
+          interest_level: formData.get('interestLevel'),
+          anything_else: formData.get('notes') || ''
+        };
 
         try {
-          const res = await fetch('/api/tee-elite-interest', {
+          const res = await fetch('/api/applications/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
 
-          if (!res.ok) throw new Error('Network error');
+          const data = await res.json();
 
-          form.style.display = 'none';
-          formSuccess.classList.add('visible');
+          if (!res.ok) {
+            throw new Error(data.error || 'Something went wrong');
+          }
+
+          // Redirect based on interest level
+          if (data.redirect) {
+            window.location.href = data.redirect;
+          } else {
+            // Fallback to success message if no redirect
+            form.style.display = 'none';
+            formSuccess.classList.add('visible');
+          }
+
         } catch (err) {
-          formError.textContent = 'Something went wrong. Please try again or contact us directly.';
+          formError.textContent = err.message || 'Something went wrong. Please try again or contact us directly.';
           formError.classList.add('visible');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Application';
         }
       });
     })();
