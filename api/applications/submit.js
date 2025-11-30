@@ -1,4 +1,5 @@
 const { Client } = require('pg');
+const { sendEmail, applicationReceivedEmail } = require('../lib/email');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -80,6 +81,19 @@ module.exports = async (req, res) => {
     } else {
       // Curious - different thank you page
       redirectUrl = '/thank-you-curious.html';
+    }
+
+    // Send confirmation email
+    try {
+      const emailContent = applicationReceivedEmail(full_name);
+      await sendEmail({
+        to: email,
+        subject: emailContent.subject,
+        content: emailContent.content
+      });
+    } catch (emailErr) {
+      console.error('Failed to send confirmation email:', emailErr);
+      // Don't fail the request if email fails
     }
 
     return res.status(200).json({ 
