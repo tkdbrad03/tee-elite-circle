@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Member Login — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--deep-forest);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .logo-area {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .logo-area img {
+      height: 40px;
+      margin-bottom: 16px;
+    }
+
+    .logo-area h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: 0.1em;
+    }
+
+    .logo-area p {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-blush);
+      margin-top: 8px;
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(232, 204, 200, 0.2);
+      padding: 40px 32px;
+    }
+
+    .login-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #fff;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(232, 204, 200, 0.2);
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-input:focus {
+      border-color: var(--tmac-blush);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      margin-top: 24px;
+    }
+
+    .login-btn:hover {
+      background: var(--tmac-blush-light);
+      transform: translateY(-2px);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .error-message {
+      background: rgba(180, 80, 80, 0.2);
+      border: 1px solid rgba(180, 80, 80, 0.4);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #e8c4c4;
+      margin-top: 16px;
+      text-align: center;
+      display: none;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-link:hover {
+      color: var(--tmac-blush);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 32px;
+      font-size: 12px;
+      color: var(--tmac-blush);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: opacity 0.3s ease;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo-area">
+      <img src="images/tmac-logo.png" alt="TMac Inspired">
+      <h1>The Tee Elite Circle</h1>
+      <p>Member Access</p>
+    </div>
+
+    <div class="login-card">
+      <h2 class="login-title">Welcome Back</h2>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input" required placeholder="your@email.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-input" required placeholder="Enter your password">
+        </div>
+
+        <button type="submit" class="login-btn" id="login-btn">Enter The Circle</button>
+        
+        <div id="error-message" class="error-message"></div>
+      </form>
+
+      <a href="#" class="forgot-link">Forgot your password?</a>
+    </div>
+
+    <a href="/" class="back-link">Back to Home</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const loginBtn = document.getElementById('login-btn');
+    const errorMessage = document.getElementById('error-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      errorMessage.classList.remove('visible');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Entering...';
+
+      const formData = new FormData(form);
+      const email = formData.get('email');
+      const password = formData.get('password');
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Login failed');
+        }
+
+        // Redirect to member dashboard
+        window.location.href = '/home.html';
+      } catch (err) {
+        errorMessage.textContent = err.message;
+        errorMessage.classList.add('visible');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Enter The Circle';
+      }
+    });
+  </script>
+</body>
+</html>

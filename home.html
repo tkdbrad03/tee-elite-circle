@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link active">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link">Wins</a>
+        <a href="/resources.html" class="nav-link">Vault</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">FM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link active">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link">Wins</a>
+    <a href="/resources.html" class="mobile-nav-link">Vault</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    
+    <!-- WELCOME SECTION -->
+    <section class="welcome-section">
+      <div class="welcome-content">
+        <p class="welcome-label">Welcome back,</p>
+        <h1 class="welcome-name" id="member-name">Founding Member</h1>
+        <p class="welcome-pin">The Tee <span class="pin-number" id="pin-number">#01</span></p>
+      </div>
+    </section>
+
+    <!-- RETREAT COUNTDOWN -->
+    <section class="countdown-section">
+      <div class="countdown-card">
+        <div class="countdown-header">
+          <p class="countdown-label">Next Retreat</p>
+          <h2 class="countdown-title" id="retreat-name">Spring Retreat 2026</h2>
+          <p class="countdown-location" id="retreat-location">Location TBA</p>
+        </div>
+        <div class="countdown-timer">
+          <div class="countdown-unit">
+            <span class="countdown-number" id="countdown-days">--</span>
+            <span class="countdown-text">Days</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="countdown-hours">--</span>
+            <span class="countdown-text">Hours</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="countdown-mins">--</span>
+            <span class="countdown-text">Mins</span>
+          </div>
+        </div>
+        <a href="/retreats.html" class="countdown-cta">View Details</a>
+      </div>
+    </section>
+
+    <!-- QUICK LINKS -->
+    <section class="quicklinks-section">
+      <h2 class="section-title">Quick Access</h2>
+      <div class="quicklinks-grid">
+        <a href="/members.html" class="quicklink-card">
+          <div class="quicklink-icon">12</div>
+          <h3 class="quicklink-title">The Circle</h3>
+          <p class="quicklink-desc">View founding members</p>
+        </a>
+        <a href="/wins.html" class="quicklink-card">
+          <div class="quicklink-icon">W</div>
+          <h3 class="quicklink-title">Wins Feed</h3>
+          <p class="quicklink-desc">Celebrate victories</p>
+        </a>
+        <a href="/between-the-tees.html" class="quicklink-card">
+          <div class="quicklink-icon">BTT</div>
+          <h3 class="quicklink-title">Between the Tees</h3>
+          <p class="quicklink-desc">Discussions</p>
+        </a>
+        <a href="/resources.html" class="quicklink-card">
+          <div class="quicklink-icon">V</div>
+          <h3 class="quicklink-title">The Vault</h3>
+          <p class="quicklink-desc">Resources & guides</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- RECENT WINS -->
+    <section class="recent-section">
+      <div class="recent-header">
+        <h2 class="section-title">Recent Wins</h2>
+        <a href="/wins.html" class="see-all-link">See All</a>
+      </div>
+      <div class="wins-feed" id="wins-feed">
+        <!-- Populated by JS -->
+        <div class="empty-state">
+          <p>No wins posted yet. Be the first to celebrate a victory.</p>
+          <a href="/wins.html" class="empty-cta">Post a Win</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE FINISHED SCORECARD -->
+    <section class="scorecard-section">
+      <div class="scorecard-card">
+        <h2 class="scorecard-title">The Finished Scorecard</h2>
+        <p class="scorecard-desc">What does your win look like? What are you playing toward?</p>
+        <div class="scorecard-content" id="scorecard-content">
+          <p class="scorecard-placeholder">You haven't set your vision yet.</p>
+        </div>
+        <a href="/profile.html#scorecard" class="scorecard-cta">Update My Scorecard</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    // Logout
+    document.getElementById('logout-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+      window.location.href = '/member-login.html';
+    });
+
+    // Countdown timer
+    function updateCountdown() {
+      // Set your retreat date here
+      const retreatDate = new Date('2026-04-15T09:00:00');
+      const now = new Date();
+      const diff = retreatDate - now;
+
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById('countdown-days').textContent = days;
+        document.getElementById('countdown-hours').textContent = hours;
+        document.getElementById('countdown-mins').textContent = mins;
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+
+    // Load member data
+    async function loadMemberData() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (!res.ok) {
+          window.location.href = '/member-login.html';
+          return;
+        }
+        const member = await res.json();
+        
+        document.getElementById('member-name').textContent = member.name || 'Founding Member';
+        document.getElementById('pin-number').textContent = `#${String(member.pin_number || 1).padStart(2, '0')}`;
+        document.getElementById('user-initials').textContent = getInitials(member.name);
+        
+        if (member.finished_scorecard) {
+          document.getElementById('scorecard-content').innerHTML = `<p class="scorecard-text">${member.finished_scorecard}</p>`;
+        }
+      } catch (err) {
+        console.error('Error loading member data:', err);
+      }
+    }
+
+    function getInitials(name) {
+      if (!name) return 'FM';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    // Load recent wins
+    async function loadRecentWins() {
+      try {
+        const res = await fetch('/api/posts/get?limit=3');
+        if (!res.ok) return;
+        const posts = await res.json();
+        
+        if (posts.length > 0) {
+          const feed = document.getElementById('wins-feed');
+          feed.innerHTML = posts.map(post => `
+            <div class="win-item">
+              <div class="win-author">${post.author_name}</div>
+              <div class="win-content">${post.content}</div>
+              <div class="win-date">${formatDate(post.created_at)}</div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error loading wins:', err);
+      }
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Initialize
+    loadMemberData();
+    loadRecentWins();
+  </script>
+</body>
+</html>
