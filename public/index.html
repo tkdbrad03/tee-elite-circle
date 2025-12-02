@@ -30,36 +30,54 @@
       min-height: -webkit-fill-available;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       position: relative;
       overflow: hidden;
       background: #1a2a1a;
     }
 
-    /* Full Screen Splash Image */
-    .splash-image {
+    /* Golf Course Background */
+    .splash-bg {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('/images/splash.png') center center / cover no-repeat;
-      background-color: #1a2a1a;
+      background: url('/images/Golf_Course.png') center center / cover no-repeat;
       opacity: 0;
-      animation: fadeIn 1.5s ease-out forwards;
+      animation: fadeIn 1.2s ease-out forwards;
     }
 
-    /* On mobile/portrait - contain the full image */
-    @media (max-aspect-ratio: 3/4) {
-      .splash-image {
-        background-size: contain;
-      }
+    /* Dark overlay for better logo visibility */
+    .splash-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
     }
 
-    /* On very wide screens - keep it elegant */
-    @media (min-aspect-ratio: 16/9) {
-      .splash-image {
-        background-size: auto 100%;
-      }
+    /* Content Container */
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeInScale 0.8s ease-out 0.6s forwards;
+    }
+
+    /* Circle Logo */
+    .splash-logo {
+      width: 320px;
+      height: auto;
+      max-width: 80vw;
+      filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.4));
     }
 
     /* Buttons */
@@ -75,7 +93,7 @@
       z-index: 10;
       opacity: 0;
       transform: translateY(20px);
-      animation: slideUp 0.6s ease-out 1.5s forwards;
+      animation: slideUp 0.6s ease-out 1.2s forwards;
     }
 
     .splash-btn {
@@ -116,11 +134,18 @@
 
     /* Animations */
     @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInScale {
       from {
         opacity: 0;
+        transform: scale(0.9);
       }
       to {
         opacity: 1;
+        transform: scale(1);
       }
     }
 
@@ -137,10 +162,14 @@
 
     /* Responsive */
     @media (max-width: 480px) {
+      .splash-logo {
+        width: 280px;
+      }
+
       .splash-buttons {
         flex-direction: column;
         align-items: center;
-        bottom: 40px;
+        bottom: 50px;
         gap: 12px;
       }
 
@@ -149,17 +178,34 @@
       }
     }
 
+    @media (min-width: 768px) {
+      .splash-logo {
+        width: 380px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .splash-logo {
+        width: 420px;
+      }
+    }
+
     /* Safe area for notched phones */
     @supports (padding-bottom: env(safe-area-inset-bottom)) {
       .splash-buttons {
-        bottom: calc(40px + env(safe-area-inset-bottom));
+        bottom: calc(50px + env(safe-area-inset-bottom));
       }
     }
   </style>
 </head>
 <body>
-  <!-- Full Screen Splash Image -->
-  <div class="splash-image"></div>
+  <!-- Golf Course Background -->
+  <div class="splash-bg"></div>
+
+  <!-- Logo -->
+  <div class="splash-content">
+    <img src="/images/tee-elite-logo.png" alt="The Tee Elite Circle" class="splash-logo">
+  </div>
 
   <!-- Buttons -->
   <div class="splash-buttons">
