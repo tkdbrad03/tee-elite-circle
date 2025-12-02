@@ -1,4 +1,6 @@
 const { Client } = require('pg');
+const bcrypt = require('bcryptjs');
+const { sendEmail, welcomeEmail } = require('../../lib/email');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -46,19 +48,28 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: `Pin #${String(pin_number).padStart(2, '0')} is already assigned` });
     }
 
-    // Check if email already exists
-    const existingEmail = await client.query(
+    // Check if email already exists in applications
+    const existingAppEmail = await client.query(
       'SELECT id FROM applications WHERE email = $1',
       [email]
     );
     
-    if (existingEmail.rows.length > 0) {
+    if (existingAppEmail.rows.length > 0) {
       return res.status(400).json({ error: 'A member with this email already exists' });
     }
 
-    // Insert new member as application with paid status
-    // Include default values for required columns
-    const result = await client.query(
+    // Check if email already exists in members
+    const existingMemberEmail = await client.query(
+      'SELECT id FROM members WHERE email = $1',
+      [email]
+    );
+    
+    if (existingMemberEmail.rows.length > 0) {
+      return res.status(400).json({ error: 'A member account with this email already exists' });
+    }
+
+    // Insert into applications table
+    const appResult = await client.query(
       `INSERT INTO applications (
         full_name,
         email,
@@ -85,7 +96,7 @@ module.exports = async (req, res) => {
         true,
         true,
         'Ready to secure my founding seat',
-        'approved',
+        'member',
         'Founding Member - Direct Add',
         'Founding Member',
         'Founding Member - Direct Add',
@@ -93,10 +104,37 @@ module.exports = async (req, res) => {
       ]
     );
 
+    // Generate temporary password
+    const tempPassword = 'TeeElite' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const passwordHash = await bcrypt.hash(tempPassword, 10);
+
+    // Create member account
+    await client.query(
+      `INSERT INTO members (email, password_hash, name, pin_number, bio, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, NOW(), NOW())`,
+      [email, passwordHash, full_name, pin_number, '']
+    );
+
+    // Send welcome email with login credentials
+    try {
+      const emailContent = welcomeEmail(full_name, email, tempPassword, pin_number);
+      await sendEmail({
+        to: email,
+        subject: emailContent.subject,
+        content: emailContent.content
+      });
+    } catch (emailErr) {
+      console.error('Failed to send welcome email:', emailErr);
+      // Don't fail the request if email fails
+    }
+
     return res.status(200).json({ 
       success: true, 
-      id: result.rows[0].id,
-      message: 'Member added successfully'
+      id: appResult.rows[0].id,
+      email: email,
+      temp_password: tempPassword,
+      pin_number: pin_number,
+      message: 'Member added and account created successfully'
     });
 
   } catch (error) {
