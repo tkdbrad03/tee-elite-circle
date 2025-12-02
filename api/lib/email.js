@@ -250,7 +250,7 @@ const welcomeEmail = (name, email, tempPassword, pinNumber) => ({
       <p style="margin: 0 0 8px 0; font-size: 13px; color: rgba(255,255,255,0.7);">Temporary Password</p>
       <p style="margin: 0 0 20px 0; font-size: 16px; color: #ffffff; font-family: monospace;">${tempPassword}</p>
       
-      <a href="https://tee-elite-circle.vercel.app/login.html" style="display: inline-block; background-color: #e8ccc8; color: #1a2f23; text-decoration: none; padding: 14px 32px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;">Access Your Portal</a>
+      <a href="https://tmacmastermind.com/member-login.html" style="display: inline-block; background-color: #e8ccc8; color: #1a2f23; text-decoration: none; padding: 14px 32px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;">Access Your Portal</a>
     </div>
     
     <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555;">
