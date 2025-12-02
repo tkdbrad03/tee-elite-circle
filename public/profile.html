@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
-  <title>My Profile — The Tee Elite Circle</title>
+  <title>Profile — The Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -107,6 +107,21 @@
       color: var(--tmac-blush);
     }
 
+    .profile-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .profile-email {
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
     .profile-nav {
       display: flex;
       flex-direction: column;
@@ -141,6 +156,20 @@
 
     .logout-btn:hover {
       color: var(--charcoal);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--tmac-bronze);
+      text-decoration: none;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
     }
 
     /* Main Content */
@@ -264,6 +293,48 @@
       color: #999;
     }
 
+    /* View-only profile styles */
+    .view-only-field {
+      margin-bottom: 24px;
+    }
+
+    .view-only-label {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .view-only-value {
+      font-size: 15px;
+      color: var(--charcoal);
+      line-height: 1.7;
+    }
+
+    .view-only-empty {
+      font-size: 14px;
+      color: #999;
+      font-style: italic;
+    }
+
+    /* Hide elements based on view mode */
+    .edit-only {
+      display: block;
+    }
+
+    .view-only {
+      display: none;
+    }
+
+    body.viewing-other .edit-only {
+      display: none;
+    }
+
+    body.viewing-other .view-only {
+      display: block;
+    }
+
     @media (max-width: 900px) {
       .profile-layout {
         grid-template-columns: 1fr;
@@ -325,6 +396,9 @@
 
   <!-- MAIN CONTENT -->
   <main class="member-main">
+    <!-- Back link (only shown when viewing another member) -->
+    <a href="/members.html" class="back-link view-only">← Back to The Circle</a>
+
     <div class="profile-layout">
       <!-- SIDEBAR -->
       <aside class="profile-sidebar">
@@ -332,7 +406,7 @@
           <div class="profile-photo" id="profile-photo">
             <span class="initials" id="photo-initials">FM</span>
           </div>
-          <button class="photo-upload-btn" id="photo-upload-btn">
+          <button class="photo-upload-btn edit-only" id="photo-upload-btn">
             <svg viewBox="0 0 24 24">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
               <circle cx="12" cy="13" r="4"></circle>
@@ -346,18 +420,21 @@
           <p class="profile-pin-number" id="profile-pin">#01</p>
         </div>
 
-        <nav class="profile-nav">
+        <!-- Name shown when viewing another member -->
+        <h2 class="profile-name view-only" id="view-profile-name"></h2>
+
+        <nav class="profile-nav edit-only">
           <a href="#info" class="profile-nav-link active">Basic Info</a>
           <a href="#about" class="profile-nav-link">About Me</a>
           <a href="#scorecard" class="profile-nav-link">The Finished Scorecard</a>
           <a href="#password" class="profile-nav-link">Change Password</a>
         </nav>
 
-        <button class="logout-btn" id="logout-link">Log Out</button>
+        <button class="logout-btn edit-only" id="logout-link">Log Out</button>
       </aside>
 
-      <!-- MAIN FORM -->
-      <div class="profile-main">
+      <!-- MAIN FORM (Edit mode - own profile) -->
+      <div class="profile-main edit-only">
         <form id="profile-form">
           <!-- BASIC INFO -->
           <section class="profile-section" id="info">
@@ -442,6 +519,38 @@
           </form>
         </section>
       </div>
+
+      <!-- VIEW-ONLY CONTENT (viewing another member) -->
+      <div class="profile-main view-only">
+        <section class="profile-section">
+          <h2 class="profile-section-title">About</h2>
+          
+          <div class="view-only-field">
+            <p class="view-only-label">Bio</p>
+            <p class="view-only-value" id="view-bio"><span class="view-only-empty">No bio added yet.</span></p>
+          </div>
+
+          <div class="view-only-field">
+            <p class="view-only-label">What I Offer</p>
+            <p class="view-only-value" id="view-offering"><span class="view-only-empty">Not specified.</span></p>
+          </div>
+
+          <div class="view-only-field">
+            <p class="view-only-label">What I'm Looking For</p>
+            <p class="view-only-value" id="view-looking-for"><span class="view-only-empty">Not specified.</span></p>
+          </div>
+        </section>
+
+        <section class="profile-section">
+          <h2 class="profile-section-title">The Finished Scorecard</h2>
+          <div class="scorecard-preview">
+            <p class="scorecard-preview-label">Their Vision</p>
+            <p class="scorecard-preview-text" id="view-scorecard">
+              <span class="scorecard-empty">This member hasn't set their vision yet.</span>
+            </p>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
 
@@ -452,6 +561,11 @@
 
   <script>
     let currentMember = null;
+    let viewingMemberId = null;
+
+    // Check if viewing another member's profile
+    const urlParams = new URLSearchParams(window.location.search);
+    viewingMemberId = urlParams.get('id');
 
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -478,16 +592,68 @@
     // Load member data
     async function loadMember() {
       try {
-        const res = await fetch('/api/members/me');
-        if (!res.ok) {
+        // First, get current logged-in user for header initials
+        const meRes = await fetch('/api/members/me');
+        if (!meRes.ok) {
           window.location.href = '/member-login.html';
           return;
         }
-        currentMember = await res.json();
-        populateForm(currentMember);
+        const me = await meRes.json();
+        document.getElementById('user-initials').textContent = getInitials(me.name);
+
+        // If viewing another member
+        if (viewingMemberId && viewingMemberId != me.id) {
+          document.body.classList.add('viewing-other');
+          document.title = 'Member Profile — The Tee Elite Circle';
+          await loadOtherMember(viewingMemberId);
+        } else {
+          // Viewing own profile
+          currentMember = me;
+          populateForm(currentMember);
+        }
       } catch (err) {
         console.error('Error loading member:', err);
       }
+    }
+
+    async function loadOtherMember(memberId) {
+      try {
+        const res = await fetch(`/api/members/get?id=${memberId}`);
+        if (!res.ok) {
+          window.location.href = '/members.html';
+          return;
+        }
+        const members = await res.json();
+        const member = Array.isArray(members) ? members.find(m => m.id == memberId) : members;
+        
+        if (!member) {
+          window.location.href = '/members.html';
+          return;
+        }
+
+        populateViewOnly(member);
+      } catch (err) {
+        console.error('Error loading member:', err);
+        window.location.href = '/members.html';
+      }
+    }
+
+    function populateViewOnly(member) {
+      document.getElementById('view-profile-name').textContent = member.name || 'Member';
+      document.getElementById('profile-pin').textContent = `#${String(member.pin_number || 1).padStart(2, '0')}`;
+      document.getElementById('photo-initials').textContent = getInitials(member.name);
+
+      if (member.photo_url) {
+        document.getElementById('profile-photo').innerHTML = `<img src="${member.photo_url}" alt="${member.name}">`;
+      }
+
+      // Populate view-only fields
+      document.getElementById('view-bio').innerHTML = member.bio || '<span class="view-only-empty">No bio added yet.</span>';
+      document.getElementById('view-offering').innerHTML = member.offering || '<span class="view-only-empty">Not specified.</span>';
+      document.getElementById('view-looking-for').innerHTML = member.looking_for || '<span class="view-only-empty">Not specified.</span>';
+      document.getElementById('view-scorecard').innerHTML = member.finished_scorecard || '<span class="scorecard-empty">This member hasn\'t set their vision yet.</span>';
+
+      document.title = `${member.name} — The Tee Elite Circle`;
     }
 
     function populateForm(member) {
@@ -627,5 +793,6 @@
     // Initialize
     loadMember();
   </script>
+  <script src="/member-common.js"></script>
 </body>
 </html>
