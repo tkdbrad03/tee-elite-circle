@@ -355,6 +355,49 @@
             font-style: italic;
         }
 
+        /* RSVP Section */
+        .rsvp-section {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .rsvp-btn {
+            display: inline-block;
+            background: var(--tmac-blush);
+            color: var(--charcoal);
+            padding: 1rem 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .rsvp-btn:hover {
+            background: var(--tmac-blush-light);
+        }
+
+        .rsvp-btn.confirmed {
+            background: var(--forest);
+            color: white;
+            cursor: pointer;
+        }
+
+        .rsvp-btn.confirmed:hover {
+            background: #4a5a47;
+        }
+
+        .rsvp-count {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
         /* Mobile Styles */
         @media (max-width: 900px) {
             .header {
@@ -663,6 +706,12 @@
             </div>
         </section>
 
+        <!-- RSVP Section -->
+        <section class="rsvp-section">
+            <button class="rsvp-btn" id="rsvp-btn" onclick="toggleRSVP()">I'll Be There</button>
+            <p class="rsvp-count" id="rsvp-count"></p>
+        </section>
+
         <!-- Past Retreats -->
         <section class="past-retreats">
             <h2 class="section-title">Past Retreats</h2>
@@ -744,6 +793,71 @@
                 behavior: 'smooth' 
             });
         });
+
+        // RSVP functionality
+        const RETREAT_ID = 'spring-2026';
+        let isConfirmed = false;
+
+        async function loadRSVPStatus() {
+            try {
+                const res = await fetch(`/api/retreats/rsvp-status?retreat_id=${RETREAT_ID}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    isConfirmed = data.confirmed;
+                    updateRSVPButton();
+                    updateRSVPCount(data.count);
+                }
+            } catch (err) {
+                console.error('Error loading RSVP status:', err);
+            }
+        }
+
+        async function toggleRSVP() {
+            const btn = document.getElementById('rsvp-btn');
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/retreats/rsvp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ retreat_id: RETREAT_ID })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    isConfirmed = data.confirmed;
+                    updateRSVPButton();
+                    updateRSVPCount(data.count);
+                }
+            } catch (err) {
+                console.error('Error toggling RSVP:', err);
+            }
+
+            btn.disabled = false;
+        }
+
+        function updateRSVPButton() {
+            const btn = document.getElementById('rsvp-btn');
+            if (isConfirmed) {
+                btn.textContent = "You're Confirmed ✓";
+                btn.classList.add('confirmed');
+            } else {
+                btn.textContent = "I'll Be There";
+                btn.classList.remove('confirmed');
+            }
+        }
+
+        function updateRSVPCount(count) {
+            const countEl = document.getElementById('rsvp-count');
+            if (count > 0) {
+                countEl.textContent = `${count} member${count !== 1 ? 's' : ''} confirmed`;
+            } else {
+                countEl.textContent = '';
+            }
+        }
+
+        // Load RSVP status on page load
+        loadRSVPStatus();
     </script>
 </body>
 </html>
