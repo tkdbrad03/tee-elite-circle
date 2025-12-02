@@ -15,6 +15,13 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --tmac-blush: #e8ccc8;
+            --tmac-blush-light: #f5e6e4;
+            --charcoal: #1a1a1a;
+            --forest: #3d4a3a;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #faf9f7;
@@ -69,7 +76,7 @@
 
         .nav-links a:hover,
         .nav-links a.active {
-            color: #e8ccc8;
+            color: var(--tmac-blush);
         }
 
         .profile-circle {
@@ -89,7 +96,7 @@
         }
 
         .profile-circle:hover {
-            background: #e8ccc8;
+            background: var(--tmac-blush);
         }
 
         /* Mobile menu button */
@@ -119,7 +126,7 @@
 
         /* Featured Retreat */
         .featured-retreat {
-            background: #3d4a3a;
+            background: var(--forest);
             border-radius: 12px;
             padding: 3rem;
             display: grid;
@@ -138,7 +145,7 @@
 
         .retreat-dates {
             font-size: 0.95rem;
-            color: rgba(255,255,255,0.8);
+            color: var(--tmac-blush);
             margin-bottom: 1.5rem;
         }
 
@@ -171,6 +178,7 @@
             font-size: 3rem;
             font-weight: 300;
             line-height: 1;
+            color: var(--tmac-blush);
         }
 
         .countdown-label {
@@ -182,8 +190,8 @@
 
         .schedule-btn {
             display: inline-block;
-            background: #e8ccc8;
-            color: #1a1a1a;
+            background: var(--tmac-blush);
+            color: var(--charcoal);
             padding: 1rem 2rem;
             text-decoration: none;
             font-size: 0.8rem;
@@ -195,7 +203,7 @@
         }
 
         .schedule-btn:hover {
-            background: #dbb8b3;
+            background: var(--tmac-blush-light);
         }
 
         .retreat-image {
@@ -206,8 +214,8 @@
 
         .retreat-image img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
+            object-fit: contain;
             border-radius: 8px;
         }
 
@@ -253,7 +261,7 @@
         .expect-number {
             font-family: 'Cormorant Garamond', serif;
             font-size: 3rem;
-            color: #e8ccc8;
+            color: var(--tmac-blush);
             margin-bottom: 1rem;
         }
 
@@ -269,6 +277,71 @@
             font-size: 0.9rem;
             line-height: 1.7;
             color: #666;
+        }
+
+        /* Schedule Section */
+        .schedule-section {
+            margin-bottom: 4rem;
+        }
+
+        .schedule-day {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .schedule-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .schedule-day-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--charcoal);
+        }
+
+        .schedule-day-date {
+            font-size: 0.85rem;
+            color: var(--tmac-blush);
+            font-weight: 500;
+        }
+
+        .schedule-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0.75rem 0;
+        }
+
+        .schedule-time {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--forest);
+            min-width: 80px;
+        }
+
+        .schedule-event {
+            font-weight: 500;
+            color: var(--charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .schedule-event-desc {
+            font-size: 0.85rem;
+            color: #888;
         }
 
         /* Past Retreats */
@@ -330,6 +403,12 @@
             .countdown-number {
                 font-size: 2.5rem;
             }
+
+            .schedule-day-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
         }
 
         /* Mobile navigation */
@@ -362,7 +441,7 @@
         }
 
         .mobile-nav-links a.active {
-            color: #e8ccc8;
+            color: var(--tmac-blush);
         }
 
         .mobile-nav-links svg {
@@ -433,25 +512,156 @@
             </div>
         </section>
 
-        <!-- What to Expect -->
+        <!-- What to Expect - All 6 Items -->
         <h2 class="section-title">What to Expect</h2>
         <div class="expect-grid">
             <div class="expect-card">
                 <div class="expect-number">I</div>
-                <h3 class="expect-title">Curated Golf</h3>
-                <p class="expect-text">Two rounds at a premier course, with pairings designed to spark meaningful connections.</p>
+                <h3 class="expect-title">First Tee Ceremony</h3>
+                <p class="expect-text">The ritual that marks your official entry into the room. Receive your numbered Tee pin.</p>
             </div>
             <div class="expect-card">
                 <div class="expect-number">II</div>
-                <h3 class="expect-title">Intimate Dinners</h3>
-                <p class="expect-text">Evenings that blend fine dining with conversations that matter—no small talk allowed.</p>
+                <h3 class="expect-title">Deal on the 9th</h3>
+                <p class="expect-text">Structured networking round. Intentionally paired to explore business synergies.</p>
             </div>
             <div class="expect-card">
                 <div class="expect-number">III</div>
-                <h3 class="expect-title">Mastermind Sessions</h3>
-                <p class="expect-text">Facilitated discussions where you'll both give and receive the insights that change everything.</p>
+                <h3 class="expect-title">The Finished Scorecard</h3>
+                <p class="expect-text">Visualization session rooted in the power of playing from the end.</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">IV</div>
+                <h3 class="expect-title">Course Conditions</h3>
+                <p class="expect-text">Life and business diagnostic. Where are you? Where's the opportunity?</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">V</div>
+                <h3 class="expect-title">Between the Tees</h3>
+                <p class="expect-text">Intimate roundtable where real dilemmas meet real wisdom from the room.</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">VI</div>
+                <h3 class="expect-title">The Back Nine Dinner</h3>
+                <p class="expect-text">Final night. Real talk about wealth, power, regrets, and dreams.</p>
             </div>
         </div>
+
+        <!-- Schedule Section -->
+        <section class="schedule-section" id="schedule">
+            <h2 class="section-title">Retreat Schedule</h2>
+            
+            <div class="schedule-day">
+                <div class="schedule-day-header">
+                    <h3 class="schedule-day-title">Day One</h3>
+                    <span class="schedule-day-date">April 15, 2026</span>
+                </div>
+                <div class="schedule-items">
+                    <div class="schedule-item">
+                        <span class="schedule-time">2:00 PM</span>
+                        <div>
+                            <p class="schedule-event">Arrival & Check-in</p>
+                            <p class="schedule-event-desc">Settle into your accommodations</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">4:00 PM</span>
+                        <div>
+                            <p class="schedule-event">First Tee Ceremony</p>
+                            <p class="schedule-event-desc">Welcome reception and pin presentation</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">6:00 PM</span>
+                        <div>
+                            <p class="schedule-event">Course Conditions Session</p>
+                            <p class="schedule-event-desc">Life & business diagnostic</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:30 PM</span>
+                        <div>
+                            <p class="schedule-event">Welcome Dinner</p>
+                            <p class="schedule-event-desc">Breaking bread together</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-day">
+                <div class="schedule-day-header">
+                    <h3 class="schedule-day-title">Day Two</h3>
+                    <span class="schedule-day-date">April 16, 2026</span>
+                </div>
+                <div class="schedule-items">
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Sunrise Movement</p>
+                            <p class="schedule-event-desc">Optional yoga or walk</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Breakfast</p>
+                            <p class="schedule-event-desc">Fuel for the day ahead</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">9:30 AM</span>
+                        <div>
+                            <p class="schedule-event">Deal on the 9th</p>
+                            <p class="schedule-event-desc">Structured networking round</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">2:00 PM</span>
+                        <div>
+                            <p class="schedule-event">The Finished Scorecard</p>
+                            <p class="schedule-event-desc">Visualization session</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">4:00 PM</span>
+                        <div>
+                            <p class="schedule-event">Between the Tees</p>
+                            <p class="schedule-event-desc">Intimate roundtable discussion</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:30 PM</span>
+                        <div>
+                            <p class="schedule-event">The Back Nine Dinner</p>
+                            <p class="schedule-event-desc">Final night — real talk</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-day">
+                <div class="schedule-day-header">
+                    <h3 class="schedule-day-title">Day Three</h3>
+                    <span class="schedule-day-date">April 17, 2026</span>
+                </div>
+                <div class="schedule-items">
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Closing Breakfast</p>
+                            <p class="schedule-event-desc">Reflections and commitments</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">10:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Departure</p>
+                            <p class="schedule-event-desc">Until we meet again</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Past Retreats -->
         <section class="past-retreats">
@@ -526,6 +736,14 @@
                 navLinks.classList.toggle('active');
             });
         }
+
+        // Smooth scroll to schedule
+        document.querySelector('.schedule-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('schedule').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        });
     </script>
 </body>
 </html>
