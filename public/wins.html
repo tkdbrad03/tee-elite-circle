@@ -816,7 +816,7 @@
     }
 
     function escapeForAttr(str) {
-      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+      return btoa(encodeURIComponent(str));
     }
 
     // Toggle post menu
@@ -841,9 +841,9 @@
     });
 
     // Edit modal functions
-    function openEditModal(postId, content) {
+    function openEditModal(postId, encodedContent) {
       editingPostId = postId;
-      document.getElementById('edit-content').value = content.replace(/\\n/g, '\n');
+      document.getElementById('edit-content').value = decodeURIComponent(atob(encodedContent));
       document.getElementById('edit-modal').classList.add('open');
       document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('open'));
     }
@@ -931,9 +931,12 @@
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
-    // Initialize
-    loadCurrentMember();
-    loadWins();
+    // Initialize - load member first, then wins
+    async function init() {
+      await loadCurrentMember();
+      await loadWins();
+    }
+    init();
   </script>
   <script src="/member-common.js"></script>
 </body>
