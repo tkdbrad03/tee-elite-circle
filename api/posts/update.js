@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
 
     // Verify the post belongs to this member
     const postResult = await client.query(
-      'SELECT author_id FROM posts WHERE id = $1',
+      'SELECT member_id FROM posts WHERE id = $1',
       [post_id]
     );
 
@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    if (postResult.rows[0].author_id !== memberId) {
+    if (postResult.rows[0].member_id !== memberId) {
       return res.status(403).json({ error: 'You can only edit your own posts' });
     }
 
