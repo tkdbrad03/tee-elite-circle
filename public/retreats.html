@@ -35,8 +35,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 4rem;
-            background: white;
-            border-bottom: 1px solid #eee;
+            background: #1a2f23;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -46,6 +45,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            text-decoration: none;
         }
 
         .logo-section img {
@@ -56,7 +56,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.5rem;
             font-weight: 400;
-            color: #1a1a1a;
+            color: #fff;
         }
 
         .nav-links {
@@ -67,10 +67,10 @@
 
         .nav-links a {
             text-decoration: none;
-            color: #1a1a1a;
-            font-size: 0.85rem;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.75rem;
             font-weight: 500;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             transition: color 0.3s ease;
         }
 
@@ -83,7 +83,7 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: #f5f0ee;
+            background: var(--tmac-blush);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -92,29 +92,23 @@
             font-weight: 600;
             color: #1a1a1a;
             cursor: pointer;
+            text-decoration: none;
             transition: background 0.3s ease;
         }
 
         .profile-circle:hover {
-            background: var(--tmac-blush);
+            background: #d4b5b0;
         }
 
         /* Mobile menu button */
         .mobile-menu-btn {
             display: none;
-            flex-direction: column;
-            gap: 5px;
             background: none;
             border: none;
             cursor: pointer;
             padding: 5px;
-        }
-
-        .mobile-menu-btn span {
-            width: 25px;
-            height: 2px;
-            background: #1a1a1a;
-            transition: 0.3s;
+            font-size: 1.5rem;
+            color: #fff;
         }
 
         /* Main Content */
@@ -410,12 +404,11 @@
                 top: 100%;
                 left: 0;
                 right: 0;
-                background: white;
+                background: #1a2f23;
                 flex-direction: column;
                 padding: 1.5rem;
                 gap: 1.5rem;
-                border-bottom: 1px solid #eee;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
 
             .nav-links.active {
@@ -423,7 +416,7 @@
             }
 
             .mobile-menu-btn {
-                display: flex;
+                display: block;
             }
 
             .featured-retreat {
@@ -505,23 +498,19 @@
 </head>
 <body>
     <header class="header">
-        <div class="logo-section">
-            <img src="/images/tmac-logo.png" alt="TMac Inspired">
+        <a href="/dashboard.html" class="logo-section">
+            <img src="/images/tmacinspired-logo.png" alt="TMac Inspired">
             <h1>The Tee Elite Circle</h1>
-        </div>
+        </a>
         <nav class="nav-links" id="navLinks">
-            <a href="/members.html">HOME</a>
-            <a href="/between-the-tees.html">THE CIRCLE</a>
+            <a href="/dashboard.html">HOME</a>
+            <a href="/circle.html">THE CIRCLE</a>
             <a href="/retreats.html" class="active">RETREATS</a>
             <a href="/wins.html">WINS</a>
-            <a href="/resources.html">TEE ROOM</a>
+            <a href="/tee-room.html">TEE ROOM</a>
         </nav>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <a href="/profile.html" class="profile-circle" id="profileInitials">TM</a>
+        <a href="/profile.html" class="profile-circle" id="user-initials">TM</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
     </header>
 
     <main class="main-content">
@@ -859,5 +848,6 @@
         // Load RSVP status on page load
         loadRSVPStatus();
     </script>
+    <script src="/js/member-common.js"></script>
 </body>
 </html>
