@@ -181,6 +181,161 @@
       color: rgba(255,255,255,0.5);
     }
 
+    .clinic-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .clinic-signup-btn {
+      background: var(--tmac-blush);
+      color: var(--deep-forest);
+      border: none;
+      padding: 10px 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .clinic-signup-btn:hover {
+      background: #fff;
+    }
+
+    .clinic-signup-btn.signed-up {
+      background: transparent;
+      border: 1px solid var(--tmac-blush);
+      color: var(--tmac-blush);
+    }
+
+    .clinic-signup-btn.signed-up:hover {
+      background: rgba(232, 204, 200, 0.1);
+    }
+
+    .signup-count {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* From the Fairway Blog Section */
+    .blog-section {
+      margin-bottom: 48px;
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .blog-card {
+      background: #fff;
+      border: 1px solid #eee;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: block;
+    }
+
+    .blog-card:hover {
+      border-color: var(--tmac-blush);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .blog-image {
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, var(--deep-forest) 0%, #1a2e1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .blog-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-image svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--tmac-blush);
+      stroke-width: 1;
+      fill: none;
+      opacity: 0.5;
+    }
+
+    .blog-content {
+      padding: 24px;
+    }
+
+    .blog-date {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .blog-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .blog-excerpt {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .blog-read-more {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .blog-read-more svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .blog-empty {
+      text-align: center;
+      padding: 64px 32px;
+      background: #fafafa;
+      border: 1px dashed #ddd;
+    }
+
+    .blog-empty p {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .blog-empty span {
+      font-size: 12px;
+      color: #aaa;
+      font-style: italic;
+    }
+
     /* Golf Essentials Section */
     .essentials-section {
       margin-bottom: 48px;
@@ -498,8 +653,8 @@
       </div>
 
       <div class="clinics-grid" id="clinics-grid">
-        <!-- Clinic Card - Upcoming -->
-        <div class="clinic-card">
+        <!-- Clinic Card - January -->
+        <div class="clinic-card" data-clinic-id="jan-2026">
           <p class="clinic-date">January 2026</p>
           <h3 class="clinic-title">Winter Clinic</h3>
           <p class="clinic-details">Date & location to be announced. Stay tuned for details.</p>
@@ -512,11 +667,14 @@
               <p class="instructor-title">Instructor</p>
             </div>
           </div>
-          <span class="clinic-status upcoming">Upcoming</span>
+          <div class="clinic-actions">
+            <button class="clinic-signup-btn" data-clinic="jan-2026">Reserve My Spot</button>
+            <span class="signup-count" id="count-jan-2026"></span>
+          </div>
         </div>
 
-        <!-- Clinic Card - Upcoming -->
-        <div class="clinic-card">
+        <!-- Clinic Card - March -->
+        <div class="clinic-card" data-clinic-id="mar-2026">
           <p class="clinic-date">March 2026</p>
           <h3 class="clinic-title">Spring Clinic</h3>
           <p class="clinic-details">Date & location to be announced. Stay tuned for details.</p>
@@ -529,11 +687,14 @@
               <p class="instructor-title">Instructor</p>
             </div>
           </div>
-          <span class="clinic-status upcoming">Upcoming</span>
+          <div class="clinic-actions">
+            <button class="clinic-signup-btn" data-clinic="mar-2026">Reserve My Spot</button>
+            <span class="signup-count" id="count-mar-2026"></span>
+          </div>
         </div>
 
-        <!-- Clinic Card - Upcoming -->
-        <div class="clinic-card">
+        <!-- Clinic Card - May -->
+        <div class="clinic-card" data-clinic-id="may-2026">
           <p class="clinic-date">May 2026</p>
           <h3 class="clinic-title">Pre-Retreat Clinic</h3>
           <p class="clinic-details">Date & location to be announced. Stay tuned for details.</p>
@@ -546,7 +707,10 @@
               <p class="instructor-title">Instructor</p>
             </div>
           </div>
-          <span class="clinic-status upcoming">Upcoming</span>
+          <div class="clinic-actions">
+            <button class="clinic-signup-btn" data-clinic="may-2026">Reserve My Spot</button>
+            <span class="signup-count" id="count-may-2026"></span>
+          </div>
         </div>
       </div>
     </section>
@@ -567,123 +731,19 @@
       </div>
 
       <div class="essentials-grid" id="essentials-grid">
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="apparel" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Apparel</p>
-            <h3 class="essential-name">Golf Polo Collection</h3>
-            <p class="essential-desc">Stylish, breathable polos perfect for the course.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
-
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="apparel" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Apparel</p>
-            <h3 class="essential-name">Golf Skirts & Skorts</h3>
-            <p class="essential-desc">Move freely with style on every swing.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
-
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="accessories" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Accessories</p>
-            <h3 class="essential-name">Premium Golf Balls</h3>
-            <p class="essential-desc">Tour-quality performance for your game.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
-
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="accessories" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Accessories</p>
-            <h3 class="essential-name">Golf Gloves</h3>
-            <p class="essential-desc">Better grip, better game.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
-
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="gear" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Gear</p>
-            <h3 class="essential-name">Golf Bags</h3>
-            <p class="essential-desc">Carry your clubs in style.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
-
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="gear" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Gear</p>
-            <h3 class="essential-name">Rangefinders</h3>
-            <p class="essential-desc">Know your distance, own your shot.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
-
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="travel" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Travel</p>
-            <h3 class="essential-name">Golf Travel Bags</h3>
-            <p class="essential-desc">Protect your clubs on retreat trips.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
-
-        <!-- Essential Item -->
-        <a href="#" class="essential-card" data-category="accessories" target="_blank">
-          <div class="essential-image">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          </div>
-          <div class="essential-info">
-            <p class="essential-category">Accessories</p>
-            <h3 class="essential-name">Sun Protection</h3>
-            <p class="essential-desc">Hats, visors, and sunscreen essentials.</p>
-            <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-          </div>
-        </a>
+        <div class="essentials-loading">Loading essentials...</div>
       </div>
     </section>
 
-    <!-- ADDITIONAL RESOURCES -->
-    <section class="resources-section">
+    <!-- FROM THE FAIRWAY BLOG -->
+    <section class="blog-section">
       <div class="section-header">
-        <h2>Resources</h2>
-        <p>Elevate your game on and off the course.</p>
+        <h2>From the Fairway</h2>
+        <p>Elevate your game — on and off the course.</p>
       </div>
 
-      <div class="resources-grid" id="resources-grid">
-        <div class="empty-state">
-          <p>Resources coming soon.</p>
-        </div>
+      <div class="blog-grid" id="blog-grid">
+        <div class="blog-loading">Loading...</div>
       </div>
     </section>
 
@@ -715,28 +775,184 @@
       window.location.href = '/member-login.html';
     });
 
-    // Category filter for essentials
-    const categoryBtns = document.querySelectorAll('.category-btn');
-    const essentialCards = document.querySelectorAll('.essential-card');
+    // Clinic signup functionality
+    const signupBtns = document.querySelectorAll('.clinic-signup-btn');
 
-    categoryBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const category = btn.dataset.category;
-        
-        // Update active button
-        categoryBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    // Load signup status on page load
+    async function loadClinicSignups() {
+      try {
+        const res = await fetch('/api/clinics/signups');
+        if (res.ok) {
+          const data = await res.json();
+          data.forEach(clinic => {
+            const countEl = document.getElementById(`count-${clinic.clinic_id}`);
+            const btn = document.querySelector(`[data-clinic="${clinic.clinic_id}"]`);
+            
+            if (countEl && clinic.count > 0) {
+              countEl.textContent = `${clinic.count} attending`;
+            }
+            
+            if (btn && clinic.signed_up) {
+              btn.textContent = "I'm Going ✓";
+              btn.classList.add('signed-up');
+            }
+          });
+        }
+      } catch (err) {
+        console.error('Error loading signups:', err);
+      }
+    }
 
-        // Filter cards
-        essentialCards.forEach(card => {
-          if (category === 'all' || card.dataset.category === category) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
+    signupBtns.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const clinicId = btn.dataset.clinic;
+        const isSignedUp = btn.classList.contains('signed-up');
+
+        try {
+          const res = await fetch('/api/clinics/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              clinic_id: clinicId,
+              action: isSignedUp ? 'cancel' : 'signup'
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            const countEl = document.getElementById(`count-${clinicId}`);
+            
+            if (isSignedUp) {
+              btn.textContent = 'Reserve My Spot';
+              btn.classList.remove('signed-up');
+            } else {
+              btn.textContent = "I'm Going ✓";
+              btn.classList.add('signed-up');
+            }
+            
+            if (countEl) {
+              countEl.textContent = data.count > 0 ? `${data.count} attending` : '';
+            }
           }
-        });
+        } catch (err) {
+          console.error('Signup error:', err);
+        }
       });
     });
+
+    loadClinicSignups();
+
+    // Load Golf Essentials dynamically
+    async function loadEssentials() {
+      const grid = document.getElementById('essentials-grid');
+      try {
+        const res = await fetch('/api/essentials/get');
+        if (res.ok) {
+          const items = await res.json();
+          
+          if (items.length === 0) {
+            grid.innerHTML = '<div class="essentials-empty" style="grid-column: 1/-1; text-align: center; padding: 48px; color: #888;">Coming soon — curated picks for the course.</div>';
+            return;
+          }
+
+          grid.innerHTML = items.map(item => `
+            <a href="${item.affiliate_url || '#'}" class="essential-card" data-category="${item.category}" target="_blank">
+              <div class="essential-image">
+                ${item.image_url 
+                  ? `<img src="${item.image_url}" alt="${item.name}">`
+                  : `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>`
+                }
+              </div>
+              <div class="essential-info">
+                <p class="essential-category">${item.category}</p>
+                <h3 class="essential-name">${item.name}</h3>
+                ${item.description ? `<p class="essential-desc">${item.description}</p>` : ''}
+                <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
+              </div>
+            </a>
+          `).join('');
+
+          // Re-attach category filter after loading
+          attachCategoryFilter();
+        }
+      } catch (err) {
+        console.error('Error loading essentials:', err);
+        grid.innerHTML = '<div class="essentials-empty" style="grid-column: 1/-1; text-align: center; padding: 48px; color: #888;">Coming soon — curated picks for the course.</div>';
+      }
+    }
+
+    // Category filter function
+    function attachCategoryFilter() {
+      const categoryBtns = document.querySelectorAll('.category-btn');
+      const essentialCards = document.querySelectorAll('.essential-card');
+
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const category = btn.dataset.category;
+          
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          essentialCards.forEach(card => {
+            if (category === 'all' || card.dataset.category === category) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    }
+
+    // Load Blog Posts dynamically
+    async function loadBlogPosts() {
+      const grid = document.getElementById('blog-grid');
+      try {
+        const res = await fetch('/api/blog/get');
+        if (res.ok) {
+          const posts = await res.json();
+          
+          if (posts.length === 0) {
+            grid.innerHTML = `
+              <div class="blog-empty">
+                <p>Stories coming soon.</p>
+                <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+              </div>
+            `;
+            return;
+          }
+
+          grid.innerHTML = posts.map(post => `
+            <div class="blog-card">
+              <div class="blog-image">
+                ${post.image_url 
+                  ? `<img src="${post.image_url}" alt="${post.title}">`
+                  : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
+                }
+              </div>
+              <div class="blog-content">
+                <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <h3 class="blog-title">${post.title}</h3>
+                ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
+                <span class="blog-read-more">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error loading blog posts:', err);
+        grid.innerHTML = `
+          <div class="blog-empty">
+            <p>Stories coming soon.</p>
+            <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+          </div>
+        `;
+      }
+    }
+
+    // Load content
+    loadEssentials();
+    loadBlogPosts();
   </script>
   <script src="/member-common.js"></script>
 </body>
