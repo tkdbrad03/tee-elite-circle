@@ -57,6 +57,7 @@ module.exports = async (req, res) => {
     }
 
     // Insert new member as application with paid status
+    // Include default values for required columns
     const result = await client.query(
       `INSERT INTO applications (
         full_name,
@@ -68,8 +69,12 @@ module.exports = async (req, res) => {
         deposit_paid,
         interest_level,
         status,
+        golf_relationship,
+        season_of_life,
+        what_draws_you,
+        what_to_elevate,
         created_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW())
       RETURNING id`,
       [
         full_name,
@@ -80,7 +85,11 @@ module.exports = async (req, res) => {
         true,
         true,
         'Ready to secure my founding seat',
-        'approved'
+        'approved',
+        'Founding Member - Direct Add',
+        'Founding Member',
+        'Founding Member - Direct Add',
+        'Founding Member - Direct Add'
       ]
     );
 
