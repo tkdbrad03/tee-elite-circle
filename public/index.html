@@ -113,6 +113,22 @@
       color: var(--charcoal);
       border-color: var(--tmac-blush);
     }
+    .nav-links {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.nav-cta.nav-login {
+  background: transparent;
+  border: 1px solid rgba(232, 204, 200, 0.3);
+}
+
+.nav-cta.nav-login:hover {
+  background: rgba(232, 204, 200, 0.1);
+  border-color: var(--tmac-blush);
+  color: var(--tmac-blush);
+}
 
     .hero-content {
       flex: 1;
@@ -1100,7 +1116,7 @@
         <span class="presents-text">presents</span>
         <span class="circle-name">The Tee Elite Circle</span>
       </div>
-      <a href="#apply" class="nav-cta">Apply Now</a>
+      <div class="nav-links">   <a href="member-login.html" class="nav-cta nav-login">Member Login</a>   <a href="#apply" class="nav-cta">Apply Now</a> </div>
     </nav>
 
     <div class="hero-content">
