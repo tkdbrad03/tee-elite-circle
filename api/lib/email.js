@@ -104,7 +104,7 @@ const adminNewApplicationEmail = (application) => ({
     ` : ''}
     
     <div style="text-align: center; margin-top: 32px;">
-      <a href="https://tee-elite-circle.vercel.app/admin.html" style="display: inline-block; background-color: #1a2f23; color: #ffffff; text-decoration: none; padding: 14px 32px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;">View in Admin Panel</a>
+      <a href="https://tmacmastermind.com/admin.html" style="display: inline-block; background-color: #1a2f23; color: #ffffff; text-decoration: none; padding: 14px 32px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;">View in Admin Panel</a>
     </div>
   `
 });
@@ -131,7 +131,7 @@ const adminDepositPaidEmail = (name, email) => ({
     </p>
     
     <div style="text-align: center; margin-top: 32px;">
-      <a href="https://tee-elite-circle.vercel.app/admin.html" style="display: inline-block; background-color: #1a2f23; color: #ffffff; text-decoration: none; padding: 14px 32px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;">View in Admin Panel</a>
+      <a href="https://tmacmastermind.com/admin.html" style="display: inline-block; background-color: #1a2f23; color: #ffffff; text-decoration: none; padding: 14px 32px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;">View in Admin Panel</a>
     </div>
   `
 });
