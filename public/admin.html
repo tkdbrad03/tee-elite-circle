@@ -113,6 +113,11 @@
       color: #fff;
     }
 
+    .admin-header-btns {
+      display: flex;
+      gap: 12px;
+    }
+
     .admin-header button {
       background: none;
       border: 1px solid rgba(255,255,255,0.3);
@@ -120,6 +125,17 @@
       padding: 8px 16px;
       font-size: 11px;
       cursor: pointer;
+    }
+
+    .admin-header button.add-member-btn {
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+      border: none;
+      font-weight: 500;
+    }
+
+    .admin-header button.add-member-btn:hover {
+      background: #d4b5b0;
     }
 
     .admin-main {
@@ -224,6 +240,13 @@
     .applicant-email {
       font-size: 12px;
       color: #888;
+    }
+
+    .pin-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--deep-forest);
     }
 
     .status-badge {
@@ -340,6 +363,21 @@
       color: var(--charcoal);
     }
 
+    .modal-field input,
+    .modal-field select {
+      width: 100%;
+      padding: 12px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    .modal-field input:focus,
+    .modal-field select:focus {
+      border-color: var(--deep-forest);
+    }
+
     .modal-actions {
       display: flex;
       gap: 12px;
@@ -357,6 +395,26 @@
       font-size: 24px;
       cursor: pointer;
       color: #888;
+    }
+
+    .form-btn {
+      padding: 12px 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+    }
+
+    .form-btn.primary {
+      background: var(--deep-forest);
+      color: #fff;
+    }
+
+    .form-btn.secondary {
+      background: #eee;
+      color: var(--charcoal);
     }
 
     @media (max-width: 768px) {
@@ -385,7 +443,10 @@
   <div class="admin-dashboard" id="admin-dashboard">
     <header class="admin-header">
       <h1>The Tee Elite Circle — Admin</h1>
-      <button onclick="logout()">Log Out</button>
+      <div class="admin-header-btns">
+        <button class="add-member-btn" onclick="openAddMemberModal()">+ Add Member</button>
+        <button onclick="logout()">Log Out</button>
+      </div>
     </header>
 
     <main class="admin-main">
@@ -423,6 +484,7 @@
         <table>
           <thead>
             <tr>
+              <th>Pin</th>
               <th>Applicant</th>
               <th>Location</th>
               <th>Interest</th>
@@ -433,7 +495,7 @@
           </thead>
           <tbody id="applications-tbody">
             <tr>
-              <td colspan="6" style="text-align: center; color: #888;">Loading applications...</td>
+              <td colspan="7" style="text-align: center; color: #888;">Loading applications...</td>
             </tr>
           </tbody>
         </table>
@@ -452,6 +514,54 @@
       <div class="modal-actions" id="modal-actions">
         <!-- Populated by JS -->
       </div>
+    </div>
+  </div>
+
+  <!-- ADD MEMBER MODAL -->
+  <div class="modal-overlay" id="add-member-modal">
+    <div class="modal" style="position: relative;">
+      <button class="close-modal" onclick="closeAddMemberModal()">&times;</button>
+      <h2>Add Founding Member</h2>
+      <form id="add-member-form">
+        <div class="modal-field">
+          <label>Full Name *</label>
+          <input type="text" id="new-member-name" required placeholder="e.g. Simone Richardson">
+        </div>
+        <div class="modal-field">
+          <label>Email *</label>
+          <input type="email" id="new-member-email" required placeholder="e.g. simone@email.com">
+        </div>
+        <div class="modal-field">
+          <label>Phone</label>
+          <input type="tel" id="new-member-phone" placeholder="e.g. (404) 555-1234">
+        </div>
+        <div class="modal-field">
+          <label>Location *</label>
+          <input type="text" id="new-member-location" required placeholder="e.g. Atlanta, GA">
+        </div>
+        <div class="modal-field">
+          <label>Founding Pin Number *</label>
+          <select id="new-member-pin" required>
+            <option value="">Select pin number...</option>
+            <option value="1">#01</option>
+            <option value="2">#02</option>
+            <option value="3">#03</option>
+            <option value="4">#04</option>
+            <option value="5">#05</option>
+            <option value="6">#06</option>
+            <option value="7">#07</option>
+            <option value="8">#08</option>
+            <option value="9">#09</option>
+            <option value="10">#10</option>
+            <option value="11">#11</option>
+            <option value="12">#12</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="form-btn secondary" onclick="closeAddMemberModal()">Cancel</button>
+          <button type="submit" class="form-btn primary">Add Member</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -499,7 +609,7 @@
       } catch (err) {
         console.error('Error loading applications:', err);
         document.getElementById('applications-tbody').innerHTML = 
-          '<tr><td colspan="6" style="text-align: center; color: #c0392b;">Error loading applications</td></tr>';
+          '<tr><td colspan="7" style="text-align: center; color: #c0392b;">Error loading applications</td></tr>';
       }
     }
 
@@ -529,21 +639,24 @@
       const tbody = document.getElementById('applications-tbody');
       
       if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #888;">No applications found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #888;">No applications found</td></tr>';
         return;
       }
 
       tbody.innerHTML = filtered.map(app => `
         <tr>
           <td>
+            ${app.pin_number ? `<span class="pin-number">#${String(app.pin_number).padStart(2, '0')}</span>` : '—'}
+          </td>
+          <td>
             <div class="applicant-name">${app.full_name}</div>
             <div class="applicant-email">${app.email}</div>
           </td>
           <td>${app.location}</td>
           <td>
-            <span class="interest-badge ${app.interest_level.includes('Ready') ? 'interest-ready' : ''}">
-              ${app.interest_level.includes('Ready') ? '✓ Ready' : 
-                app.interest_level.includes('Likely') ? 'Likely' : 'Curious'}
+            <span class="interest-badge ${app.interest_level && app.interest_level.includes('Ready') ? 'interest-ready' : ''}">
+              ${app.interest_level ? (app.interest_level.includes('Ready') ? '✓ Ready' : 
+                app.interest_level.includes('Likely') ? 'Likely' : 'Curious') : 'Direct Add'}
             </span>
           </td>
           <td>
@@ -597,6 +710,12 @@
       if (!app) return;
 
       document.getElementById('modal-content').innerHTML = `
+        ${app.pin_number ? `
+          <div class="modal-field">
+            <label>Founding Pin</label>
+            <p style="font-size: 24px; font-family: 'Cormorant Garamond', serif; color: var(--deep-forest);">#${String(app.pin_number).padStart(2, '0')}</p>
+          </div>
+        ` : ''}
         <div class="modal-field">
           <label>Name</label>
           <p>${app.full_name}</p>
@@ -613,26 +732,36 @@
           <label>Location</label>
           <p>${app.location}</p>
         </div>
-        <div class="modal-field">
-          <label>Relationship with Golf</label>
-          <p>${app.golf_relationship}</p>
-        </div>
-        <div class="modal-field">
-          <label>Season of Life</label>
-          <p>${app.season_of_life}</p>
-        </div>
-        <div class="modal-field">
-          <label>What Draws You to The Circle?</label>
-          <p>${app.what_draws_you}</p>
-        </div>
-        <div class="modal-field">
-          <label>What Are You Ready to Elevate?</label>
-          <p>${app.what_to_elevate}</p>
-        </div>
-        <div class="modal-field">
-          <label>Interest Level</label>
-          <p>${app.interest_level}</p>
-        </div>
+        ${app.golf_relationship ? `
+          <div class="modal-field">
+            <label>Relationship with Golf</label>
+            <p>${app.golf_relationship}</p>
+          </div>
+        ` : ''}
+        ${app.season_of_life ? `
+          <div class="modal-field">
+            <label>Season of Life</label>
+            <p>${app.season_of_life}</p>
+          </div>
+        ` : ''}
+        ${app.what_draws_you ? `
+          <div class="modal-field">
+            <label>What Draws You to The Circle?</label>
+            <p>${app.what_draws_you}</p>
+          </div>
+        ` : ''}
+        ${app.what_to_elevate ? `
+          <div class="modal-field">
+            <label>What Are You Ready to Elevate?</label>
+            <p>${app.what_to_elevate}</p>
+          </div>
+        ` : ''}
+        ${app.interest_level ? `
+          <div class="modal-field">
+            <label>Interest Level</label>
+            <p>${app.interest_level}</p>
+          </div>
+        ` : ''}
         ${app.anything_else ? `
           <div class="modal-field">
             <label>Anything Else</label>
@@ -658,6 +787,59 @@
     function closeModal() {
       document.getElementById('detail-modal').classList.remove('visible');
     }
+
+    // Add Member Modal
+    function openAddMemberModal() {
+      document.getElementById('add-member-modal').classList.add('visible');
+    }
+
+    function closeAddMemberModal() {
+      document.getElementById('add-member-modal').classList.remove('visible');
+      document.getElementById('add-member-form').reset();
+    }
+
+    // Add Member Form Submit
+    document.getElementById('add-member-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const memberData = {
+        full_name: document.getElementById('new-member-name').value,
+        email: document.getElementById('new-member-email').value,
+        phone: document.getElementById('new-member-phone').value || null,
+        location: document.getElementById('new-member-location').value,
+        pin_number: parseInt(document.getElementById('new-member-pin').value),
+        paid_in_full: true,
+        deposit_paid: true,
+        interest_level: 'Ready to secure my founding seat',
+        status: 'approved'
+      };
+
+      try {
+        const res = await fetch('/api/admin/add-member', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(memberData)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✓ Founding Member Added!\n\nName: ${memberData.full_name}\nPin: #${String(memberData.pin_number).padStart(2, '0')}\nEmail: ${memberData.email}`);
+          closeAddMemberModal();
+          loadApplications();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) {
+        console.error('Error adding member:', err);
+        alert('Error adding member. Please try again.');
+      }
+    });
+
+    // Close add member modal on overlay click
+    document.getElementById('add-member-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'add-member-modal') closeAddMemberModal();
+    });
 
     // Mark deposit paid
     async function markDepositPaid(id) {
