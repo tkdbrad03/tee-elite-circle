@@ -1,21 +1,24 @@
-import { sql } from '@vercel/postgres';
+const { Client } = require('pg');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const client = new Client({
+    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+
   try {
+    await client.connect();
+
     const { 
       full_name, 
       email, 
       phone, 
       location, 
-      pin_number,
-      paid_in_full,
-      deposit_paid,
-      interest_level,
-      status
+      pin_number
     } = req.body;
 
     // Validate required fields
@@ -23,27 +26,39 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Check if pin number is already taken
-    const existingPin = await sql`
-      SELECT id FROM applications WHERE pin_number = ${pin_number}
-    `;
+    // Check if pin number is already taken in applications
+    const existingAppPin = await client.query(
+      'SELECT id FROM applications WHERE pin_number = $1',
+      [pin_number]
+    );
     
-    if (existingPin.rows.length > 0) {
+    if (existingAppPin.rows.length > 0) {
+      return res.status(400).json({ error: `Pin #${String(pin_number).padStart(2, '0')} is already assigned` });
+    }
+
+    // Check if pin number is already taken in members
+    const existingMemberPin = await client.query(
+      'SELECT id FROM members WHERE pin_number = $1',
+      [pin_number]
+    );
+    
+    if (existingMemberPin.rows.length > 0) {
       return res.status(400).json({ error: `Pin #${String(pin_number).padStart(2, '0')} is already assigned` });
     }
 
     // Check if email already exists
-    const existingEmail = await sql`
-      SELECT id FROM applications WHERE email = ${email}
-    `;
+    const existingEmail = await client.query(
+      'SELECT id FROM applications WHERE email = $1',
+      [email]
+    );
     
     if (existingEmail.rows.length > 0) {
       return res.status(400).json({ error: 'A member with this email already exists' });
     }
 
-    // Insert new member
-    const result = await sql`
-      INSERT INTO applications (
+    // Insert new member as application with paid status
+    const result = await client.query(
+      `INSERT INTO applications (
         full_name,
         email,
         phone,
@@ -54,20 +69,20 @@ export default async function handler(req, res) {
         interest_level,
         status,
         created_at
-      ) VALUES (
-        ${full_name},
-        ${email},
-        ${phone},
-        ${location},
-        ${pin_number},
-        ${paid_in_full || true},
-        ${deposit_paid || true},
-        ${interest_level || 'Ready to secure my founding seat'},
-        ${status || 'approved'},
-        NOW()
-      )
-      RETURNING id
-    `;
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+      RETURNING id`,
+      [
+        full_name,
+        email,
+        phone || null,
+        location,
+        pin_number,
+        true,
+        true,
+        'Ready to secure my founding seat',
+        'approved'
+      ]
+    );
 
     return res.status(200).json({ 
       success: true, 
@@ -78,5 +93,7 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error('Error adding member:', error);
     return res.status(500).json({ error: 'Failed to add member' });
+  } finally {
+    await client.end();
   }
-}
+};
