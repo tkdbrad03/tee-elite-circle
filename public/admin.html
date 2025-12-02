@@ -823,7 +823,7 @@
 
         if (res.ok) {
           const data = await res.json();
-          alert(`✓ Founding Member Added!\n\nName: ${memberData.full_name}\nPin: #${String(memberData.pin_number).padStart(2, '0')}\nEmail: ${memberData.email}`);
+          alert(`✓ Founding Member Added & Account Created!\n\nName: ${memberData.full_name}\nPin: #${String(memberData.pin_number).padStart(2, '0')}\nEmail: ${memberData.email}\nTemp Password: ${data.temp_password}\n\n📧 Welcome email sent with login credentials!`);
           closeAddMemberModal();
           loadApplications();
         } else {
