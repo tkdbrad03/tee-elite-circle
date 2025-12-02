@@ -39,7 +39,7 @@ function addAdminLink() {
   const headerNav = document.querySelector('.header-nav');
   if (headerNav) {
     const adminLink = document.createElement('a');
-    adminLink.href = '/tee-room-admin.html';
+    adminLink.href = '/admin.html';
     adminLink.className = 'nav-link admin-link';
     adminLink.textContent = 'Admin';
     adminLink.style.color = '#e8ccc8';
@@ -52,7 +52,7 @@ function addAdminLink() {
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
       const adminLink = document.createElement('a');
-      adminLink.href = '/tee-room-admin.html';
+      adminLink.href = '/admin.html';
       adminLink.className = 'mobile-nav-link admin-link';
       adminLink.textContent = 'Admin';
       adminLink.style.color = '#e8ccc8';
