@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
         * {
             margin: 0;
@@ -27,88 +28,6 @@
             background-color: #faf9f7;
             color: #2d2d2d;
             min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 4rem;
-            background: #1a2f23;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-        }
-
-        .logo-section img {
-            height: 50px;
-        }
-
-        .logo-section h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: #fff;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: rgba(255,255,255,0.85);
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--tmac-blush);
-        }
-
-        .profile-circle {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--tmac-blush);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1a1a1a;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.3s ease;
-        }
-
-        .profile-circle:hover {
-            background: #d4b5b0;
-        }
-
-        /* Mobile menu button */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-            font-size: 1.5rem;
-            color: #fff;
         }
 
         /* Main Content */
@@ -394,30 +313,6 @@
 
         /* Mobile Styles */
         @media (max-width: 900px) {
-            .header {
-                padding: 1rem 1.5rem;
-            }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: #1a2f23;
-                flex-direction: column;
-                padding: 1.5rem;
-                gap: 1.5rem;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
 
             .featured-retreat {
                 grid-template-columns: 1fr;
@@ -446,72 +341,46 @@
                 gap: 0.5rem;
             }
         }
-
-        /* Mobile navigation */
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            border-top: 1px solid #eee;
-            padding: 0.75rem 0;
-            z-index: 100;
-        }
-
-        .mobile-nav-links {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .mobile-nav-links a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #666;
-            font-size: 0.65rem;
-            gap: 0.25rem;
-        }
-
-        .mobile-nav-links a.active {
-            color: var(--tmac-blush);
-        }
-
-        .mobile-nav-links svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-nav {
-                display: block;
-            }
-
-            .main-content {
-                padding-bottom: 5rem;
-            }
-        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <a href="/dashboard.html" class="logo-section">
-            <img src="/images/tmacinspired-logo.png" alt="TMac Inspired">
-            <h1>The Tee Elite Circle</h1>
+    <!-- HEADER -->
+    <header class="member-header">
+      <div class="header-inner">
+        <a href="/home.html" class="header-logo">
+          <img src="images/tmac-logo.png" alt="TMac Inspired">
+          <span>The Tee Elite Circle</span>
         </a>
-        <nav class="nav-links" id="navLinks">
-            <a href="/dashboard.html">HOME</a>
-            <a href="/circle.html">THE CIRCLE</a>
-            <a href="/retreats.html" class="active">RETREATS</a>
-            <a href="/wins.html">WINS</a>
-            <a href="/tee-room.html">TEE ROOM</a>
+        <nav class="header-nav">
+          <a href="/home.html" class="nav-link">Home</a>
+          <a href="/members.html" class="nav-link">The Circle</a>
+          <a href="/retreats.html" class="nav-link active">Retreats</a>
+          <a href="/wins.html" class="nav-link">Wins</a>
+          <a href="/resources.html" class="nav-link">Tee Room</a>
         </nav>
-        <a href="/profile.html" class="profile-circle" id="user-initials">TM</a>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
+        <div class="header-user">
+          <a href="/profile.html" class="user-avatar" id="user-avatar">
+            <span id="user-initials">TM</span>
+          </a>
+        </div>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </header>
+
+    <!-- MOBILE NAV -->
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="/home.html" class="mobile-nav-link">Home</a>
+      <a href="/members.html" class="mobile-nav-link">The Circle</a>
+      <a href="/retreats.html" class="mobile-nav-link active">Retreats</a>
+      <a href="/wins.html" class="mobile-nav-link">Wins</a>
+      <a href="/resources.html" class="mobile-nav-link">Tee Room</a>
+      <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+      <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
+    </div>
 
     <main class="main-content">
         <!-- Featured Retreat -->
@@ -708,45 +577,25 @@
         </section>
     </main>
 
-    <!-- Mobile Navigation -->
-    <nav class="mobile-nav">
-        <div class="mobile-nav-links" id="mobileNavLinks">
-            <a href="/members.html">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                HOME
-            </a>
-            <a href="/between-the-tees.html">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                CIRCLE
-            </a>
-            <a href="/retreats.html" class="active">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                RETREATS
-            </a>
-            <a href="/wins.html">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
-                WINS
-            </a>
-            <a href="/resources.html">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                TEE ROOM
-            </a>
-        </div>
-    </nav>
+    <!-- FOOTER -->
+    <footer class="member-footer">
+      <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+    </footer>
 
-    <script src="/member-common.js"></script>
     <script>
+        // Mobile menu
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+          this.classList.toggle('active');
+          document.getElementById('mobile-nav').classList.toggle('open');
+        });
+
+        // Logout
+        document.getElementById('logout-link').addEventListener('click', async (e) => {
+          e.preventDefault();
+          await fetch('/api/auth/logout', { method: 'POST' });
+          window.location.href = '/member-login.html';
+        });
+
         // Countdown Timer
         function updateCountdown() {
             const retreatDate = new Date('April 15, 2026 00:00:00').getTime();
@@ -764,16 +613,6 @@
 
         updateCountdown();
         setInterval(updateCountdown, 60000);
-
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
-        }
 
         // Smooth scroll to schedule
         document.querySelector('.schedule-btn').addEventListener('click', function(e) {
