@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 const bcrypt = require('bcryptjs');
-const { sendEmail, welcomeEmail } = require('../../lib/email');
+const { sendEmail, welcomeEmail } = require('../lib/email');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
