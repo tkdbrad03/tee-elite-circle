@@ -37,9 +37,7 @@
     }
 
     .wins-layout {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 48px;
+      max-width: 700px;
     }
 
     /* Post Form */
@@ -184,6 +182,175 @@
       color: #999;
     }
 
+    .win-header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .post-menu {
+      position: relative;
+    }
+
+    .post-menu-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 18px;
+      color: #aaa;
+      letter-spacing: 2px;
+      transition: color 0.3s ease;
+    }
+
+    .post-menu-btn:hover {
+      color: var(--tmac-bronze);
+    }
+
+    .post-menu-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      min-width: 140px;
+      z-index: 10;
+    }
+
+    .post-menu-dropdown.open {
+      display: block;
+    }
+
+    .post-menu-item {
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      color: var(--charcoal);
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .post-menu-item:hover {
+      background: var(--tmac-blush-light);
+      color: var(--tmac-bronze);
+    }
+
+    .post-menu-item.delete {
+      color: #999;
+    }
+
+    .post-menu-item.delete:hover {
+      background: #fff5f5;
+      color: #c0392b;
+    }
+
+    /* Edit Modal */
+    .edit-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-modal-overlay.open {
+      display: flex;
+    }
+
+    .edit-modal {
+      background: #fff;
+      width: 90%;
+      max-width: 500px;
+      padding: 32px;
+    }
+
+    .edit-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+      margin-bottom: 20px;
+    }
+
+    .edit-modal textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+      resize: vertical;
+      margin-bottom: 20px;
+    }
+
+    .edit-modal textarea:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .edit-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .edit-cancel-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      background: none;
+      border: 1px solid #ddd;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .edit-cancel-btn:hover {
+      border-color: #aaa;
+      color: #666;
+    }
+
+    .edit-save-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      border: none;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .edit-save-btn:hover {
+      background: var(--tmac-blush-light);
+    }
+
+    /* Delete Confirmation */
+    .delete-confirm {
+      text-align: center;
+    }
+
+    .delete-confirm p {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+
     .win-content {
       padding: 20px 24px;
       font-size: 15px;
@@ -312,63 +479,6 @@
       color: #fff;
     }
 
-    /* Sidebar */
-    .wins-sidebar {
-      position: sticky;
-      top: 100px;
-    }
-
-    .sidebar-card {
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.06);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .sidebar-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      color: var(--charcoal);
-      margin-bottom: 16px;
-    }
-
-    .top-contributors {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .contributor {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .contributor-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--tmac-blush);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .contributor-avatar span {
-      font-size: 12px;
-      color: var(--deep-forest);
-    }
-
-    .contributor-name {
-      font-size: 14px;
-      color: var(--charcoal);
-    }
-
-    .contributor-wins {
-      font-size: 11px;
-      color: #888;
-    }
-
     .empty-feed {
       background: #fff;
       border: 1px solid rgba(0,0,0,0.06);
@@ -385,25 +495,6 @@
     .empty-feed span {
       font-size: 13px;
       color: #aaa;
-    }
-
-    @media (max-width: 900px) {
-      .wins-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .wins-sidebar {
-        position: static;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .wins-sidebar {
-        grid-template-columns: 1fr;
-      }
     }
   </style>
 </head>
@@ -479,20 +570,6 @@
           </div>
         </div>
       </div>
-
-      <!-- SIDEBAR -->
-      <aside class="wins-sidebar">
-        <div class="sidebar-card">
-          <h3 class="sidebar-title">This Month</h3>
-          <p style="font-size: 13px; color: #888;">Stats coming soon</p>
-        </div>
-        <div class="sidebar-card">
-          <h3 class="sidebar-title">Top Contributors</h3>
-          <div class="top-contributors" id="top-contributors">
-            <p style="font-size: 13px; color: #888;">Be the first to post</p>
-          </div>
-        </div>
-      </aside>
     </div>
   </main>
 
@@ -501,8 +578,34 @@
     <p>The Tee Elite Circle — A TMac Inspired Experience</p>
   </footer>
 
+  <!-- EDIT MODAL -->
+  <div class="edit-modal-overlay" id="edit-modal">
+    <div class="edit-modal">
+      <h2 class="edit-modal-title">Edit Your Win</h2>
+      <textarea id="edit-content"></textarea>
+      <div class="edit-modal-actions">
+        <button class="edit-cancel-btn" onclick="closeEditModal()">Cancel</button>
+        <button class="edit-save-btn" id="edit-save-btn" onclick="saveEdit()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div class="edit-modal-overlay" id="delete-modal">
+    <div class="edit-modal delete-confirm">
+      <h2 class="edit-modal-title">Remove This Win?</h2>
+      <p>This action cannot be undone.</p>
+      <div class="edit-modal-actions">
+        <button class="edit-cancel-btn" onclick="closeDeleteModal()">Keep It</button>
+        <button class="edit-save-btn" id="delete-confirm-btn" onclick="deletePost()">Remove</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let currentMember = null;
+    let editingPostId = null;
+    let deletingPostId = null;
 
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -567,7 +670,18 @@
                 <p class="win-author-name">${post.author_name}</p>
                 <p class="win-author-pin">Founding Member #${String(post.author_pin || 1).padStart(2, '0')}</p>
               </div>
-              <span class="win-date">${formatDate(post.created_at)}</span>
+              <div class="win-header-right">
+                <span class="win-date">${formatDate(post.created_at)}</span>
+                ${post.author_id === currentMember?.id ? `
+                  <div class="post-menu">
+                    <button class="post-menu-btn" onclick="togglePostMenu(${post.id})">⋯</button>
+                    <div class="post-menu-dropdown" id="menu-${post.id}">
+                      <button class="post-menu-item" onclick="openEditModal(${post.id}, '${escapeForAttr(post.content)}')">Edit</button>
+                      <button class="post-menu-item delete" onclick="confirmDelete(${post.id})">Remove</button>
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
             </div>
             <div class="win-content">${post.content}</div>
             ${post.image_url ? `<img src="${post.image_url}" class="win-image" alt="Win image">` : ''}
@@ -699,6 +813,109 @@
     function getInitials(name) {
       if (!name) return 'FM';
       return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function escapeForAttr(str) {
+      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+    }
+
+    // Toggle post menu
+    function togglePostMenu(postId) {
+      // Close all other menus first
+      document.querySelectorAll('.post-menu-dropdown').forEach(menu => {
+        if (menu.id !== `menu-${postId}`) {
+          menu.classList.remove('open');
+        }
+      });
+      const menu = document.getElementById(`menu-${postId}`);
+      menu.classList.toggle('open');
+    }
+
+    // Close menus when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.post-menu')) {
+        document.querySelectorAll('.post-menu-dropdown').forEach(menu => {
+          menu.classList.remove('open');
+        });
+      }
+    });
+
+    // Edit modal functions
+    function openEditModal(postId, content) {
+      editingPostId = postId;
+      document.getElementById('edit-content').value = content.replace(/\\n/g, '\n');
+      document.getElementById('edit-modal').classList.add('open');
+      document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('open'));
+    }
+
+    function closeEditModal() {
+      editingPostId = null;
+      document.getElementById('edit-modal').classList.remove('open');
+    }
+
+    async function saveEdit() {
+      const content = document.getElementById('edit-content').value.trim();
+      if (!content || !editingPostId) return;
+
+      const btn = document.getElementById('edit-save-btn');
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/posts/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: editingPostId, content })
+        });
+
+        if (res.ok) {
+          closeEditModal();
+          loadWins();
+        }
+      } catch (err) {
+        console.error('Error updating post:', err);
+      }
+
+      btn.textContent = 'Save Changes';
+      btn.disabled = false;
+    }
+
+    // Delete modal functions
+    function confirmDelete(postId) {
+      deletingPostId = postId;
+      document.getElementById('delete-modal').classList.add('open');
+      document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('open'));
+    }
+
+    function closeDeleteModal() {
+      deletingPostId = null;
+      document.getElementById('delete-modal').classList.remove('open');
+    }
+
+    async function deletePost() {
+      if (!deletingPostId) return;
+
+      const btn = document.getElementById('delete-confirm-btn');
+      btn.textContent = 'Removing...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/posts/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: deletingPostId })
+        });
+
+        if (res.ok) {
+          closeDeleteModal();
+          loadWins();
+        }
+      } catch (err) {
+        console.error('Error deleting post:', err);
+      }
+
+      btn.textContent = 'Remove';
+      btn.disabled = false;
     }
 
     function formatDate(dateStr) {
