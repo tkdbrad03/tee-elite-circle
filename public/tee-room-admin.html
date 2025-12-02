@@ -2,958 +2,650 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>The Tee Room — The Tee Elite Circle</title>
+  <title>Tee Room Admin — The Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
   <style>
-    .page-header {
-      margin-bottom: 48px;
+    :root {
+      --deep-forest: #2d3b2d;
+      --tmac-blush: #e8ccc8;
+      --tmac-blush-light: #faf6f5;
+      --charcoal: #2a2a2a;
+      --tmac-bronze: #8b7355;
     }
 
-    .page-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 8px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .page-title {
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f8f8f8;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .admin-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .admin-header {
+      margin-bottom: 40px;
+    }
+
+    .admin-header h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(32px, 5vw, 48px);
+      font-size: 36px;
       font-weight: 400;
       color: var(--charcoal);
-      margin-bottom: 12px;
-    }
-
-    .page-subtitle {
-      font-size: 14px;
-      color: #666;
-      max-width: 500px;
-    }
-
-    /* Golf Clinics Section */
-    .clinics-section {
-      background: var(--deep-forest);
-      padding: 48px;
-      margin-bottom: 48px;
-    }
-
-    .clinics-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .clinics-title-wrap h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 400;
-      color: #fff;
       margin-bottom: 8px;
     }
 
-    .clinics-title-wrap p {
+    .admin-header p {
+      color: #666;
       font-size: 14px;
-      color: rgba(255,255,255,0.7);
     }
 
-    .clinics-badge {
-      background: var(--tmac-blush);
-      color: var(--deep-forest);
-      font-size: 10px;
-      letter-spacing: 0.15em;
+    .admin-nav {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .admin-nav a {
+      font-size: 12px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 8px 16px;
-      font-weight: 600;
-    }
-
-    .clinics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .clinic-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 24px;
+      color: var(--deep-forest);
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid #ddd;
       transition: all 0.3s ease;
     }
 
-    .clinic-card:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: var(--tmac-blush);
+    .admin-nav a:hover,
+    .admin-nav a.active {
+      background: var(--deep-forest);
+      color: #fff;
+      border-color: var(--deep-forest);
     }
 
-    .clinic-date {
-      font-size: 10px;
-      letter-spacing: 0.15em;
+    .admin-section {
+      background: #fff;
+      padding: 32px;
+      margin-bottom: 32px;
+      border: 1px solid #eee;
+    }
+
+    .admin-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--tmac-blush);
+      color: #666;
       margin-bottom: 8px;
     }
 
-    .clinic-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      color: #fff;
-      margin-bottom: 12px;
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
     }
 
-    .clinic-details {
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--tmac-blush);
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-checkbox input {
+      width: auto;
+    }
+
+    .form-checkbox label {
+      margin-bottom: 0;
+    }
+
+    .btn {
+      background: var(--deep-forest);
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--charcoal);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 1px solid var(--deep-forest);
+    }
+
+    .btn-secondary:hover {
+      background: var(--deep-forest);
+      color: #fff;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin-bottom: 20px;
       font-size: 13px;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.6;
+    }
+
+    .message.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+
+    .message.error {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+    }
+
+    .items-list {
+      margin-top: 32px;
+      border-top: 1px solid #eee;
+      padding-top: 24px;
+    }
+
+    .items-list h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--charcoal);
       margin-bottom: 16px;
     }
 
-    .clinic-instructor {
+    .item-row {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
     }
 
-    .instructor-photo {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--tmac-blush);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .instructor-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .instructor-photo svg {
-      width: 20px;
-      height: 20px;
-      stroke: var(--deep-forest);
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .instructor-info {
+    .item-info {
       flex: 1;
     }
 
-    .instructor-name {
-      font-size: 13px;
-      color: #fff;
+    .item-name {
       font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 4px;
     }
 
-    .instructor-title {
-      font-size: 11px;
-      color: rgba(255,255,255,0.5);
+    .item-meta {
+      font-size: 12px;
+      color: #888;
     }
 
-    .clinic-status {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      display: inline-block;
-      margin-top: 12px;
-    }
-
-    .clinic-status.upcoming {
-      background: rgba(232, 204, 200, 0.2);
-      color: var(--tmac-blush);
-    }
-
-    .clinic-status.completed {
-      background: rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.5);
-    }
-
-    .clinic-actions {
+    .item-actions {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      gap: 8px;
     }
 
-    .clinic-signup-btn {
-      background: var(--tmac-blush);
-      color: var(--deep-forest);
-      border: none;
-      padding: 10px 20px;
-      font-family: 'Montserrat', sans-serif;
+    .item-actions button {
+      background: none;
+      border: 1px solid #ddd;
+      padding: 6px 12px;
       font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
-    .clinic-signup-btn:hover {
-      background: #fff;
+    .item-actions button:hover {
+      border-color: var(--deep-forest);
+      color: var(--deep-forest);
     }
 
-    .clinic-signup-btn.signed-up {
-      background: transparent;
-      border: 1px solid var(--tmac-blush);
-      color: var(--tmac-blush);
+    .item-actions button.delete:hover {
+      border-color: #c62828;
+      color: #c62828;
     }
 
-    .clinic-signup-btn.signed-up:hover {
-      background: rgba(232, 204, 200, 0.1);
+    .back-link {
+      display: inline-block;
+      margin-bottom: 24px;
+      font-size: 12px;
+      color: var(--deep-forest);
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .clinic-signups {
+      margin-top: 32px;
+    }
+
+    .signup-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #fafafa;
+      margin-bottom: 8px;
+    }
+
+    .signup-clinic {
+      font-weight: 500;
     }
 
     .signup-count {
-      font-size: 11px;
-      color: rgba(255,255,255,0.5);
-    }
-
-    /* From the Fairway Blog Section */
-    .blog-section {
-      margin-bottom: 48px;
-    }
-
-    .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-    }
-
-    .blog-card {
-      background: #fff;
-      border: 1px solid #eee;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: block;
-    }
-
-    .blog-card:hover {
-      border-color: var(--tmac-blush);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-
-    .blog-image {
-      aspect-ratio: 16/9;
-      background: linear-gradient(135deg, var(--deep-forest) 0%, #1a2e1a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .blog-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .blog-image svg {
-      width: 48px;
-      height: 48px;
-      stroke: var(--tmac-blush);
-      stroke-width: 1;
-      fill: none;
-      opacity: 0.5;
-    }
-
-    .blog-content {
-      padding: 24px;
-    }
-
-    .blog-date {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 8px;
-    }
-
-    .blog-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      color: var(--charcoal);
-      margin-bottom: 12px;
-      line-height: 1.3;
-    }
-
-    .blog-excerpt {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    .blog-read-more {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
       color: var(--deep-forest);
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .blog-read-more svg {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .blog-empty {
-      text-align: center;
-      padding: 64px 32px;
-      background: #fafafa;
-      border: 1px dashed #ddd;
-    }
-
-    .blog-empty p {
-      color: #888;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .blog-empty span {
-      font-size: 12px;
-      color: #aaa;
-      font-style: italic;
-    }
-
-    /* Golf Essentials Section */
-    .essentials-section {
-      margin-bottom: 48px;
-    }
-
-    .section-header {
-      margin-bottom: 32px;
-    }
-
-    .section-header h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 400;
-      color: var(--charcoal);
-      margin-bottom: 8px;
-    }
-
-    .section-header p {
-      font-size: 14px;
-      color: #666;
-    }
-
-    .essentials-categories {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .category-btn {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #888;
-      background: none;
-      border: 1px solid #ddd;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .category-btn:hover,
-    .category-btn.active {
-      color: var(--charcoal);
-      border-color: var(--tmac-blush);
-      background: var(--tmac-blush-light);
-    }
-
-    .essentials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 24px;
-    }
-
-    .essential-card {
-      background: #fff;
-      border: 1px solid #eee;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: block;
-    }
-
-    .essential-card:hover {
-      border-color: var(--tmac-blush);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      transform: translateY(-4px);
-    }
-
-    .essential-image {
-      aspect-ratio: 1;
-      background: #f8f8f8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .essential-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .essential-image svg {
-      width: 48px;
-      height: 48px;
-      stroke: #ccc;
-      stroke-width: 1.5;
-      fill: none;
-    }
-
-    .essential-info {
-      padding: 16px;
-    }
-
-    .essential-category {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 6px;
-    }
-
-    .essential-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      color: var(--charcoal);
-      margin-bottom: 8px;
-      line-height: 1.3;
-    }
-
-    .essential-desc {
-      font-size: 12px;
-      color: #888;
-      line-height: 1.5;
-      margin-bottom: 12px;
-    }
-
-    .essential-link {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--deep-forest);
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .essential-link svg {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    /* Resources Section */
-    .resources-section {
-      margin-bottom: 48px;
-    }
-
-    .resources-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .resource-card {
-      background: #fff;
-      border: 1px solid #eee;
-      padding: 24px;
-      transition: all 0.3s ease;
-    }
-
-    .resource-card:hover {
-      border-color: var(--tmac-blush);
-    }
-
-    .resource-icon {
-      width: 48px;
-      height: 48px;
-      background: var(--tmac-blush-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-
-    .resource-icon svg {
-      width: 24px;
-      height: 24px;
-      stroke: var(--deep-forest);
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .resource-category {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 6px;
-    }
-
-    .resource-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      color: var(--charcoal);
-      margin-bottom: 8px;
-    }
-
-    .resource-desc {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    .resource-download {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--deep-forest);
-      text-decoration: none;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .resource-download svg {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 48px;
-      background: #fafafa;
-      color: #888;
-      font-size: 14px;
-    }
-
-    @media (max-width: 768px) {
-      .clinics-section {
-        padding: 32px 24px;
-      }
-
-      .clinics-header {
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .essentials-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-      }
-
-      .essential-info {
-        padding: 12px;
-      }
-
-      .essential-name {
-        font-size: 15px;
-      }
-
-      .essential-desc {
-        display: none;
-      }
+      font-weight: 600;
     }
   </style>
 </head>
-<body class="member-body">
-  
-  <!-- HEADER -->
-  <header class="member-header">
-    <div class="header-inner">
-      <a href="/home.html" class="header-logo">
-        <img src="images/tmac-logo.png" alt="TMac Inspired">
-        <span>The Tee Elite Circle</span>
-      </a>
-      <nav class="header-nav">
-        <a href="/home.html" class="nav-link">Home</a>
-        <a href="/members.html" class="nav-link">The Circle</a>
-        <a href="/retreats.html" class="nav-link">Retreats</a>
-        <a href="/wins.html" class="nav-link">Wins</a>
-        <a href="/resources.html" class="nav-link active">Tee Room</a>
-      </nav>
-      <div class="header-user">
-        <a href="/profile.html" class="user-avatar" id="user-avatar">
-          <span id="user-initials">TM</span>
-        </a>
-      </div>
-      <button class="mobile-menu-btn" id="mobile-menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </header>
-
-  <!-- MOBILE NAV -->
-  <div class="mobile-nav" id="mobile-nav">
-    <a href="/home.html" class="mobile-nav-link">Home</a>
-    <a href="/members.html" class="mobile-nav-link">The Circle</a>
-    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
-    <a href="/wins.html" class="mobile-nav-link">Wins</a>
-    <a href="/resources.html" class="mobile-nav-link active">Tee Room</a>
-    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
-    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <main class="member-main">
-    <div class="page-header">
-      <p class="page-label">Members Only</p>
-      <h1 class="page-title">The Tee Room</h1>
-      <p class="page-subtitle">Everything you need — beyond the pin.</p>
+<body>
+  <div class="admin-container">
+    <a href="/admin.html" class="back-link">← Back to Main Admin</a>
+    
+    <div class="admin-header">
+      <h1>The Tee Room Admin</h1>
+      <p>Manage golf essentials, blog posts, and clinic signups.</p>
     </div>
 
-    <!-- GOLF CLINICS -->
-    <section class="clinics-section">
-      <div class="clinics-header">
-        <div class="clinics-title-wrap">
-          <h2>Golf Clinics</h2>
-          <p>Complimentary lessons with our LPGA Professional — every other month, exclusively for Circle members.</p>
-        </div>
-        <span class="clinics-badge">Free for Members</span>
-      </div>
-
-      <div class="clinics-grid" id="clinics-grid">
-        <!-- Clinic Card - January -->
-        <div class="clinic-card" data-clinic-id="jan-2026">
-          <p class="clinic-date">January 2026</p>
-          <h3 class="clinic-title">Winter Clinic</h3>
-          <p class="clinic-details">Date & location to be announced. Stay tuned for details.</p>
-          <div class="clinic-instructor">
-            <div class="instructor-photo">
-              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
-            <div class="instructor-info">
-              <p class="instructor-name">LPGA Professional</p>
-              <p class="instructor-title">Instructor</p>
-            </div>
-          </div>
-          <div class="clinic-actions">
-            <button class="clinic-signup-btn" data-clinic="jan-2026">Reserve My Spot</button>
-            <span class="signup-count" id="count-jan-2026"></span>
-          </div>
-        </div>
-
-        <!-- Clinic Card - March -->
-        <div class="clinic-card" data-clinic-id="mar-2026">
-          <p class="clinic-date">March 2026</p>
-          <h3 class="clinic-title">Spring Clinic</h3>
-          <p class="clinic-details">Date & location to be announced. Stay tuned for details.</p>
-          <div class="clinic-instructor">
-            <div class="instructor-photo">
-              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
-            <div class="instructor-info">
-              <p class="instructor-name">LPGA Professional</p>
-              <p class="instructor-title">Instructor</p>
-            </div>
-          </div>
-          <div class="clinic-actions">
-            <button class="clinic-signup-btn" data-clinic="mar-2026">Reserve My Spot</button>
-            <span class="signup-count" id="count-mar-2026"></span>
-          </div>
-        </div>
-
-        <!-- Clinic Card - May -->
-        <div class="clinic-card" data-clinic-id="may-2026">
-          <p class="clinic-date">May 2026</p>
-          <h3 class="clinic-title">Pre-Retreat Clinic</h3>
-          <p class="clinic-details">Date & location to be announced. Stay tuned for details.</p>
-          <div class="clinic-instructor">
-            <div class="instructor-photo">
-              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
-            <div class="instructor-info">
-              <p class="instructor-name">LPGA Professional</p>
-              <p class="instructor-title">Instructor</p>
-            </div>
-          </div>
-          <div class="clinic-actions">
-            <button class="clinic-signup-btn" data-clinic="may-2026">Reserve My Spot</button>
-            <span class="signup-count" id="count-may-2026"></span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div class="admin-nav">
+      <a href="#essentials" class="active" data-tab="essentials">Golf Essentials</a>
+      <a href="#blog" data-tab="blog">Blog Posts</a>
+      <a href="#clinics" data-tab="clinics">Clinic Signups</a>
+    </div>
 
     <!-- GOLF ESSENTIALS -->
-    <section class="essentials-section">
-      <div class="section-header">
-        <h2>Golf Essentials</h2>
-        <p>Curated picks for the course — apparel, accessories, and gear we love.</p>
+    <div class="admin-section" id="essentials-section">
+      <h2>Add Golf Essential</h2>
+      <div id="essential-message"></div>
+      
+      <form id="essential-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Name *</label>
+            <input type="text" id="essential-name" required placeholder="e.g., Nike Dri-FIT Golf Polo">
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="essential-category" required>
+              <option value="">Select category...</option>
+              <option value="apparel">Apparel</option>
+              <option value="accessories">Accessories</option>
+              <option value="gear">Gear</option>
+              <option value="travel">Travel</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="essential-description" placeholder="Brief description of the product..."></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Image URL</label>
+            <input type="url" id="essential-image" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>Affiliate Link *</label>
+            <input type="url" id="essential-url" required placeholder="https://amazon.com/...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Display Order (lower = first)</label>
+          <input type="number" id="essential-order" value="0" min="0">
+        </div>
+        
+        <button type="submit" class="btn">Add Essential</button>
+      </form>
+
+      <div class="items-list" id="essentials-list">
+        <h3>Current Essentials</h3>
+        <div id="essentials-items">Loading...</div>
       </div>
+    </div>
 
-      <div class="essentials-categories">
-        <button class="category-btn active" data-category="all">All</button>
-        <button class="category-btn" data-category="apparel">Apparel</button>
-        <button class="category-btn" data-category="accessories">Accessories</button>
-        <button class="category-btn" data-category="gear">Gear</button>
-        <button class="category-btn" data-category="travel">Travel</button>
+    <!-- BLOG POSTS -->
+    <div class="admin-section" id="blog-section" style="display: none;">
+      <h2>Add Blog Post</h2>
+      <div id="blog-message"></div>
+      
+      <form id="blog-form">
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" id="blog-title" required placeholder="e.g., 5 Tips for Your First Golf Retreat">
+        </div>
+        
+        <div class="form-group">
+          <label>Excerpt (shows on card)</label>
+          <textarea id="blog-excerpt" placeholder="Brief preview of the post..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Full Content</label>
+          <textarea id="blog-content" style="min-height: 200px;" placeholder="Full blog post content..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Featured Image URL</label>
+          <input type="url" id="blog-image" placeholder="https://...">
+        </div>
+
+        <div class="form-group form-checkbox">
+          <input type="checkbox" id="blog-published">
+          <label>Publish immediately</label>
+        </div>
+        
+        <button type="submit" class="btn">Add Post</button>
+      </form>
+
+      <div class="items-list" id="blog-list">
+        <h3>All Posts</h3>
+        <div id="blog-items">Loading...</div>
       </div>
+    </div>
 
-      <div class="essentials-grid" id="essentials-grid">
-        <div class="essentials-loading">Loading essentials...</div>
-      </div>
-    </section>
-
-    <!-- FROM THE FAIRWAY BLOG -->
-    <section class="blog-section">
-      <div class="section-header">
-        <h2>From the Fairway</h2>
-        <p>Elevate your game — on and off the course.</p>
-      </div>
-
-      <div class="blog-grid" id="blog-grid">
-        <div class="blog-loading">Loading...</div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="member-footer">
-    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
-  </footer>
+    <!-- CLINIC SIGNUPS -->
+    <div class="admin-section" id="clinics-section" style="display: none;">
+      <h2>Clinic Signups</h2>
+      <p style="color: #666; font-size: 14px; margin-bottom: 24px;">See who has signed up for each clinic.</p>
+      
+      <div id="clinic-signups">Loading...</div>
+    </div>
+  </div>
 
   <script>
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileNav = document.getElementById('mobile-nav');
-    
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileNav.classList.toggle('open');
-    });
+    // Tab navigation
+    const navLinks = document.querySelectorAll('.admin-nav a');
+    const sections = {
+      essentials: document.getElementById('essentials-section'),
+      blog: document.getElementById('blog-section'),
+      clinics: document.getElementById('clinics-section')
+    };
 
-    // Logout
-    document.getElementById('logout-link').addEventListener('click', async (e) => {
-      e.preventDefault();
-      try {
-        await fetch('/api/auth/logout', { method: 'POST' });
-      } catch (err) {
-        console.error('Logout error:', err);
-      }
-      window.location.href = '/member-login.html';
-    });
-
-    // Clinic signup functionality
-    const signupBtns = document.querySelectorAll('.clinic-signup-btn');
-
-    // Load signup status on page load
-    async function loadClinicSignups() {
-      try {
-        const res = await fetch('/api/clinics/signups');
-        if (res.ok) {
-          const data = await res.json();
-          data.forEach(clinic => {
-            const countEl = document.getElementById(`count-${clinic.clinic_id}`);
-            const btn = document.querySelector(`[data-clinic="${clinic.clinic_id}"]`);
-            
-            if (countEl && clinic.count > 0) {
-              countEl.textContent = `${clinic.count} attending`;
-            }
-            
-            if (btn && clinic.signed_up) {
-              btn.textContent = "I'm Going ✓";
-              btn.classList.add('signed-up');
-            }
-          });
-        }
-      } catch (err) {
-        console.error('Error loading signups:', err);
-      }
-    }
-
-    signupBtns.forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const clinicId = btn.dataset.clinic;
-        const isSignedUp = btn.classList.contains('signed-up');
-
-        try {
-          const res = await fetch('/api/clinics/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              clinic_id: clinicId,
-              action: isSignedUp ? 'cancel' : 'signup'
-            })
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            const countEl = document.getElementById(`count-${clinicId}`);
-            
-            if (isSignedUp) {
-              btn.textContent = 'Reserve My Spot';
-              btn.classList.remove('signed-up');
-            } else {
-              btn.textContent = "I'm Going ✓";
-              btn.classList.add('signed-up');
-            }
-            
-            if (countEl) {
-              countEl.textContent = data.count > 0 ? `${data.count} attending` : '';
-            }
-          }
-        } catch (err) {
-          console.error('Signup error:', err);
-        }
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = link.dataset.tab;
+        
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        
+        Object.values(sections).forEach(s => s.style.display = 'none');
+        sections[tab].style.display = 'block';
+        
+        if (tab === 'clinics') loadClinicSignups();
       });
     });
 
-    loadClinicSignups();
+    // Add Essential
+    document.getElementById('essential-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const messageEl = document.getElementById('essential-message');
+      
+      const data = {
+        name: document.getElementById('essential-name').value,
+        category: document.getElementById('essential-category').value,
+        description: document.getElementById('essential-description').value,
+        image_url: document.getElementById('essential-image').value,
+        affiliate_url: document.getElementById('essential-url').value,
+        display_order: parseInt(document.getElementById('essential-order').value) || 0
+      };
 
-    // Load Golf Essentials dynamically
-    async function loadEssentials() {
-      const grid = document.getElementById('essentials-grid');
       try {
-        const res = await fetch('/api/essentials/get');
+        const res = await fetch('/api/admin/essential-create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          messageEl.innerHTML = '<div class="message success">Essential added successfully!</div>';
+          document.getElementById('essential-form').reset();
+          loadEssentials();
+        } else {
+          const err = await res.json();
+          messageEl.innerHTML = `<div class="message error">${err.error}</div>`;
+        }
+      } catch (err) {
+        messageEl.innerHTML = '<div class="message error">Error adding essential</div>';
+      }
+    });
+
+    // Add Blog Post
+    document.getElementById('blog-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const messageEl = document.getElementById('blog-message');
+      
+      const data = {
+        title: document.getElementById('blog-title').value,
+        excerpt: document.getElementById('blog-excerpt').value,
+        content: document.getElementById('blog-content').value,
+        image_url: document.getElementById('blog-image').value,
+        published: document.getElementById('blog-published').checked
+      };
+
+      try {
+        const res = await fetch('/api/admin/blog-create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          messageEl.innerHTML = '<div class="message success">Blog post added successfully!</div>';
+          document.getElementById('blog-form').reset();
+          loadBlogPosts();
+        } else {
+          const err = await res.json();
+          messageEl.innerHTML = `<div class="message error">${err.error}</div>`;
+        }
+      } catch (err) {
+        messageEl.innerHTML = '<div class="message error">Error adding post</div>';
+      }
+    });
+
+    // Load Essentials
+    async function loadEssentials() {
+      try {
+        const res = await fetch('/api/admin/essentials-list');
         if (res.ok) {
           const items = await res.json();
+          const container = document.getElementById('essentials-items');
           
           if (items.length === 0) {
-            grid.innerHTML = '<div class="essentials-empty" style="grid-column: 1/-1; text-align: center; padding: 48px; color: #888;">Coming soon — curated picks for the course.</div>';
+            container.innerHTML = '<p style="color: #888;">No essentials added yet.</p>';
             return;
           }
 
-          grid.innerHTML = items.map(item => `
-            <a href="${item.affiliate_url || '#'}" class="essential-card" data-category="${item.category}" target="_blank">
-              <div class="essential-image">
-                ${item.image_url 
-                  ? `<img src="${item.image_url}" alt="${item.name}">`
-                  : `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>`
-                }
+          container.innerHTML = items.map(item => `
+            <div class="item-row">
+              <div class="item-info">
+                <div class="item-name">${item.name}</div>
+                <div class="item-meta">${item.category} • Order: ${item.display_order}</div>
               </div>
-              <div class="essential-info">
-                <p class="essential-category">${item.category}</p>
-                <h3 class="essential-name">${item.name}</h3>
-                ${item.description ? `<p class="essential-desc">${item.description}</p>` : ''}
-                <span class="essential-link">Shop Now <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
+              <div class="item-actions">
+                <button class="delete" onclick="deleteEssential(${item.id})">Delete</button>
               </div>
-            </a>
+            </div>
           `).join('');
-
-          // Re-attach category filter after loading
-          attachCategoryFilter();
         }
       } catch (err) {
         console.error('Error loading essentials:', err);
-        grid.innerHTML = '<div class="essentials-empty" style="grid-column: 1/-1; text-align: center; padding: 48px; color: #888;">Coming soon — curated picks for the course.</div>';
       }
     }
 
-    // Category filter function
-    function attachCategoryFilter() {
-      const categoryBtns = document.querySelectorAll('.category-btn');
-      const essentialCards = document.querySelectorAll('.essential-card');
-
-      categoryBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const category = btn.dataset.category;
-          
-          categoryBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          essentialCards.forEach(card => {
-            if (category === 'all' || card.dataset.category === category) {
-              card.style.display = 'block';
-            } else {
-              card.style.display = 'none';
-            }
-          });
-        });
-      });
-    }
-
-    // Load Blog Posts dynamically
+    // Load Blog Posts
     async function loadBlogPosts() {
-      const grid = document.getElementById('blog-grid');
       try {
-        const res = await fetch('/api/blog/get');
+        const res = await fetch('/api/admin/blog-list');
         if (res.ok) {
-          const posts = await res.json();
+          const items = await res.json();
+          const container = document.getElementById('blog-items');
           
-          if (posts.length === 0) {
-            grid.innerHTML = `
-              <div class="blog-empty">
-                <p>Stories coming soon.</p>
-                <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
-              </div>
-            `;
+          if (items.length === 0) {
+            container.innerHTML = '<p style="color: #888;">No blog posts yet.</p>';
             return;
           }
 
-          grid.innerHTML = posts.map(post => `
-            <div class="blog-card">
-              <div class="blog-image">
-                ${post.image_url 
-                  ? `<img src="${post.image_url}" alt="${post.title}">`
-                  : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
-                }
+          container.innerHTML = items.map(item => `
+            <div class="item-row">
+              <div class="item-info">
+                <div class="item-name">${item.title}</div>
+                <div class="item-meta">${item.published ? '✓ Published' : 'Draft'} • ${new Date(item.created_at).toLocaleDateString()}</div>
               </div>
-              <div class="blog-content">
-                <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-                <h3 class="blog-title">${post.title}</h3>
-                ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
-                <span class="blog-read-more">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+              <div class="item-actions">
+                <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish'}</button>
+                <button class="delete" onclick="deleteBlogPost(${item.id})">Delete</button>
               </div>
             </div>
           `).join('');
         }
       } catch (err) {
         console.error('Error loading blog posts:', err);
-        grid.innerHTML = `
-          <div class="blog-empty">
-            <p>Stories coming soon.</p>
-            <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
-          </div>
-        `;
       }
     }
 
-    // Load content
+    // Load Clinic Signups
+    async function loadClinicSignups() {
+      try {
+        const res = await fetch('/api/admin/clinic-signups');
+        if (res.ok) {
+          const data = await res.json();
+          const container = document.getElementById('clinic-signups');
+          
+          if (data.length === 0) {
+            container.innerHTML = '<p style="color: #888;">No signups yet.</p>';
+            return;
+          }
+
+          // Group by clinic
+          const clinics = {};
+          data.forEach(signup => {
+            if (!clinics[signup.clinic_id]) {
+              clinics[signup.clinic_id] = [];
+            }
+            clinics[signup.clinic_id].push(signup);
+          });
+
+          container.innerHTML = Object.entries(clinics).map(([clinicId, signups]) => `
+            <div style="margin-bottom: 24px;">
+              <h3 style="margin-bottom: 12px; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em; color: var(--deep-forest);">${clinicId.replace('-', ' ').toUpperCase()}</h3>
+              <p style="margin-bottom: 12px; font-size: 14px;"><strong>${signups.length}</strong> member${signups.length !== 1 ? 's' : ''} attending</p>
+              ${signups.map(s => `
+                <div class="signup-item">
+                  <span>${s.member_name}</span>
+                  <span style="color: #888; font-size: 12px;">${s.member_email}</span>
+                </div>
+              `).join('')}
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error loading signups:', err);
+      }
+    }
+
+    // Delete Essential
+    async function deleteEssential(id) {
+      if (!confirm('Delete this essential?')) return;
+      
+      try {
+        const res = await fetch('/api/admin/essential-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        if (res.ok) loadEssentials();
+      } catch (err) {
+        console.error('Delete error:', err);
+      }
+    }
+
+    // Delete Blog Post
+    async function deleteBlogPost(id) {
+      if (!confirm('Delete this post?')) return;
+      
+      try {
+        const res = await fetch('/api/admin/blog-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        if (res.ok) loadBlogPosts();
+      } catch (err) {
+        console.error('Delete error:', err);
+      }
+    }
+
+    // Toggle Publish
+    async function togglePublish(id, publish) {
+      try {
+        const res = await fetch('/api/admin/blog-publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, published: publish })
+        });
+        if (res.ok) loadBlogPosts();
+      } catch (err) {
+        console.error('Publish error:', err);
+      }
+    }
+
+    // Initial load
     loadEssentials();
     loadBlogPosts();
   </script>
-  <script src="/member-common.js"></script>
 </body>
 </html>
