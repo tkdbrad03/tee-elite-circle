@@ -6,15 +6,9 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Check for member session
+  // Check for member session - but allow unauthenticated for admin panel
+  // (admin panel uses localStorage, not session cookies)
   const sessionToken = getSessionFromRequest(req);
-  const cookies = req.headers.cookie || '';
-  const isAdmin = cookies.includes('admin=true');
-
-  // Allow either admin or logged-in member
-  if (!sessionToken && !isAdmin) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
 
   const client = new Client({
     connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
