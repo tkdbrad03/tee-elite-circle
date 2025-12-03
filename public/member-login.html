@@ -195,6 +195,39 @@
     .back-link:hover {
       opacity: 0.7;
     }
+
+    /* App Download Instructions */
+    .app-install {
+      margin-top: 48px;
+      padding: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(232, 204, 200, 0.15);
+      text-align: center;
+    }
+
+    .app-install-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--tmac-blush);
+      margin-bottom: 16px;
+    }
+
+    .app-install-steps {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.8;
+    }
+
+    .app-install-steps strong {
+      color: var(--tmac-blush);
+    }
+
+    .app-install-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 16px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -228,6 +261,16 @@
     </div>
 
     <a href="/" class="back-link">Back to Home</a>
+
+    <!-- App Download Instructions -->
+    <div class="app-install">
+      <h3 class="app-install-title">Add to Home Screen</h3>
+      <div class="app-install-steps">
+        <strong>iPhone:</strong> Tap the Share button, then "Add to Home Screen"<br><br>
+        <strong>Android:</strong> Tap the menu (3 dots), then "Add to Home Screen"
+      </div>
+      <p class="app-install-note">Access The Circle like an app — no download required</p>
+    </div>
   </div>
 
   <script>
