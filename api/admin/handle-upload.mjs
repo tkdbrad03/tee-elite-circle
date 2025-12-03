@@ -14,8 +14,13 @@ export default async function handler(req, res) {
       onBeforeGenerateToken: async (pathname) => {
         return {
           allowedContentTypes: [
+            // Images
             'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+            'image/heic', 'image/heif', 'image/avif',
+            // Videos
             'video/mp4', 'video/quicktime', 'video/webm', 'video/mov',
+            'video/3gpp', 'video/x-m4v', 'video/mpeg',
+            // Documents
             'application/pdf',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
