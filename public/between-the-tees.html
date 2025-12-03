@@ -726,81 +726,90 @@
     });
 
     async function handleMediaUpload(file, type, fileName = '') {
-      const preview = document.getElementById('upload-preview');
-      preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
+  const preview = document.getElementById('upload-preview');
+  preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
 
-      try {
-        console.log('Uploading file:', file.name, file.type, file.size);
-        
-        const res = await fetch('/api/upload-media', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': file.type,
-            'X-Filename': encodeURIComponent(file.name)
-          },
-          body: file
-        });
+  try {
+    console.log('Preparing upload URL for:', file.name, file.type, file.size);
 
-        console.log('Upload response status:', res.status);
-        const data = await res.json();
-        console.log('Upload response data:', data);
+    // Step 1: Request a signed upload URL from your API
+    const res = await fetch('/api/upload-url', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: file.name,
+        contentType: file.type,
+      }),
+    });
 
-        if (!data.success) {
-          throw new Error(data.error || 'Upload failed');
-        }
-        
-        const url = data.url;
-        
-        // Clear all URLs first
-        document.getElementById('thread-image-url').value = '';
-        document.getElementById('thread-video-url').value = '';
-        document.getElementById('thread-doc-url').value = '';
-        document.getElementById('thread-doc-name').value = '';
-        
-        if (type === 'image') {
-          document.getElementById('thread-image-url').value = url;
-        } else if (type === 'video') {
-          document.getElementById('thread-video-url').value = url;
-        } else if (type === 'document') {
-          document.getElementById('thread-doc-url').value = url;
-          document.getElementById('thread-doc-name').value = fileName || file.name;
-        }
-        document.getElementById('thread-media-type').value = type;
-        
-        let mediaElement;
-        if (type === 'image') {
-          mediaElement = `<img src="${url}" alt="Preview">`;
-        } else if (type === 'video') {
-          mediaElement = `<video src="${url}" controls></video>`;
-        } else {
-          const ext = (fileName || file.name).split('.').pop().toUpperCase();
-          mediaElement = `
-            <div class="doc-preview">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-              </svg>
-              <div>
-                <div class="doc-name">${fileName || file.name}</div>
-                <div class="doc-type">${ext} Document</div>
-              </div>
-            </div>
-          `;
-        }
-        
-        preview.innerHTML = `
-          ${mediaElement}
-          <div class="media-actions">
-            <button type="button" class="change-media-btn" onclick="showUploadButtons()">Change</button>
-            <button type="button" class="remove-media-btn" onclick="removeMedia()">Remove</button>
-          </div>
-        `;
-        preview.classList.add('has-media');
-      } catch (err) {
-        console.error('Upload error:', err);
-        showUploadError(preview);
-      }
+    if (!res.ok) throw new Error('Failed to get upload URL');
+    const { url } = await res.json();
+
+    // Step 2: Upload the file directly to Vercel Blob
+    const upload = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type },
+      body: file,
+    });
+
+    if (!upload.ok) throw new Error('Upload failed');
+    const blobUrl = url.split('?')[0]; // permanent blob URL
+
+    console.log('Upload complete:', blobUrl);
+
+    // Step 3: Update hidden fields
+    document.getElementById('thread-image-url').value = '';
+    document.getElementById('thread-video-url').value = '';
+    document.getElementById('thread-doc-url').value = '';
+    document.getElementById('thread-doc-name').value = '';
+
+    if (type === 'image') {
+      document.getElementById('thread-image-url').value = blobUrl;
+    } else if (type === 'video') {
+      document.getElementById('thread-video-url').value = blobUrl;
+    } else if (type === 'document') {
+      document.getElementById('thread-doc-url').value = blobUrl;
+      document.getElementById('thread-doc-name').value = fileName || file.name;
     }
+    document.getElementById('thread-media-type').value = type;
+
+    // Step 4: Build the preview element
+    let mediaElement;
+    if (type === 'image') {
+      mediaElement = `<img src="${blobUrl}" alt="Preview">`;
+    } else if (type === 'video') {
+      mediaElement = `<video src="${blobUrl}" controls></video>`;
+    } else {
+      const ext = (fileName || file.name).split('.').pop().toUpperCase();
+      mediaElement = `
+        <div class="doc-preview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <div>
+            <div class="doc-name">${fileName || file.name}</div>
+            <div class="doc-type">${ext} Document</div>
+          </div>
+        </div>
+      `;
+    }
+
+    preview.innerHTML = `
+      ${mediaElement}
+      <div class="media-actions">
+        <button type="button" class="change-media-btn" onclick="showUploadButtons()">Change</button>
+        <button type="button" class="remove-media-btn" onclick="removeMedia()">Remove</button>
+      </div>
+    `;
+    preview.classList.add('has-media');
+  } catch (err) {
+    console.error('Upload error:', err);
+    preview.innerHTML = `<div class="upload-status" style="color:#c0392b;">Upload failed: ${err.message}</div>`;
+    showUploadError(preview);
+  }
+}
+
 
     function showUploadError(preview) {
       preview.innerHTML = `
