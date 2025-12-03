@@ -474,6 +474,9 @@
         // Start polling for new viewers
         pollForViewers();
 
+        // Start polling for chat messages
+        pollChat();
+
       } catch (err) {
         console.error('Failed to go live:', err);
         alert('Failed to start broadcast. Please try again.');
@@ -599,6 +602,13 @@
         body: JSON.stringify({ room_name: roomName })
       });
 
+      // Clean up chat
+      await fetch('/api/live/chat', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_name: roomName })
+      });
+
       // Stop local stream
       localStream.getTracks().forEach(track => track.stop());
 
@@ -607,18 +617,54 @@
     });
 
     // === CHAT ===
+    let lastChatId = 0;
+
     document.getElementById('chat-input').addEventListener('keypress', async (e) => {
       if (e.key !== 'Enter') return;
       
       const input = e.target;
       const message = input.value.trim();
-      if (!message) return;
+      if (!message || !roomName) return;
 
-      addChatMessage('Dr. TMac', message);
       input.value = '';
 
-      // Broadcast chat to all viewers via data channel (future enhancement)
+      // Send to server
+      try {
+        await fetch('/api/live/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            room_name: roomName,
+            author_name: 'Dr. TMac',
+            message: message
+          })
+        });
+      } catch (err) {
+        console.error('Chat send error:', err);
+      }
     });
+
+    async function pollChat() {
+      if (!isLive || !roomName) return;
+
+      try {
+        const url = `/api/live/chat?room_name=${roomName}${lastChatId ? `&after_id=${lastChatId}` : ''}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        for (const msg of data.messages || []) {
+          if (msg.id > lastChatId) {
+            addChatMessage(msg.author_name, msg.message);
+            lastChatId = msg.id;
+          }
+        }
+      } catch (err) {
+        console.error('Chat poll error:', err);
+      }
+
+      // Poll again
+      setTimeout(pollChat, 2000);
+    }
 
     function addChatMessage(author, text) {
       const container = document.getElementById('chat-messages');
