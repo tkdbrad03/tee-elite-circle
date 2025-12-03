@@ -532,6 +532,33 @@
       margin-bottom: 8px;
     }
 
+    .editor-toolbar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-bottom: none;
+    }
+
+    .editor-toolbar button {
+      width: 32px;
+      height: 32px;
+      background: #fff;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .editor-toolbar button:hover {
+      background: var(--tmac-blush-light);
+      border-color: var(--tmac-blush);
+    }
+
     .image-upload-wrap {
       display: flex;
       align-items: center;
@@ -931,7 +958,14 @@
               
               <div class="form-group">
                 <label>Full Content</label>
+                <div class="editor-toolbar">
+                  <button type="button" onclick="formatText('bold')" title="Bold"><strong>B</strong></button>
+                  <button type="button" onclick="formatText('italic')" title="Italic"><em>I</em></button>
+                  <button type="button" onclick="formatText('heading')" title="Heading">H</button>
+                  <button type="button" onclick="formatText('bullet')" title="Bullet List">•</button>
+                </div>
                 <textarea id="blog-content" style="min-height: 200px;" placeholder="Full blog post content..."></textarea>
+                <p style="font-size: 11px; color: #888; margin-top: 8px;">Use the toolbar to format text, or type HTML tags directly.</p>
               </div>
               
               <div class="form-group">
@@ -954,7 +988,10 @@
                 <label>Publish immediately</label>
               </div>
               
-              <button type="submit" class="btn">Add Post</button>
+              <div style="display: flex; gap: 12px; align-items: center; margin-top: 24px;">
+                <button type="submit" class="btn" id="blog-submit-btn">Add Post</button>
+                <button type="button" class="btn btn-secondary" onclick="resetBlogForm()" style="display: none;" id="blog-cancel-btn">Cancel Edit</button>
+              </div>
             </form>
 
             <div class="items-list">
@@ -1540,8 +1577,9 @@
         previewEl.innerHTML = '<span>No image selected</span>';
       }
       
-      // Change button text
-      document.querySelector('#blog-form .btn').textContent = 'Update Post';
+      // Change button text and show cancel
+      document.getElementById('blog-submit-btn').textContent = 'Update Post';
+      document.getElementById('blog-cancel-btn').style.display = 'inline-block';
       
       // Scroll to form
       document.getElementById('blog-form').scrollIntoView({ behavior: 'smooth' });
@@ -1553,7 +1591,42 @@
       document.getElementById('blog-image').value = '';
       document.getElementById('blog-image-preview').innerHTML = '<span>No image selected</span>';
       document.getElementById('upload-status').textContent = '';
-      document.querySelector('#blog-form .btn').textContent = 'Add Post';
+      document.getElementById('blog-submit-btn').textContent = 'Add Post';
+      document.getElementById('blog-cancel-btn').style.display = 'none';
+    }
+
+    // Rich text formatting
+    function formatText(type) {
+      const textarea = document.getElementById('blog-content');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      let replacement = '';
+      
+      switch(type) {
+        case 'bold':
+          replacement = `<strong>${selectedText || 'bold text'}</strong>`;
+          break;
+        case 'italic':
+          replacement = `<em>${selectedText || 'italic text'}</em>`;
+          break;
+        case 'heading':
+          replacement = `<h3>${selectedText || 'Heading'}</h3>`;
+          break;
+        case 'bullet':
+          if (selectedText) {
+            const lines = selectedText.split('\n');
+            replacement = '<ul>\n' + lines.map(line => `  <li>${line}</li>`).join('\n') + '\n</ul>';
+          } else {
+            replacement = '<ul>\n  <li>Item 1</li>\n  <li>Item 2</li>\n</ul>';
+          }
+          break;
+      }
+      
+      textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+      textarea.focus();
+      textarea.selectionStart = start;
+      textarea.selectionEnd = start + replacement.length;
     }
 
     async function togglePublish(id, publish) {
