@@ -19,13 +19,29 @@
         :root {
             --tmac-blush: #e8ccc8;
             --tmac-blush-light: #f5e6e4;
+            --tmac-bronze: #a67c52;
+            --tmac-gold: #c9a86c;
             --charcoal: #1a1a1a;
-            --forest: #3d4a3a;
+            --forest: #1a2f23;
+            --deep-forest: #1a2f23;
         }
 
+        /* PWA-style gradient background */
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #faf9f7;
+            background: linear-gradient(
+                180deg, 
+                var(--deep-forest) 0%, 
+                #1e352a 8%,
+                #2a4435 18%,
+                #3d5a48 30%,
+                #5a7058 45%,
+                #7a8968 55%,
+                #9a9a70 65%,
+                #b8a56a 78%,
+                #c9a86c 88%,
+                var(--tmac-bronze) 100%
+            );
             color: #2d2d2d;
             min-height: 100vh;
         }
@@ -37,10 +53,13 @@
             padding: 3rem 2rem;
         }
 
-        /* Featured Retreat */
+        /* Featured Retreat - Rounded corners */
         .featured-retreat {
-            background: var(--forest);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
             padding: 3rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -103,7 +122,7 @@
 
         .schedule-btn {
             display: inline-block;
-            background: var(--tmac-blush);
+            background: linear-gradient(135deg, var(--tmac-gold) 0%, var(--tmac-bronze) 100%);
             color: var(--charcoal);
             padding: 1rem 2rem;
             text-decoration: none;
@@ -111,12 +130,13 @@
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            border-radius: 4px;
+            border-radius: 8px;
             transition: all 0.3s ease;
         }
 
         .schedule-btn:hover {
-            background: var(--tmac-blush-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(166, 124, 82, 0.4);
         }
 
         .retreat-image {
@@ -129,15 +149,15 @@
             width: 100%;
             height: auto;
             object-fit: contain;
-            border-radius: 8px;
+            border-radius: 12px;
         }
 
         .image-placeholder {
             width: 100%;
             height: 100%;
             min-height: 300px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -153,7 +173,7 @@
             font-size: 2rem;
             font-weight: 400;
             margin-bottom: 2rem;
-            color: #1a1a1a;
+            color: #fff;
         }
 
         .expect-grid {
@@ -163,12 +183,13 @@
             margin-bottom: 4rem;
         }
 
+        /* Expect Cards - White with rounded corners */
         .expect-card {
             background: white;
-            border-radius: 8px;
+            border-radius: 16px;
             padding: 2rem;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         .expect-number {
@@ -197,12 +218,13 @@
             margin-bottom: 4rem;
         }
 
+        /* Schedule Day Cards - White with rounded corners */
         .schedule-day {
             background: white;
-            border-radius: 8px;
+            border-radius: 16px;
             padding: 2rem;
             margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         .schedule-day-header {
@@ -223,7 +245,7 @@
 
         .schedule-day-date {
             font-size: 0.85rem;
-            color: var(--tmac-blush);
+            color: var(--tmac-bronze);
             font-weight: 500;
         }
 
@@ -236,14 +258,14 @@
         .schedule-item {
             display: flex;
             gap: 1.5rem;
-            padding: 0.75rem 0;
+            align-items: flex-start;
         }
 
         .schedule-time {
             font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--forest);
+            color: var(--tmac-bronze);
             min-width: 80px;
+            font-weight: 500;
         }
 
         .schedule-event {
@@ -253,97 +275,109 @@
         }
 
         .schedule-event-desc {
-            font-size: 0.85rem;
-            color: #888;
-        }
-
-        /* Past Retreats */
-        .past-retreats {
-            margin-bottom: 4rem;
-        }
-
-        .past-retreats-note {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #666;
-            font-style: italic;
         }
 
         /* RSVP Section */
         .rsvp-section {
             text-align: center;
-            padding: 2rem 0 3rem;
             margin-bottom: 4rem;
         }
 
         .rsvp-btn {
-            display: inline-block;
-            background: var(--tmac-blush);
+            background: linear-gradient(135deg, var(--tmac-gold) 0%, var(--tmac-bronze) 100%);
             color: var(--charcoal);
-            padding: 1rem 2.5rem;
+            border: none;
+            padding: 1rem 3rem;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            border: none;
-            border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
+            border-radius: 8px;
         }
 
         .rsvp-btn:hover {
-            background: var(--tmac-blush-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(166, 124, 82, 0.4);
         }
 
         .rsvp-btn.confirmed {
-            background: var(--forest);
-            color: white;
-            cursor: pointer;
-        }
-
-        .rsvp-btn.confirmed:hover {
-            background: #4a5a47;
+            background: transparent;
+            border: 2px solid var(--tmac-blush);
+            color: var(--tmac-blush);
         }
 
         .rsvp-count {
             margin-top: 1rem;
             font-size: 0.9rem;
-            color: #888;
+            color: rgba(255,255,255,0.6);
         }
 
-        /* Mobile Styles */
-        @media (max-width: 900px) {
+        /* Past Retreats */
+        .past-retreats {
+            text-align: center;
+        }
 
+        .past-retreats-note {
+            font-style: italic;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Footer adjustments */
+        .member-footer {
+            background: transparent;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .member-footer p {
+            color: rgba(255,255,255,0.5);
+        }
+
+        @media (max-width: 900px) {
             .featured-retreat {
                 grid-template-columns: 1fr;
-                padding: 2rem;
-            }
-
-            .retreat-image {
-                order: -1;
+                border-radius: 16px;
             }
 
             .expect-grid {
                 grid-template-columns: 1fr;
             }
 
+            .retreat-image {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .featured-retreat {
+                padding: 2rem;
+            }
+
             .countdown {
-                gap: 1.5rem;
+                gap: 1rem;
             }
 
             .countdown-number {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
 
-            .schedule-day-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
+            .schedule-day {
+                border-radius: 12px;
+                padding: 1.5rem;
+            }
+
+            .expect-card {
+                border-radius: 12px;
             }
         }
     </style>
 </head>
-<body>
+<body class="member-body">
+
     <!-- HEADER -->
     <header class="member-header">
       <div class="header-inner">
@@ -353,14 +387,12 @@
         </a>
         <nav class="header-nav">
           <a href="/home.html" class="nav-link">Home</a>
-          <a href="/members.html" class="nav-link">The Circle</a>
-          <a href="/retreats.html" class="nav-link active">Retreats</a>
-          <a href="/wins.html" class="nav-link">Wins</a>
           <a href="/resources.html" class="nav-link">Tee Room</a>
+          <a href="/profile.html" class="nav-link">My Profile</a>
         </nav>
         <div class="header-user">
           <a href="/profile.html" class="user-avatar" id="user-avatar">
-            <span id="user-initials">TM</span>
+            <span id="user-initials">FM</span>
           </a>
         </div>
         <button class="mobile-menu-btn" id="mobile-menu-btn">
@@ -374,9 +406,6 @@
     <!-- MOBILE NAV -->
     <div class="mobile-nav" id="mobile-nav">
       <a href="/home.html" class="mobile-nav-link">Home</a>
-      <a href="/members.html" class="mobile-nav-link">The Circle</a>
-      <a href="/retreats.html" class="mobile-nav-link active">Retreats</a>
-      <a href="/wins.html" class="mobile-nav-link">Wins</a>
       <a href="/resources.html" class="mobile-nav-link">Tee Room</a>
       <a href="/profile.html" class="mobile-nav-link">My Profile</a>
       <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
@@ -388,12 +417,16 @@
             <div class="retreat-info">
                 <h2>Spring Retreat 2026</h2>
                 <p class="retreat-dates">April 15-17, 2026</p>
-                <p class="retreat-location">Location to be announced</p>
-                <p class="retreat-description">Two days of luxury golf, intimate conversations, and connections that will shape your next chapter. Expect the unexpected.</p>
+                <p class="retreat-location">📍 Location to be announced</p>
+                <p class="retreat-description">
+                    Three transformative days designed for high-achieving women who play golf 
+                    and mean business. Strategy sessions, networking rounds, and real conversations 
+                    that move the needle.
+                </p>
                 
-                <div class="countdown" id="countdown">
+                <div class="countdown">
                     <div class="countdown-item">
-                        <div class="countdown-number" id="days">---</div>
+                        <div class="countdown-number" id="days">--</div>
                         <div class="countdown-label">Days</div>
                     </div>
                     <div class="countdown-item">
@@ -405,52 +438,40 @@
                         <div class="countdown-label">Mins</div>
                     </div>
                 </div>
-
+                
                 <a href="#schedule" class="schedule-btn">View Schedule</a>
             </div>
+            
             <div class="retreat-image">
-                <img src="/images/retreat-spring-2026.jpg" alt="Spring Retreat 2026">
+                <img src="/images/retreat-spring-2026.jpg" alt="Spring Retreat 2026" onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>Retreat imagery coming soon</div>'">
             </div>
         </section>
 
-        <!-- What to Expect - All 6 Items -->
-        <h2 class="section-title">What to Expect</h2>
-        <div class="expect-grid">
-            <div class="expect-card">
-                <div class="expect-number">I</div>
-                <h3 class="expect-title">First Tee Ceremony</h3>
-                <p class="expect-text">The ritual that marks your official entry into the room. Receive your numbered Tee pin.</p>
+        <!-- What to Expect -->
+        <section class="expect-section">
+            <h2 class="section-title">What to Expect</h2>
+            <div class="expect-grid">
+                <div class="expect-card">
+                    <div class="expect-number">01</div>
+                    <h3 class="expect-title">Curated Connections</h3>
+                    <p class="expect-text">Intimate gatherings with 12 like-minded women. Every conversation has potential.</p>
+                </div>
+                <div class="expect-card">
+                    <div class="expect-number">02</div>
+                    <h3 class="expect-title">Strategic Sessions</h3>
+                    <p class="expect-text">Workshops designed to clarify your vision and accelerate your goals.</p>
+                </div>
+                <div class="expect-card">
+                    <div class="expect-number">03</div>
+                    <h3 class="expect-title">Golf & Growth</h3>
+                    <p class="expect-text">Networking rounds, skill clinics, and meaningful moments on the course.</p>
+                </div>
             </div>
-            <div class="expect-card">
-                <div class="expect-number">II</div>
-                <h3 class="expect-title">Deal on the 9th</h3>
-                <p class="expect-text">Structured networking round. Intentionally paired to explore business synergies.</p>
-            </div>
-            <div class="expect-card">
-                <div class="expect-number">III</div>
-                <h3 class="expect-title">The Finished Scorecard</h3>
-                <p class="expect-text">Visualization session rooted in the power of playing from the end.</p>
-            </div>
-            <div class="expect-card">
-                <div class="expect-number">IV</div>
-                <h3 class="expect-title">Course Conditions</h3>
-                <p class="expect-text">Life and business diagnostic. Where are you? Where's the opportunity?</p>
-            </div>
-            <div class="expect-card">
-                <div class="expect-number">V</div>
-                <h3 class="expect-title">Between the Tees</h3>
-                <p class="expect-text">Intimate roundtable where real dilemmas meet real wisdom from the room.</p>
-            </div>
-            <div class="expect-card">
-                <div class="expect-number">VI</div>
-                <h3 class="expect-title">The Back Nine Dinner</h3>
-                <p class="expect-text">Final night. Real talk about wealth, power, regrets, and dreams.</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- Schedule Section -->
+        <!-- Schedule -->
         <section class="schedule-section" id="schedule">
-            <h2 class="section-title">Retreat Schedule</h2>
+            <h2 class="section-title">The Itinerary</h2>
             
             <div class="schedule-day">
                 <div class="schedule-day-header">
@@ -687,6 +708,6 @@
         // Load RSVP status on page load
         loadRSVPStatus();
     </script>
-    <script src="/js/member-common.js"></script>
+    <script src="/member-common.js"></script>
 </body>
 </html>
