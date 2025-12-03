@@ -32,11 +32,11 @@ module.exports = async (req, res) => {
       ON CONFLICT (id) DO NOTHING
     `);
 
-    const { action, topic } = req.body;
+    const { action, topic, room_name } = req.body;
 
     if (action === 'start') {
-      // Generate a unique room name
-      const roomName = `TeeEliteCircle_${Date.now()}`;
+      // Use provided room name or generate one
+      const roomName = room_name || `TeeEliteCircle_${Date.now()}`;
       
       await client.query(`
         UPDATE live_status 
