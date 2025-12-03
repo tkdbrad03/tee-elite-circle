@@ -550,8 +550,13 @@
         const res = await fetch(`/api/live/signal?room_name=${roomName}&peer_id=${PEER_ID}`);
         const data = await res.json();
 
+        if (data.signals && data.signals.length > 0) {
+          console.log('Received', data.signals.length, 'signals');
+        }
+
         for (const signal of data.signals || []) {
           const viewerId = signal.from_peer;
+          console.log('Processing signal:', signal.signal_type, 'from:', viewerId);
 
           if (signal.signal_type === 'join' || signal.signal_type === 'join-video') {
             // New viewer wants to connect
@@ -560,6 +565,7 @@
             
             // Destroy existing peer if reconnecting with video
             if (peers[viewerId]) {
+              console.log('Destroying existing peer for:', viewerId);
               peers[viewerId].destroy();
               delete peers[viewerId];
               removeViewerVideo(viewerId);
@@ -568,10 +574,12 @@
             createPeerConnection(viewerId, hasVideo);
           } else if (signal.signal_type === 'answer' && peers[viewerId]) {
             // Viewer sent answer
+            console.log('Received answer from:', viewerId);
             const signalData = JSON.parse(signal.signal_data);
             peers[viewerId].signal(signalData);
           } else if (signal.signal_type === 'ice' && peers[viewerId]) {
             // ICE candidate from viewer
+            console.log('Received ICE from:', viewerId);
             const signalData = JSON.parse(signal.signal_data);
             peers[viewerId].signal(signalData);
           }
@@ -590,7 +598,13 @@
     let videoViewers = {}; // Track which viewers have video
     
     function createPeerConnection(viewerId, hasVideo = false) {
-      if (peers[viewerId]) return;
+      console.log('Creating peer for viewer:', viewerId, 'hasVideo:', hasVideo);
+      
+      if (peers[viewerId]) {
+        console.log('Peer already exists for', viewerId, '- destroying');
+        peers[viewerId].destroy();
+        delete peers[viewerId];
+      }
 
       videoViewers[viewerId] = hasVideo;
 
@@ -604,6 +618,7 @@
       peer.on('signal', async (signalData) => {
         // Send offer/ICE to viewer
         const signalType = signalData.type === 'offer' ? 'offer' : 'ice';
+        console.log('Sending', signalType, 'to viewer:', viewerId);
         await fetch('/api/live/signal', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
