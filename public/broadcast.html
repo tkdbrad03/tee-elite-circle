@@ -160,6 +160,45 @@
 
     .stat { display: flex; align-items: center; gap: 8px; }
 
+    /* Viewer thumbnails */
+    .viewer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .viewer-thumb {
+      position: relative;
+      width: 120px;
+      aspect-ratio: 16/9;
+      background: #1a1a1a;
+      border: 2px solid #333;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .viewer-thumb video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .viewer-thumb-name {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 4px 8px;
+      background: rgba(0,0,0,0.7);
+      font-size: 10px;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     /* Sidebar */
     .sidebar {
       background: #1a1a1a;
@@ -397,6 +436,10 @@
           <span id="duration">00:00</span>
         </div>
       </div>
+
+      <div class="viewer-grid" id="viewer-grid">
+        <!-- Viewer video thumbnails will appear here -->
+      </div>
     </div>
 
     <aside class="sidebar">
@@ -460,6 +503,22 @@
         });
 
         if (!res.ok) throw new Error('Failed to start broadcast');
+
+        // Send push notifications to all subscribers
+        try {
+          await fetch('/api/push/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: '🔴 Dr. TMac is LIVE!',
+              body: topic || 'Join the live session now!',
+              url: '/live.html'
+            })
+          });
+          console.log('Push notifications sent');
+        } catch (pushErr) {
+          console.log('Push notification error (non-critical):', pushErr);
+        }
 
         // Hide setup, show broadcast
         document.getElementById('setup-overlay').classList.add('hidden');
@@ -550,14 +609,21 @@
         updateViewerCount();
       });
 
+      peer.on('stream', (stream) => {
+        console.log('Received stream from viewer:', viewerId);
+        addViewerVideo(viewerId, stream);
+      });
+
       peer.on('close', () => {
         console.log('Viewer disconnected:', viewerId);
+        removeViewerVideo(viewerId);
         delete peers[viewerId];
         updateViewerCount();
       });
 
       peer.on('error', (err) => {
         console.error('Peer error:', viewerId, err);
+        removeViewerVideo(viewerId);
         delete peers[viewerId];
         updateViewerCount();
       });
@@ -691,6 +757,32 @@
       const mins = Math.floor(diff / 60).toString().padStart(2, '0');
       const secs = (diff % 60).toString().padStart(2, '0');
       document.getElementById('duration').textContent = `${mins}:${secs}`;
+    }
+
+    function addViewerVideo(viewerId, stream) {
+      // Check if already exists
+      if (document.getElementById(`viewer-${viewerId}`)) return;
+
+      const grid = document.getElementById('viewer-grid');
+      const thumb = document.createElement('div');
+      thumb.className = 'viewer-thumb';
+      thumb.id = `viewer-${viewerId}`;
+      thumb.innerHTML = `
+        <video autoplay playsinline></video>
+        <div class="viewer-thumb-name">${viewerId.replace('viewer_', 'Member ')}</div>
+      `;
+      
+      const video = thumb.querySelector('video');
+      video.srcObject = stream;
+      
+      grid.appendChild(thumb);
+    }
+
+    function removeViewerVideo(viewerId) {
+      const thumb = document.getElementById(`viewer-${viewerId}`);
+      if (thumb) {
+        thumb.remove();
+      }
     }
 
     // === INIT ===
