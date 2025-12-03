@@ -100,6 +100,11 @@
       border: 1px solid rgba(0,0,0,0.1);
     }
 
+    /* Hide Jitsi branding where possible */
+    #jitsi-container iframe {
+      border: none;
+    }
+
     .not-live {
       display: flex;
       flex-direction: column;
@@ -366,7 +371,15 @@
           prejoinPageEnabled: false,
           disableDeepLinking: true,
           hideConferenceSubject: true,
-          brandingRoomAlias: 'The Tee Elite Circle'
+          brandingRoomAlias: 'The Tee Elite Circle',
+          // Disable lobby
+          lobby: {
+            enableChat: false,
+            autoKnock: true
+          },
+          disableLobbyPassword: true,
+          requireDisplayName: false,
+          enableLobbyChat: false
         },
         interfaceConfigOverwrite: {
           TOOLBAR_BUTTONS: [
@@ -380,7 +393,17 @@
           SHOW_POWERED_BY: false,
           SHOW_PROMOTIONAL_CLOSE_PAGE: false,
           DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
-          MOBILE_APP_PROMO: false
+          MOBILE_APP_PROMO: false,
+          DISABLE_PRESENCE_STATUS: true,
+          HIDE_INVITE_MORE_HEADER: true,
+          DISPLAY_WELCOME_PAGE_CONTENT: false,
+          DISPLAY_WELCOME_FOOTER: false,
+          SHOW_CHROME_EXTENSION_BANNER: false,
+          DEFAULT_LOGO_URL: '',
+          DEFAULT_WELCOME_PAGE_LOGO_URL: '',
+          JITSI_WATERMARK_LINK: '',
+          HIDE_DEEP_LINKING_LOGO: true,
+          PROVIDER_NAME: 'The Tee Elite Circle'
         }
       };
 
