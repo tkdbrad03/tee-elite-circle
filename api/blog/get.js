@@ -30,9 +30,9 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Session expired' });
     }
 
-    // Get published blog posts
+    // Get published blog posts - now includes content field
     const result = await client.query(
-      'SELECT id, title, excerpt, image_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
+      'SELECT id, title, excerpt, content, image_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
     );
 
     return res.status(200).json(result.rows);
