@@ -1244,7 +1244,7 @@
               </div>
               <p class="live-topic-display">Topic: <strong id="current-topic">Live with Dr. TMac</strong></p>
               <div class="live-actions">
-                <a href="/live.html" target="_blank" class="join-btn">Join Your Stream</a>
+                <a href="/broadcast.html" target="_blank" class="join-btn">Open Broadcast Studio</a>
                 <button class="end-live-btn" onclick="toggleLive()">End Live</button>
               </div>
             </div>
@@ -1990,36 +1990,30 @@
     }
 
     async function toggleLive() {
-      const topic = document.getElementById('live-topic').value || 'Live with Dr. TMac';
-      const action = isLive ? 'stop' : 'start';
+      if (!isLive) {
+        // Not live - open the broadcast studio
+        window.open('/broadcast.html', '_blank');
+        return;
+      }
       
+      // Currently live - stop the broadcast
       try {
         const res = await fetch('/api/admin/go-live', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action, topic })
+          body: JSON.stringify({ action: 'stop' })
         });
 
         if (res.ok) {
-          const data = await res.json();
-          isLive = data.is_live;
-          
-          if (isLive) {
-            liveStartTime = new Date();
-            showLiveActive(topic);
-            
-            // Open live page in new tab
-            window.open('/live.html', '_blank');
-          } else {
-            showLiveForm();
-            alert('Live session ended successfully!');
-          }
+          isLive = false;
+          showLiveForm();
+          alert('Live session ended successfully!');
         } else {
           const error = await res.json();
-          alert(error.error || 'Failed to toggle live status');
+          alert(error.error || 'Failed to end live session');
         }
       } catch (err) {
-        console.error('Error toggling live:', err);
+        console.error('Error ending live:', err);
         alert('Error: ' + err.message);
       }
     }
