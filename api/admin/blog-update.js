@@ -1,34 +1,44 @@
-import { neon } from '@neondatabase/serverless';
+const { Client } = require('pg');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { id, title, excerpt, content, image_url, published } = req.body;
-
-  if (!id || !title) {
-    return res.status(400).json({ error: 'ID and title are required' });
-  }
+  const client = new Client({
+    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
 
   try {
-    const sql = neon(process.env.DATABASE_URL);
-    
-    await sql`
-      UPDATE blog_posts 
-      SET 
-        title = ${title},
-        excerpt = ${excerpt || null},
-        content = ${content || null},
-        image_url = ${image_url || null},
-        published = ${published || false},
-        updated_at = NOW()
-      WHERE id = ${id}
-    `;
+    const { id, title, excerpt, content, image_url, published } = req.body;
 
-    res.status(200).json({ success: true });
+    if (!id || !title) {
+      return res.status(400).json({ error: 'ID and title are required' });
+    }
+
+    await client.connect();
+
+    const result = await client.query(
+      `UPDATE blog_posts 
+       SET title = $1, excerpt = $2, content = $3, image_url = $4, published = $5, updated_at = NOW()
+       WHERE id = $6
+       RETURNING id, title, published, updated_at`,
+      [title, excerpt || '', content || '', image_url || '', published || false, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Blog post not found' });
+    }
+
+    return res.status(200).json({ 
+      success: true, 
+      post: result.rows[0]
+    });
   } catch (error) {
-    console.error('Error updating blog post:', error);
-    res.status(500).json({ error: 'Failed to update blog post' });
+    console.error('Update blog post error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    await client.end();
   }
-}
+};
