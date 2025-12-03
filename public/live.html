@@ -490,6 +490,9 @@
     async function joinStream() {
       updateStatus('connecting', 'Connecting...');
 
+      // Start chat polling
+      startChatPolling();
+
       // Tell host we want to join
       await fetch('/api/live/signal', {
         method: 'POST',
@@ -594,18 +597,66 @@
     }
 
     // === CHAT ===
+    let lastChatId = 0;
+    let chatPolling = false;
+
     document.getElementById('chat-send').addEventListener('click', sendChat);
     document.getElementById('chat-input').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendChat();
     });
 
-    function sendChat() {
+    async function sendChat() {
       const input = document.getElementById('chat-input');
       const message = input.value.trim();
-      if (!message) return;
+      if (!message || !roomName) return;
 
-      addChatMessage(memberName, message);
       input.value = '';
+
+      // Send to server
+      try {
+        await fetch('/api/live/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            room_name: roomName,
+            author_name: memberName,
+            message: message
+          })
+        });
+      } catch (err) {
+        console.error('Chat send error:', err);
+      }
+    }
+
+    async function pollChat() {
+      if (!roomName || !chatPolling) return;
+
+      try {
+        const url = `/api/live/chat?room_name=${roomName}${lastChatId ? `&after_id=${lastChatId}` : ''}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        for (const msg of data.messages || []) {
+          if (msg.id > lastChatId) {
+            addChatMessage(msg.author_name, msg.message);
+            lastChatId = msg.id;
+          }
+        }
+      } catch (err) {
+        console.error('Chat poll error:', err);
+      }
+
+      // Poll again
+      setTimeout(pollChat, 2000);
+    }
+
+    function startChatPolling() {
+      if (!chatPolling) {
+        chatPolling = true;
+        // Clear the welcome message
+        document.getElementById('chat-messages').innerHTML = '';
+        pollChat();
+      }
     }
 
     function addChatMessage(author, text) {
