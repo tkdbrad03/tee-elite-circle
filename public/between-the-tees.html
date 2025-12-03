@@ -606,9 +606,9 @@
         <div class="form-group">
           <label class="form-label">Attach Media (optional)</label>
           <div class="upload-area" id="upload-area">
-            <input type="file" id="thread-image" accept="image/*" style="display: none;">
-            <input type="file" id="thread-video" accept="video/mp4,video/webm,video/quicktime" style="display: none;">
-            <input type="file" id="thread-doc" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" style="display: none;">
+            <input type="file" id="thread-image" accept="image/*" capture="environment" style="display: none;">
+            <input type="file" id="thread-video" accept="video/*" capture="environment" style="display: none;">
+            <input type="file" id="thread-doc" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,application/pdf" style="display: none;">
             <div class="upload-preview" id="upload-preview">
               <div class="attachment-dropdown">
                 <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
