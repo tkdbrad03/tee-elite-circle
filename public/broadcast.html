@@ -553,10 +553,19 @@
         for (const signal of data.signals || []) {
           const viewerId = signal.from_peer;
 
-          if (signal.signal_type === 'join') {
+          if (signal.signal_type === 'join' || signal.signal_type === 'join-video') {
             // New viewer wants to connect
-            console.log('New viewer:', viewerId);
-            createPeerConnection(viewerId);
+            const hasVideo = signal.signal_type === 'join-video';
+            console.log('New viewer:', viewerId, hasVideo ? '(with video)' : '(watching only)');
+            
+            // Destroy existing peer if reconnecting with video
+            if (peers[viewerId]) {
+              peers[viewerId].destroy();
+              delete peers[viewerId];
+              removeViewerVideo(viewerId);
+            }
+            
+            createPeerConnection(viewerId, hasVideo);
           } else if (signal.signal_type === 'answer' && peers[viewerId]) {
             // Viewer sent answer
             const signalData = JSON.parse(signal.signal_data);
@@ -578,8 +587,12 @@
     }
 
     // === CREATE PEER CONNECTION (HOST INITIATES) ===
-    function createPeerConnection(viewerId) {
+    let videoViewers = {}; // Track which viewers have video
+    
+    function createPeerConnection(viewerId, hasVideo = false) {
       if (peers[viewerId]) return;
+
+      videoViewers[viewerId] = hasVideo;
 
       const peer = new SimplePeer({
         initiator: true,
@@ -618,6 +631,7 @@
         console.log('Viewer disconnected:', viewerId);
         removeViewerVideo(viewerId);
         delete peers[viewerId];
+        delete videoViewers[viewerId];
         updateViewerCount();
       });
 
@@ -625,6 +639,7 @@
         console.error('Peer error:', viewerId, err);
         removeViewerVideo(viewerId);
         delete peers[viewerId];
+        delete videoViewers[viewerId];
         updateViewerCount();
       });
 
@@ -763,6 +778,11 @@
       // Check if already exists
       if (document.getElementById(`viewer-${viewerId}`)) return;
 
+      // Log stream info
+      console.log('Adding viewer video:', viewerId);
+      console.log('Stream has audio tracks:', stream.getAudioTracks().length);
+      console.log('Stream has video tracks:', stream.getVideoTracks().length);
+
       const grid = document.getElementById('viewer-grid');
       const thumb = document.createElement('div');
       thumb.className = 'viewer-thumb';
@@ -774,6 +794,9 @@
       
       const video = thumb.querySelector('video');
       video.srcObject = stream;
+      // Ensure audio plays
+      video.muted = false;
+      video.volume = 1.0;
       
       grid.appendChild(thumb);
     }
@@ -783,6 +806,7 @@
       if (thumb) {
         thumb.remove();
       }
+      delete videoViewers[viewerId];
     }
 
     // === INIT ===
