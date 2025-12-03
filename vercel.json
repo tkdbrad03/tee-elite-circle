@@ -1,10 +1,10 @@
 {
   "functions": {
-    "api/admin/upload-media.js": {
+    "api/admin/upload-media.mjs": {
       "maxDuration": 60,
       "memory": 1024
     },
-    "api/admin/handle-upload.js": {
+    "api/admin/handle-upload.mjs": {
       "maxDuration": 60,
       "memory": 1024
     }
