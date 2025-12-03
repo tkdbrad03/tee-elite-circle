@@ -2,8 +2,7 @@
   "functions": {
     "api/upload-media.js": {
       "maxDuration": 60,
-      "memory": 1024,
-      "maxRequestBodySize": "100mb"
+      "memory": 1024
     }
   }
 }
