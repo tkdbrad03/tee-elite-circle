@@ -238,6 +238,79 @@
         padding: 32px 24px;
       }
     }
+
+    /* Live Banner */
+    .live-banner {
+      display: none;
+      background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: livePulse 2s infinite;
+    }
+
+    .live-banner:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(192, 57, 43, 0.3);
+    }
+
+    .live-banner.visible {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    @keyframes livePulse {
+      0%, 100% { box-shadow: 0 4px 12px rgba(192, 57, 43, 0.2); }
+      50% { box-shadow: 0 4px 20px rgba(192, 57, 43, 0.4); }
+    }
+
+    .live-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .live-dot {
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .live-banner-text {
+      color: #fff;
+    }
+
+    .live-banner-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .live-banner-topic {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .live-banner-join {
+      background: #fff;
+      color: #c0392b;
+      padding: 10px 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      border-radius: 4px;
+    }
   </style>
 </head>
 
@@ -283,6 +356,18 @@
 
   <!-- MAIN -->
   <main class="home-container">
+    
+    <!-- LIVE BANNER -->
+    <a href="/live.html" class="live-banner" id="live-banner">
+      <div class="live-banner-left">
+        <div class="live-dot"></div>
+        <div class="live-banner-text">
+          <div class="live-banner-title">🔴 Dr. TMac is LIVE</div>
+          <div class="live-banner-topic" id="live-banner-topic">Live with Dr. TMac</div>
+        </div>
+      </div>
+      <div class="live-banner-join">Join Now</div>
+    </a>
     
     <!-- WELCOME -->
     <section class="welcome-section">
@@ -402,6 +487,30 @@
     loadMember();
     updateCountdown();
     setInterval(updateCountdown, 60000);
+
+    // Check live status
+    async function checkLiveStatus() {
+      try {
+        const res = await fetch('/api/live/status');
+        if (res.ok) {
+          const status = await res.json();
+          const banner = document.getElementById('live-banner');
+          
+          if (status.is_live) {
+            document.getElementById('live-banner-topic').textContent = status.topic || 'Live with Dr. TMac';
+            banner.classList.add('visible');
+          } else {
+            banner.classList.remove('visible');
+          }
+        }
+      } catch (err) {
+        console.error('Error checking live status:', err);
+      }
+    }
+
+    checkLiveStatus();
+    // Check every 30 seconds for live status
+    setInterval(checkLiveStatus, 30000);
   </script>
   <!-- PWA BOTTOM NAV -->
   <nav class="pwa-bottom-nav">
