@@ -732,7 +732,7 @@
       try {
         console.log('Uploading file:', file.name, file.type, file.size);
         
-        const res = await fetch('/api/admin/upload-media', {
+        const res = await fetch('/api/upload-media', {
           method: 'POST',
           headers: { 
             'Content-Type': file.type,
