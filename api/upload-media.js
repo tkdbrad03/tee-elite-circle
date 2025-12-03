@@ -1,12 +1,6 @@
-import { put } from '@vercel/blob';
+const { put } = require('@vercel/blob');
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Filename');
@@ -20,7 +14,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const filename = req.headers['x-filename'] || `file-${Date.now()}`;
+    const filename = req.headers['x-filename'] ? decodeURIComponent(req.headers['x-filename']) : `file-${Date.now()}`;
     const contentType = req.headers['content-type'] || 'application/octet-stream';
 
     const blob = await put(filename, req, {
@@ -43,4 +37,10 @@ export default async function handler(req, res) {
       error: error.message,
     });
   }
-}
+};
+
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
+};
