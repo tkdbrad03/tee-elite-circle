@@ -8,12 +8,12 @@
     "build": "echo 'Build complete'"
   },
   "dependencies": {
-    "@vercel/blob": "^1.8.0",
+    "@vercel/blob": "latest",
     "bcryptjs": "^2.4.3",
     "nodemailer": "^6.9.7",
     "pg": "^8.11.3"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "20.x"
   }
 }
