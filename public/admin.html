@@ -785,6 +785,205 @@
         max-height: 90vh;
       }
     }
+
+    /* Live Tab Styles */
+    .live-control-panel {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .live-status-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 32px;
+    }
+
+    .live-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #888;
+    }
+
+    .live-status-indicator.live .status-dot {
+      background: #c0392b;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+
+    .status-text {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .live-status-indicator.live .status-text {
+      color: #c0392b;
+      font-weight: 500;
+    }
+
+    .live-form .form-group {
+      margin-bottom: 24px;
+    }
+
+    .live-form label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .live-form input {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    .live-form input:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .go-live-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .go-live-btn:hover {
+      background: #a93226;
+    }
+
+    .go-live-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .live-active {
+      text-align: center;
+    }
+
+    .live-timer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .live-badge {
+      background: #c0392b;
+      color: #fff;
+      padding: 8px 16px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      animation: pulse 1.5s infinite;
+    }
+
+    .live-duration {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      color: var(--charcoal);
+    }
+
+    .live-topic-display {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    .live-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .join-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: var(--deep-forest);
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .join-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .end-live-btn {
+      padding: 14px 28px;
+      background: none;
+      border: 2px solid #c0392b;
+      color: #c0392b;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .end-live-btn:hover {
+      background: #c0392b;
+      color: #fff;
+    }
+
+    .live-tips {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 24px;
+    }
+
+    .live-tips h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .live-tips ul {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.8;
+      padding-left: 20px;
+    }
+
+    .live-tips li {
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .live-control-panel {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -817,6 +1016,7 @@
       <button class="main-tab active" data-tab="members">Members</button>
       <button class="main-tab" data-tab="content">Content</button>
       <button class="main-tab" data-tab="retreats">Retreats</button>
+      <button class="main-tab" data-tab="live">🔴 Live</button>
     </div>
 
     <main class="admin-main">
@@ -1014,6 +1214,55 @@
         </div>
       </div>
 
+      <!-- LIVE TAB -->
+      <div class="tab-content" id="live-tab">
+        <div class="live-control-panel">
+          <div class="live-status-card" id="live-status-card">
+            <div class="live-status-indicator" id="live-status-indicator">
+              <span class="status-dot"></span>
+              <span class="status-text">You are offline</span>
+            </div>
+            
+            <div class="live-form" id="live-form">
+              <div class="form-group">
+                <label>Topic / Title</label>
+                <input type="text" id="live-topic" placeholder="e.g., Quick Golf Tips, Q&A Session, Mindset Monday" value="Live with Dr. TMac">
+              </div>
+              <button class="go-live-btn" id="go-live-btn" onclick="toggleLive()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                </svg>
+                Go Live
+              </button>
+            </div>
+
+            <div class="live-active" id="live-active" style="display: none;">
+              <div class="live-timer">
+                <span class="live-badge">🔴 LIVE NOW</span>
+                <span class="live-duration" id="live-duration">00:00</span>
+              </div>
+              <p class="live-topic-display">Topic: <strong id="current-topic">Live with Dr. TMac</strong></p>
+              <div class="live-actions">
+                <a href="/live.html" target="_blank" class="join-btn">Join Your Stream</a>
+                <button class="end-live-btn" onclick="toggleLive()">End Live</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="live-tips">
+            <h4>Quick Tips</h4>
+            <ul>
+              <li>Make sure you're in a well-lit area</li>
+              <li>Test your microphone before going live</li>
+              <li>Members will see a 🔴 Live banner on their dashboard</li>
+              <li>You can share your screen to show slides or content</li>
+              <li>Use "Raise Hand" to manage who speaks</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -1136,6 +1385,7 @@
         
         if (tab.dataset.tab === 'retreats') loadRetreatRSVPs();
         if (tab.dataset.tab === 'content') loadEssentials();
+        if (tab.dataset.tab === 'live') loadLiveStatus();
       });
     });
 
@@ -1674,6 +1924,100 @@
       } catch (err) {
         console.error('Error loading RSVPs:', err);
         document.getElementById('rsvp-members').innerHTML = '<div class="empty-state">Error loading RSVPs</div>';
+      }
+    }
+
+    // ==================== LIVE STREAMING ====================
+    let isLive = false;
+    let liveStartTime = null;
+    let liveDurationInterval = null;
+
+    async function loadLiveStatus() {
+      try {
+        const res = await fetch('/api/live/status');
+        if (res.ok) {
+          const status = await res.json();
+          isLive = status.is_live;
+          
+          if (isLive) {
+            liveStartTime = new Date(status.started_at);
+            showLiveActive(status.topic);
+          } else {
+            showLiveForm();
+          }
+        }
+      } catch (err) {
+        console.error('Error loading live status:', err);
+      }
+    }
+
+    function showLiveForm() {
+      document.getElementById('live-form').style.display = 'block';
+      document.getElementById('live-active').style.display = 'none';
+      document.getElementById('live-status-indicator').classList.remove('live');
+      document.querySelector('.status-text').textContent = 'You are offline';
+      
+      if (liveDurationInterval) {
+        clearInterval(liveDurationInterval);
+        liveDurationInterval = null;
+      }
+    }
+
+    function showLiveActive(topic) {
+      document.getElementById('live-form').style.display = 'none';
+      document.getElementById('live-active').style.display = 'block';
+      document.getElementById('live-status-indicator').classList.add('live');
+      document.querySelector('.status-text').textContent = 'You are LIVE';
+      document.getElementById('current-topic').textContent = topic || 'Live with Dr. TMac';
+      
+      // Start duration timer
+      updateLiveDuration();
+      liveDurationInterval = setInterval(updateLiveDuration, 1000);
+    }
+
+    function updateLiveDuration() {
+      if (!liveStartTime) return;
+      
+      const now = new Date();
+      const diff = Math.floor((now - liveStartTime) / 1000);
+      const mins = Math.floor(diff / 60).toString().padStart(2, '0');
+      const secs = (diff % 60).toString().padStart(2, '0');
+      
+      document.getElementById('live-duration').textContent = `${mins}:${secs}`;
+    }
+
+    async function toggleLive() {
+      const topic = document.getElementById('live-topic').value || 'Live with Dr. TMac';
+      const action = isLive ? 'stop' : 'start';
+      
+      try {
+        const res = await fetch('/api/admin/go-live', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, topic })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          isLive = data.is_live;
+          
+          if (isLive) {
+            liveStartTime = new Date();
+            showLiveActive(topic);
+            
+            // Open live page in new tab
+            window.open('/live.html', '_blank');
+          } else {
+            showLiveForm();
+            alert('Live session ended successfully!');
+          }
+        } else {
+          const error = await res.json();
+          alert(error.error || 'Failed to toggle live status');
+        }
+      } catch (err) {
+        console.error('Error toggling live:', err);
+        alert('Error: ' + err.message);
       }
     }
   </script>
