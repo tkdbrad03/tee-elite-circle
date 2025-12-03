@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { post_id, content } = req.body;
+  const { post_id, content, title, category } = req.body;
 
   if (!post_id || !content) {
     return res.status(400).json({ error: 'Post ID and content required' });
@@ -56,8 +56,8 @@ module.exports = async (req, res) => {
 
     // Update the post
     await client.query(
-      'UPDATE posts SET content = $1, updated_at = NOW() WHERE id = $2',
-      [content, post_id]
+      'UPDATE posts SET content = $1, title = $2, category = $3, updated_at = NOW() WHERE id = $4',
+      [content, title || null, category || 'general', post_id]
     );
 
     return res.status(200).json({ success: true });
