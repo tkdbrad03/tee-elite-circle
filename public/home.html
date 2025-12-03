@@ -10,6 +10,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
+    /* PWA-style gradient background */
+    body.member-body {
+      background: linear-gradient(
+        180deg, 
+        var(--deep-forest) 0%, 
+        #1e352a 8%,
+        #2a4435 18%,
+        #3d5a48 30%,
+        #5a7058 45%,
+        #7a8968 55%,
+        #9a9a70 65%,
+        #b8a56a 78%,
+        #c9a86c 88%,
+        var(--tmac-bronze) 100%
+      );
+      min-height: 100vh;
+    }
+
     .home-container {
       max-width: 800px;
       margin: 0 auto;
@@ -25,7 +43,7 @@
       font-size: 14px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--tmac-bronze);
+      color: rgba(255,255,255,0.6);
       margin-bottom: 16px;
     }
 
@@ -33,20 +51,31 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(36px, 6vw, 56px);
       font-weight: 400;
-      color: var(--charcoal);
-      margin-bottom: 12px;
+      font-style: italic;
+      color: #fff;
+      margin-bottom: 16px;
     }
 
+    /* Gold Founding Member Badge */
     .welcome-pin {
-      font-size: 12px;
-      letter-spacing: 0.25em;
+      display: inline-block;
+      background: linear-gradient(135deg, #c9a86c 0%, var(--tmac-bronze) 100%);
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #999;
+      color: var(--deep-forest);
+      font-weight: 600;
+      border-radius: 4px;
     }
 
-    /* Retreat Card */
+    /* Retreat Card - Transparent with rounded corners */
     .retreat-card {
-      background: var(--deep-forest);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
       padding: 48px;
       text-align: center;
       margin-bottom: 80px;
@@ -64,7 +93,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(28px, 4vw, 36px);
       font-weight: 400;
-      color: var(--tmac-blush);
+      color: #fff;
       margin-bottom: 8px;
     }
 
@@ -89,7 +118,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 48px;
       font-weight: 400;
-      color: #fff;
+      color: var(--tmac-blush);
       line-height: 1;
     }
 
@@ -115,23 +144,26 @@
       border-color: var(--tmac-blush);
     }
 
-    /* Navigation Links */
+    /* Navigation Links - Pink with rounded corners */
     .nav-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: rgba(0,0,0,0.06);
+      gap: 16px;
       margin-bottom: 80px;
     }
 
     .nav-item {
-      background: #fff;
+      background: var(--tmac-blush);
+      border-radius: 16px;
       padding: 40px 32px;
       text-decoration: none;
-      transition: background 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .nav-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
       background: var(--tmac-blush-light);
     }
 
@@ -144,19 +176,25 @@
 
     .nav-item-desc {
       font-size: 13px;
-      color: #888;
+      color: #666;
     }
 
     /* Scorecard Section */
     .scorecard-section {
       text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 40px;
     }
 
     .scorecard-label {
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--tmac-bronze);
+      color: var(--tmac-blush);
       margin-bottom: 24px;
     }
 
@@ -164,7 +202,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 22px;
       font-style: italic;
-      color: var(--charcoal);
+      color: #fff;
       line-height: 1.7;
       max-width: 600px;
       margin: 0 auto 24px;
@@ -172,18 +210,28 @@
 
     .scorecard-empty {
       font-size: 15px;
-      color: #999;
+      color: rgba(255,255,255,0.5);
       font-style: italic;
     }
 
     .scorecard-link {
       font-size: 12px;
-      color: var(--tmac-bronze);
+      color: var(--tmac-blush);
       text-decoration: none;
     }
 
     .scorecard-link:hover {
       text-decoration: underline;
+    }
+
+    /* Footer adjustments for gradient background */
+    .member-footer {
+      background: transparent;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .member-footer p {
+      color: rgba(255,255,255,0.5);
     }
 
     @media (max-width: 600px) {
@@ -198,6 +246,7 @@
       .retreat-card {
         padding: 32px 24px;
         margin-bottom: 60px;
+        border-radius: 16px;
       }
 
       .countdown {
@@ -215,6 +264,12 @@
 
       .nav-item {
         padding: 32px 24px;
+        border-radius: 12px;
+      }
+
+      .scorecard-section {
+        border-radius: 16px;
+        padding: 32px 24px;
       }
     }
   </style>
@@ -230,10 +285,8 @@
       </a>
       <nav class="header-nav">
         <a href="/home.html" class="nav-link active">Home</a>
-        <a href="/members.html" class="nav-link">The Circle</a>
-        <a href="/retreats.html" class="nav-link">Retreats</a>
-        <a href="/wins.html" class="nav-link">Wins</a>
         <a href="/resources.html" class="nav-link">Tee Room</a>
+        <a href="/profile.html" class="nav-link">My Profile</a>
       </nav>
       <div class="header-user">
         <a href="/profile.html" class="user-avatar" id="user-avatar">
@@ -251,9 +304,6 @@
   <!-- MOBILE NAV -->
   <div class="mobile-nav" id="mobile-nav">
     <a href="/home.html" class="mobile-nav-link active">Home</a>
-    <a href="/members.html" class="mobile-nav-link">The Circle</a>
-    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
-    <a href="/wins.html" class="mobile-nav-link">Wins</a>
     <a href="/resources.html" class="mobile-nav-link">Tee Room</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
     <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
@@ -306,7 +356,7 @@
         <p class="nav-item-desc">Real talk, real wisdom</p>
       </a>
       <a href="/resources.html" class="nav-item">
-        <h3 class="nav-item-title">The Vault</h3>
+        <h3 class="nav-item-title">The Tee Room</h3>
         <p class="nav-item-desc">Resources & connections</p>
       </a>
     </nav>
