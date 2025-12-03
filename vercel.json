@@ -1,10 +1,6 @@
 {
   "functions": {
-    "api/admin/upload-image.js": {
-      "maxDuration": 60,
-      "memory": 1024
-    },
-    "api/admin/client-upload.js": {
+    "api/admin/upload-media.js": {
       "maxDuration": 60,
       "memory": 1024
     }
