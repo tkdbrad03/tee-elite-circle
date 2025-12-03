@@ -1,7 +1,8 @@
 const { Client } = require('pg');
+const { getSessionFromRequest } = require('../../session-protection');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
+  if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -11,32 +12,32 @@ module.exports = async (req, res) => {
   });
 
   try {
-    const { id, title, excerpt, content, image_url, published } = req.body;
+    const sessionToken = getSessionFromRequest(req);
 
-    if (!id || !title) {
-      return res.status(400).json({ error: 'ID and title are required' });
+    if (!sessionToken) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     await client.connect();
 
-    const result = await client.query(
-      `UPDATE blog_posts 
-       SET title = $1, excerpt = $2, content = $3, image_url = $4, published = $5, updated_at = NOW()
-       WHERE id = $6
-       RETURNING id, title, published, updated_at`,
-      [title, excerpt || '', content || '', image_url || '', published || false, id]
+    // Verify session
+    const sessionResult = await client.query(
+      'SELECT member_id FROM sessions WHERE token = $1 AND expires_at > NOW()',
+      [sessionToken]
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Blog post not found' });
+    if (sessionResult.rows.length === 0) {
+      return res.status(401).json({ error: 'Session expired' });
     }
 
-    return res.status(200).json({ 
-      success: true, 
-      post: result.rows[0]
-    });
+    // Get published blog posts - now includes content field
+    const result = await client.query(
+      'SELECT id, title, excerpt, content, image_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
+    );
+
+    return res.status(200).json(result.rows);
   } catch (error) {
-    console.error('Update blog post error:', error);
+    console.error('Get blog posts error:', error);
     return res.status(500).json({ error: 'Internal server error' });
   } finally {
     await client.end();
