@@ -665,33 +665,26 @@
       preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
 
       try {
-        let url;
+        console.log('Uploading file:', file.name, file.type, file.size);
         
-        // For files over 4MB, use client-side upload
-        if (file.size > 4 * 1024 * 1024) {
-          // Use Vercel Blob client upload for large files
-          const { upload } = await import('https://unpkg.com/@vercel/blob@0.19.0/dist/index.mjs');
-          
-          const blob = await upload(file.name, file, {
-            access: 'public',
-            handleUploadUrl: '/api/admin/client-upload',
-          });
-          url = blob.url;
-        } else {
-          // Use regular upload for small files
-          const res = await fetch('/api/admin/upload-image', {
-            method: 'POST',
-            headers: { 'Content-Type': file.type },
-            body: file
-          });
+        const res = await fetch('/api/admin/upload-media', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': file.type,
+            'X-Filename': encodeURIComponent(file.name)
+          },
+          body: file
+        });
 
-          if (!res.ok) {
-            throw new Error('Upload failed');
-          }
-          
-          const data = await res.json();
-          url = data.url;
+        console.log('Upload response status:', res.status);
+        const data = await res.json();
+        console.log('Upload response data:', data);
+
+        if (!data.success) {
+          throw new Error(data.error || 'Upload failed');
         }
+        
+        const url = data.url;
         
         // Clear all URLs first
         document.getElementById('thread-image-url').value = '';
@@ -705,7 +698,7 @@
           document.getElementById('thread-video-url').value = url;
         } else if (type === 'document') {
           document.getElementById('thread-doc-url').value = url;
-          document.getElementById('thread-doc-name').value = fileName;
+          document.getElementById('thread-doc-name').value = fileName || file.name;
         }
         document.getElementById('thread-media-type').value = type;
         
@@ -715,7 +708,7 @@
         } else if (type === 'video') {
           mediaElement = `<video src="${url}" controls></video>`;
         } else {
-          const ext = fileName.split('.').pop().toUpperCase();
+          const ext = (fileName || file.name).split('.').pop().toUpperCase();
           mediaElement = `
             <div class="doc-preview">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -723,7 +716,7 @@
                 <polyline points="14 2 14 8 20 8"></polyline>
               </svg>
               <div>
-                <div class="doc-name">${fileName}</div>
+                <div class="doc-name">${fileName || file.name}</div>
                 <div class="doc-type">${ext} Document</div>
               </div>
             </div>
