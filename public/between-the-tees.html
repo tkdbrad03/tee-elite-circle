@@ -563,9 +563,9 @@
             <div class="upload-preview" id="upload-preview">
               <select class="form-select upload-select" id="upload-type-select" onchange="handleUploadSelect(this.value)">
                 <option value="">Select file type to upload...</option>
-                <option value="photo">📷 Photo</option>
-                <option value="video">🎥 Video</option>
-                <option value="document">📄 Document</option>
+                <option value="photo">Photo</option>
+                <option value="video">Video</option>
+                <option value="document">Document</option>
               </select>
             </div>
           </div>
@@ -667,24 +667,68 @@
       try {
         console.log('Uploading file:', file.name, file.type, file.size);
         
-        const res = await fetch('/api/admin/upload-media', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': file.type,
-            'X-Filename': encodeURIComponent(file.name)
-          },
-          body: file
-        });
-
-        console.log('Upload response status:', res.status);
-        const data = await res.json();
-        console.log('Upload response data:', data);
-
-        if (!data.success) {
-          throw new Error(data.error || 'Upload failed');
-        }
+        let url;
         
-        const url = data.url;
+        // For files under 4MB, use regular upload
+        // For larger files, use client-side upload to bypass serverless limit
+        if (file.size < 4 * 1024 * 1024) {
+          // Small file - use regular serverless upload
+          const res = await fetch('/api/admin/upload-media', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': file.type,
+              'X-Filename': encodeURIComponent(file.name)
+            },
+            body: file
+          });
+
+          console.log('Upload response status:', res.status);
+          const data = await res.json();
+          console.log('Upload response data:', data);
+
+          if (!data.success) {
+            throw new Error(data.error || 'Upload failed');
+          }
+          url = data.url;
+        } else {
+          // Large file - use client-side Vercel Blob upload
+          preview.innerHTML = '<div class="upload-status">Uploading large file... This may take a moment.</div>';
+          
+          // Get upload token from server
+          const tokenRes = await fetch('/api/admin/handle-upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'blob.generate-client-token',
+              payload: {
+                pathname: file.name,
+                callbackUrl: window.location.origin + '/api/admin/handle-upload',
+              }
+            })
+          });
+          
+          if (!tokenRes.ok) {
+            throw new Error('Failed to get upload token');
+          }
+          
+          const tokenData = await tokenRes.json();
+          
+          // Upload directly to Vercel Blob
+          const uploadRes = await fetch(tokenData.clientToken.uploadUrl, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': file.type,
+              'x-vercel-blob-content-type': file.type,
+            },
+            body: file
+          });
+          
+          if (!uploadRes.ok) {
+            throw new Error('Upload failed');
+          }
+          
+          url = tokenData.clientToken.url;
+        }
         
         // Clear all URLs first
         document.getElementById('thread-image-url').value = '';
@@ -742,9 +786,9 @@
         <div class="upload-status" style="color: #c0392b;">Upload failed. Try again.</div>
         <select class="form-select upload-select" id="upload-type-select" onchange="handleUploadSelect(this.value)">
           <option value="">Select file type to upload...</option>
-          <option value="photo">📷 Photo</option>
-          <option value="video">🎥 Video</option>
-          <option value="document">📄 Document</option>
+          <option value="photo">Photo</option>
+          <option value="video">Video</option>
+          <option value="document">Document</option>
         </select>
       `;
     }
@@ -755,9 +799,9 @@
       preview.innerHTML = `
         <select class="form-select upload-select" id="upload-type-select" onchange="handleUploadSelect(this.value)">
           <option value="">Select file type to upload...</option>
-          <option value="photo">📷 Photo</option>
-          <option value="video">🎥 Video</option>
-          <option value="document">📄 Document</option>
+          <option value="photo">Photo</option>
+          <option value="video">Video</option>
+          <option value="document">Document</option>
         </select>
       `;
     }
