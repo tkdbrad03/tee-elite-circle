@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="pwa-nav.css">
   <style>
     :root {
       --tmac-blush: #e8ccc8;
@@ -709,6 +710,57 @@
       .stats-row { grid-template-columns: repeat(2, 1fr); }
       .form-row { grid-template-columns: 1fr; }
       .main-tab { padding: 12px 16px; font-size: 10px; }
+      
+      .admin-header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+      
+      .admin-header h1 {
+        font-size: 16px;
+      }
+      
+      .admin-header-btns {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .admin-main {
+        padding: 16px;
+        padding-bottom: 100px;
+      }
+      
+      .applications-table {
+        font-size: 12px;
+      }
+      
+      th, td {
+        padding: 10px 8px;
+      }
+      
+      .action-btn {
+        padding: 8px 10px;
+        font-size: 9px;
+      }
+      
+      .stat-card {
+        padding: 16px;
+      }
+      
+      .stat-number {
+        font-size: 28px;
+      }
+      
+      .content-section {
+        padding: 20px;
+      }
+      
+      .modal {
+        padding: 20px;
+        margin: 10px;
+        max-height: 90vh;
+      }
     }
   </style>
 </head>
@@ -1009,7 +1061,7 @@
       if (password === ADMIN_PASSWORD) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-dashboard').style.display = 'block';
-        sessionStorage.setItem('adminAuth', 'true');
+        localStorage.setItem('adminAuth', 'true');
         loadApplications();
         loadEssentials();
         loadBlogPosts();
@@ -1018,7 +1070,7 @@
       }
     });
 
-    if (sessionStorage.getItem('adminAuth') === 'true') {
+    if (localStorage.getItem('adminAuth') === 'true') {
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('admin-dashboard').style.display = 'block';
       loadApplications();
@@ -1027,7 +1079,7 @@
     }
 
     function logout() {
-      sessionStorage.removeItem('adminAuth');
+      localStorage.removeItem('adminAuth');
       window.location.reload();
     }
 
