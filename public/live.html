@@ -639,11 +639,19 @@
     function createPeerConnection(offerSignal) {
       if (peer) return;
 
-      peer = new SimplePeer({
+      // Include local stream if viewer has joined with video
+      const peerConfig = {
         initiator: false,
         trickle: true,
         config: { iceServers }
-      });
+      };
+
+      // Add local stream if we have one (joined with video)
+      if (localStream) {
+        peerConfig.stream = localStream;
+      }
+
+      peer = new SimplePeer(peerConfig);
 
       peer.on('signal', async (signalData) => {
         // Send answer/ICE back to host
@@ -728,40 +736,62 @@
           localStream.getTracks().forEach(track => track.stop());
           localStream = null;
         }
-        
-        // Remove stream from peer
-        if (peer) {
-          peer.removeStream(localStream);
-        }
 
         localPreview.classList.remove('visible');
         btn.classList.remove('active');
         btnText.textContent = 'Join Call';
         hasJoinedCall = false;
 
-        // Notify chat
-        addChatMessage('System', `${memberName} turned off their camera`);
+        // Reconnect without video
+        if (peer) {
+          peer.destroy();
+          peer = null;
+        }
+        joinStream();
         
       } else {
         // Join the call (start camera)
         try {
+          // Request both video AND audio explicitly
           localStream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 }
+            },
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true
+            }
           });
+
+          // Verify we got audio
+          const audioTracks = localStream.getAudioTracks();
+          const videoTracks = localStream.getVideoTracks();
+          console.log('Got audio tracks:', audioTracks.length, 'video tracks:', videoTracks.length);
+
+          if (audioTracks.length === 0) {
+            console.warn('No audio track - trying to get audio separately');
+            try {
+              const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              audioStream.getAudioTracks().forEach(track => localStream.addTrack(track));
+            } catch (audioErr) {
+              console.error('Could not get audio:', audioErr);
+            }
+          }
 
           // Show local preview
           document.getElementById('local-video').srcObject = localStream;
           localPreview.classList.add('visible');
 
-          // Add stream to peer connection
-          if (peer) {
-            peer.addStream(localStream);
-          }
-
           btn.classList.add('active');
           btnText.textContent = 'Leave Call';
           hasJoinedCall = true;
+
+          // Destroy old peer and create new one with our stream
+          if (peer) {
+            peer.destroy();
+            peer = null;
+          }
 
           // Notify in chat
           await fetch('/api/live/chat', {
@@ -774,11 +804,35 @@
             })
           });
 
+          // Rejoin with our video stream
+          joinStreamWithVideo();
+
         } catch (err) {
           console.error('Camera access error:', err);
           alert('Could not access camera/microphone. Please check permissions.');
         }
       }
+    }
+
+    // Join stream WITH video (viewer sends their stream too)
+    async function joinStreamWithVideo() {
+      updateStatus('connecting', 'Connecting with video...');
+
+      // Tell host we want to join with video
+      await fetch('/api/live/signal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          room_name: roomName,
+          from_peer: PEER_ID,
+          to_peer: 'host',
+          signal_type: 'join-video',
+          signal_data: '{}'
+        })
+      });
+
+      // Poll for host's offer
+      pollForSignals();
     }
 
     // === CHAT ===
