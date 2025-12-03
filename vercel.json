@@ -2,8 +2,11 @@
   "functions": {
     "api/admin/upload-image.js": {
       "maxDuration": 60,
-      "memory": 1024,
-      "maxBodyLength": 104857600
+      "memory": 1024
+    },
+    "api/admin/client-upload.js": {
+      "maxDuration": 60,
+      "memory": 1024
     }
   }
 }
