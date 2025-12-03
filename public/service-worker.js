@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tee-elite-v2';
+const CACHE_NAME = 'tee-elite-v3';
 const urlsToCache = [
   '/',
   '/home.html',
@@ -68,6 +68,76 @@ self.addEventListener('fetch', event => {
       .catch(() => {
         // Network failed, try cache
         return caches.match(event.request);
+      })
+  );
+});
+
+// Push notification received
+self.addEventListener('push', event => {
+  console.log('Push received:', event);
+
+  let data = {
+    title: '🔴 Dr. TMac is LIVE!',
+    body: 'Join the live session now!',
+    url: '/live.html',
+    icon: '/images/tee-elite-favicon.png',
+    badge: '/images/tee-elite-favicon.png'
+  };
+
+  if (event.data) {
+    try {
+      data = { ...data, ...event.data.json() };
+    } catch (e) {
+      console.error('Error parsing push data:', e);
+    }
+  }
+
+  const options = {
+    body: data.body,
+    icon: data.icon,
+    badge: data.badge,
+    vibrate: [200, 100, 200],
+    data: {
+      url: data.url
+    },
+    actions: [
+      { action: 'join', title: 'Join Now' },
+      { action: 'dismiss', title: 'Later' }
+    ],
+    requireInteraction: true
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Notification clicked
+self.addEventListener('notificationclick', event => {
+  console.log('Notification clicked:', event);
+
+  event.notification.close();
+
+  if (event.action === 'dismiss') {
+    return;
+  }
+
+  const url = event.notification.data?.url || '/live.html';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then(clientList => {
+        // Check if there's already a window open
+        for (const client of clientList) {
+          if (client.url.includes('tmacmastermind.com') && 'focus' in client) {
+            client.navigate(url);
+            return client.focus();
+          }
+        }
+        // Open new window
+        if (clients.openWindow) {
+          return clients.openWindow(url);
+        }
       })
   );
 });
