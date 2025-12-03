@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>Live Session — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pwa-nav.css">
+  <script src="https://meet.jit.si/external_api.js"></script>
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    .live-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      text-decoration: none;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--deep-forest);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .live-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #c0392b;
+      color: #fff;
+      padding: 8px 16px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: pulse 2s infinite;
+    }
+
+    .live-indicator::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .live-topic {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+    }
+
+    .live-info {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    #jitsi-container {
+      width: 100%;
+      height: 70vh;
+      min-height: 500px;
+      background: #000;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .not-live {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .not-live-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--tmac-blush-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .not-live-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--tmac-bronze);
+    }
+
+    .not-live h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+
+    .not-live p {
+      font-size: 15px;
+      color: #666;
+      max-width: 400px;
+      line-height: 1.7;
+    }
+
+    .check-again-btn {
+      margin-top: 24px;
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      border: none;
+      padding: 14px 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .check-again-btn:hover {
+      background: var(--tmac-blush-light);
+    }
+
+    .tips-section {
+      margin-top: 32px;
+      padding: 24px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .tips-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .tips-list {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.8;
+    }
+
+    .tips-list li {
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+      #jitsi-container {
+        height: 60vh;
+        min-height: 400px;
+      }
+    }
+  </style>
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/resources.html" class="nav-link">Tee Room</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">FM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/resources.html" class="mobile-nav-link">Tee Room</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    <div class="live-container">
+      <a href="/home.html" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Dashboard
+      </a>
+
+      <!-- Loading State -->
+      <div id="loading-state">
+        <p style="color: #888; text-align: center; padding: 60px;">Checking live status...</p>
+      </div>
+
+      <!-- Live Content (hidden by default) -->
+      <div id="live-content" style="display: none;">
+        <div class="live-header">
+          <div class="live-indicator">Live Now</div>
+          <h1 class="live-topic" id="live-topic">Live with Dr. TMac</h1>
+        </div>
+        <p class="live-info">Join the conversation. Your camera and mic are off by default — turn them on to participate.</p>
+        <div id="jitsi-container"></div>
+        
+        <div class="tips-section">
+          <h3 class="tips-title">Quick Tips</h3>
+          <ul class="tips-list">
+            <li>🎤 Click the microphone icon to unmute and speak</li>
+            <li>📹 Click the camera icon to turn on your video</li>
+            <li>✋ Use "Raise Hand" to get Dr. TMac's attention</li>
+            <li>💬 Use the chat for questions anytime</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Not Live State (hidden by default) -->
+      <div id="not-live-content" style="display: none;">
+        <div class="not-live">
+          <div class="not-live-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M23 7l-7 5 7 5V7z"/>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+          </div>
+          <h2>No Live Session Right Now</h2>
+          <p>Dr. TMac isn't live at the moment. Check back soon or keep an eye on your dashboard for the 🔴 Live indicator.</p>
+          <button class="check-again-btn" onclick="checkLiveStatus()">Check Again</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    let jitsiApi = null;
+    let memberName = 'Founding Member';
+
+    // Get member name
+    async function getMemberName() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (res.ok) {
+          const member = await res.json();
+          memberName = member.name || 'Founding Member';
+        }
+      } catch (err) {
+        console.error('Error getting member:', err);
+      }
+    }
+
+    // Check live status
+    async function checkLiveStatus() {
+      document.getElementById('loading-state').style.display = 'block';
+      document.getElementById('live-content').style.display = 'none';
+      document.getElementById('not-live-content').style.display = 'none';
+
+      try {
+        const res = await fetch('/api/live/status');
+        if (!res.ok) throw new Error('Failed to check status');
+        
+        const status = await res.json();
+        
+        document.getElementById('loading-state').style.display = 'none';
+
+        if (status.is_live && status.room_name) {
+          document.getElementById('live-content').style.display = 'block';
+          document.getElementById('live-topic').textContent = status.topic || 'Live with Dr. TMac';
+          
+          // Initialize Jitsi
+          initJitsi(status.room_name);
+        } else {
+          document.getElementById('not-live-content').style.display = 'block';
+        }
+      } catch (err) {
+        console.error('Error checking live status:', err);
+        document.getElementById('loading-state').style.display = 'none';
+        document.getElementById('not-live-content').style.display = 'block';
+      }
+    }
+
+    // Initialize Jitsi Meet
+    function initJitsi(roomName) {
+      if (jitsiApi) {
+        jitsiApi.dispose();
+      }
+
+      const domain = 'meet.jit.si';
+      const options = {
+        roomName: roomName,
+        width: '100%',
+        height: '100%',
+        parentNode: document.getElementById('jitsi-container'),
+        userInfo: {
+          displayName: memberName
+        },
+        configOverwrite: {
+          startWithAudioMuted: true,
+          startWithVideoMuted: true,
+          prejoinPageEnabled: false,
+          disableDeepLinking: true,
+          hideConferenceSubject: true,
+          brandingRoomAlias: 'The Tee Elite Circle'
+        },
+        interfaceConfigOverwrite: {
+          TOOLBAR_BUTTONS: [
+            'microphone', 'camera', 'desktop', 'chat',
+            'raisehand', 'reactions', 'tileview', 'hangup'
+          ],
+          SHOW_JITSI_WATERMARK: false,
+          SHOW_WATERMARK_FOR_GUESTS: false,
+          SHOW_BRAND_WATERMARK: false,
+          BRAND_WATERMARK_LINK: '',
+          SHOW_POWERED_BY: false,
+          SHOW_PROMOTIONAL_CLOSE_PAGE: false,
+          DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
+          MOBILE_APP_PROMO: false
+        }
+      };
+
+      jitsiApi = new JitsiMeetExternalAPI(domain, options);
+
+      // Listen for meeting end
+      jitsiApi.addEventListener('videoConferenceLeft', () => {
+        checkLiveStatus();
+      });
+
+      jitsiApi.addEventListener('readyToClose', () => {
+        window.location.href = '/home.html';
+      });
+    }
+
+    // Initialize
+    getMemberName().then(() => {
+      checkLiveStatus();
+    });
+
+    // Poll for status changes every 30 seconds
+    setInterval(() => {
+      if (document.getElementById('not-live-content').style.display !== 'none') {
+        checkLiveStatus();
+      }
+    }, 30000);
+  </script>
+  <script src="/member-common.js"></script>
+  <script src="/pwa-nav.js"></script>
+</body>
+</html>
