@@ -1,0 +1,25 @@
+{
+  "name": "The Tee Elite Circle",
+  "short_name": "Tee Elite",
+  "description": "A TMac Inspired Experience - Premium Women's Golf Mastermind",
+  "start_url": "/home.html",
+  "display": "standalone",
+  "background_color": "#1a2e1a",
+  "theme_color": "#1a2e1a",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/images/tee-elite-favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/tee-elite-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
