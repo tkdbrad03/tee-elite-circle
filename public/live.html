@@ -135,6 +135,12 @@
       color: #666;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
       gap: 8px;
     }
 
@@ -148,6 +154,78 @@
     .status-dot.connecting { background: #f39c12; animation: blink 1s infinite; }
     .status-dot.connected { background: #27ae60; }
     .status-dot.error { background: #c0392b; }
+
+    .viewer-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .control-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .join-btn {
+      background: var(--deep-forest);
+      color: #fff;
+    }
+
+    .join-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .join-btn.active {
+      background: #c0392b;
+    }
+
+    .leave-btn {
+      background: #f0f0f0;
+      color: #666;
+      border: 1px solid #ddd;
+    }
+
+    .leave-btn:hover {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    /* Local video preview (when joined) */
+    .local-preview {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 150px;
+      aspect-ratio: 16/9;
+      background: #000;
+      border: 2px solid var(--tmac-blush);
+      border-radius: 4px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .local-preview.visible {
+      display: block;
+    }
+
+    .local-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
 
     @keyframes blink {
       0%, 100% { opacity: 1; }
@@ -388,10 +466,32 @@
                 </svg>
                 <p>Connecting to stream...</p>
               </div>
+              <div class="local-preview" id="local-preview">
+                <video id="local-video" autoplay muted playsinline></video>
+              </div>
             </div>
             <div class="connection-status">
-              <span class="status-dot connecting" id="status-dot"></span>
-              <span id="status-text">Connecting...</span>
+              <div class="status-left">
+                <span class="status-dot connecting" id="status-dot"></span>
+                <span id="status-text">Connecting...</span>
+              </div>
+              <div class="viewer-controls">
+                <button class="control-btn join-btn" id="join-call-btn" onclick="toggleJoinCall()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 7l-7 5 7 5V7z"/>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                  </svg>
+                  <span id="join-btn-text">Join Call</span>
+                </button>
+                <button class="control-btn leave-btn" onclick="leaveStream()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                  </svg>
+                  Leave
+                </button>
+              </div>
             </div>
           </div>
 
@@ -432,6 +532,8 @@
     let roomName = null;
     let peer = null;
     let memberName = 'Member';
+    let localStream = null;
+    let hasJoinedCall = false;
 
     const iceServers = [
       { urls: 'stun:stun.l.google.com:19302' },
@@ -594,6 +696,89 @@
       const dot = document.getElementById('status-dot');
       dot.className = 'status-dot ' + status;
       document.getElementById('status-text').textContent = text;
+    }
+
+    // === LEAVE STREAM ===
+    function leaveStream() {
+      // Disconnect peer
+      if (peer) {
+        peer.destroy();
+        peer = null;
+      }
+
+      // Stop local stream if active
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+
+      // Redirect back to dashboard
+      window.location.href = '/home.html';
+    }
+
+    // === JOIN CALL (with camera/mic) ===
+    async function toggleJoinCall() {
+      const btn = document.getElementById('join-call-btn');
+      const btnText = document.getElementById('join-btn-text');
+      const localPreview = document.getElementById('local-preview');
+
+      if (hasJoinedCall) {
+        // Leave the call (stop camera)
+        if (localStream) {
+          localStream.getTracks().forEach(track => track.stop());
+          localStream = null;
+        }
+        
+        // Remove stream from peer
+        if (peer) {
+          peer.removeStream(localStream);
+        }
+
+        localPreview.classList.remove('visible');
+        btn.classList.remove('active');
+        btnText.textContent = 'Join Call';
+        hasJoinedCall = false;
+
+        // Notify chat
+        addChatMessage('System', `${memberName} turned off their camera`);
+        
+      } else {
+        // Join the call (start camera)
+        try {
+          localStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+          });
+
+          // Show local preview
+          document.getElementById('local-video').srcObject = localStream;
+          localPreview.classList.add('visible');
+
+          // Add stream to peer connection
+          if (peer) {
+            peer.addStream(localStream);
+          }
+
+          btn.classList.add('active');
+          btnText.textContent = 'Leave Call';
+          hasJoinedCall = true;
+
+          // Notify in chat
+          await fetch('/api/live/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              room_name: roomName,
+              author_name: 'System',
+              message: `${memberName} joined the call with video 📹`
+            })
+          });
+
+        } catch (err) {
+          console.error('Camera access error:', err);
+          alert('Could not access camera/microphone. Please check permissions.');
+        }
+      }
     }
 
     // === CHAT ===
