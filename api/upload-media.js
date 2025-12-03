@@ -1,0 +1,46 @@
+import { put } from '@vercel/blob';
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Filename');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const filename = req.headers['x-filename'] || `file-${Date.now()}`;
+    const contentType = req.headers['content-type'] || 'application/octet-stream';
+
+    const blob = await put(filename, req, {
+      access: 'public',
+      contentType: contentType,
+    });
+
+    const mediaType = contentType.includes('pdf') ? 'pdf' : contentType.includes('video') ? 'video' : 'image';
+
+    return res.status(200).json({
+      success: true,
+      url: blob.url,
+      mediaType: mediaType
+    });
+
+  } catch (error) {
+    console.error('Upload error:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+}
