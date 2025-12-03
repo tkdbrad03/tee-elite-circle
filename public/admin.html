@@ -1698,9 +1698,12 @@
       statusEl.style.color = '#888';
 
       try {
-        const res = await fetch('/api/admin/upload-image', {
+        const res = await fetch('/api/upload', {
           method: 'POST',
-          headers: { 'Content-Type': file.type },
+          headers: { 
+            'Content-Type': file.type,
+            'x-filename': file.name
+          },
           body: file
         });
 
