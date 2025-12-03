@@ -7,17 +7,22 @@ export const config = {
 };
 
 export default async function handler(req, res) {
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { filename, contentType } = await new Promise((resolve) => {
-      let body = '';
-      req.on('data', (chunk) => (body += chunk));
-      req.on('end', () => resolve(JSON.parse(body || '{}')));
-    });
+    // Read the request body from the stream
+    const buffers = [];
+    for await (const chunk of req) {
+      buffers.push(chunk);
+    }
+    const bodyStr = Buffer.concat(buffers).toString();
+    const body = JSON.parse(bodyStr || '{}');
+    const { filename, contentType } = body;
 
+    // Create a signed upload URL using Vercel Blob
     const { url, id } = await createUploadUrl({
       access: 'public',
       contentType,
