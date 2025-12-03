@@ -10,22 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* PWA-style gradient background */
-    body.member-body {
-      background: linear-gradient(
-        180deg, 
-        var(--deep-forest) 0%, 
-        #1e352a 8%,
-        #2a4435 18%,
-        #3d5a48 30%,
-        #5a7058 45%,
-        #7a8968 55%,
-        #9a9a70 65%,
-        #b8a56a 78%,
-        #c9a86c 88%,
-        var(--tmac-bronze) 100%
-      );
-      min-height: 100vh;
+    .member-main {
+      padding-bottom: 100px; /* Extra padding for mobile nav */
     }
 
     .page-header {
@@ -36,7 +22,7 @@
       font-size: 10px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #c9a86c;
+      color: var(--tmac-bronze);
       margin-bottom: 8px;
     }
 
@@ -44,13 +30,13 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(32px, 5vw, 48px);
       font-weight: 400;
-      color: #fff;
+      color: var(--charcoal);
       margin-bottom: 12px;
     }
 
     .page-subtitle {
       font-size: 14px;
-      color: rgba(255,255,255,0.7);
+      color: #666;
       max-width: 500px;
     }
 
@@ -60,33 +46,31 @@
       gap: 24px;
     }
 
-    /* Member Cards - Pink with rounded corners */
+    /* CHANGE: Pink member cards with rounded corners */
     .member-card {
       background: var(--tmac-blush);
-      border-radius: 20px;
+      border-radius: 16px;
       overflow: hidden;
       transition: all 0.3s ease;
       text-align: center;
       padding: 32px 24px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .member-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
     }
 
     .member-photo {
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background: var(--tmac-blush-light);
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       margin: 0 auto 20px;
-      border: 3px solid #fff;
     }
 
     .member-photo img {
@@ -102,18 +86,18 @@
       opacity: 0.5;
     }
 
-    /* Gold Founding Member Badge */
+    /* CHANGE: Gold Founding Member Badge */
     .member-pin {
+      display: inline-block;
+      background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--deep-forest);
-      background: linear-gradient(135deg, #c9a86c 0%, var(--tmac-bronze) 100%);
-      display: inline-block;
+      color: #fff;
       padding: 6px 14px;
       margin-bottom: 12px;
       border-radius: 4px;
-      font-weight: 600;
+      font-weight: 500;
     }
 
     .member-name {
@@ -161,7 +145,7 @@
       font-size: 11px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--deep-forest);
+      color: var(--charcoal);
       text-decoration: none;
       border-top: 1px solid rgba(0,0,0,0.08);
       margin-top: 20px;
@@ -174,24 +158,60 @@
 
     .view-profile-btn:hover {
       background: rgba(255,255,255,0.5);
-      color: var(--charcoal);
     }
 
     .loading-state {
       text-align: center;
       padding: 80px 24px;
-      color: rgba(255,255,255,0.6);
+      color: #888;
       grid-column: 1 / -1;
     }
 
-    /* Footer adjustments */
-    .member-footer {
-      background: transparent;
+    /* Bottom Mobile Navigation Bar */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--deep-forest);
+      padding: 12px 0;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 1000;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
-    .member-footer p {
+    .mobile-bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .mobile-bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
       color: rgba(255,255,255,0.5);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+    }
+
+    .mobile-bottom-nav-item.active,
+    .mobile-bottom-nav-item:hover {
+      color: var(--tmac-blush);
+    }
+
+    .mobile-bottom-nav-item svg {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
     }
 
     @media (max-width: 900px) {
@@ -206,7 +226,25 @@
       }
 
       .member-card {
-        border-radius: 16px;
+        border-radius: 12px;
+      }
+
+      .member-main {
+        padding-bottom: 120px;
+      }
+
+      /* Show bottom nav on mobile */
+      .mobile-bottom-nav {
+        display: block;
+      }
+
+      /* Hide hamburger menu and old mobile nav */
+      .mobile-menu-btn {
+        display: none !important;
+      }
+
+      .mobile-nav {
+        display: none !important;
       }
     }
   </style>
@@ -222,8 +260,10 @@
       </a>
       <nav class="header-nav">
         <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link active">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link">Wins</a>
         <a href="/resources.html" class="nav-link">Tee Room</a>
-        <a href="/profile.html" class="nav-link">My Profile</a>
       </nav>
       <div class="header-user">
         <a href="/profile.html" class="user-avatar" id="user-avatar">
@@ -238,9 +278,12 @@
     </div>
   </header>
 
-  <!-- MOBILE NAV -->
+  <!-- MOBILE NAV (for tablet) -->
   <div class="mobile-nav" id="mobile-nav">
     <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link active">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link">Wins</a>
     <a href="/resources.html" class="mobile-nav-link">Tee Room</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
     <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
@@ -263,6 +306,24 @@
   <footer class="member-footer">
     <p>The Tee Elite Circle — A TMac Inspired Experience</p>
   </footer>
+
+  <!-- MOBILE BOTTOM NAV BAR -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="/home.html" class="mobile-bottom-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </a>
+      <a href="/resources.html" class="mobile-bottom-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span>Tee Room</span>
+      </a>
+      <a href="/profile.html" class="mobile-bottom-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
 
   <script>
     // Mobile menu toggle
