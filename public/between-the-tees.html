@@ -725,13 +725,11 @@
       await handleMediaUpload(file, 'document', file.name);
     });
 
-    async function handleMediaUpload(file, type, fileName = '') {
+ async function handleMediaUpload(file, type, fileName = '') {
   const preview = document.getElementById('upload-preview');
   preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
 
   try {
-    console.log('Preparing upload URL for:', file.name, file.type, file.size);
-
     // Step 1: Request a signed upload URL from your API
     const res = await fetch('/api/upload-url', {
       method: 'POST',
@@ -741,7 +739,6 @@
         contentType: file.type,
       }),
     });
-
     if (!res.ok) throw new Error('Failed to get upload URL');
     const { url } = await res.json();
 
@@ -751,9 +748,8 @@
       headers: { 'Content-Type': file.type },
       body: file,
     });
-
     if (!upload.ok) throw new Error('Upload failed');
-    const blobUrl = url.split('?')[0]; // permanent blob URL
+    const blobUrl = url.split('?')[0]; // permanent Blob URL
 
     console.log('Upload complete:', blobUrl);
 
@@ -791,8 +787,7 @@
             <div class="doc-name">${fileName || file.name}</div>
             <div class="doc-type">${ext} Document</div>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     preview.innerHTML = `
@@ -800,8 +795,7 @@
       <div class="media-actions">
         <button type="button" class="change-media-btn" onclick="showUploadButtons()">Change</button>
         <button type="button" class="remove-media-btn" onclick="removeMedia()">Remove</button>
-      </div>
-    `;
+      </div>`;
     preview.classList.add('has-media');
   } catch (err) {
     console.error('Upload error:', err);
@@ -809,7 +803,6 @@
     showUploadError(preview);
   }
 }
-
 
     function showUploadError(preview) {
       preview.innerHTML = `
