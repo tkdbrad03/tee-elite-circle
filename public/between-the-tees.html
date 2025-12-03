@@ -349,13 +349,62 @@
       text-align: center;
     }
 
-    .upload-select {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 14px;
+    .attachment-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .attachment-toggle {
+      padding: 12px 24px;
+      background: var(--tmac-blush-light);
       border: 1px solid #ddd;
-      background: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      color: var(--charcoal);
       cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .attachment-toggle:hover {
+      background: var(--tmac-blush);
+    }
+
+    .attachment-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .attachment-menu.show {
+      display: block;
+    }
+
+    .attachment-option {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #eee;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      color: var(--charcoal);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .attachment-option:last-child {
+      border-bottom: none;
+    }
+
+    .attachment-option:hover {
+      background: var(--tmac-blush-light);
     }
 
     .upload-preview img,
@@ -366,7 +415,7 @@
       border-radius: 4px;
     }
 
-    .upload-preview.has-media .upload-select {
+    .upload-preview.has-media .attachment-dropdown {
       display: none;
     }
 
@@ -558,15 +607,17 @@
           <label class="form-label">Attach Media (optional)</label>
           <div class="upload-area" id="upload-area">
             <input type="file" id="thread-image" accept="image/*" style="display: none;">
-            <input type="file" id="thread-video" accept="video/*" style="display: none;">
+            <input type="file" id="thread-video" accept="video/mp4,video/webm,video/quicktime" style="display: none;">
             <input type="file" id="thread-doc" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" style="display: none;">
             <div class="upload-preview" id="upload-preview">
-              <select class="form-select upload-select" id="upload-type-select" onchange="handleUploadSelect(this.value)">
-                <option value="">Select file type to upload...</option>
-                <option value="photo">📷 Photo</option>
-                <option value="video">🎥 Video</option>
-                <option value="document">📄 Document</option>
-              </select>
+              <div class="attachment-dropdown">
+                <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
+                <div class="attachment-menu" id="attachment-menu">
+                  <button type="button" class="attachment-option" data-type="image">Photo</button>
+                  <button type="button" class="attachment-option" data-type="video">Video</button>
+                  <button type="button" class="attachment-option" data-type="document">Document</button>
+                </div>
+              </div>
             </div>
           </div>
           <input type="hidden" id="thread-image-url" value="">
@@ -609,21 +660,35 @@
       window.location.href = '/member-login.html';
     });
 
-    // Handle upload type selection
-    function handleUploadSelect(type) {
-      if (!type) return;
-      
-      if (type === 'photo') {
-        document.getElementById('thread-image').click();
-      } else if (type === 'video') {
-        document.getElementById('thread-video').click();
-      } else if (type === 'document') {
-        document.getElementById('thread-doc').click();
+    // Attachment dropdown toggle
+    const attachmentToggle = document.getElementById('attachment-toggle');
+    const attachmentMenu = document.getElementById('attachment-menu');
+
+    attachmentToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      attachmentMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.attachment-dropdown')) {
+        attachmentMenu.classList.remove('show');
       }
-      
-      // Reset select
-      document.getElementById('upload-type-select').value = '';
-    }
+    });
+
+    // Handle attachment option clicks
+    document.querySelectorAll('.attachment-option').forEach(option => {
+      option.addEventListener('click', () => {
+        const type = option.dataset.type;
+        attachmentMenu.classList.remove('show');
+        if (type === 'image') {
+          document.getElementById('thread-image').click();
+        } else if (type === 'video') {
+          document.getElementById('thread-video').click();
+        } else if (type === 'document') {
+          document.getElementById('thread-doc').click();
+        }
+      });
+    });
 
     // Image upload handler
     document.getElementById('thread-image').addEventListener('change', async (e) => {
@@ -784,26 +849,74 @@
     function showUploadError(preview) {
       preview.innerHTML = `
         <div class="upload-status" style="color: #c0392b;">Upload failed. Try again.</div>
-        <select class="form-select upload-select" id="upload-type-select" onchange="handleUploadSelect(this.value)">
-          <option value="">Select file type to upload...</option>
-          <option value="photo">📷 Photo</option>
-          <option value="video">🎥 Video</option>
-          <option value="document">📄 Document</option>
-        </select>
+        <div class="attachment-dropdown">
+          <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
+          <div class="attachment-menu" id="attachment-menu">
+            <button type="button" class="attachment-option" data-type="image">Photo</button>
+            <button type="button" class="attachment-option" data-type="video">Video</button>
+            <button type="button" class="attachment-option" data-type="document">Document</button>
+          </div>
+        </div>
       `;
+      // Rebind event listeners
+      const toggle = document.getElementById('attachment-toggle');
+      const menu = document.getElementById('attachment-menu');
+      
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        menu.classList.toggle('show');
+      });
+      
+      document.querySelectorAll('.attachment-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const type = option.dataset.type;
+          menu.classList.remove('show');
+          if (type === 'image') {
+            document.getElementById('thread-image').click();
+          } else if (type === 'video') {
+            document.getElementById('thread-video').click();
+          } else if (type === 'document') {
+            document.getElementById('thread-doc').click();
+          }
+        });
+      });
     }
 
     function showUploadButtons() {
       const preview = document.getElementById('upload-preview');
       preview.classList.remove('has-media');
       preview.innerHTML = `
-        <select class="form-select upload-select" id="upload-type-select" onchange="handleUploadSelect(this.value)">
-          <option value="">Select file type to upload...</option>
-          <option value="photo">📷 Photo</option>
-          <option value="video">🎥 Video</option>
-          <option value="document">📄 Document</option>
-        </select>
+        <div class="attachment-dropdown">
+          <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
+          <div class="attachment-menu" id="attachment-menu">
+            <button type="button" class="attachment-option" data-type="image">Photo</button>
+            <button type="button" class="attachment-option" data-type="video">Video</button>
+            <button type="button" class="attachment-option" data-type="document">Document</button>
+          </div>
+        </div>
       `;
+      // Rebind event listeners
+      const toggle = document.getElementById('attachment-toggle');
+      const menu = document.getElementById('attachment-menu');
+      
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        menu.classList.toggle('show');
+      });
+      
+      document.querySelectorAll('.attachment-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const type = option.dataset.type;
+          menu.classList.remove('show');
+          if (type === 'image') {
+            document.getElementById('thread-image').click();
+          } else if (type === 'video') {
+            document.getElementById('thread-video').click();
+          } else if (type === 'document') {
+            document.getElementById('thread-doc').click();
+          }
+        });
+      });
     }
 
     function removeMedia() {
