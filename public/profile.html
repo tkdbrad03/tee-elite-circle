@@ -10,22 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* PWA-style gradient background */
-    body.member-body {
-      background: linear-gradient(
-        180deg, 
-        var(--deep-forest) 0%, 
-        #1e352a 8%,
-        #2a4435 18%,
-        #3d5a48 30%,
-        #5a7058 45%,
-        #7a8968 55%,
-        #9a9a70 65%,
-        #b8a56a 78%,
-        #c9a86c 88%,
-        var(--tmac-bronze) 100%
-      );
-      min-height: 100vh;
+    .member-main {
+      padding-bottom: 100px; /* Extra padding for mobile nav */
     }
 
     .profile-layout {
@@ -58,7 +44,6 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border: 4px solid var(--tmac-blush);
     }
 
     .profile-photo img {
@@ -105,40 +90,40 @@
       fill: none;
     }
 
-    /* Gold Founding Member Badge */
+    /* CHANGE: Gold Founding Member Badge */
     .profile-pin {
-      background: linear-gradient(135deg, #c9a86c 0%, var(--tmac-bronze) 100%);
+      background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
       padding: 16px;
       text-align: center;
       margin-bottom: 24px;
-      border-radius: 12px;
+      border-radius: 8px;
     }
 
     .profile-pin-label {
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(26, 47, 35, 0.7);
+      color: rgba(255,255,255,0.8);
       margin-bottom: 4px;
     }
 
     .profile-pin-number {
       font-family: 'Cormorant Garamond', serif;
       font-size: 32px;
-      color: var(--deep-forest);
+      color: #fff;
     }
 
     .profile-name {
       font-family: 'Cormorant Garamond', serif;
       font-size: 28px;
-      color: #fff;
+      color: var(--charcoal);
       text-align: center;
       margin-bottom: 8px;
     }
 
     .profile-email {
       font-size: 13px;
-      color: rgba(255,255,255,0.6);
+      color: #888;
       text-align: center;
       margin-bottom: 24px;
     }
@@ -151,35 +136,32 @@
 
     .profile-nav-link {
       font-size: 13px;
-      color: rgba(255,255,255,0.7);
+      color: #666;
       text-decoration: none;
       padding: 12px 16px;
       transition: all 0.3s ease;
-      border-radius: 8px;
     }
 
     .profile-nav-link:hover,
     .profile-nav-link.active {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+      background: var(--tmac-blush-light);
+      color: var(--charcoal);
     }
 
     .logout-btn {
       font-family: 'Montserrat', sans-serif;
       font-size: 12px;
-      color: rgba(255,255,255,0.5);
+      color: #888;
       background: none;
       border: none;
       padding: 12px 16px;
       cursor: pointer;
       text-align: left;
       margin-top: 16px;
-      border-radius: 8px;
     }
 
     .logout-btn:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.05);
+      color: var(--charcoal);
     }
 
     .back-link {
@@ -187,7 +169,7 @@
       align-items: center;
       gap: 8px;
       font-size: 13px;
-      color: var(--tmac-blush);
+      color: var(--tmac-bronze);
       text-decoration: none;
       margin-bottom: 24px;
     }
@@ -203,9 +185,6 @@
 
     .profile-section {
       margin-bottom: 48px;
-      background: var(--tmac-blush);
-      border-radius: 20px;
-      padding: 32px;
     }
 
     .profile-section-title {
@@ -214,7 +193,7 @@
       color: var(--charcoal);
       margin-bottom: 24px;
       padding-bottom: 12px;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
 
     .form-group {
@@ -226,7 +205,7 @@
       font-size: 11px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: #555;
+      color: #666;
       margin-bottom: 8px;
     }
 
@@ -237,15 +216,13 @@
       font-family: 'Montserrat', sans-serif;
       font-size: 14px;
       border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 8px;
       outline: none;
       transition: border-color 0.3s ease;
-      background: #fff;
     }
 
     .form-input:focus,
     .form-textarea:focus {
-      border-color: var(--tmac-bronze);
+      border-color: var(--tmac-blush);
     }
 
     .form-textarea {
@@ -255,7 +232,7 @@
 
     .form-help {
       font-size: 12px;
-      color: #777;
+      color: #999;
       margin-top: 8px;
     }
 
@@ -264,25 +241,21 @@
       font-size: 11px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--deep-forest);
-      background: linear-gradient(135deg, #c9a86c 0%, var(--tmac-bronze) 100%);
+      color: var(--charcoal);
+      background: var(--tmac-blush);
       border: none;
       padding: 14px 32px;
-      border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
-      font-weight: 600;
     }
 
     .save-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(166, 124, 82, 0.3);
+      background: var(--tmac-blush-light);
     }
 
     .save-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      transform: none;
     }
 
     .save-message {
@@ -300,9 +273,8 @@
 
     /* Scorecard Section */
     .scorecard-preview {
-      background: #fff;
-      border: 1px solid rgba(166, 124, 82, 0.2);
-      border-radius: 12px;
+      background: linear-gradient(135deg, var(--tmac-blush-light) 0%, #fff 100%);
+      border: 1px solid rgba(232, 204, 200, 0.3);
       padding: 24px;
       margin-bottom: 24px;
     }
@@ -312,33 +284,22 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--tmac-bronze);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .scorecard-preview-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-style: italic;
+      font-size: 15px;
       color: var(--charcoal);
-      line-height: 1.6;
+      line-height: 1.8;
+      font-style: italic;
     }
 
     .scorecard-empty {
+      font-size: 14px;
       color: #999;
-      font-style: italic;
     }
 
-    /* View-only mode */
-    body.viewing-other .profile-main:not(.view-only),
-    body:not(.viewing-other) .profile-main.view-only {
-      display: none;
-    }
-
-    body.viewing-other .photo-upload-btn,
-    body.viewing-other .logout-btn {
-      display: none;
-    }
-
+    /* View-only profile styles */
     .view-only-field {
       margin-bottom: 24px;
     }
@@ -347,7 +308,7 @@
       font-size: 11px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: #555;
+      color: #666;
       margin-bottom: 8px;
     }
 
@@ -358,18 +319,73 @@
     }
 
     .view-only-empty {
+      font-size: 14px;
       color: #999;
       font-style: italic;
     }
 
-    /* Footer adjustments */
-    .member-footer {
-      background: transparent;
+    /* Hide elements based on view mode */
+    .edit-only {
+      display: block;
+    }
+
+    .view-only {
+      display: none;
+    }
+
+    body.viewing-other .edit-only {
+      display: none;
+    }
+
+    body.viewing-other .view-only {
+      display: block;
+    }
+
+    /* Bottom Mobile Navigation Bar */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--deep-forest);
+      padding: 12px 0;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 1000;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
-    .member-footer p {
+    .mobile-bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .mobile-bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
       color: rgba(255,255,255,0.5);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+    }
+
+    .mobile-bottom-nav-item.active,
+    .mobile-bottom-nav-item:hover {
+      color: var(--tmac-blush);
+    }
+
+    .mobile-bottom-nav-item svg {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
     }
 
     @media (max-width: 900px) {
@@ -380,17 +396,33 @@
       .profile-sidebar {
         position: static;
         text-align: center;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        margin-bottom: 32px;
       }
 
       .profile-nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .member-main {
+        padding-bottom: 120px;
       }
 
-      .profile-section {
-        border-radius: 16px;
-        padding: 24px;
+      /* Show bottom nav on mobile */
+      .mobile-bottom-nav {
+        display: block;
+      }
+
+      /* Hide hamburger menu and old mobile nav */
+      .mobile-menu-btn {
+        display: none !important;
+      }
+
+      .mobile-nav {
+        display: none !important;
       }
     }
   </style>
@@ -406,11 +438,13 @@
       </a>
       <nav class="header-nav">
         <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link">Wins</a>
         <a href="/resources.html" class="nav-link">Tee Room</a>
-        <a href="/profile.html" class="nav-link active">My Profile</a>
       </nav>
       <div class="header-user">
-        <a href="/profile.html" class="user-avatar" id="user-avatar">
+        <a href="/profile.html" class="user-avatar active" id="user-avatar">
           <span id="user-initials">FM</span>
         </a>
       </div>
@@ -422,17 +456,21 @@
     </div>
   </header>
 
-  <!-- MOBILE NAV -->
+  <!-- MOBILE NAV (for tablet) -->
   <div class="mobile-nav" id="mobile-nav">
     <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link">Wins</a>
     <a href="/resources.html" class="mobile-nav-link">Tee Room</a>
     <a href="/profile.html" class="mobile-nav-link active">My Profile</a>
-    <a href="#" class="mobile-nav-link" id="logout-link-mobile">Log Out</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link-mobile">Log Out</a>
   </div>
 
-  <!-- MAIN -->
+  <!-- MAIN CONTENT -->
   <main class="member-main">
-    <a href="/members.html" class="back-link">← Back to The Circle</a>
+    <!-- Back link (only shown when viewing another member) -->
+    <a href="/members.html" class="back-link view-only">← Back to The Circle</a>
 
     <div class="profile-layout">
       <!-- SIDEBAR -->
@@ -441,8 +479,11 @@
           <div class="profile-photo" id="profile-photo">
             <span class="initials" id="photo-initials">FM</span>
           </div>
-          <button class="photo-upload-btn" id="photo-upload-btn" title="Change photo">
-            <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+          <button class="photo-upload-btn edit-only" id="photo-upload-btn">
+            <svg viewBox="0 0 24 24">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
           </button>
           <input type="file" id="photo-input" accept="image/*" style="display: none;">
         </div>
@@ -452,79 +493,86 @@
           <p class="profile-pin-number" id="profile-pin">#01</p>
         </div>
 
-        <h1 class="profile-name" id="view-profile-name">Member</h1>
+        <!-- Name shown when viewing another member -->
+        <h2 class="profile-name view-only" id="view-profile-name"></h2>
 
-        <nav class="profile-nav">
-          <a href="#about" class="profile-nav-link active">About</a>
-          <a href="#scorecard" class="profile-nav-link">Scorecard</a>
-          <a href="#settings" class="profile-nav-link">Settings</a>
+        <nav class="profile-nav edit-only">
+          <a href="#info" class="profile-nav-link active">Basic Info</a>
+          <a href="#about" class="profile-nav-link">About Me</a>
+          <a href="#scorecard" class="profile-nav-link">The Finished Scorecard</a>
+          <a href="#password" class="profile-nav-link">Change Password</a>
         </nav>
 
-        <button class="logout-btn" id="logout-link">Log Out</button>
+        <button class="logout-btn edit-only" id="logout-link">Log Out</button>
       </aside>
 
-      <!-- MAIN CONTENT - Edit Mode -->
-      <div class="profile-main">
+      <!-- MAIN FORM (Edit mode - own profile) -->
+      <div class="profile-main edit-only">
         <form id="profile-form">
-          <section class="profile-section" id="about">
-            <h2 class="profile-section-title">About You</h2>
+          <!-- BASIC INFO -->
+          <section class="profile-section" id="info">
+            <h2 class="profile-section-title">Basic Info</h2>
             
             <div class="form-group">
-              <label class="form-label">Name</label>
-              <input type="text" class="form-input" id="name" name="name">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="name" name="name" placeholder="Your name">
             </div>
 
             <div class="form-group">
               <label class="form-label">Email</label>
-              <input type="email" class="form-input" id="email" name="email" disabled>
-              <p class="form-help">Contact admin to change email</p>
+              <input type="email" class="form-input" id="email" name="email" placeholder="your@email.com" disabled>
+              <p class="form-help">Contact support to change your email.</p>
             </div>
+          </section>
 
+          <!-- ABOUT -->
+          <section class="profile-section" id="about">
+            <h2 class="profile-section-title">About Me</h2>
+            
             <div class="form-group">
               <label class="form-label">Bio</label>
               <textarea class="form-textarea" id="bio" name="bio" placeholder="Tell the circle about yourself..."></textarea>
+              <p class="form-help">This will appear on your member profile.</p>
             </div>
 
             <div class="form-group">
               <label class="form-label">What I Offer</label>
-              <input type="text" class="form-input" id="offering" name="offering" placeholder="Your expertise, skills, or resources">
+              <input type="text" class="form-input" id="offering" name="offering" placeholder="Your expertise, connections, resources...">
             </div>
 
             <div class="form-group">
               <label class="form-label">What I'm Looking For</label>
-              <input type="text" class="form-input" id="looking_for" name="looking_for" placeholder="Connections, advice, opportunities">
+              <input type="text" class="form-input" id="looking_for" name="looking_for" placeholder="Collaborations, introductions, advice...">
             </div>
           </section>
 
+          <!-- THE FINISHED SCORECARD -->
           <section class="profile-section" id="scorecard">
             <h2 class="profile-section-title">The Finished Scorecard</h2>
             
             <div class="scorecard-preview">
               <p class="scorecard-preview-label">Your Vision</p>
               <p class="scorecard-preview-text" id="scorecard-preview">
-                <span class="scorecard-empty">What does winning look like for you?</span>
+                <span class="scorecard-empty">You haven't set your vision yet. What does your win look like?</span>
               </p>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Describe Your Vision</label>
-              <textarea class="form-textarea" id="finished_scorecard" name="finished_scorecard" placeholder="Paint the picture of your ideal life..."></textarea>
-              <p class="form-help">This is your north star. What are you building toward?</p>
+              <label class="form-label">What Does Your Win Look Like?</label>
+              <textarea class="form-textarea" id="finished_scorecard" name="finished_scorecard" placeholder="Play from the end. You've already won. Describe it in vivid detail..."></textarea>
+              <p class="form-help">Write as if it's already happened. This is the vision you're playing toward.</p>
             </div>
           </section>
 
-          <section class="profile-section" id="settings">
-            <h2 class="profile-section-title">Account Settings</h2>
-            
-            <button type="submit" class="save-btn" id="save-btn">Save Changes</button>
-            <span class="save-message" id="save-message">Saved!</span>
-          </section>
+          <button type="submit" class="save-btn" id="save-btn">Save Changes</button>
+          <span class="save-message" id="save-message">Saved successfully!</span>
         </form>
 
-        <form id="password-form" style="display: none;">
-          <section class="profile-section">
-            <h2 class="profile-section-title">Change Password</h2>
-            
+        <!-- PASSWORD SECTION -->
+        <section class="profile-section" id="password">
+          <h2 class="profile-section-title">Change Password</h2>
+          
+          <form id="password-form">
             <div class="form-group">
               <label class="form-label">Current Password</label>
               <input type="password" class="form-input" id="current_password" name="current_password">
@@ -541,11 +589,11 @@
             </div>
 
             <button type="submit" class="save-btn">Update Password</button>
-          </section>
-        </form>
+          </form>
+        </section>
       </div>
 
-      <!-- VIEW-ONLY MODE (for viewing other members) -->
+      <!-- VIEW-ONLY CONTENT (viewing another member) -->
       <div class="profile-main view-only">
         <section class="profile-section">
           <h2 class="profile-section-title">About</h2>
@@ -583,6 +631,24 @@
   <footer class="member-footer">
     <p>The Tee Elite Circle — A TMac Inspired Experience</p>
   </footer>
+
+  <!-- MOBILE BOTTOM NAV BAR -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="/home.html" class="mobile-bottom-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </a>
+      <a href="/resources.html" class="mobile-bottom-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span>Tee Room</span>
+      </a>
+      <a href="/profile.html" class="mobile-bottom-nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
 
   <script>
     let currentMember = null;
@@ -693,7 +759,6 @@
       document.getElementById('user-initials').textContent = initials;
       document.getElementById('photo-initials').textContent = initials;
       document.getElementById('profile-pin').textContent = `#${String(member.pin_number || 1).padStart(2, '0')}`;
-      document.getElementById('view-profile-name').textContent = member.name || 'Member';
 
       if (member.photo_url) {
         document.getElementById('profile-photo').innerHTML = `<img src="${member.photo_url}" alt="${member.name}">`;
