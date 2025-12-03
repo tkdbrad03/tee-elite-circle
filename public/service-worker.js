@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tee-elite-v1';
+const CACHE_NAME = 'tee-elite-v2';
 const urlsToCache = [
   '/',
   '/home.html',
@@ -8,52 +8,30 @@ const urlsToCache = [
   '/retreats.html',
   '/between-the-tees.html',
   '/member-login.html',
+  '/admin.html',
   '/styles.css',
   '/pwa-nav.css',
+  '/pwa-nav.js',
   '/images/tee-elite-favicon.png',
   '/images/tee-elite-logo.png',
   '/images/tmac-logo.png'
 ];
 
-// Install service worker and cache files
+// Install - cache files
 self.addEventListener('install', event => {
+  // Force the new service worker to activate immediately
+  self.skipWaiting();
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
+        console.log('Caching app files');
         return cache.addAll(urlsToCache);
       })
   );
 });
 
-// Fetch from cache first, then network
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return cached version or fetch from network
-        if (response) {
-          return response;
-        }
-        return fetch(event.request)
-          .then(response => {
-            // Don't cache if not a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            // Clone and cache the response
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-            return response;
-          });
-      })
-  );
-});
-
-// Clean up old caches
+// Activate - clean up old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -65,6 +43,31 @@ self.addEventListener('activate', event => {
           }
         })
       );
+    }).then(() => {
+      // Take control of all pages immediately
+      return self.clients.claim();
     })
+  );
+});
+
+// Fetch - network first, then cache (so you always get fresh content)
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        // If we got a valid response, clone it and cache it
+        if (response && response.status === 200 && response.type === 'basic') {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+        }
+        return response;
+      })
+      .catch(() => {
+        // Network failed, try cache
+        return caches.match(event.request);
+      })
   );
 });
