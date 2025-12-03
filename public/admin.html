@@ -1441,24 +1441,34 @@
       };
 
       try {
-        const res = await fetch('/api/admin/blog-create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
+        let res;
+        if (editingBlogId) {
+          // Update existing post
+          data.id = editingBlogId;
+          res = await fetch('/api/admin/blog-update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        } else {
+          // Create new post
+          res = await fetch('/api/admin/blog-create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
 
         if (res.ok) {
-          messageEl.innerHTML = '<div class="message success">Blog post added!</div>';
-          document.getElementById('blog-form').reset();
-          document.getElementById('blog-image-preview').innerHTML = '<span>No image selected</span>';
-          document.getElementById('upload-status').textContent = '';
+          messageEl.innerHTML = `<div class="message success">Blog post ${editingBlogId ? 'updated' : 'added'}!</div>`;
+          resetBlogForm();
           loadBlogPosts();
         } else {
           const err = await res.json();
           messageEl.innerHTML = `<div class="message error">${err.error}</div>`;
         }
       } catch (err) {
-        messageEl.innerHTML = '<div class="message error">Error adding post</div>';
+        messageEl.innerHTML = '<div class="message error">Error saving post</div>';
       }
     });
 
@@ -1481,11 +1491,15 @@
                 <div class="item-meta">${item.published ? '✓ Published' : 'Draft'} • ${new Date(item.created_at).toLocaleDateString()}</div>
               </div>
               <div class="item-actions">
+                <button onclick="editBlogPost(${item.id})">Edit</button>
                 <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish'}</button>
                 <button class="delete" onclick="deleteBlogPost(${item.id})">Delete</button>
               </div>
             </div>
           `).join('');
+          
+          // Store posts for editing
+          window.blogPostsData = items;
         }
       } catch (err) { console.error('Error:', err); }
     }
@@ -1500,6 +1514,46 @@
         });
         if (res.ok) loadBlogPosts();
       } catch (err) { console.error('Error:', err); }
+    }
+
+    // Edit blog post - populate form with existing data
+    let editingBlogId = null;
+    
+    function editBlogPost(id) {
+      const post = window.blogPostsData.find(p => p.id === id);
+      if (!post) return;
+      
+      editingBlogId = id;
+      
+      // Populate the form
+      document.getElementById('blog-title').value = post.title || '';
+      document.getElementById('blog-excerpt').value = post.excerpt || '';
+      document.getElementById('blog-content').value = post.content || '';
+      document.getElementById('blog-published').checked = post.published || false;
+      
+      // Handle image
+      document.getElementById('blog-image').value = post.image_url || '';
+      const previewEl = document.getElementById('blog-image-preview');
+      if (post.image_url) {
+        previewEl.innerHTML = `<img src="${post.image_url}" alt="Preview">`;
+      } else {
+        previewEl.innerHTML = '<span>No image selected</span>';
+      }
+      
+      // Change button text
+      document.querySelector('#blog-form .btn').textContent = 'Update Post';
+      
+      // Scroll to form
+      document.getElementById('blog-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function resetBlogForm() {
+      editingBlogId = null;
+      document.getElementById('blog-form').reset();
+      document.getElementById('blog-image').value = '';
+      document.getElementById('blog-image-preview').innerHTML = '<span>No image selected</span>';
+      document.getElementById('upload-status').textContent = '';
+      document.querySelector('#blog-form .btn').textContent = 'Add Post';
     }
 
     async function togglePublish(id, publish) {
