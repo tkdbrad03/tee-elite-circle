@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>Go Live — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/simple-peer@9/simplepeer.min.js"></script>
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--charcoal);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .broadcast-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 24px;
+      min-height: 100vh;
+    }
+
+    .video-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .broadcast-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .broadcast-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+    }
+
+    .live-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #c0392b;
+      padding: 8px 16px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      animation: pulse 2s infinite;
+    }
+
+    .live-badge.visible { display: flex; }
+
+    .live-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .video-container {
+      position: relative;
+      background: #000;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #local-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    .video-placeholder {
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .video-placeholder svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .control-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .control-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .control-btn.mic { background: #2d2d2d; }
+    .control-btn.mic.off { background: #c0392b; }
+    .control-btn.mic svg { stroke: #fff; }
+
+    .control-btn.cam { background: #2d2d2d; }
+    .control-btn.cam.off { background: #c0392b; }
+    .control-btn.cam svg { stroke: #fff; }
+
+    .control-btn.end { background: #c0392b; }
+    .control-btn.end svg { stroke: #fff; }
+
+    .control-btn.start { background: #27ae60; }
+    .control-btn.start svg { stroke: #fff; fill: #fff; }
+
+    .control-btn:hover { transform: scale(1.1); }
+
+    .stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .stat { display: flex; align-items: center; gap: 8px; }
+
+    /* Sidebar */
+    .sidebar {
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 48px);
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid #333;
+    }
+
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .viewer-count {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .chat-message {
+      margin-bottom: 16px;
+    }
+
+    .chat-author {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--tmac-blush);
+      margin-bottom: 4px;
+    }
+
+    .chat-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.5;
+    }
+
+    .chat-input-area {
+      padding: 16px;
+      border-top: 1px solid #333;
+    }
+
+    .chat-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #2d2d2d;
+      border: none;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input::placeholder { color: rgba(255,255,255,0.4); }
+
+    /* Pre-broadcast setup */
+    .setup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .setup-overlay.hidden { display: none; }
+
+    .setup-box {
+      background: #1a1a1a;
+      padding: 48px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .setup-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .setup-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 32px;
+    }
+
+    .setup-preview {
+      aspect-ratio: 16/9;
+      background: #000;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .setup-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    .setup-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: #2d2d2d;
+      border: none;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      margin-bottom: 24px;
+      outline: none;
+      text-align: center;
+    }
+
+    .setup-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 48px;
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .setup-btn:hover { background: #a93226; }
+
+    .setup-btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 900px) {
+      .broadcast-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SETUP OVERLAY -->
+  <div class="setup-overlay" id="setup-overlay">
+    <div class="setup-box">
+      <h1 class="setup-title">Go Live</h1>
+      <p class="setup-subtitle">Check your camera and enter a topic for today's session</p>
+      
+      <div class="setup-preview">
+        <video id="preview-video" autoplay muted playsinline></video>
+      </div>
+
+      <input type="text" class="setup-input" id="topic-input" placeholder="Topic: e.g., Mindset Monday, Q&A" value="Live with Dr. TMac">
+
+      <button class="setup-btn" id="start-broadcast-btn" disabled>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="3" fill="currentColor"/>
+        </svg>
+        Go Live
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN BROADCAST VIEW -->
+  <div class="broadcast-container">
+    <div class="video-section">
+      <div class="broadcast-header">
+        <h1 class="broadcast-title">The Tee Elite Circle</h1>
+        <div class="live-badge" id="live-badge">LIVE</div>
+      </div>
+
+      <div class="video-container">
+        <video id="local-video" autoplay muted playsinline></video>
+        <div class="video-placeholder" id="video-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M23 7l-7 5 7 5V7z"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+          <p>Camera off</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="control-btn mic" id="mic-btn" title="Toggle Microphone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <button class="control-btn cam" id="cam-btn" title="Toggle Camera">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 7l-7 5 7 5V7z"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+        </button>
+        <button class="control-btn end" id="end-btn" title="End Broadcast">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span>👥</span>
+          <span id="viewer-count">0 viewers</span>
+        </div>
+        <div class="stat">
+          <span>⏱️</span>
+          <span id="duration">00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Live Chat</h2>
+        <p class="viewer-count" id="sidebar-viewer-count">0 watching</p>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chat-input" placeholder="Send a message..." />
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // === CONFIG ===
+    const PEER_ID = 'host';
+    let roomName = null;
+    let localStream = null;
+    let peers = {}; // { peerId: SimplePeer }
+    let isLive = false;
+    let startTime = null;
+    let micEnabled = true;
+    let camEnabled = true;
+
+    // ICE Servers (free STUN servers)
+    const iceServers = [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:stun2.l.google.com:19302' }
+    ];
+
+    // === SETUP ===
+    async function initSetup() {
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 1280, height: 720 },
+          audio: true
+        });
+        
+        document.getElementById('preview-video').srcObject = localStream;
+        document.getElementById('local-video').srcObject = localStream;
+        document.getElementById('start-broadcast-btn').disabled = false;
+      } catch (err) {
+        console.error('Camera access denied:', err);
+        alert('Please allow camera and microphone access to go live.');
+      }
+    }
+
+    // === START BROADCAST ===
+    document.getElementById('start-broadcast-btn').addEventListener('click', async () => {
+      const topic = document.getElementById('topic-input').value || 'Live with Dr. TMac';
+      roomName = 'TeeElite_' + Date.now();
+
+      // Tell server we're live
+      try {
+        const res = await fetch('/api/admin/go-live', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'start', topic, room_name: roomName })
+        });
+
+        if (!res.ok) throw new Error('Failed to start broadcast');
+
+        // Hide setup, show broadcast
+        document.getElementById('setup-overlay').classList.add('hidden');
+        document.getElementById('live-badge').classList.add('visible');
+        document.getElementById('video-placeholder').style.display = 'none';
+        
+        isLive = true;
+        startTime = Date.now();
+        updateDuration();
+        setInterval(updateDuration, 1000);
+
+        // Start polling for new viewers
+        pollForViewers();
+
+      } catch (err) {
+        console.error('Failed to go live:', err);
+        alert('Failed to start broadcast. Please try again.');
+      }
+    });
+
+    // === POLL FOR VIEWERS ===
+    async function pollForViewers() {
+      if (!isLive) return;
+
+      try {
+        const res = await fetch(`/api/live/signal?room_name=${roomName}&peer_id=${PEER_ID}`);
+        const data = await res.json();
+
+        for (const signal of data.signals || []) {
+          const viewerId = signal.from_peer;
+
+          if (signal.signal_type === 'join') {
+            // New viewer wants to connect
+            console.log('New viewer:', viewerId);
+            createPeerConnection(viewerId);
+          } else if (signal.signal_type === 'answer' && peers[viewerId]) {
+            // Viewer sent answer
+            const signalData = JSON.parse(signal.signal_data);
+            peers[viewerId].signal(signalData);
+          } else if (signal.signal_type === 'ice' && peers[viewerId]) {
+            // ICE candidate from viewer
+            const signalData = JSON.parse(signal.signal_data);
+            peers[viewerId].signal(signalData);
+          }
+        }
+
+        updateViewerCount();
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+
+      // Poll again in 1 second
+      setTimeout(pollForViewers, 1000);
+    }
+
+    // === CREATE PEER CONNECTION (HOST INITIATES) ===
+    function createPeerConnection(viewerId) {
+      if (peers[viewerId]) return;
+
+      const peer = new SimplePeer({
+        initiator: true,
+        stream: localStream,
+        trickle: true,
+        config: { iceServers }
+      });
+
+      peer.on('signal', async (signalData) => {
+        // Send offer/ICE to viewer
+        const signalType = signalData.type === 'offer' ? 'offer' : 'ice';
+        await fetch('/api/live/signal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            room_name: roomName,
+            from_peer: PEER_ID,
+            to_peer: viewerId,
+            signal_type: signalType,
+            signal_data: JSON.stringify(signalData)
+          })
+        });
+      });
+
+      peer.on('connect', () => {
+        console.log('Connected to viewer:', viewerId);
+        updateViewerCount();
+      });
+
+      peer.on('close', () => {
+        console.log('Viewer disconnected:', viewerId);
+        delete peers[viewerId];
+        updateViewerCount();
+      });
+
+      peer.on('error', (err) => {
+        console.error('Peer error:', viewerId, err);
+        delete peers[viewerId];
+        updateViewerCount();
+      });
+
+      peers[viewerId] = peer;
+    }
+
+    // === CONTROLS ===
+    document.getElementById('mic-btn').addEventListener('click', () => {
+      micEnabled = !micEnabled;
+      localStream.getAudioTracks().forEach(track => track.enabled = micEnabled);
+      document.getElementById('mic-btn').classList.toggle('off', !micEnabled);
+    });
+
+    document.getElementById('cam-btn').addEventListener('click', () => {
+      camEnabled = !camEnabled;
+      localStream.getVideoTracks().forEach(track => track.enabled = camEnabled);
+      document.getElementById('cam-btn').classList.toggle('off', !camEnabled);
+      document.getElementById('video-placeholder').style.display = camEnabled ? 'none' : 'flex';
+    });
+
+    document.getElementById('end-btn').addEventListener('click', async () => {
+      if (!confirm('End the live broadcast?')) return;
+
+      isLive = false;
+
+      // Close all peer connections
+      Object.values(peers).forEach(peer => peer.destroy());
+      peers = {};
+
+      // Tell server we're done
+      await fetch('/api/admin/go-live', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'stop' })
+      });
+
+      // Clean up signals
+      await fetch('/api/live/signal', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_name: roomName })
+      });
+
+      // Stop local stream
+      localStream.getTracks().forEach(track => track.stop());
+
+      // Redirect back to admin
+      window.location.href = '/admin.html';
+    });
+
+    // === CHAT ===
+    document.getElementById('chat-input').addEventListener('keypress', async (e) => {
+      if (e.key !== 'Enter') return;
+      
+      const input = e.target;
+      const message = input.value.trim();
+      if (!message) return;
+
+      addChatMessage('Dr. TMac', message);
+      input.value = '';
+
+      // Broadcast chat to all viewers via data channel (future enhancement)
+    });
+
+    function addChatMessage(author, text) {
+      const container = document.getElementById('chat-messages');
+      const msgEl = document.createElement('div');
+      msgEl.className = 'chat-message';
+      msgEl.innerHTML = `
+        <div class="chat-author">${author}</div>
+        <div class="chat-text">${text}</div>
+      `;
+      container.appendChild(msgEl);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // === HELPERS ===
+    function updateViewerCount() {
+      const count = Object.keys(peers).length;
+      document.getElementById('viewer-count').textContent = `${count} viewer${count !== 1 ? 's' : ''}`;
+      document.getElementById('sidebar-viewer-count').textContent = `${count} watching`;
+    }
+
+    function updateDuration() {
+      if (!startTime) return;
+      const diff = Math.floor((Date.now() - startTime) / 1000);
+      const mins = Math.floor(diff / 60).toString().padStart(2, '0');
+      const secs = (diff % 60).toString().padStart(2, '0');
+      document.getElementById('duration').textContent = `${mins}:${secs}`;
+    }
+
+    // === INIT ===
+    initSetup();
+
+    // Warn before leaving
+    window.addEventListener('beforeunload', (e) => {
+      if (isLive) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+  </script>
+</body>
+</html>
