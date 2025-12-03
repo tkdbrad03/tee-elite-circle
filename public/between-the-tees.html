@@ -665,63 +665,79 @@
       preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
 
       try {
-        const res = await fetch('/api/admin/upload-image', {
-          method: 'POST',
-          headers: { 'Content-Type': file.type },
-          body: file
-        });
+        let url;
+        
+        // For files over 4MB, use client-side upload
+        if (file.size > 4 * 1024 * 1024) {
+          // Use Vercel Blob client upload for large files
+          const { upload } = await import('https://unpkg.com/@vercel/blob@0.19.0/dist/index.mjs');
+          
+          const blob = await upload(file.name, file, {
+            access: 'public',
+            handleUploadUrl: '/api/admin/client-upload',
+          });
+          url = blob.url;
+        } else {
+          // Use regular upload for small files
+          const res = await fetch('/api/admin/upload-image', {
+            method: 'POST',
+            headers: { 'Content-Type': file.type },
+            body: file
+          });
 
-        if (res.ok) {
+          if (!res.ok) {
+            throw new Error('Upload failed');
+          }
+          
           const data = await res.json();
-          
-          // Clear all URLs first
-          document.getElementById('thread-image-url').value = '';
-          document.getElementById('thread-video-url').value = '';
-          document.getElementById('thread-doc-url').value = '';
-          document.getElementById('thread-doc-name').value = '';
-          
-          if (type === 'image') {
-            document.getElementById('thread-image-url').value = data.url;
-          } else if (type === 'video') {
-            document.getElementById('thread-video-url').value = data.url;
-          } else if (type === 'document') {
-            document.getElementById('thread-doc-url').value = data.url;
-            document.getElementById('thread-doc-name').value = fileName;
-          }
-          document.getElementById('thread-media-type').value = type;
-          
-          let mediaElement;
-          if (type === 'image') {
-            mediaElement = `<img src="${data.url}" alt="Preview">`;
-          } else if (type === 'video') {
-            mediaElement = `<video src="${data.url}" controls></video>`;
-          } else {
-            const ext = fileName.split('.').pop().toUpperCase();
-            mediaElement = `
-              <div class="doc-preview">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                </svg>
-                <div>
-                  <div class="doc-name">${fileName}</div>
-                  <div class="doc-type">${ext} Document</div>
-                </div>
+          url = data.url;
+        }
+        
+        // Clear all URLs first
+        document.getElementById('thread-image-url').value = '';
+        document.getElementById('thread-video-url').value = '';
+        document.getElementById('thread-doc-url').value = '';
+        document.getElementById('thread-doc-name').value = '';
+        
+        if (type === 'image') {
+          document.getElementById('thread-image-url').value = url;
+        } else if (type === 'video') {
+          document.getElementById('thread-video-url').value = url;
+        } else if (type === 'document') {
+          document.getElementById('thread-doc-url').value = url;
+          document.getElementById('thread-doc-name').value = fileName;
+        }
+        document.getElementById('thread-media-type').value = type;
+        
+        let mediaElement;
+        if (type === 'image') {
+          mediaElement = `<img src="${url}" alt="Preview">`;
+        } else if (type === 'video') {
+          mediaElement = `<video src="${url}" controls></video>`;
+        } else {
+          const ext = fileName.split('.').pop().toUpperCase();
+          mediaElement = `
+            <div class="doc-preview">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <div>
+                <div class="doc-name">${fileName}</div>
+                <div class="doc-type">${ext} Document</div>
               </div>
-            `;
-          }
-          
-          preview.innerHTML = `
-            ${mediaElement}
-            <div class="media-actions">
-              <button type="button" class="change-media-btn" onclick="showUploadButtons()">Change</button>
-              <button type="button" class="remove-media-btn" onclick="removeMedia()">Remove</button>
             </div>
           `;
-          preview.classList.add('has-media');
-        } else {
-          showUploadError(preview);
         }
+        
+        preview.innerHTML = `
+          ${mediaElement}
+          <div class="media-actions">
+            <button type="button" class="change-media-btn" onclick="showUploadButtons()">Change</button>
+            <button type="button" class="remove-media-btn" onclick="removeMedia()">Remove</button>
+          </div>
+        `;
+        preview.classList.add('has-media');
       } catch (err) {
         console.error('Upload error:', err);
         showUploadError(preview);
