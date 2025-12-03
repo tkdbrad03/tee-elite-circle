@@ -10,28 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* PWA-style gradient background */
-    body.member-body {
-      background: linear-gradient(
-        180deg, 
-        var(--deep-forest) 0%, 
-        #1e352a 8%,
-        #2a4435 18%,
-        #3d5a48 30%,
-        #5a7058 45%,
-        #7a8968 55%,
-        #9a9a70 65%,
-        #b8a56a 78%,
-        #c9a86c 88%,
-        var(--tmac-bronze) 100%
-      );
-      min-height: 100vh;
-    }
-
     .home-container {
       max-width: 800px;
       margin: 0 auto;
-      padding: 60px 24px 80px;
+      padding: 60px 24px 100px; /* Extra bottom padding for mobile nav */
     }
 
     .welcome-section {
@@ -43,7 +25,7 @@
       font-size: 14px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
+      color: var(--tmac-bronze);
       margin-bottom: 16px;
     }
 
@@ -51,31 +33,26 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(36px, 6vw, 56px);
       font-weight: 400;
-      font-style: italic;
-      color: #fff;
-      margin-bottom: 16px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
     }
 
-    /* Gold Founding Member Badge */
+    /* CHANGE: Gold Founding Member Badge */
     .welcome-pin {
       display: inline-block;
-      background: linear-gradient(135deg, #c9a86c 0%, var(--tmac-bronze) 100%);
+      background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
       padding: 8px 20px;
+      border-radius: 4px;
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--deep-forest);
-      font-weight: 600;
-      border-radius: 4px;
+      color: #fff;
+      font-weight: 500;
     }
 
-    /* Retreat Card - Transparent with rounded corners */
+    /* Retreat Card - Keep original */
     .retreat-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
+      background: var(--deep-forest);
       padding: 48px;
       text-align: center;
       margin-bottom: 80px;
@@ -93,7 +70,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(28px, 4vw, 36px);
       font-weight: 400;
-      color: #fff;
+      color: var(--tmac-blush);
       margin-bottom: 8px;
     }
 
@@ -118,7 +95,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 48px;
       font-weight: 400;
-      color: var(--tmac-blush);
+      color: #fff;
       line-height: 1;
     }
 
@@ -144,7 +121,7 @@
       border-color: var(--tmac-blush);
     }
 
-    /* Navigation Links - Pink with rounded corners */
+    /* CHANGE: Navigation Links - Pink with rounded corners */
     .nav-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -158,13 +135,11 @@
       padding: 40px 32px;
       text-decoration: none;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .nav-item:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      background: var(--tmac-blush-light);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
 
     .nav-item-title {
@@ -176,25 +151,21 @@
 
     .nav-item-desc {
       font-size: 13px;
-      color: #666;
+      color: #555;
     }
 
-    /* Scorecard Section */
+    /* CHANGE: Scorecard Section - Match retreat card styling */
     .scorecard-section {
+      background: var(--deep-forest);
+      padding: 48px;
       text-align: center;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 40px;
     }
 
     .scorecard-label {
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--tmac-blush);
+      color: rgba(255,255,255,0.5);
       margin-bottom: 24px;
     }
 
@@ -224,19 +195,60 @@
       text-decoration: underline;
     }
 
-    /* Footer adjustments for gradient background */
-    .member-footer {
-      background: transparent;
+    /* CHANGE: Bottom Mobile Navigation Bar */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--deep-forest);
+      padding: 12px 0;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 1000;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
-    .member-footer p {
+    .mobile-bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .mobile-bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
       color: rgba(255,255,255,0.5);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+    }
+
+    .mobile-bottom-nav-item.active,
+    .mobile-bottom-nav-item:hover {
+      color: var(--tmac-blush);
+    }
+
+    .mobile-bottom-nav-item svg {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .mobile-bottom-nav-item.active svg {
+      stroke-width: 2;
     }
 
     @media (max-width: 600px) {
       .home-container {
-        padding: 40px 20px 60px;
+        padding: 40px 20px 120px; /* Extra padding for bottom nav */
       }
 
       .welcome-section {
@@ -246,7 +258,6 @@
       .retreat-card {
         padding: 32px 24px;
         margin-bottom: 60px;
-        border-radius: 16px;
       }
 
       .countdown {
@@ -260,6 +271,7 @@
       .nav-grid {
         grid-template-columns: 1fr;
         margin-bottom: 60px;
+        gap: 12px;
       }
 
       .nav-item {
@@ -268,8 +280,21 @@
       }
 
       .scorecard-section {
-        border-radius: 16px;
         padding: 32px 24px;
+      }
+
+      /* Show bottom nav on mobile */
+      .mobile-bottom-nav {
+        display: block;
+      }
+
+      /* Hide hamburger menu and old mobile nav */
+      .mobile-menu-btn {
+        display: none !important;
+      }
+
+      .mobile-nav {
+        display: none !important;
       }
     }
   </style>
@@ -285,8 +310,10 @@
       </a>
       <nav class="header-nav">
         <a href="/home.html" class="nav-link active">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/wins.html" class="nav-link">Wins</a>
         <a href="/resources.html" class="nav-link">Tee Room</a>
-        <a href="/profile.html" class="nav-link">My Profile</a>
       </nav>
       <div class="header-user">
         <a href="/profile.html" class="user-avatar" id="user-avatar">
@@ -301,9 +328,12 @@
     </div>
   </header>
 
-  <!-- MOBILE NAV -->
+  <!-- OLD MOBILE NAV (hidden on mobile, kept for tablet) -->
   <div class="mobile-nav" id="mobile-nav">
     <a href="/home.html" class="mobile-nav-link active">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/wins.html" class="mobile-nav-link">Wins</a>
     <a href="/resources.html" class="mobile-nav-link">Tee Room</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
     <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
@@ -377,8 +407,26 @@
     <p>The Tee Elite Circle — A TMac Inspired Experience</p>
   </footer>
 
+  <!-- MOBILE BOTTOM NAV BAR -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="/home.html" class="mobile-bottom-nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </a>
+      <a href="/resources.html" class="mobile-bottom-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span>Tee Room</span>
+      </a>
+      <a href="/profile.html" class="mobile-bottom-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
   <script>
-    // Mobile menu
+    // Mobile menu (for tablet)
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
       this.classList.toggle('active');
       document.getElementById('mobile-nav').classList.toggle('open');
