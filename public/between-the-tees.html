@@ -5,15 +5,6 @@
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
   <title>Between the Tees — The Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- PWA Meta Tags -->
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#1a2e1a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Tee Elite">
-  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <meta name="msapplication-TileColor" content="#1a2e1a">
-  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -132,6 +123,15 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+
+    .thread-preview a {
+      color: var(--tmac-bronze);
+      text-decoration: underline;
+    }
+
+    .thread-preview a:hover {
+      color: var(--deep-forest);
     }
 
     .thread-meta {
@@ -539,7 +539,7 @@
             <div class="thread-content">
               <span class="thread-category">${formatCategory(thread.category)}</span>
               <h3 class="thread-title">${thread.title || 'Untitled'}</h3>
-              <p class="thread-preview">${thread.content}</p>
+              <p class="thread-preview">${linkify(thread.content)}</p>
               <div class="thread-meta">
                 <div class="thread-author">
                   <div class="thread-author-avatar">
@@ -584,38 +584,17 @@
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
+    // Convert URLs in text to clickable links
+    function linkify(text) {
+      if (!text) return '';
+      const urlPattern = /(https?:\/\/[^\s<]+)/g;
+      return text.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener" onclick="event.stopPropagation()">$1</a>');
+    }
+
     // Initialize
     loadThreads();
   </script>
   <script src="/member-common.js"></script>
-<!-- PWA Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('ServiceWorker registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-          });
-      });
-    }
-    // Show admin link for pin #01 only
-    async function checkAdminAccess() {
-      try {
-        const res = await fetch('/api/members/me');
-        if (res.ok) {
-          const member = await res.json();
-          if (member.pin_number === 1) {
-            const adminLink = document.getElementById('admin-nav-link');
-            if (adminLink) adminLink.style.display = 'flex';
-          }
-        }
-      } catch (err) {}
-    }
-    checkAdminAccess();
-  </script>
   <script src="/pwa-nav.js"></script>
 </body>
 </html>
