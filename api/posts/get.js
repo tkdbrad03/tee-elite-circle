@@ -31,15 +31,35 @@ module.exports = async (req, res) => {
     }
 
     const currentMemberId = sessionCheck.rows[0].member_id;
-    const { type, limit } = req.query;
+    const { type, limit, id } = req.query;
     const postLimit = parseInt(limit) || 50;
 
     let result;
     
+    // If ID is provided, fetch single post
+    if (id) {
+      result = await client.query(
+        `SELECT 
+          p.id, p.title, p.content, p.category, p.image_url, p.post_type, p.created_at, p.member_id,
+          m.name as author_name, m.pin_number as author_pin, m.photo_url as author_photo,
+          (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) as comment_count
+        FROM posts p
+        JOIN members m ON p.member_id = m.id
+        WHERE p.id = $1`,
+        [id]
+      );
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+      
+      return res.status(200).json(result.rows[0]);
+    }
+    
     if (type === 'discussion') {
       result = await client.query(
         `SELECT 
-          p.id, p.title, p.content, p.category, p.image_url, p.created_at,
+          p.id, p.title, p.content, p.category, p.image_url, p.created_at, p.member_id,
           m.name as author_name, m.pin_number as author_pin, m.photo_url as author_photo,
           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) as comment_count
         FROM posts p
@@ -52,7 +72,7 @@ module.exports = async (req, res) => {
     } else {
       result = await client.query(
         `SELECT 
-          p.id, p.content, p.image_url, p.post_type, p.created_at,
+          p.id, p.content, p.image_url, p.post_type, p.created_at, p.member_id,
           m.name as author_name, m.pin_number as author_pin, m.photo_url as author_photo,
           (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) as like_count,
           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) as comment_count,
