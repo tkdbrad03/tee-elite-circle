@@ -77,6 +77,33 @@
       gap: 16px;
     }
 
+    .thread-card-wrapper {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+    }
+
+    .thread-card-wrapper:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .thread-card-wrapper .thread-card {
+      border: none;
+      box-shadow: none;
+    }
+
+    .thread-card-wrapper .thread-card:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .thread-card-wrapper .thread-actions {
+      padding: 0 24px 16px;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      margin-top: -8px;
+      padding-top: 12px;
+    }
+
     .thread-card {
       background: #fff;
       border: 1px solid rgba(0,0,0,0.06);
@@ -503,6 +530,90 @@
       letter-spacing: 0.05em;
     }
 
+    /* Post Action Buttons */
+    .thread-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .thread-action-btn {
+      padding: 6px 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .thread-action-btn.edit-btn {
+      background: var(--tmac-blush-light);
+      color: var(--charcoal);
+    }
+
+    .thread-action-btn.edit-btn:hover {
+      background: var(--tmac-blush);
+    }
+
+    .thread-action-btn.delete-btn {
+      background: none;
+      color: #c0392b;
+      border: 1px solid #c0392b;
+    }
+
+    .thread-action-btn.delete-btn:hover {
+      background: #c0392b;
+      color: #fff;
+    }
+
+    /* Delete Confirmation Modal */
+    .confirm-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1001;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .confirm-modal.open {
+      display: flex;
+    }
+
+    .confirm-content {
+      background: #fff;
+      width: 100%;
+      max-width: 400px;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .confirm-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+
+    .confirm-text {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    .confirm-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
     @media (max-width: 600px) {
       .thread-card {
         grid-template-columns: 1fr;
@@ -630,6 +741,54 @@
       <div class="modal-footer">
         <button class="btn-secondary" id="modal-cancel">Cancel</button>
         <button class="btn-primary" id="submit-thread">Post Discussion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT THREAD MODAL -->
+  <div class="modal-overlay" id="edit-modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Discussion</h2>
+        <button class="modal-close" id="edit-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-thread-id" value="">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="edit-thread-category">
+            <option value="business">Business & Strategy</option>
+            <option value="money">Money & Wealth</option>
+            <option value="golf">Golf & Game</option>
+            <option value="life">Life & Legacy</option>
+            <option value="general">General Discussion</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-input" id="edit-thread-title" placeholder="What's on your mind?">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Question or Topic</label>
+          <textarea class="form-textarea" id="edit-thread-content" placeholder="Share the context. What are you navigating? What input would help?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="edit-modal-cancel">Cancel</button>
+        <button class="btn-primary" id="save-edit-thread">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div class="confirm-modal" id="delete-confirm-modal">
+    <div class="confirm-content">
+      <h3 class="confirm-title">Delete Discussion?</h3>
+      <p class="confirm-text">This will permanently remove this discussion and all its replies. This cannot be undone.</p>
+      <input type="hidden" id="delete-thread-id" value="">
+      <div class="confirm-buttons">
+        <button class="btn-secondary" id="cancel-delete">Cancel</button>
+        <button class="btn-primary" style="background: #c0392b; color: #fff;" id="confirm-delete">Delete</button>
       </div>
     </div>
   </div>
@@ -917,7 +1076,27 @@ async function handleMediaUpload(file, type, fileName = '') {
     });
 
     // Load threads
+    let currentMemberId = null;
+
+    // Get current member ID
+    async function getCurrentMember() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (res.ok) {
+          const member = await res.json();
+          currentMemberId = member.id;
+        }
+      } catch (err) {
+        console.error('Error getting current member:', err);
+      }
+    }
+
     async function loadThreads() {
+      // Make sure we have current member ID
+      if (!currentMemberId) {
+        await getCurrentMember();
+      }
+
       try {
         const res = await fetch('/api/posts/get?type=discussion');
         if (!res.ok) return;
@@ -927,34 +1106,50 @@ async function handleMediaUpload(file, type, fileName = '') {
         
         if (threads.length === 0) return;
 
-        list.innerHTML = threads.map(thread => `
-          <a href="/thread.html?id=${thread.id}" class="thread-card">
-            <div class="thread-content">
-              <span class="thread-category">${formatCategory(thread.category)}</span>
-              <h3 class="thread-title">${thread.title || 'Untitled'}</h3>
-              <p class="thread-preview">${linkify(thread.content)}</p>
-              ${thread.image_url ? `<div class="thread-attachment">${getMediaElement(thread.image_url)}</div>` : ''}
-              <div class="thread-meta">
-                <div class="thread-author">
-                  <div class="thread-author-avatar">
-                    <span>${getInitials(thread.author_name)}</span>
+        list.innerHTML = threads.map(thread => {
+          const isOwner = thread.member_id === currentMemberId;
+          return `
+          <div class="thread-card-wrapper">
+            <a href="/thread.html?id=${thread.id}" class="thread-card">
+              <div class="thread-content">
+                <span class="thread-category">${formatCategory(thread.category)}</span>
+                <h3 class="thread-title">${thread.title || 'Untitled'}</h3>
+                <p class="thread-preview">${linkify(thread.content)}</p>
+                ${thread.image_url ? `<div class="thread-attachment">${getMediaElement(thread.image_url)}</div>` : ''}
+                <div class="thread-meta">
+                  <div class="thread-author">
+                    <div class="thread-author-avatar">
+                      <span>${getInitials(thread.author_name)}</span>
+                    </div>
+                    <span class="thread-author-name">${thread.author_name}</span>
                   </div>
-                  <span class="thread-author-name">${thread.author_name}</span>
+                  <span class="thread-date">${formatDate(thread.created_at)}</span>
                 </div>
-                <span class="thread-date">${formatDate(thread.created_at)}</span>
               </div>
-            </div>
-            <div class="thread-stats">
-              <div class="thread-replies">
-                <div class="thread-replies-count">${thread.comment_count || 0}</div>
-                <div class="thread-replies-label">Replies</div>
+              <div class="thread-stats">
+                <div class="thread-replies">
+                  <div class="thread-replies-count">${thread.comment_count || 0}</div>
+                  <div class="thread-replies-label">Replies</div>
+                </div>
               </div>
+            </a>
+            ${isOwner ? `
+            <div class="thread-actions">
+              <button class="thread-action-btn edit-btn" onclick="openEditModal(${thread.id}, '${escapeForAttr(thread.title)}', '${escapeForAttr(thread.content)}', '${thread.category || 'general'}')">Edit</button>
+              <button class="thread-action-btn delete-btn" onclick="openDeleteModal(${thread.id})">Delete</button>
             </div>
-          </a>
-        `).join('');
+            ` : ''}
+          </div>
+        `}).join('');
       } catch (err) {
         console.error('Error loading threads:', err);
       }
+    }
+
+    // Escape strings for HTML attributes
+    function escapeForAttr(str) {
+      if (!str) return '';
+      return str.replace(/'/g, "\\'").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
     }
 
     function formatCategory(cat) {
@@ -1027,6 +1222,95 @@ async function handleMediaUpload(file, type, fileName = '') {
         return `<img src="${url}" alt="Attachment">`;
       }
     }
+
+    // Edit Modal
+    const editModal = document.getElementById('edit-modal-overlay');
+    const editModalClose = document.getElementById('edit-modal-close');
+    const editModalCancel = document.getElementById('edit-modal-cancel');
+
+    editModalClose.addEventListener('click', () => editModal.classList.remove('open'));
+    editModalCancel.addEventListener('click', () => editModal.classList.remove('open'));
+    editModal.addEventListener('click', (e) => {
+      if (e.target === editModal) editModal.classList.remove('open');
+    });
+
+    function openEditModal(id, title, content, category) {
+      document.getElementById('edit-thread-id').value = id;
+      document.getElementById('edit-thread-title').value = title ? title.replace(/\\n/g, '\n') : '';
+      document.getElementById('edit-thread-content').value = content ? content.replace(/\\n/g, '\n') : '';
+      document.getElementById('edit-thread-category').value = category || 'general';
+      editModal.classList.add('open');
+    }
+
+    // Save edited thread
+    document.getElementById('save-edit-thread').addEventListener('click', async () => {
+      const postId = document.getElementById('edit-thread-id').value;
+      const title = document.getElementById('edit-thread-title').value.trim();
+      const content = document.getElementById('edit-thread-content').value.trim();
+      const category = document.getElementById('edit-thread-category').value;
+
+      if (!title || !content) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/posts/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: parseInt(postId), title, content, category })
+        });
+
+        if (res.ok) {
+          editModal.classList.remove('open');
+          loadThreads();
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Failed to update post');
+        }
+      } catch (err) {
+        console.error('Error updating thread:', err);
+        alert('Error updating post');
+      }
+    });
+
+    // Delete Modal
+    const deleteModal = document.getElementById('delete-confirm-modal');
+    const cancelDelete = document.getElementById('cancel-delete');
+
+    cancelDelete.addEventListener('click', () => deleteModal.classList.remove('open'));
+    deleteModal.addEventListener('click', (e) => {
+      if (e.target === deleteModal) deleteModal.classList.remove('open');
+    });
+
+    function openDeleteModal(id) {
+      document.getElementById('delete-thread-id').value = id;
+      deleteModal.classList.add('open');
+    }
+
+    // Confirm delete
+    document.getElementById('confirm-delete').addEventListener('click', async () => {
+      const postId = document.getElementById('delete-thread-id').value;
+
+      try {
+        const res = await fetch('/api/posts/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: parseInt(postId) })
+        });
+
+        if (res.ok) {
+          deleteModal.classList.remove('open');
+          loadThreads();
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Failed to delete post');
+        }
+      } catch (err) {
+        console.error('Error deleting thread:', err);
+        alert('Error deleting post');
+      }
+    });
 
     // Initialize
     loadThreads();
