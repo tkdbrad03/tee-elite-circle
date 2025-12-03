@@ -725,85 +725,56 @@
       await handleMediaUpload(file, 'document', file.name);
     });
 
- async function handleMediaUpload(file, type, fileName = '') {
+async function handleMediaUpload(file, type, fileName = '') {
   const preview = document.getElementById('upload-preview');
   preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
 
   try {
-    console.log('Preparing upload for:', file.name, file.type, file.size);
-
-    // Step 1: Ask your API for a signed Blob URL
-    const res = await fetch('/api/upload-url', {
+    const res = await fetch('/api/upload', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        filename: file.name,
-        contentType: file.type,
-      }),
+      headers: {
+        'Content-Type': file.type,
+        'X-Filename': encodeURIComponent(file.name)
+      },
+      body: file
     });
 
-    if (!res.ok) throw new Error('Failed to get upload URL');
-    const { url } = await res.json();
-
-    // Step 2: Upload file directly to Vercel Blob
-    await fetch(url, {
-      method: 'PUT',
-      headers: { 'Content-Type': file.type },
-      body: file,
-    });
-
-    // ✅ Step 3: Use the permanent Blob URL (no extra fetch)
-    const blobUrl = url.split('?')[0];
+    if (!res.ok) throw new Error('Upload failed');
+    const data = await res.json();
+    const blobUrl = data.url;
     console.log('✅ Upload complete:', blobUrl);
 
-    // Step 4: Reset hidden fields
-    document.getElementById('thread-image-url').value = '';
-    document.getElementById('thread-video-url').value = '';
-    document.getElementById('thread-doc-url').value = '';
-    document.getElementById('thread-doc-name').value = '';
     document.getElementById('thread-media-type').value = type;
-
-    if (type === 'image') {
-      document.getElementById('thread-image-url').value = blobUrl;
-    } else if (type === 'video') {
-      document.getElementById('thread-video-url').value = blobUrl;
-    } else if (type === 'document') {
+    if (type === 'image') document.getElementById('thread-image-url').value = blobUrl;
+    else if (type === 'video') document.getElementById('thread-video-url').value = blobUrl;
+    else {
       document.getElementById('thread-doc-url').value = blobUrl;
       document.getElementById('thread-doc-name').value = fileName || file.name;
     }
 
-    // Step 5: Build preview element
-    let mediaElement;
+    let mediaElement = '';
     if (type === 'image') {
-      mediaElement = `<img src="${blobUrl}" alt="Preview" crossorigin="anonymous">`;
+      mediaElement = `<img src="${blobUrl}" alt="Preview" style="max-width:100%;border-radius:10px;">`;
     } else if (type === 'video') {
-      mediaElement = `<video src="${blobUrl}" controls crossorigin="anonymous"></video>`;
+      mediaElement = `<video src="${blobUrl}" controls style="max-width:100%;border-radius:10px;"></video>`;
     } else {
       const ext = (fileName || file.name).split('.').pop().toUpperCase();
       mediaElement = `
         <div class="doc-preview">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-          </svg>
-          <div>
-            <div class="doc-name">${fileName || file.name}</div>
-            <div class="doc-type">${ext} Document</div>
-          </div>
+          <strong>${fileName || file.name}</strong><br>${ext} Document
         </div>`;
     }
 
     preview.innerHTML = `
       ${mediaElement}
       <div class="media-actions">
-        <button type="button" class="change-media-btn" onclick="showUploadButtons()">Change</button>
-        <button type="button" class="remove-media-btn" onclick="removeMedia()">Remove</button>
+        <button type="button" onclick="showUploadButtons()">Change</button>
+        <button type="button" onclick="removeMedia()">Remove</button>
       </div>`;
     preview.classList.add('has-media');
   } catch (err) {
     console.error('Upload error:', err);
     preview.innerHTML = `<div class="upload-status" style="color:#c0392b;">Upload failed: ${err.message}</div>`;
-    showUploadError(preview);
   }
 }
 
