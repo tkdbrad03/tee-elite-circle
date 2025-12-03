@@ -730,7 +730,9 @@
   preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
 
   try {
-    // Step 1: Request a signed upload URL from your API
+    console.log('Preparing upload for:', file.name, file.type, file.size);
+
+    // Step 1: Ask your API for a signed Blob URL
     const res = await fetch('/api/upload-url', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -739,25 +741,27 @@
         contentType: file.type,
       }),
     });
+
     if (!res.ok) throw new Error('Failed to get upload URL');
     const { url } = await res.json();
 
-    // Step 2: Upload the file directly to Vercel Blob
-    const upload = await fetch(url, {
+    // Step 2: Upload file directly to Vercel Blob
+    await fetch(url, {
       method: 'PUT',
       headers: { 'Content-Type': file.type },
       body: file,
     });
-    if (!upload.ok) throw new Error('Upload failed');
-    const blobUrl = url.split('?')[0]; // permanent Blob URL
 
-    console.log('Upload complete:', blobUrl);
+    // ✅ Step 3: Use the permanent Blob URL (no extra fetch)
+    const blobUrl = url.split('?')[0];
+    console.log('✅ Upload complete:', blobUrl);
 
-    // Step 3: Update hidden fields
+    // Step 4: Reset hidden fields
     document.getElementById('thread-image-url').value = '';
     document.getElementById('thread-video-url').value = '';
     document.getElementById('thread-doc-url').value = '';
     document.getElementById('thread-doc-name').value = '';
+    document.getElementById('thread-media-type').value = type;
 
     if (type === 'image') {
       document.getElementById('thread-image-url').value = blobUrl;
@@ -767,14 +771,13 @@
       document.getElementById('thread-doc-url').value = blobUrl;
       document.getElementById('thread-doc-name').value = fileName || file.name;
     }
-    document.getElementById('thread-media-type').value = type;
 
-    // Step 4: Build the preview element
+    // Step 5: Build preview element
     let mediaElement;
     if (type === 'image') {
-      mediaElement = `<img src="${blobUrl}" alt="Preview">`;
+      mediaElement = `<img src="${blobUrl}" alt="Preview" crossorigin="anonymous">`;
     } else if (type === 'video') {
-      mediaElement = `<video src="${blobUrl}" controls></video>`;
+      mediaElement = `<video src="${blobUrl}" controls crossorigin="anonymous"></video>`;
     } else {
       const ext = (fileName || file.name).split('.').pop().toUpperCase();
       mediaElement = `
@@ -803,6 +806,7 @@
     showUploadError(preview);
   }
 }
+
 
     function showUploadError(preview) {
       preview.innerHTML = `
