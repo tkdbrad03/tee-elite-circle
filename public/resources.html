@@ -347,6 +347,119 @@
       font-style: italic;
     }
 
+    /* Blog Modal */
+    .blog-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .blog-modal-overlay.open {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .blog-modal {
+      background: #fff;
+      max-width: 700px;
+      width: 100%;
+      margin: 40px auto;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .blog-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .blog-modal-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    .blog-modal-close:hover {
+      background: rgba(0,0,0,0.7);
+    }
+
+    .blog-modal-image {
+      width: 100%;
+      max-height: 300px;
+      overflow: hidden;
+    }
+
+    .blog-modal-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-modal-body {
+      padding: 32px;
+    }
+
+    .blog-modal-date {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .blog-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .blog-modal-content {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    .blog-modal-content p {
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .blog-modal {
+        margin: 20px auto;
+      }
+      
+      .blog-modal-body {
+        padding: 24px;
+      }
+      
+      .blog-modal-title {
+        font-size: 24px;
+      }
+    }
+
     /* Golf Essentials Section */
     .essentials-section {
       margin-bottom: 48px;
@@ -760,6 +873,21 @@
 
   </main>
 
+  <!-- BLOG MODAL -->
+  <div class="blog-modal-overlay" id="blog-modal">
+    <div class="blog-modal">
+      <button class="blog-modal-close" onclick="closeBlogModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="blog-modal-image" id="blog-modal-image"></div>
+      <div class="blog-modal-body">
+        <p class="blog-modal-date" id="blog-modal-date"></p>
+        <h2 class="blog-modal-title" id="blog-modal-title"></h2>
+        <div class="blog-modal-content" id="blog-modal-content"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="member-footer">
     <p>The Tee Elite Circle — A TMac Inspired Experience</p>
@@ -933,8 +1061,11 @@
             return;
           }
 
-          grid.innerHTML = posts.map(post => `
-            <div class="blog-card">
+          // Store posts for modal access
+          window.blogPosts = posts;
+          
+          grid.innerHTML = posts.map((post, index) => `
+            <div class="blog-card" onclick="openBlogModal(${index})" style="cursor: pointer;">
               <div class="blog-image">
                 ${post.image_url 
                   ? `<img src="${post.image_url}" alt="${post.title}">`
@@ -960,6 +1091,37 @@
         `;
       }
     }
+
+    // Blog modal functions
+    function openBlogModal(index) {
+      const post = window.blogPosts[index];
+      if (!post) return;
+      
+      document.getElementById('blog-modal-title').textContent = post.title;
+      document.getElementById('blog-modal-date').textContent = new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('blog-modal-content').innerHTML = post.content || post.excerpt || 'No content available.';
+      
+      const imageEl = document.getElementById('blog-modal-image');
+      if (post.image_url) {
+        imageEl.innerHTML = `<img src="${post.image_url}" alt="${post.title}">`;
+        imageEl.style.display = 'block';
+      } else {
+        imageEl.style.display = 'none';
+      }
+      
+      document.getElementById('blog-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeBlogModal() {
+      document.getElementById('blog-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    
+    // Close modal on backdrop click
+    document.getElementById('blog-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'blog-modal') closeBlogModal();
+    });
 
     // Load content
     loadEssentials();
