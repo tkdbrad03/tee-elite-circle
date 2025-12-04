@@ -718,14 +718,16 @@
           <label class="form-label">Attach Media (optional)</label>
           <div class="upload-area" id="upload-area">
             <input type="file" id="thread-image" accept="image/*" style="display: none;">
-            <input type="file" id="thread-video" accept="video/*" style="display: none;">
+            <input type="file" id="thread-video" accept="video/mp4,video/quicktime,video/x-m4v,video/mov,video/*,.mp4,.mov,.m4v" style="display: none;">
+            <input type="file" id="thread-video-record" accept="video/*" capture="environment" style="display: none;">
             <input type="file" id="thread-doc" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,application/pdf" style="display: none;">
             <div class="upload-preview" id="upload-preview">
               <div class="attachment-dropdown">
                 <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
                 <div class="attachment-menu" id="attachment-menu">
                   <button type="button" class="attachment-option" data-type="image">Photo</button>
-                  <button type="button" class="attachment-option" data-type="video">Video</button>
+                  <button type="button" class="attachment-option" data-type="video">Upload Video</button>
+                  <button type="button" class="attachment-option" data-type="record">Record Video</button>
                   <button type="button" class="attachment-option" data-type="document">Document</button>
                 </div>
               </div>
@@ -843,6 +845,8 @@
           document.getElementById('thread-image').click();
         } else if (type === 'video') {
           document.getElementById('thread-video').click();
+        } else if (type === 'record') {
+          document.getElementById('thread-video-record').click();
         } else if (type === 'document') {
           document.getElementById('thread-doc').click();
         }
@@ -856,14 +860,36 @@
       await handleMediaUpload(file, 'image');
     });
 
-    // Video upload handler
+    // Video upload handler (from library)
     document.getElementById('thread-video').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
       
-      // Check file size (100MB limit for Pro)
-      if (file.size > 50 * 1024 * 1024) {
-        alert('Video must be under 50MB');
+      // Check file size - Vercel Blob Pro allows larger files
+      const sizeMB = file.size / (1024 * 1024);
+      if (sizeMB > 50) {
+        alert(`Video is ${sizeMB.toFixed(1)}MB. Please use a video under 50MB.`);
+        return;
+      }
+      
+      // Warn for larger files
+      if (sizeMB > 10) {
+        const proceed = confirm(`Video is ${sizeMB.toFixed(1)}MB. Large files may take a while to upload. Continue?`);
+        if (!proceed) return;
+      }
+      
+      await handleMediaUpload(file, 'video');
+    });
+
+    // Video record handler (capture new video)
+    document.getElementById('thread-video-record').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      // Check file size
+      const sizeMB = file.size / (1024 * 1024);
+      if (sizeMB > 50) {
+        alert(`Video is ${sizeMB.toFixed(1)}MB. Please record a shorter video (under 50MB).`);
         return;
       }
       
@@ -886,20 +912,29 @@
 
 async function handleMediaUpload(file, type, fileName = '') {
   const preview = document.getElementById('upload-preview');
-  preview.innerHTML = '<div class="upload-status">Uploading... Please wait.</div>';
+  
+  // Show file size in upload status
+  const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+  preview.innerHTML = `<div class="upload-status">Uploading ${type}... (${sizeMB}MB)<br>Please wait.</div>`;
 
   try {
+    console.log('Uploading file:', file.name, 'Type:', file.type, 'Size:', sizeMB + 'MB');
+    
     const res = await fetch('/api/upload', {
       method: 'POST',
       headers: {
-        'Content-Type': file.type,
+        'Content-Type': file.type || 'application/octet-stream',
         'X-Filename': encodeURIComponent(file.name)
       },
       body: file
     });
 
-    if (!res.ok) throw new Error('Upload failed');
     const data = await res.json();
+    
+    if (!res.ok) {
+      throw new Error(data.error || 'Upload failed');
+    }
+    
     const blobUrl = data.url;
     console.log('✅ Upload complete:', blobUrl);
 
@@ -933,7 +968,15 @@ async function handleMediaUpload(file, type, fileName = '') {
     preview.classList.add('has-media');
   } catch (err) {
     console.error('Upload error:', err);
-    preview.innerHTML = `<div class="upload-status" style="color:#c0392b;">Upload failed: ${err.message}</div>`;
+    let errorMsg = err.message;
+    if (errorMsg.includes('PayloadTooLarge') || errorMsg.includes('too large')) {
+      errorMsg = 'File too large. Please use a smaller file (under 10MB for videos).';
+    }
+    preview.innerHTML = `
+      <div class="upload-status" style="color:#c0392b;">
+        Upload failed: ${errorMsg}<br>
+        <button type="button" onclick="showUploadButtons()" style="margin-top:10px;">Try Again</button>
+      </div>`;
   }
 }
 
