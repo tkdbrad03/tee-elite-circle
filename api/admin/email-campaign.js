@@ -1,4 +1,4 @@
-aconst nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
