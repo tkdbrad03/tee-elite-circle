@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>Email Campaign — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .admin-header {
+      background: var(--deep-forest);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .admin-header a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .admin-header a:hover {
+      color: #fff;
+    }
+
+    /* Main Content */
+    .campaign-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      margin-bottom: 24px;
+      color: var(--charcoal);
+    }
+
+    /* Cards */
+    .card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 16px;
+    }
+
+    /* Form Elements */
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: #fff;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--tmac-bronze);
+    }
+
+    textarea {
+      min-height: 200px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    /* Checkbox */
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-wrapper input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--deep-forest);
+    }
+
+    .checkbox-wrapper label {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 14px 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--deep-forest);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--charcoal);
+    }
+
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+    }
+
+    .btn-secondary:hover {
+      background: var(--tmac-bronze);
+      color: #fff;
+    }
+
+    /* Contacts Table */
+    .contacts-preview {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .contacts-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .contacts-table th {
+      background: var(--tmac-blush-light);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+    }
+
+    .contacts-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .contact-count {
+      font-size: 14px;
+      color: var(--tmac-bronze);
+      margin-bottom: 16px;
+    }
+
+    /* Preview */
+    .email-preview {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      padding: 24px;
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .preview-header {
+      background: var(--tmac-blush-light);
+      padding: 12px 16px;
+      margin: -24px -24px 24px -24px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Status Messages */
+    .status {
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+
+    .status.sending {
+      background: var(--tmac-blush-light);
+      color: var(--charcoal);
+      display: block;
+    }
+
+    /* Progress */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--deep-forest);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .tab {
+      padding: 14px 24px;
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      color: var(--tmac-bronze);
+    }
+
+    .tab.active {
+      border-bottom-color: var(--deep-forest);
+      font-weight: 500;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Actions Row */
+    .actions-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    /* File Drop Zone */
+    .drop-zone {
+      border: 2px dashed rgba(0,0,0,0.15);
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: var(--tmac-bronze);
+      background: var(--tmac-blush-light);
+    }
+
+    .drop-zone p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .drop-zone .icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    /* Helper text */
+    .helper-text {
+      font-size: 12px;
+      color: #888;
+      margin-top: -12px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <h1>Email Campaign</h1>
+    <a href="/admin.html">← Back to Admin</a>
+  </header>
+
+  <div class="campaign-container">
+
+    <div id="statusMessage" class="status"></div>
+
+    <!-- Step 1: Contacts -->
+    <div class="card">
+      <div class="card-title">Step 1: Add Contacts</div>
+      
+      <div class="tabs">
+        <div class="tab active" data-tab="upload">Upload CSV</div>
+        <div class="tab" data-tab="paste">Paste List</div>
+      </div>
+
+      <div id="upload-tab" class="tab-content active">
+        <div class="drop-zone" id="dropZone">
+          <div class="icon">📁</div>
+          <p>Drop your CSV file here, or click to select</p>
+          <p style="font-size: 12px; color: #999; margin-top: 8px;">File must have columns: first_name, email</p>
+        </div>
+        <input type="file" id="csvFile" accept=".csv" style="display: none;">
+      </div>
+
+      <div id="paste-tab" class="tab-content">
+        <label>Paste contacts (one per line: name, email)</label>
+        <textarea id="pasteContacts" placeholder="Brandy, brandy@example.com&#10;Pattie, pattie@example.com&#10;Veniece, veniece@example.com"></textarea>
+        <button class="btn btn-secondary" onclick="parsePastedContacts()">Parse Contacts</button>
+      </div>
+
+      <div id="contactsCount" class="contact-count" style="display: none;"></div>
+      
+      <div id="contactsPreview" class="contacts-preview" style="display: none;">
+        <table class="contacts-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="contactsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Step 2: Compose Email -->
+    <div class="card">
+      <div class="card-title">Step 2: Compose Email</div>
+      
+      <label>Subject Line</label>
+      <input type="text" id="emailSubject" placeholder="It's been a minute...">
+
+      <label>Email Body</label>
+      <p class="helper-text">Use {first_name} to personalize. It will be replaced with each contact's name.</p>
+      <textarea id="emailTemplate" placeholder="Hey {first_name},
+
+Girl, it's been a minute. Hope you're doing well!
+
+So... I started golfing. Random, I know. But I'm obsessed now and I had to tell you why.
+
+The people I'm meeting on the golf course? Business owners. Investors. Retired folks who already made it. More real connections than any networking event I've ever been to. I didn't expect that.
+
+I'm putting together something called The Tee Elite Circle, a space for women who want in on this. You don't have to know how to play. Just be curious.
+
+It's brand new, so you'd literally be getting in at the beginning.
+
+No pressure at all. I just thought of you and wanted to share.
+
+Let me know if you want the details. 🏌🏾‍♀️
+
+Dr. TMac"></textarea>
+
+      <div class="checkbox-wrapper">
+        <input type="checkbox" id="useBranding">
+        <label for="useBranding">Use Tee Elite Circle branded template (header & footer)</label>
+      </div>
+
+      <button class="btn btn-secondary" onclick="showPreview()">Preview Email</button>
+
+      <div id="previewContainer" style="display: none;">
+        <div class="email-preview">
+          <div class="preview-header">
+            <strong>To:</strong> <span id="previewTo"></span><br>
+            <strong>Subject:</strong> <span id="previewSubject"></span>
+          </div>
+          <div id="previewBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Send -->
+    <div class="card">
+      <div class="card-title">Step 3: Send Campaign</div>
+      
+      <p style="font-size: 14px; color: #555; margin-bottom: 20px;">
+        Review your contacts and email content above before sending. This action cannot be undone.
+      </p>
+
+      <div class="actions-row">
+        <button class="btn btn-primary" id="sendBtn" onclick="sendCampaign()" disabled>
+          Send to <span id="sendCount">0</span> Contacts
+        </button>
+      </div>
+
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let contacts = [];
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + '-tab').classList.add('active');
+      });
+    });
+
+    // Drag and drop
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('csvFile');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file && file.name.endsWith('.csv')) {
+        parseCSV(file);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) parseCSV(file);
+    });
+
+    // Parse CSV file
+    function parseCSV(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target.result;
+        const lines = text.split('\n');
+        contacts = [];
+
+        // Find header row indices
+        const header = lines[0].toLowerCase();
+        let firstNameIdx = -1;
+        let emailIdx = -1;
+
+        const columns = parseCSVLine(lines[0]);
+        columns.forEach((col, idx) => {
+          const colLower = col.toLowerCase().trim();
+          if (colLower === 'first_name' || colLower === 'first name' || colLower === 'name' || colLower === 'firstname') {
+            firstNameIdx = idx;
+          }
+          if (colLower === 'email' || colLower === 'email_address' || colLower === 'email address') {
+            emailIdx = idx;
+          }
+        });
+
+        if (emailIdx === -1) {
+          showStatus('error', 'CSV must have an "email" column');
+          return;
+        }
+
+        // Parse data rows
+        for (let i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue;
+          const cols = parseCSVLine(lines[i]);
+          const email = cols[emailIdx]?.trim();
+          const firstName = firstNameIdx >= 0 ? cols[firstNameIdx]?.trim() : '';
+
+          if (email && email.includes('@')) {
+            contacts.push({
+              first_name: firstName || '',
+              email: email
+            });
+          }
+        }
+
+        displayContacts();
+      };
+      reader.readAsText(file);
+    }
+
+    // Parse CSV line handling quotes
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim());
+      return result;
+    }
+
+    // Parse pasted contacts
+    function parsePastedContacts() {
+      const text = document.getElementById('pasteContacts').value;
+      const lines = text.split('\n');
+      contacts = [];
+
+      lines.forEach(line => {
+        if (!line.trim()) return;
+        const parts = line.split(',');
+        if (parts.length >= 2) {
+          const firstName = parts[0].trim();
+          const email = parts[1].trim();
+          if (email.includes('@')) {
+            contacts.push({ first_name: firstName, email: email });
+          }
+        }
+      });
+
+      displayContacts();
+    }
+
+    // Display contacts in table
+    function displayContacts() {
+      const tbody = document.getElementById('contactsBody');
+      const countEl = document.getElementById('contactsCount');
+      const previewEl = document.getElementById('contactsPreview');
+      const sendBtn = document.getElementById('sendBtn');
+      const sendCount = document.getElementById('sendCount');
+
+      if (contacts.length === 0) {
+        showStatus('error', 'No valid contacts found');
+        return;
+      }
+
+      tbody.innerHTML = contacts.map((c, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${c.first_name || '(no name)'}</td>
+          <td>${c.email}</td>
+        </tr>
+      `).join('');
+
+      countEl.textContent = `${contacts.length} contacts loaded`;
+      countEl.style.display = 'block';
+      previewEl.style.display = 'block';
+      sendCount.textContent = contacts.length;
+      sendBtn.disabled = false;
+
+      showStatus('success', `Loaded ${contacts.length} contacts`);
+    }
+
+    // Show email preview
+    function showPreview() {
+      const subject = document.getElementById('emailSubject').value;
+      const template = document.getElementById('emailTemplate').value;
+
+      if (!subject || !template) {
+        showStatus('error', 'Please fill in subject and email body');
+        return;
+      }
+
+      const sampleName = contacts.length > 0 ? contacts[0].first_name || 'there' : 'there';
+      const sampleEmail = contacts.length > 0 ? contacts[0].email : 'example@email.com';
+
+      document.getElementById('previewTo').textContent = sampleEmail;
+      document.getElementById('previewSubject').textContent = subject;
+      document.getElementById('previewBody').textContent = template.replace(/{first_name}/gi, sampleName);
+      document.getElementById('previewContainer').style.display = 'block';
+    }
+
+    // Send campaign
+    async function sendCampaign() {
+      const subject = document.getElementById('emailSubject').value;
+      const template = document.getElementById('emailTemplate').value;
+      const useTemplate = document.getElementById('useBranding').checked;
+
+      if (!subject || !template) {
+        showStatus('error', 'Please fill in subject and email body');
+        return;
+      }
+
+      if (contacts.length === 0) {
+        showStatus('error', 'No contacts loaded');
+        return;
+      }
+
+      // Confirm
+      if (!confirm(`Send ${contacts.length} emails? This cannot be undone.`)) {
+        return;
+      }
+
+      const sendBtn = document.getElementById('sendBtn');
+      const progressBar = document.getElementById('progressBar');
+      const progressFill = document.getElementById('progressFill');
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending...';
+      progressBar.style.display = 'block';
+      progressFill.style.width = '10%';
+
+      showStatus('sending', `Sending ${contacts.length} emails... This may take a few minutes.`);
+
+      try {
+        const response = await fetch('/api/admin/email-campaign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contacts,
+            subject,
+            template,
+            useTemplate
+          })
+        });
+
+        progressFill.style.width = '100%';
+
+        const data = await response.json();
+
+        if (data.success) {
+          showStatus('success', `✓ Campaign complete! ${data.results.sent} emails sent, ${data.results.failed} failed.`);
+          
+          if (data.results.failed > 0) {
+            console.log('Failed emails:', data.results.errors);
+          }
+        } else {
+          showStatus('error', data.error || 'Campaign failed');
+        }
+      } catch (err) {
+        showStatus('error', 'Error: ' + err.message);
+      }
+
+      sendBtn.textContent = `Send to ${contacts.length} Contacts`;
+      sendBtn.disabled = false;
+    }
+
+    // Show status message
+    function showStatus(type, message) {
+      const el = document.getElementById('statusMessage');
+      el.className = 'status ' + type;
+      el.textContent = message;
+    }
+  </script>
+
+</body>
+</html>
