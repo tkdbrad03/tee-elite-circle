@@ -100,11 +100,14 @@
     .video-container {
       position: relative;
       background: var(--deep-forest);
-      aspect-ratio: 16/9;
+      max-width: 400px;
+      margin: 0 auto;
+      aspect-ratio: 9/16;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      border-radius: 12px;
     }
 
     .video-container video {
@@ -277,14 +280,10 @@
     <!-- Video -->
     <div class="video-section">
       <div class="video-container" id="video-container">
-        <!-- Video will be inserted here, or placeholder shown -->
-        <div class="video-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"></polygon>
-          </svg>
-          <p>Welcome video coming soon</p>
-        </div>
+        <video controls playsinline poster="">
+          <source src="https://res.cloudinary.com/dkdcoc4tt/video/upload/v1764896006/welcome-video_grist1.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
       </div>
     </div>
 
