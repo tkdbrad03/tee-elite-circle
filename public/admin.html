@@ -1178,6 +1178,12 @@
                 <input type="checkbox" id="blog-published">
                 <label>Publish immediately</label>
               </div>
+
+              <div class="form-group" id="schedule-group" style="display: none;">
+                <label>Schedule for</label>
+                <input type="datetime-local" id="blog-scheduled" style="padding: 10px; font-family: inherit; border: 1px solid rgba(0,0,0,0.1);">
+                <p style="font-size: 11px; color: #888; margin-top: 4px;">Post will auto-publish at this date/time</p>
+              </div>
               
               <div style="display: flex; gap: 12px; align-items: center; margin-top: 24px;">
                 <button type="submit" class="btn" id="blog-submit-btn">Add Post</button>
@@ -1687,6 +1693,18 @@
     }
 
     // Blog
+    
+    // Toggle schedule field visibility
+    document.getElementById('blog-published').addEventListener('change', (e) => {
+      const scheduleGroup = document.getElementById('schedule-group');
+      if (e.target.checked) {
+        scheduleGroup.style.display = 'none';
+        document.getElementById('blog-scheduled').value = '';
+      } else {
+        scheduleGroup.style.display = 'block';
+      }
+    });
+
     document.getElementById('blog-image-file').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -1728,12 +1746,16 @@
       e.preventDefault();
       const messageEl = document.getElementById('blog-message');
       
+      const isPublished = document.getElementById('blog-published').checked;
+      const scheduledValue = document.getElementById('blog-scheduled').value;
+      
       const data = {
         title: document.getElementById('blog-title').value,
         excerpt: document.getElementById('blog-excerpt').value,
         content: quill.root.innerHTML,
         image_url: document.getElementById('blog-image').value,
-        published: document.getElementById('blog-published').checked
+        published: isPublished,
+        scheduled_for: (!isPublished && scheduledValue) ? new Date(scheduledValue).toISOString() : null
       };
 
       try {
@@ -1780,19 +1802,29 @@
             return;
           }
 
-          container.innerHTML = items.map(item => `
+          container.innerHTML = items.map(item => {
+            let statusText = '';
+            if (item.published) {
+              statusText = '✓ Published';
+            } else if (item.scheduled_for) {
+              const schedDate = new Date(item.scheduled_for);
+              statusText = `🕐 Scheduled: ${schedDate.toLocaleDateString()} ${schedDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            } else {
+              statusText = 'Draft';
+            }
+            return `
             <div class="item-row">
               <div class="item-info">
                 <div class="item-name">${item.title}</div>
-                <div class="item-meta">${item.published ? '✓ Published' : 'Draft'} • ${new Date(item.created_at).toLocaleDateString()}</div>
+                <div class="item-meta">${statusText} • ${new Date(item.created_at).toLocaleDateString()}</div>
               </div>
               <div class="item-actions">
                 <button onclick="editBlogPost(${item.id})">Edit</button>
-                <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish'}</button>
+                <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish Now'}</button>
                 <button class="delete" onclick="deleteBlogPost(${item.id})">Delete</button>
               </div>
             </div>
-          `).join('');
+          `}).join('');
           
           // Store posts for editing
           window.blogPostsData = items;
@@ -1827,6 +1859,19 @@
       quill.root.innerHTML = post.content || '';
       document.getElementById('blog-published').checked = post.published || false;
       
+      // Handle scheduled_for
+      const scheduleGroup = document.getElementById('schedule-group');
+      const scheduledInput = document.getElementById('blog-scheduled');
+      if (post.scheduled_for) {
+        const schedDate = new Date(post.scheduled_for);
+        // Format for datetime-local input (YYYY-MM-DDTHH:mm)
+        scheduledInput.value = schedDate.toISOString().slice(0, 16);
+        scheduleGroup.style.display = 'block';
+      } else {
+        scheduledInput.value = '';
+        scheduleGroup.style.display = post.published ? 'none' : 'block';
+      }
+      
       // Handle image
       document.getElementById('blog-image').value = post.image_url || '';
       const previewEl = document.getElementById('blog-image-preview');
@@ -1853,6 +1898,8 @@
       document.getElementById('upload-status').textContent = '';
       document.getElementById('blog-submit-btn').textContent = 'Add Post';
       document.getElementById('blog-cancel-btn').style.display = 'none';
+      document.getElementById('blog-scheduled').value = '';
+      document.getElementById('schedule-group').style.display = 'none';
     }
 
     async function togglePublish(id, publish) {
