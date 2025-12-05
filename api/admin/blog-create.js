@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   });
 
   try {
-    const { title, excerpt, content, image_url, published } = req.body;
+    const { title, excerpt, content, image_url, published, scheduled_for } = req.body;
 
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
@@ -20,10 +20,10 @@ module.exports = async (req, res) => {
     await client.connect();
 
     const result = await client.query(
-      `INSERT INTO blog_posts (title, excerpt, content, image_url, published)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, title, published, created_at`,
-      [title, excerpt || '', content || '', image_url || '', published || false]
+      `INSERT INTO blog_posts (title, excerpt, content, image_url, published, scheduled_for)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, title, published, scheduled_for, created_at`,
+      [title, excerpt || '', content || '', image_url || '', published || false, scheduled_for || null]
     );
 
     return res.status(200).json({ 

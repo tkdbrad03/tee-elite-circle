@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   });
 
   try {
-    const { id, title, excerpt, content, image_url, published } = req.body;
+    const { id, title, excerpt, content, image_url, published, scheduled_for } = req.body;
 
     if (!id || !title) {
       return res.status(400).json({ error: 'ID and title are required' });
@@ -21,10 +21,10 @@ module.exports = async (req, res) => {
 
     const result = await client.query(
       `UPDATE blog_posts 
-       SET title = $1, excerpt = $2, content = $3, image_url = $4, published = $5, updated_at = NOW()
-       WHERE id = $6
-       RETURNING id, title, published, updated_at`,
-      [title, excerpt || '', content || '', image_url || '', published || false, id]
+       SET title = $1, excerpt = $2, content = $3, image_url = $4, published = $5, scheduled_for = $6, updated_at = NOW()
+       WHERE id = $7
+       RETURNING id, title, published, scheduled_for, updated_at`,
+      [title, excerpt || '', content || '', image_url || '', published || false, scheduled_for || null, id]
     );
 
     if (result.rows.length === 0) {
