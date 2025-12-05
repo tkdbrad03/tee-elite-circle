@@ -30,7 +30,16 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Session expired' });
     }
 
-    // Get published blog posts - now includes content field
+    // Auto-publish any scheduled posts whose time has come
+    await client.query(
+      `UPDATE blog_posts 
+       SET published = true, scheduled_for = NULL 
+       WHERE published = false 
+       AND scheduled_for IS NOT NULL 
+       AND scheduled_for <= NOW()`
+    );
+
+    // Get published blog posts
     const result = await client.query(
       'SELECT id, title, excerpt, content, image_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
     );
