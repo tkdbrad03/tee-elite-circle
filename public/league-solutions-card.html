@@ -88,29 +88,6 @@
             border-radius: 50%;
         }
 
-        .logo-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.15);
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-
-        .logo-badge svg {
-            width: 20px;
-            height: 20px;
-            color: var(--gold);
-        }
-
-        .logo-badge span {
-            color: var(--white);
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
         .profile-photo {
             width: 110px;
             height: 110px;
@@ -118,8 +95,14 @@
             border: 4px solid var(--gold);
             object-fit: cover;
             object-position: center top;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .complitrst-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 16px;
         }
 
         .profile-name {
@@ -353,11 +336,8 @@
 <body>
     <div class="card">
         <div class="card-header">
-            <div class="logo-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0-6.88 17.23"/><circle cx="12" cy="12" r="3"/></svg>
-                <span>CompliTrst™</span>
-            </div>
             <img src="images/founder-photo.png" alt="Dr. TMac" class="profile-photo">
+            <img src="images/complitrst-favicon.png" alt="CompliTrst" class="complitrst-logo">
             <h1 class="profile-name">Tasha McCray</h1>
             <p class="profile-credentials">Ph.D, MSN-Ed., RN</p>
             <p class="profile-title">Founder & CEO</p>
@@ -387,7 +367,7 @@
             <div class="divider"></div>
 
             <div class="contact-row">
-                <a href="mailto:support@complitrst.com" class="contact-btn email">
+                <a href="/cdn-cgi/l/email-protection#4c3f393c3c233e380c2f23213c2025383e3f38622f2321" class="contact-btn email">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                     Email
                 </a>
@@ -407,8 +387,4 @@
             <p>Building golf communities, one league at a time</p>
             <div class="footer-brand">
                 <span>Customized League Solutions</span>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+            </di
