@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>From Expertise to Paid System — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --deep-forest: #1a2f23;
+      --forest-light: #2a4a3a;
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --charcoal: #2c2c2c;
+      --cream: #faf8f5;
+      --gold-accent: #c9a961;
+      --success-green: #4a7c59;
+      --error-red: #c45c5c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .form-header {
+      background: var(--deep-forest);
+      padding: 20px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--tmac-blush);
+    }
+
+    .auto-save-indicator {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .save-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success-green);
+    }
+
+    .save-dot.saving {
+      background: var(--gold-accent);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      background: var(--deep-forest);
+      padding: 0 24px 20px;
+    }
+
+    .progress-bar {
+      max-width: 600px;
+      margin: 0 auto;
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--tmac-blush), var(--gold-accent));
+      transition: width 0.5s ease;
+      border-radius: 2px;
+    }
+
+    .progress-text {
+      max-width: 600px;
+      margin: 8px auto 0;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Main Container */
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px 24px 100px;
+    }
+
+    /* Intro Screen */
+    .intro-screen {
+      text-align: center;
+      padding: 60px 20px;
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .intro-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--deep-forest);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+    }
+
+    .intro-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--tmac-blush);
+    }
+
+    .intro-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 6vw, 36px);
+      font-weight: 400;
+      color: var(--deep-forest);
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .intro-text {
+      font-size: 15px;
+      color: #666;
+      max-width: 400px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .intro-text em {
+      font-style: italic;
+      color: var(--charcoal);
+    }
+
+    /* Sections */
+    .form-section {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+    }
+
+    .section-number {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 5vw, 32px);
+      font-weight: 400;
+      color: var(--deep-forest);
+      line-height: 1.2;
+    }
+
+    /* Instruction Text */
+    .instruction-text {
+      background: rgba(26, 47, 35, 0.04);
+      border-left: 2px solid var(--tmac-bronze);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      color: var(--charcoal);
+      font-style: italic;
+    }
+
+    /* Form Fields */
+    .field-group {
+      margin-bottom: 28px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .field-label .optional {
+      font-weight: 400;
+      color: #999;
+      font-size: 12px;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #888;
+      margin-top: 6px;
+    }
+
+    /* Text Inputs */
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 16px 18px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--charcoal);
+      transition: all 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--deep-forest);
+      box-shadow: 0 0 0 3px rgba(26, 47, 35, 0.08);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #aaa;
+    }
+
+    /* Radio Cards */
+    .radio-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .radio-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .radio-card {
+      position: relative;
+    }
+
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-card label {
+      display: block;
+      padding: 18px 16px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--charcoal);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .radio-card input:checked + label {
+      background: var(--deep-forest);
+      border-color: var(--deep-forest);
+      color: #fff;
+    }
+
+    .radio-card label:hover {
+      border-color: var(--forest-light);
+    }
+
+    /* Checkboxes */
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .checkbox-item:hover {
+      border-color: var(--forest-light);
+    }
+
+    .checkbox-item.checked {
+      background: rgba(26, 47, 35, 0.04);
+      border-color: var(--deep-forest);
+    }
+
+    .checkbox-item input {
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
+      accent-color: var(--deep-forest);
+      flex-shrink: 0;
+    }
+
+    .checkbox-item span {
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.4;
+    }
+
+    /* Component Fields */
+    .component-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .component-field {
+      position: relative;
+    }
+
+    .component-number {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      background: var(--deep-forest);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .component-field input {
+      padding-left: 52px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--deep-forest);
+      color: #fff;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--forest-light);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 1px solid var(--deep-forest);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(26, 47, 35, 0.05);
+    }
+
+    /* Navigation Buttons */
+    .form-nav {
+      display: flex;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .form-nav .btn-secondary {
+      flex: 0 0 auto;
+      padding: 16px 24px;
+    }
+
+    .form-nav .btn-primary {
+      flex: 1;
+    }
+
+    /* Submission Screen */
+    .submission-screen {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+    }
+
+    .success-icon svg {
+      width: 36px;
+      height: 36px;
+      stroke: #fff;
+    }
+
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 5vw, 32px);
+      font-weight: 400;
+      color: var(--deep-forest);
+      margin-bottom: 16px;
+    }
+
+    .success-text {
+      font-size: 15px;
+      color: #666;
+      max-width: 400px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .closing-line {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(26, 47, 35, 0.1);
+    }
+
+    .closing-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .closing-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--deep-forest);
+      max-width: 360px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Validation */
+    .field-error {
+      border-color: var(--error-red) !important;
+    }
+
+    .error-message {
+      color: var(--error-red);
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 24px 20px 100px;
+      }
+
+      .field-group {
+        margin-bottom: 24px;
+      }
+
+      .form-nav {
+        flex-direction: column-reverse;
+      }
+
+      .form-nav .btn-secondary {
+        width: 100%;
+      }
+    }
+
+    /* Print styles for saving */
+    @media print {
+      .form-header,
+      .progress-container,
+      .form-nav,
+      .btn {
+        display: none !important;
+      }
+
+      .form-section {
+        display: block !important;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="form-header">
+    <div class="header-inner">
+      <a href="resources.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Tee Room
+      </a>
+      <div class="auto-save-indicator">
+        <span class="save-dot" id="saveDot"></span>
+        <span id="saveStatus">Saved</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-container" id="progressContainer" style="display: none;">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="progressText">Section 1 of 7</span>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <div class="form-container">
+
+    <!-- INTRO SCREEN -->
+    <div class="form-section active" id="intro">
+      <div class="intro-screen">
+        <div class="intro-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h1 class="intro-title">From Expertise to Paid System</h1>
+        <p class="intro-text">
+          This is the companion exercise to the article you just read. It will help you identify and begin structuring a paid system based on what you already know.
+          <br><br>
+          <em>There is no pressure to finish perfectly. Clarity comes from completion.</em>
+        </p>
+        <button class="btn btn-primary" onclick="startForm()">Begin</button>
+        <p style="margin-top: 16px; font-size: 12px; color: #888;">
+          <a href="blog-paid-systems.html" style="color: var(--tmac-bronze); text-decoration: none;">← Read the article first</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- SECTION 1: Identify Your Repeatable Value -->
+    <div class="form-section" id="section1">
+      <div class="section-header">
+        <div class="section-number">Section 1 of 7</div>
+        <h2 class="section-title">Identify Your Repeatable Value</h2>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What do people consistently come to you for help with?</label>
+        <textarea 
+          id="field1" 
+          placeholder="Decision-making, organization, strategy, finance, leadership, systems, lifestyle design"
+          data-required="true"
+        ></textarea>
+        <div class="error-message">This field is required</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What do you make look easier than it actually is for most people?</label>
+        <textarea id="field2" data-required="true"></textarea>
+        <div class="error-message">This field is required</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What problem have you personally solved more than once?</label>
+        <textarea id="field3" data-required="true"></textarea>
+        <div class="error-message">This field is required</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What do people regularly thank you for helping them understand or avoid? <span class="optional">(Optional)</span></label>
+        <textarea id="field4"></textarea>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+        <button class="btn btn-primary" onclick="nextSection()">Continue</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Name the Result -->
+    <div class="form-section" id="section2">
+      <div class="section-header">
+        <div class="section-number">Section 2 of 7</div>
+        <h2 class="section-title">Name the Result</h2>
+      </div>
+
+      <div class="instruction-text">
+        Paid systems sell outcomes, not effort.
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">After using my system, someone will be able to…</label>
+        <textarea 
+          id="field5" 
+          placeholder="Make faster decisions, avoid costly mistakes, get organized, move with clarity"
+          data-required="true"
+        ></textarea>
+        <div class="error-message">This field is required</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">This system helps people…</label>
+        <input type="text" id="field6" data-required="true">
+        <p class="helper-text">Short and clear is better than impressive</p>
+        <div class="error-message">This field is required</div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+        <button class="btn btn-primary" onclick="nextSection()">Continue</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Choose Your System Type -->
+    <div class="form-section" id="section3">
+      <div class="section-header">
+        <div class="section-number">Section 3 of 7</div>
+        <h2 class="section-title">Choose Your System Type</h2>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What type of system fits best right now?</label>
+        <div class="radio-cards">
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type1" value="Checklist">
+            <label for="type1">Checklist</label>
+          </div>
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type2" value="Framework">
+            <label for="type2">Framework</label>
+          </div>
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type3" value="Step-by-step guide">
+            <label for="type3">Step-by-step guide</label>
+          </div>
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type4" value="Template pack">
+            <label for="type4">Template pack</label>
+          </div>
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type5" value="Toolkit">
+            <label for="type5">Toolkit</label>
+          </div>
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type6" value="Resource vault">
+            <label for="type6">Resource vault</label>
+          </div>
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type7" value="Decision map">
+            <label for="type7">Decision map</label>
+          </div>
+          <div class="radio-card">
+            <input type="radio" name="systemType" id="type8" value="Process outline">
+            <label for="type8">Process outline</label>
+          </div>
+        </div>
+        <div class="error-message" id="systemTypeError">Please select a system type</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Name your first paid system</label>
+        <input 
+          type="text" 
+          id="field8" 
+          placeholder="Example: The Compliance Reset Kit, The Decision Clarity Framework"
+          data-required="true"
+        >
+        <div class="error-message">This field is required</div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+        <button class="btn btn-primary" onclick="nextSection()">Continue</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Define What Goes Inside -->
+    <div class="form-section" id="section4">
+      <div class="section-header">
+        <div class="section-number">Section 4 of 7</div>
+        <h2 class="section-title">Define What Goes Inside</h2>
+      </div>
+
+      <div class="instruction-text">
+        List only the core components. Simplicity scales.
+      </div>
+
+      <div class="component-fields">
+        <div class="component-field">
+          <span class="component-number">1</span>
+          <input type="text" id="component1" placeholder="Core Component 1" data-required="true">
+        </div>
+        <div class="component-field">
+          <span class="component-number">2</span>
+          <input type="text" id="component2" placeholder="Core Component 2" data-required="true">
+        </div>
+        <div class="component-field">
+          <span class="component-number">3</span>
+          <input type="text" id="component3" placeholder="Core Component 3" data-required="true">
+        </div>
+        <div class="component-field">
+          <span class="component-number">4</span>
+          <input type="text" id="component4" placeholder="Core Component 4 (Optional)">
+        </div>
+        <div class="component-field">
+          <span class="component-number">5</span>
+          <input type="text" id="component5" placeholder="Core Component 5 (Optional)">
+        </div>
+      </div>
+      <div class="error-message" id="componentsError" style="margin-top: 12px;">Please fill in at least the first 3 components</div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+        <button class="btn btn-primary" onclick="nextSection()">Continue</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Boundaries -->
+    <div class="form-section" id="section5">
+      <div class="section-header">
+        <div class="section-number">Section 5 of 7</div>
+        <h2 class="section-title">Boundaries</h2>
+      </div>
+
+      <div class="instruction-text">
+        This protects your time and energy.
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">I am intentionally not offering:</label>
+        <div class="checkbox-group" id="boundariesGroup">
+          <label class="checkbox-item">
+            <input type="checkbox" name="boundaries" value="Live calls">
+            <span>Live calls</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="boundaries" value="Ongoing client access">
+            <span>Ongoing client access</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="boundaries" value="Coaching or accountability">
+            <span>Coaching or accountability</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="boundaries" value="Custom work">
+            <span>Custom work</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="boundaries" value="Emotional labor">
+            <span>Emotional labor</span>
+          </label>
+        </div>
+        <div class="error-message" id="boundariesError">Please select at least one boundary</div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+        <button class="btn btn-primary" onclick="nextSection()">Continue</button>
+      </div>
+    </div>
+
+    <!-- SECTION 6: First Version Commitment -->
+    <div class="form-section" id="section6">
+      <div class="section-header">
+        <div class="section-number">Section 6 of 7</div>
+        <h2 class="section-title">First Version Commitment</h2>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">I will create a simple first version of my system by:</label>
+        <input type="date" id="commitmentDate" data-required="true">
+        <div class="error-message">Please select a date</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">I am allowing this first version to be:</label>
+        <div class="checkbox-group" id="allowingGroup">
+          <label class="checkbox-item">
+            <input type="checkbox" name="allowing" value="Simple">
+            <span>Simple</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="allowing" value="Clear">
+            <span>Clear</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="allowing" value="Useful">
+            <span>Useful</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="allowing" value="Imperfect">
+            <span>Imperfect</span>
+          </label>
+        </div>
+        <div class="error-message" id="allowingError">Please select at least 2 options</div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+        <button class="btn btn-primary" onclick="nextSection()">Continue</button>
+      </div>
+    </div>
+
+    <!-- SECTION 7: Reflection -->
+    <div class="form-section" id="section7">
+      <div class="section-header">
+        <div class="section-number">Section 7 of 7</div>
+        <h2 class="section-title">Reflection</h2>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What would change if your knowledge worked for you instead of staying unused? <span class="optional">(Optional)</span></label>
+        <textarea id="reflection1"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What would more leverage allow you to say no to? <span class="optional">(Optional)</span></label>
+        <textarea id="reflection2"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What would more ease allow you to say yes to? <span class="optional">(Optional)</span></label>
+        <textarea id="reflection3"></textarea>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+        <button class="btn btn-primary" onclick="submitForm()">Save My System</button>
+      </div>
+    </div>
+
+    <!-- SUBMISSION SCREEN -->
+    <div class="form-section" id="success">
+      <div class="submission-screen">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        </div>
+        <h2 class="success-title">Your System Foundation is Complete</h2>
+        <p class="success-text">
+          You just identified the foundation of a paid system.
+          <br><br>
+          Nothing here requires you to become someone else. It simply asks you to organize what you already know.
+        </p>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
+          <button class="btn btn-primary" onclick="downloadPDF()" style="background: var(--tmac-bronze);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Download My System (PDF)
+          </button>
+          <a href="resources.html" class="btn btn-secondary">Return to The Tee Room</a>
+        </div>
+
+        <div class="closing-line">
+          <div class="closing-label">The Tee Elite Truth</div>
+          <p class="closing-quote">"Your expertise has always been valuable. Now it has structure."</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Form State
+    let currentSection = 0;
+    const totalSections = 7;
+    let formData = {};
+    let autoSaveTimeout = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSavedData();
+      setupAutoSave();
+      setupCheckboxStyles();
+    });
+
+    // Start Form
+    function startForm() {
+      currentSection = 1;
+      showSection(currentSection);
+      document.getElementById('progressContainer').style.display = 'block';
+      updateProgress();
+    }
+
+    // Navigation
+    function nextSection() {
+      if (validateCurrentSection()) {
+        currentSection++;
+        showSection(currentSection);
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function prevSection() {
+      if (currentSection > 1) {
+        currentSection--;
+        showSection(currentSection);
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (currentSection === 1) {
+        currentSection = 0;
+        showSection(0);
+        document.getElementById('progressContainer').style.display = 'none';
+      }
+    }
+
+    function showSection(num) {
+      // Hide all sections
+      document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+      
+      // Show target section
+      if (num === 0) {
+        document.getElementById('intro').classList.add('active');
+      } else if (num <= totalSections) {
+        document.getElementById('section' + num).classList.add('active');
+      } else {
+        document.getElementById('success').classList.add('active');
+        document.getElementById('progressContainer').style.display = 'none';
+      }
+    }
+
+    function updateProgress() {
+      const percent = ((currentSection) / totalSections) * 100;
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressText').textContent = `Section ${currentSection} of ${totalSections}`;
+    }
+
+    // Validation
+    function validateCurrentSection() {
+      let isValid = true;
+      const section = document.getElementById('section' + currentSection);
+      
+      if (!section) return true;
+
+      // Clear previous errors
+      section.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+      section.querySelectorAll('.error-message').forEach(el => el.classList.remove('visible'));
+
+      // Validate required text fields
+      section.querySelectorAll('input[data-required="true"], textarea[data-required="true"]').forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('field-error');
+          field.nextElementSibling?.classList.add('visible');
+          isValid = false;
+        }
+      });
+
+      // Section 3: Validate radio selection
+      if (currentSection === 3) {
+        const systemType = document.querySelector('input[name="systemType"]:checked');
+        if (!systemType) {
+          document.getElementById('systemTypeError').classList.add('visible');
+          isValid = false;
+        }
+      }
+
+      // Section 4: Validate first 3 components
+      if (currentSection === 4) {
+        const c1 = document.getElementById('component1').value.trim();
+        const c2 = document.getElementById('component2').value.trim();
+        const c3 = document.getElementById('component3').value.trim();
+        if (!c1 || !c2 || !c3) {
+          document.getElementById('componentsError').classList.add('visible');
+          isValid = false;
+        }
+      }
+
+      // Section 5: Validate at least one boundary
+      if (currentSection === 5) {
+        const checked = document.querySelectorAll('input[name="boundaries"]:checked');
+        if (checked.length === 0) {
+          document.getElementById('boundariesError').classList.add('visible');
+          isValid = false;
+        }
+      }
+
+      // Section 6: Validate date and at least 2 allowing options
+      if (currentSection === 6) {
+        const date = document.getElementById('commitmentDate').value;
+        const allowingChecked = document.querySelectorAll('input[name="allowing"]:checked');
+        
+        if (!date) {
+          document.getElementById('commitmentDate').classList.add('field-error');
+          document.getElementById('commitmentDate').nextElementSibling?.classList.add('visible');
+          isValid = false;
+        }
+        
+        if (allowingChecked.length < 2) {
+          document.getElementById('allowingError').classList.add('visible');
+          isValid = false;
+        }
+      }
+
+      return isValid;
+    }
+
+    // Auto-save
+    function setupAutoSave() {
+      document.querySelectorAll('input, textarea').forEach(field => {
+        field.addEventListener('input', () => {
+          clearTimeout(autoSaveTimeout);
+          showSaving();
+          autoSaveTimeout = setTimeout(() => {
+            saveData();
+            showSaved();
+          }, 1000);
+        });
+      });
+
+      document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(field => {
+        field.addEventListener('change', () => {
+          showSaving();
+          setTimeout(() => {
+            saveData();
+            showSaved();
+          }, 500);
+        });
+      });
+    }
+
+    function showSaving() {
+      document.getElementById('saveDot').classList.add('saving');
+      document.getElementById('saveStatus').textContent = 'Saving...';
+    }
+
+    function showSaved() {
+      document.getElementById('saveDot').classList.remove('saving');
+      document.getElementById('saveStatus').textContent = 'Saved';
+    }
+
+    function saveData() {
+      formData = collectFormData();
+      localStorage.setItem('teeEliteSystemBuilder', JSON.stringify(formData));
+    }
+
+    function loadSavedData() {
+      const saved = localStorage.getItem('teeEliteSystemBuilder');
+      if (saved) {
+        formData = JSON.parse(saved);
+        populateForm(formData);
+      }
+    }
+
+    function collectFormData() {
+      return {
+        // Section 1
+        helpWith: document.getElementById('field1')?.value || '',
+        makesEasy: document.getElementById('field2')?.value || '',
+        solvedTwice: document.getElementById('field3')?.value || '',
+        thankedFor: document.getElementById('field4')?.value || '',
+        // Section 2
+        outcome: document.getElementById('field5')?.value || '',
+        helpsPeople: document.getElementById('field6')?.value || '',
+        // Section 3
+        systemType: document.querySelector('input[name="systemType"]:checked')?.value || '',
+        systemName: document.getElementById('field8')?.value || '',
+        // Section 4
+        components: [
+          document.getElementById('component1')?.value || '',
+          document.getElementById('component2')?.value || '',
+          document.getElementById('component3')?.value || '',
+          document.getElementById('component4')?.value || '',
+          document.getElementById('component5')?.value || ''
+        ].filter(c => c),
+        // Section 5
+        boundaries: Array.from(document.querySelectorAll('input[name="boundaries"]:checked')).map(cb => cb.value),
+        // Section 6
+        commitmentDate: document.getElementById('commitmentDate')?.value || '',
+        allowing: Array.from(document.querySelectorAll('input[name="allowing"]:checked')).map(cb => cb.value),
+        // Section 7
+        reflection1: document.getElementById('reflection1')?.value || '',
+        reflection2: document.getElementById('reflection2')?.value || '',
+        reflection3: document.getElementById('reflection3')?.value || '',
+        // Meta
+        lastUpdated: new Date().toISOString()
+      };
+    }
+
+    function populateForm(data) {
+      if (data.helpWith) document.getElementById('field1').value = data.helpWith;
+      if (data.makesEasy) document.getElementById('field2').value = data.makesEasy;
+      if (data.solvedTwice) document.getElementById('field3').value = data.solvedTwice;
+      if (data.thankedFor) document.getElementById('field4').value = data.thankedFor;
+      if (data.outcome) document.getElementById('field5').value = data.outcome;
+      if (data.helpsPeople) document.getElementById('field6').value = data.helpsPeople;
+      
+      if (data.systemType) {
+        const radio = document.querySelector(`input[name="systemType"][value="${data.systemType}"]`);
+        if (radio) radio.checked = true;
+      }
+      
+      if (data.systemName) document.getElementById('field8').value = data.systemName;
+      
+      if (data.components) {
+        data.components.forEach((c, i) => {
+          const field = document.getElementById('component' + (i + 1));
+          if (field) field.value = c;
+        });
+      }
+      
+      if (data.boundaries) {
+        data.boundaries.forEach(b => {
+          const cb = document.querySelector(`input[name="boundaries"][value="${b}"]`);
+          if (cb) cb.checked = true;
+        });
+      }
+      
+      if (data.commitmentDate) document.getElementById('commitmentDate').value = data.commitmentDate;
+      
+      if (data.allowing) {
+        data.allowing.forEach(a => {
+          const cb = document.querySelector(`input[name="allowing"][value="${a}"]`);
+          if (cb) cb.checked = true;
+        });
+      }
+      
+      if (data.reflection1) document.getElementById('reflection1').value = data.reflection1;
+      if (data.reflection2) document.getElementById('reflection2').value = data.reflection2;
+      if (data.reflection3) document.getElementById('reflection3').value = data.reflection3;
+
+      updateCheckboxStyles();
+    }
+
+    // Checkbox styling
+    function setupCheckboxStyles() {
+      document.querySelectorAll('.checkbox-item input').forEach(cb => {
+        cb.addEventListener('change', function() {
+          this.closest('.checkbox-item').classList.toggle('checked', this.checked);
+        });
+      });
+    }
+
+    function updateCheckboxStyles() {
+      document.querySelectorAll('.checkbox-item input').forEach(cb => {
+        cb.closest('.checkbox-item').classList.toggle('checked', cb.checked);
+      });
+    }
+
+    // Submit Form
+    async function submitForm() {
+      if (!validateCurrentSection()) return;
+
+      const finalData = collectFormData();
+      finalData.completedAt = new Date().toISOString();
+
+      // Show saving state
+      showSaving();
+
+      try {
+        // Get member info from session
+        const memberEmail = sessionStorage.getItem('memberEmail') || localStorage.getItem('memberEmail');
+        
+        // Save to server
+        const response = await fetch('/api/system-builder/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: memberEmail,
+            data: finalData
+          })
+        });
+
+        if (response.ok) {
+          showSaved();
+          // Clear local storage on successful save
+          localStorage.removeItem('teeEliteSystemBuilder');
+        }
+      } catch (error) {
+        console.log('Server save failed, data preserved locally');
+      }
+
+      // Show success screen
+      currentSection = totalSections + 1;
+      showSection(currentSection);
+    }
+
+    // PDF Export
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const data = collectFormData();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 25;
+      const contentWidth = pageWidth - (margin * 2);
+      let y = margin;
+
+      // Colors
+      const deepForest = [26, 47, 35];
+      const bronze = [166, 124, 82];
+      const charcoal = [44, 44, 44];
+      const lightGray = [102, 102, 102];
+
+      // Helper: Check for page break
+      function checkPageBreak(needed) {
+        if (y + needed > pageHeight - margin) {
+          doc.addPage();
+          y = margin;
+          return true;
+        }
+        return false;
+      }
+
+      // Helper: Add wrapped text
+      function addWrappedText(text, x, fontSize, color, maxWidth, lineHeight = 1.4) {
+        doc.setFontSize(fontSize);
+        doc.setTextColor(...color);
+        const lines = doc.splitTextToSize(text, maxWidth);
+        lines.forEach(line => {
+          checkPageBreak(fontSize * 0.4);
+          doc.text(line, x, y);
+          y += fontSize * 0.4 * lineHeight;
+        });
+        return lines.length;
+      }
+
+      // === HEADER ===
+      // Top accent bar
+      doc.setFillColor(...deepForest);
+      doc.rect(0, 0, pageWidth, 8, 'F');
+
+      y = 25;
+
+      // Logo/Brand text
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(...bronze);
+      doc.text('THE TEE ELITE CIRCLE', margin, y);
+      y += 12;
+
+      // Title
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(28);
+      doc.setTextColor(...deepForest);
+      doc.text('My Paid System', margin, y);
+      y += 10;
+
+      // System Name (large, prominent)
+      if (data.systemName) {
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(18);
+        doc.setTextColor(...bronze);
+        doc.text(data.systemName, margin, y);
+        y += 8;
+      }
+
+      // Date
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...lightGray);
+      const today = new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      doc.text('Created ' + today, margin, y);
+      y += 15;
+
+      // Divider
+      doc.setDrawColor(...bronze);
+      doc.setLineWidth(0.5);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 15;
+
+      // === SECTION 1: THE FOUNDATION ===
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(...deepForest);
+      doc.text('THE FOUNDATION', margin, y);
+      y += 8;
+
+      // System Type Badge
+      if (data.systemType) {
+        doc.setFillColor(232, 204, 200); // Blush
+        doc.roundedRect(margin, y - 4, 50, 8, 2, 2, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...deepForest);
+        doc.text(data.systemType.toUpperCase(), margin + 4, y + 1);
+        y += 12;
+      }
+
+      // What people come to you for
+      if (data.helpWith) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(...charcoal);
+        doc.text('What people come to you for:', margin, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        addWrappedText(data.helpWith, margin, 10, lightGray, contentWidth);
+        y += 6;
+      }
+
+      // What you make look easy
+      if (data.makesEasy) {
+        checkPageBreak(20);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(...charcoal);
+        doc.text('What you make look easy:', margin, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        addWrappedText(data.makesEasy, margin, 10, lightGray, contentWidth);
+        y += 6;
+      }
+
+      // Problem solved twice
+      if (data.solvedTwice) {
+        checkPageBreak(20);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(...charcoal);
+        doc.text('Problem you\'ve solved more than once:', margin, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        addWrappedText(data.solvedTwice, margin, 10, lightGray, contentWidth);
+        y += 10;
+      }
+
+      // === SECTION 2: THE OUTCOME ===
+      checkPageBreak(30);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(...deepForest);
+      doc.text('THE OUTCOME', margin, y);
+      y += 8;
+
+      // Outcome statement (highlighted)
+      if (data.outcome) {
+        doc.setFillColor(250, 248, 245); // Cream
+        doc.setDrawColor(...bronze);
+        doc.setLineWidth(0.3);
+        
+        const outcomeLines = doc.splitTextToSize('"After using my system, someone will be able to ' + data.outcome + '"', contentWidth - 16);
+        const boxHeight = outcomeLines.length * 5 + 12;
+        
+        checkPageBreak(boxHeight + 5);
+        doc.roundedRect(margin, y - 2, contentWidth, boxHeight, 3, 3, 'FD');
+        
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(11);
+        doc.setTextColor(...charcoal);
+        y += 6;
+        outcomeLines.forEach(line => {
+          doc.text(line, margin + 8, y);
+          y += 5;
+        });
+        y += 8;
+      }
+
+      // Helps people
+      if (data.helpsPeople) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(...charcoal);
+        doc.text('This system helps people: ', margin, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...bronze);
+        doc.text(data.helpsPeople, margin + doc.getTextWidth('This system helps people: '), y);
+        y += 12;
+      }
+
+      // === SECTION 3: CORE COMPONENTS ===
+      if (data.components && data.components.length > 0) {
+        checkPageBreak(40);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(...deepForest);
+        doc.text('CORE COMPONENTS', margin, y);
+        y += 10;
+
+        data.components.forEach((component, i) => {
+          if (component) {
+            checkPageBreak(10);
+            // Number circle
+            doc.setFillColor(...deepForest);
+            doc.circle(margin + 4, y - 2, 4, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8);
+            doc.setTextColor(255, 255, 255);
+            doc.text(String(i + 1), margin + 2.5, y - 0.5);
+            
+            // Component text
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(...charcoal);
+            doc.text(component, margin + 14, y);
+            y += 8;
+          }
+        });
+        y += 6;
+      }
+
+      // === SECTION 4: BOUNDARIES ===
+      if (data.boundaries && data.boundaries.length > 0) {
+        checkPageBreak(30);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(...deepForest);
+        doc.text('BOUNDARIES', margin, y);
+        y += 6;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...lightGray);
+        doc.text('I am intentionally not offering:', margin, y);
+        y += 6;
+
+        data.boundaries.forEach(boundary => {
+          checkPageBreak(8);
+          doc.setFillColor(...bronze);
+          doc.circle(margin + 2, y - 1.5, 1.5, 'F');
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          doc.setTextColor(...charcoal);
+          doc.text(boundary, margin + 8, y);
+          y += 6;
+        });
+        y += 6;
+      }
+
+      // === SECTION 5: COMMITMENT ===
+      checkPageBreak(35);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(...deepForest);
+      doc.text('MY COMMITMENT', margin, y);
+      y += 10;
+
+      // Commitment box
+      doc.setFillColor(...deepForest);
+      doc.roundedRect(margin, y - 2, contentWidth, 28, 3, 3, 'F');
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255);
+
+      if (data.commitmentDate) {
+        const commitDate = new Date(data.commitmentDate + 'T00:00:00').toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        doc.text('I will create a simple first version by: ' + commitDate, margin + 8, y + 6);
+      }
+
+      if (data.allowing && data.allowing.length > 0) {
+        doc.text('I am allowing this first version to be: ' + data.allowing.join(', '), margin + 8, y + 14);
+      }
+      y += 34;
+
+      // === SECTION 6: REFLECTIONS (if any) ===
+      if (data.reflection1 || data.reflection2 || data.reflection3) {
+        checkPageBreak(40);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(...deepForest);
+        doc.text('REFLECTIONS', margin, y);
+        y += 8;
+
+        if (data.reflection1) {
+          doc.setFont('helvetica', 'italic');
+          doc.setFontSize(9);
+          doc.setTextColor(...bronze);
+          doc.text('If my knowledge worked for me:', margin, y);
+          y += 4;
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(...charcoal);
+          addWrappedText(data.reflection1, margin, 10, charcoal, contentWidth);
+          y += 4;
+        }
+
+        if (data.reflection2) {
+          checkPageBreak(15);
+          doc.setFont('helvetica', 'italic');
+          doc.setFontSize(9);
+          doc.setTextColor(...bronze);
+          doc.text('More leverage would let me say no to:', margin, y);
+          y += 4;
+          doc.setFont('helvetica', 'normal');
+          addWrappedText(data.reflection2, margin, 10, charcoal, contentWidth);
+          y += 4;
+        }
+
+        if (data.reflection3) {
+          checkPageBreak(15);
+          doc.setFont('helvetica', 'italic');
+          doc.setFontSize(9);
+          doc.setTextColor(...bronze);
+          doc.text('More ease would let me say yes to:', margin, y);
+          y += 4;
+          doc.setFont('helvetica', 'normal');
+          addWrappedText(data.reflection3, margin, 10, charcoal, contentWidth);
+        }
+      }
+
+      // === FOOTER ===
+      // Go to last page
+      const totalPages = doc.internal.getNumberOfPages();
+      doc.setPage(totalPages);
+      
+      // Footer line
+      doc.setDrawColor(...bronze);
+      doc.setLineWidth(0.3);
+      doc.line(margin, pageHeight - 20, pageWidth - margin, pageHeight - 20);
+
+      // Footer text
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(9);
+      doc.setTextColor(...bronze);
+      doc.text('The Tee Elite Truth', margin, pageHeight - 14);
+      
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(...lightGray);
+      doc.text('"Your expertise has always been valuable. Now it has structure."', margin, pageHeight - 10);
+
+      // Page numbers on all pages
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(...lightGray);
+        doc.text(
+          'Page ' + i + ' of ' + totalPages,
+          pageWidth - margin,
+          pageHeight - 10,
+          { align: 'right' }
+        );
+      }
+
+      // Generate filename
+      const fileName = data.systemName 
+        ? data.systemName.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '-system.pdf'
+        : 'my-paid-system.pdf';
+
+      // Download
+      doc.save(fileName);
+    }
+  </script>
+
+</body>
+</html>
