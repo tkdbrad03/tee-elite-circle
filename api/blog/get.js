@@ -1,5 +1,4 @@
 const { Client } = require('pg');
-const { getSessionFromRequest } = require('../../session-protection');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
@@ -12,23 +11,7 @@ module.exports = async (req, res) => {
   });
 
   try {
-    const sessionToken = getSessionFromRequest(req);
-
-    if (!sessionToken) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
     await client.connect();
-
-    // Verify session
-    const sessionResult = await client.query(
-      'SELECT member_id FROM sessions WHERE token = $1 AND expires_at > NOW()',
-      [sessionToken]
-    );
-
-    if (sessionResult.rows.length === 0) {
-      return res.status(401).json({ error: 'Session expired' });
-    }
 
     // Auto-publish any scheduled posts whose time has come
     await client.query(
@@ -39,7 +22,7 @@ module.exports = async (req, res) => {
        AND scheduled_for <= NOW()`
     );
 
-    // Get published blog posts
+    // Get published blog posts - public access, no auth required
     const result = await client.query(
       'SELECT id, title, excerpt, content, image_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
     );
