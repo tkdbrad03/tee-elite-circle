@@ -939,8 +939,8 @@
         <h2 class="blog-modal-title" id="blog-modal-title"></h2>
         <div class="blog-modal-content" id="blog-modal-content"></div>
         
-        <!-- System Builder CTA -->
-        <div class="blog-modal-cta">
+        <!-- System Builder CTA - Only shows on "How to Turn Your Expertise Into a Paid System" post -->
+        <div class="blog-modal-cta" id="system-builder-cta" style="display: none;">
           <p class="blog-modal-cta-label">Ready to Take Action?</p>
           <h3 class="blog-modal-cta-title">Design Your First Paid System</h3>
           <p class="blog-modal-cta-text">
@@ -1172,6 +1172,11 @@
       } else {
         imageEl.style.display = 'none';
       }
+      
+      // Show System Builder CTA only for the specific post about paid systems
+      const systemBuilderCta = document.getElementById('system-builder-cta');
+      const isSystemBuilderPost = post.title && post.title.toLowerCase().includes('expertise') && post.title.toLowerCase().includes('paid system');
+      systemBuilderCta.style.display = isSystemBuilderPost ? 'block' : 'none';
       
       document.getElementById('blog-modal').classList.add('open');
       document.body.style.overflow = 'hidden';
