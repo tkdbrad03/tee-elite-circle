@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>The Tee Room — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#1a2e1a">
+  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pwa-nav.css">
+  <style>
+    .page-header {
+      margin-bottom: 48px;
+      text-align: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .page-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* Blog Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 32px;
+    }
+
+    .blog-card {
+      background: #fff;
+      border: 1px solid #eee;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: block;
+    }
+
+    .blog-card:hover {
+      border-color: var(--tmac-blush);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+    }
+
+    .blog-image {
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, var(--deep-forest) 0%, #1a2e1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .blog-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-image svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--tmac-blush);
+      stroke-width: 1;
+      fill: none;
+      opacity: 0.5;
+    }
+
+    .blog-content {
+      padding: 28px;
+    }
+
+    .blog-date {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 10px;
+    }
+
+    .blog-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .blog-excerpt {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .blog-read-more {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .blog-read-more svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .blog-empty {
+      text-align: center;
+      padding: 80px 32px;
+      background: #fafafa;
+      border: 1px dashed #ddd;
+      grid-column: 1 / -1;
+    }
+
+    .blog-empty p {
+      color: #888;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .blog-empty span {
+      font-size: 13px;
+      color: #aaa;
+      font-style: italic;
+    }
+
+    /* Blog Modal */
+    .blog-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .blog-modal-overlay.open {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .blog-modal {
+      background: #fff;
+      max-width: 700px;
+      width: 100%;
+      margin: 40px auto;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .blog-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .blog-modal-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    .blog-modal-close:hover {
+      background: rgba(0,0,0,0.7);
+    }
+
+    .blog-modal-image {
+      width: 100%;
+      max-height: 300px;
+      overflow: hidden;
+    }
+
+    .blog-modal-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-modal-body {
+      padding: 32px;
+    }
+
+    .blog-modal-date {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .blog-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .blog-modal-content {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    .blog-modal-content p {
+      margin-bottom: 16px;
+    }
+
+    /* System Builder CTA in Blog Modal */
+    .blog-modal-cta {
+      background: linear-gradient(145deg, #1a2f23, #234530);
+      border-radius: 12px;
+      padding: 32px;
+      margin-top: 32px;
+      text-align: center;
+    }
+
+    .blog-modal-cta-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .blog-modal-cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .blog-modal-cta-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .blog-modal-cta-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: var(--tmac-blush);
+      color: var(--deep-forest);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .blog-modal-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232, 204, 200, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .blog-modal {
+        margin: 20px auto;
+      }
+      
+      .blog-modal-body {
+        padding: 24px;
+      }
+      
+      .blog-modal-title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/tee-room.html" class="nav-link active">Tee Room</a>
+        <a href="/fairway.html" class="nav-link">Fairway</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">TM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/tee-room.html" class="mobile-nav-link active">Tee Room</a>
+    <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    <div class="page-header">
+      <p class="page-label">Insights & Inspiration</p>
+      <h1 class="page-title">The Tee Room</h1>
+      <p class="page-subtitle">Thoughts on business, wealth, golf, and living at the highest level — from Dr. TMac.</p>
+    </div>
+
+    <div class="blog-grid" id="blog-grid">
+      <div class="blog-loading">Loading...</div>
+    </div>
+
+  </main>
+
+  <!-- BLOG MODAL -->
+  <div class="blog-modal-overlay" id="blog-modal">
+    <div class="blog-modal">
+      <button class="blog-modal-close" onclick="closeBlogModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="blog-modal-image" id="blog-modal-image"></div>
+      <div class="blog-modal-body">
+        <p class="blog-modal-date" id="blog-modal-date"></p>
+        <h2 class="blog-modal-title" id="blog-modal-title"></h2>
+        <div class="blog-modal-content" id="blog-modal-content"></div>
+        
+        <!-- System Builder CTA - Only shows on "How to Turn Your Expertise Into a Paid System" post -->
+        <div class="blog-modal-cta" id="system-builder-cta" style="display: none;">
+          <p class="blog-modal-cta-label">Ready to Take Action?</p>
+          <h3 class="blog-modal-cta-title">Design Your First Paid System</h3>
+          <p class="blog-modal-cta-text">
+            A guided 10-minute exercise to identify, structure, and commit to building a system from your expertise.
+          </p>
+          <a href="system-builder.html" class="blog-modal-cta-btn">Start the System Builder →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    // Logout
+    document.getElementById('logout-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+      window.location.href = '/member-login.html';
+    });
+
+    // Load Blog Posts dynamically
+    async function loadBlogPosts() {
+      const grid = document.getElementById('blog-grid');
+      try {
+        const res = await fetch('/api/blog/get');
+        if (res.ok) {
+          const posts = await res.json();
+          
+          if (posts.length === 0) {
+            grid.innerHTML = `
+              <div class="blog-empty">
+                <p>Stories coming soon.</p>
+                <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+              </div>
+            `;
+            return;
+          }
+
+          // Store posts for modal access
+          window.blogPosts = posts;
+          
+          grid.innerHTML = posts.map((post, index) => `
+            <div class="blog-card" onclick="openBlogModal(${index})" style="cursor: pointer;">
+              <div class="blog-image">
+                ${post.image_url 
+                  ? `<img src="${post.image_url}" alt="${post.title}">`
+                  : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
+                }
+              </div>
+              <div class="blog-content">
+                <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <h3 class="blog-title">${post.title}</h3>
+                ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
+                <span class="blog-read-more">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error loading blog posts:', err);
+        grid.innerHTML = `
+          <div class="blog-empty">
+            <p>Stories coming soon.</p>
+            <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+          </div>
+        `;
+      }
+    }
+
+    // Blog modal functions
+    function openBlogModal(index) {
+      const post = window.blogPosts[index];
+      if (!post) return;
+      
+      document.getElementById('blog-modal-title').textContent = post.title;
+      document.getElementById('blog-modal-date').textContent = new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('blog-modal-content').innerHTML = post.content || post.excerpt || 'No content available.';
+      
+      const imageEl = document.getElementById('blog-modal-image');
+      if (post.image_url) {
+        imageEl.innerHTML = `<img src="${post.image_url}" alt="${post.title}">`;
+        imageEl.style.display = 'block';
+      } else {
+        imageEl.style.display = 'none';
+      }
+      
+      // Show System Builder CTA only for the specific post about paid systems
+      const systemBuilderCta = document.getElementById('system-builder-cta');
+      const isSystemBuilderPost = post.title && post.title.toLowerCase().includes('expertise') && post.title.toLowerCase().includes('paid system');
+      systemBuilderCta.style.display = isSystemBuilderPost ? 'block' : 'none';
+      
+      document.getElementById('blog-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeBlogModal() {
+      document.getElementById('blog-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    
+    // Close modal on backdrop click
+    document.getElementById('blog-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'blog-modal') closeBlogModal();
+    });
+
+    // Load content
+    loadBlogPosts();
+  </script>
+  <script src="/member-common.js"></script>
+  <!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registered:', registration.scope);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+    // Show admin link for pin #01 only
+    async function checkAdminAccess() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (res.ok) {
+          const member = await res.json();
+          if (member.pin_number === 1) {
+            const adminLink = document.getElementById('admin-nav-link');
+            if (adminLink) adminLink.style.display = 'flex';
+          }
+        }
+      } catch (err) {}
+    }
+    checkAdminAccess();
+  </script>
+  <script src="/pwa-nav.js"></script>
+</body>
+</html>
