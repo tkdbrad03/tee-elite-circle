@@ -454,6 +454,296 @@
   letter-spacing: 0.02em;
 }
 
+    /* ===== TEE ROOM PREVIEW ===== */
+    .tee-room-preview {
+      padding: 100px 48px;
+      background: var(--soft-cream);
+    }
+
+    .tee-room-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tee-room-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .tee-room-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+
+    .tee-room-subhead {
+      font-size: 15px;
+      color: #666;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .tee-room-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .tee-room-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .tee-room-card:hover {
+      border-color: var(--tmac-blush);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+    }
+
+    .tee-room-card-image {
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, var(--deep-forest) 0%, #1a2e1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .tee-room-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tee-room-card-image svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--tmac-blush);
+      stroke-width: 1;
+      fill: none;
+      opacity: 0.5;
+    }
+
+    .tee-room-card-content {
+      padding: 24px;
+    }
+
+    .tee-room-card-date {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .tee-room-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .tee-room-card-excerpt {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .tee-room-cta {
+      text-align: center;
+      margin-top: 48px;
+    }
+
+    .tee-room-cta a {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      padding: 16px 32px;
+      border: 1px solid var(--charcoal);
+      transition: all 0.3s ease;
+    }
+
+    .tee-room-cta a:hover {
+      background: var(--charcoal);
+      color: #fff;
+    }
+
+    .tee-room-empty {
+      text-align: center;
+      padding: 60px 32px;
+      color: #888;
+      font-style: italic;
+    }
+
+    /* Blog Modal for Landing Page */
+    .blog-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .blog-modal-overlay.open {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .blog-modal {
+      background: #fff;
+      max-width: 700px;
+      width: 100%;
+      margin: 40px auto;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .blog-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .blog-modal-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    .blog-modal-close:hover {
+      background: rgba(0,0,0,0.7);
+    }
+
+    .blog-modal-image {
+      width: 100%;
+      max-height: 300px;
+      overflow: hidden;
+    }
+
+    .blog-modal-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-modal-body {
+      padding: 32px;
+    }
+
+    .blog-modal-date {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .blog-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .blog-modal-content {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    .blog-modal-content p {
+      margin-bottom: 16px;
+    }
+
+    .blog-modal-apply {
+      background: var(--deep-forest);
+      padding: 24px;
+      margin-top: 32px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .blog-modal-apply p {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .blog-modal-apply a {
+      display: inline-block;
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+      padding: 14px 28px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .blog-modal-apply a:hover {
+      background: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .tee-room-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tee-room-preview {
+        padding: 60px 24px;
+      }
+
+      .blog-modal {
+        margin: 20px auto;
+      }
+      
+      .blog-modal-body {
+        padding: 24px;
+      }
+      
+      .blog-modal-title {
+        font-size: 24px;
+      }
+    }
+
     /* ===== SOCIAL PROOF ===== */
     .proof {
       padding: 100px 48px;
@@ -1208,6 +1498,45 @@
       </div>
     </div>
   </section>
+
+  <!-- TEE ROOM PREVIEW -->
+  <section class="tee-room-preview">
+    <div class="tee-room-inner">
+      <div class="tee-room-header">
+        <p class="section-label">From the Tee Room</p>
+        <h2 class="tee-room-headline">Thoughts on business, wealth, and playing at the highest level</h2>
+        <p class="tee-room-subhead">Insights from Dr. TMac — for women who refuse to play small.</p>
+      </div>
+
+      <div class="tee-room-grid" id="tee-room-grid">
+        <!-- Blog posts loaded dynamically -->
+      </div>
+
+      <div class="tee-room-cta">
+        <a href="/tee-room.html">Explore the Tee Room →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG MODAL -->
+  <div class="blog-modal-overlay" id="blog-modal">
+    <div class="blog-modal">
+      <button class="blog-modal-close" onclick="closeBlogModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="blog-modal-image" id="blog-modal-image"></div>
+      <div class="blog-modal-body">
+        <p class="blog-modal-date" id="blog-modal-date"></p>
+        <h2 class="blog-modal-title" id="blog-modal-title"></h2>
+        <div class="blog-modal-content" id="blog-modal-content"></div>
+        
+        <div class="blog-modal-apply">
+          <p>Ready to be in the room where it happens?</p>
+          <a href="#apply" onclick="closeBlogModal()">Apply for Membership</a>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <!-- SOCIAL PROOF -->
   <section class="proof">
@@ -1596,6 +1925,84 @@
         }
       });
     })();
+  </script>
+
+  <!-- Tee Room Blog Loading -->
+  <script>
+    // Load blog posts for preview
+    async function loadTeeRoomPreview() {
+      const grid = document.getElementById('tee-room-grid');
+      try {
+        const res = await fetch('/api/blog/get');
+        if (res.ok) {
+          const posts = await res.json();
+          
+          if (posts.length === 0) {
+            grid.innerHTML = '<div class="tee-room-empty">New insights coming soon.</div>';
+            return;
+          }
+
+          // Store posts for modal access
+          window.blogPosts = posts;
+          
+          // Show up to 3 posts
+          const previewPosts = posts.slice(0, 3);
+          
+          grid.innerHTML = previewPosts.map((post, index) => `
+            <div class="tee-room-card" onclick="openBlogModal(${index})">
+              <div class="tee-room-card-image">
+                ${post.image_url 
+                  ? `<img src="${post.image_url}" alt="${post.title}">`
+                  : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
+                }
+              </div>
+              <div class="tee-room-card-content">
+                <p class="tee-room-card-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <h3 class="tee-room-card-title">${post.title}</h3>
+                ${post.excerpt ? `<p class="tee-room-card-excerpt">${post.excerpt}</p>` : ''}
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error loading blog posts:', err);
+        grid.innerHTML = '<div class="tee-room-empty">New insights coming soon.</div>';
+      }
+    }
+
+    // Blog modal functions
+    function openBlogModal(index) {
+      const post = window.blogPosts[index];
+      if (!post) return;
+      
+      document.getElementById('blog-modal-title').textContent = post.title;
+      document.getElementById('blog-modal-date').textContent = new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('blog-modal-content').innerHTML = post.content || post.excerpt || 'No content available.';
+      
+      const imageEl = document.getElementById('blog-modal-image');
+      if (post.image_url) {
+        imageEl.innerHTML = `<img src="${post.image_url}" alt="${post.title}">`;
+        imageEl.style.display = 'block';
+      } else {
+        imageEl.style.display = 'none';
+      }
+      
+      document.getElementById('blog-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeBlogModal() {
+      document.getElementById('blog-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    
+    // Close modal on backdrop click
+    document.getElementById('blog-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'blog-modal') closeBlogModal();
+    });
+
+    // Load on page ready
+    document.addEventListener('DOMContentLoaded', loadTeeRoomPreview);
   </script>
 
   <!-- PWA Service Worker -->
