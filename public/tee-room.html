@@ -582,7 +582,7 @@
     body.is-member .visitor-only { display: none !important; }
     body.is-member .member-only { display: flex !important; }
     
-    /* Mobile nav should always be hidden until .open is added */
+    /* Mobile nav controlled by JS only - always hidden until .open */
     .mobile-nav {
       display: none !important;
     }
@@ -633,7 +633,7 @@
   </header>
 
   <!-- MOBILE NAV - Visitor -->
-  <div class="mobile-nav visitor-only" id="mobile-nav-visitor">
+  <div class="mobile-nav" id="mobile-nav-visitor">
     <a href="/landing.html" class="mobile-nav-link">Home</a>
     <a href="/tee-room.html" class="mobile-nav-link active">Tee Room</a>
     <a href="/landing.html#apply" class="mobile-nav-link">Apply for Membership</a>
@@ -641,7 +641,7 @@
   </div>
 
   <!-- MOBILE NAV - Member -->
-  <div class="mobile-nav member-only" id="mobile-nav-member">
+  <div class="mobile-nav" id="mobile-nav-member">
     <a href="/home.html" class="mobile-nav-link">Home</a>
     <a href="/members.html" class="mobile-nav-link">The Circle</a>
     <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
@@ -684,8 +684,8 @@
           <a href="/landing.html#apply">Apply for Membership</a>
         </div>
 
-        <!-- System Builder CTA for members (only on specific post) -->
-        <div class="blog-modal-cta member-only" id="system-builder-cta">
+        <!-- System Builder CTA for members (only on specific post - controlled by JS) -->
+        <div class="blog-modal-cta" id="system-builder-cta" style="display: none;">
           <p class="blog-modal-cta-label">Ready to Take Action?</p>
           <h3 class="blog-modal-cta-title">Design Your First Paid System</h3>
           <p class="blog-modal-cta-text">
