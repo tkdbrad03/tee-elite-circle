@@ -5,6 +5,7 @@
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
   <title>The Tee Room — The Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Insights from Dr. TMac on business, wealth, golf, and living at the highest level. For women who refuse to play small.">
   <!-- PWA Meta Tags -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#1a2e1a">
@@ -17,23 +18,198 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="pwa-nav.css">
   <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      line-height: 1.7;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--deep-forest);
+      padding: 20px 48px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .header-logo img {
+      height: 32px;
+      width: auto;
+    }
+
+    .header-logo span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-blush);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--tmac-blush);
+    }
+
+    .nav-cta {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      padding: 12px 24px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-cta:hover {
+      background: #fff;
+    }
+
+    .header-user {
+      display: none;
+    }
+
+    .header-user.logged-in {
+      display: block;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--tmac-blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    /* Mobile menu button */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .mobile-menu-btn span {
+      width: 24px;
+      height: 2px;
+      background: var(--tmac-blush);
+      transition: all 0.3s ease;
+    }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: var(--deep-forest);
+      padding: 24px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav-link {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+      color: var(--tmac-blush);
+    }
+
+    /* Main content */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+
     .page-header {
-      margin-bottom: 48px;
+      margin-bottom: 60px;
       text-align: center;
-      max-width: 600px;
+      max-width: 700px;
       margin-left: auto;
       margin-right: auto;
     }
 
     .page-label {
       font-size: 10px;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--tmac-bronze);
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
 
     .page-title {
@@ -41,13 +217,13 @@
       font-size: clamp(36px, 6vw, 56px);
       font-weight: 400;
       color: var(--charcoal);
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .page-subtitle {
-      font-size: 15px;
+      font-size: 16px;
       color: #666;
-      line-height: 1.7;
+      line-height: 1.8;
     }
 
     /* Blog Grid */
@@ -63,6 +239,7 @@
       transition: all 0.3s ease;
       text-decoration: none;
       display: block;
+      cursor: pointer;
     }
 
     .blog-card:hover {
@@ -260,8 +437,41 @@
       margin-bottom: 16px;
     }
 
-    /* System Builder CTA in Blog Modal */
+    /* Apply CTA in modal for visitors */
+    .blog-modal-apply {
+      background: var(--deep-forest);
+      padding: 28px;
+      margin-top: 32px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .blog-modal-apply p {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .blog-modal-apply a {
+      display: inline-block;
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+      padding: 14px 28px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .blog-modal-apply a:hover {
+      background: #fff;
+    }
+
+    /* System Builder CTA for members */
     .blog-modal-cta {
+      display: none;
       background: linear-gradient(145deg, #1a2f23, #234530);
       border-radius: 12px;
       padding: 32px;
@@ -313,6 +523,38 @@
       box-shadow: 0 6px 20px rgba(232, 204, 200, 0.3);
     }
 
+    /* Footer */
+    .site-footer {
+      background: var(--deep-forest);
+      padding: 48px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .header-nav {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .site-header {
+        padding: 16px 24px;
+      }
+
+      .main-content {
+        padding: 60px 24px;
+      }
+    }
+
     @media (max-width: 768px) {
       .blog-grid {
         grid-template-columns: 1fr;
@@ -332,29 +574,48 @@
         font-size: 24px;
       }
     }
+
+    /* Hide elements based on auth state */
+    .visitor-only { display: flex; }
+    .member-only { display: none; }
+    
+    body.is-member .visitor-only { display: none !important; }
+    body.is-member .member-only { display: flex; }
   </style>
 </head>
-<body class="member-body">
+<body>
   
   <!-- HEADER -->
-  <header class="member-header">
+  <header class="site-header">
     <div class="header-inner">
-      <a href="/home.html" class="header-logo">
+      <a href="/landing.html" class="header-logo" id="logo-link">
         <img src="images/tmac-logo.png" alt="TMac Inspired">
         <span>The Tee Elite Circle</span>
       </a>
-      <nav class="header-nav">
+
+      <!-- Visitor Navigation -->
+      <nav class="header-nav visitor-only" id="visitor-nav">
+        <a href="/landing.html" class="nav-link">Home</a>
+        <a href="/tee-room.html" class="nav-link active">Tee Room</a>
+        <a href="/landing.html#apply" class="nav-link">Apply</a>
+        <a href="/member-login.html" class="nav-cta">Member Login</a>
+      </nav>
+
+      <!-- Member Navigation -->
+      <nav class="header-nav member-only" id="member-nav">
         <a href="/home.html" class="nav-link">Home</a>
         <a href="/members.html" class="nav-link">The Circle</a>
         <a href="/retreats.html" class="nav-link">Retreats</a>
         <a href="/tee-room.html" class="nav-link active">Tee Room</a>
         <a href="/fairway.html" class="nav-link">Fairway</a>
       </nav>
-      <div class="header-user">
+
+      <div class="header-user member-only" id="header-user">
         <a href="/profile.html" class="user-avatar" id="user-avatar">
           <span id="user-initials">TM</span>
         </a>
       </div>
+
       <button class="mobile-menu-btn" id="mobile-menu-btn">
         <span></span>
         <span></span>
@@ -363,19 +624,27 @@
     </div>
   </header>
 
-  <!-- MOBILE NAV -->
-  <div class="mobile-nav" id="mobile-nav">
+  <!-- MOBILE NAV - Visitor -->
+  <div class="mobile-nav visitor-only" id="mobile-nav-visitor">
+    <a href="/landing.html" class="mobile-nav-link">Home</a>
+    <a href="/tee-room.html" class="mobile-nav-link active">Tee Room</a>
+    <a href="/landing.html#apply" class="mobile-nav-link">Apply for Membership</a>
+    <a href="/member-login.html" class="mobile-nav-link">Member Login</a>
+  </div>
+
+  <!-- MOBILE NAV - Member -->
+  <div class="mobile-nav member-only" id="mobile-nav-member">
     <a href="/home.html" class="mobile-nav-link">Home</a>
     <a href="/members.html" class="mobile-nav-link">The Circle</a>
     <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
     <a href="/tee-room.html" class="mobile-nav-link active">Tee Room</a>
     <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
-    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+    <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
   </div>
 
   <!-- MAIN CONTENT -->
-  <main class="member-main">
+  <main class="main-content">
     <div class="page-header">
       <p class="page-label">Insights & Inspiration</p>
       <h1 class="page-title">The Tee Room</h1>
@@ -383,9 +652,10 @@
     </div>
 
     <div class="blog-grid" id="blog-grid">
-      <div class="blog-loading">Loading...</div>
+      <div class="blog-empty">
+        <p>Loading...</p>
+      </div>
     </div>
-
   </main>
 
   <!-- BLOG MODAL -->
@@ -400,8 +670,14 @@
         <h2 class="blog-modal-title" id="blog-modal-title"></h2>
         <div class="blog-modal-content" id="blog-modal-content"></div>
         
-        <!-- System Builder CTA - Only shows on "How to Turn Your Expertise Into a Paid System" post -->
-        <div class="blog-modal-cta" id="system-builder-cta" style="display: none;">
+        <!-- Apply CTA for visitors -->
+        <div class="blog-modal-apply visitor-only" id="blog-modal-apply">
+          <p>Ready to be in the room where it happens?</p>
+          <a href="/landing.html#apply">Apply for Membership</a>
+        </div>
+
+        <!-- System Builder CTA for members (only on specific post) -->
+        <div class="blog-modal-cta member-only" id="system-builder-cta">
           <p class="blog-modal-cta-label">Ready to Take Action?</p>
           <h3 class="blog-modal-cta-title">Design Your First Paid System</h3>
           <p class="blog-modal-cta-text">
@@ -414,22 +690,50 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="member-footer">
-    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  <footer class="site-footer">
+    <p class="footer-text">The Tee Elite Circle — A TMac Inspired Experience</p>
   </footer>
 
   <script>
+    // Check if user is logged in
+    let isLoggedIn = false;
+
+    async function checkAuthStatus() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (res.ok) {
+          const member = await res.json();
+          isLoggedIn = true;
+          document.body.classList.add('is-member');
+          
+          // Update logo link for members
+          document.getElementById('logo-link').href = '/home.html';
+          
+          // Update user avatar
+          if (member.first_name && member.last_name) {
+            document.getElementById('user-initials').textContent = 
+              member.first_name[0] + member.last_name[0];
+          }
+        }
+      } catch (err) {
+        // Not logged in - visitor nav will show by default
+      }
+    }
+
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileNav = document.getElementById('mobile-nav');
-    
     mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileNav.classList.toggle('open');
+      if (isLoggedIn) {
+        document.getElementById('mobile-nav-member').classList.toggle('open');
+        document.getElementById('mobile-nav-visitor').classList.remove('open');
+      } else {
+        document.getElementById('mobile-nav-visitor').classList.toggle('open');
+        document.getElementById('mobile-nav-member').classList.remove('open');
+      }
     });
 
-    // Logout
-    document.getElementById('logout-link').addEventListener('click', async (e) => {
+    // Logout handler
+    document.getElementById('logout-link')?.addEventListener('click', async (e) => {
       e.preventDefault();
       try {
         await fetch('/api/auth/logout', { method: 'POST' });
@@ -461,7 +765,7 @@
           window.blogPosts = posts;
           
           grid.innerHTML = posts.map((post, index) => `
-            <div class="blog-card" onclick="openBlogModal(${index})" style="cursor: pointer;">
+            <div class="blog-card" onclick="openBlogModal(${index})">
               <div class="blog-image">
                 ${post.image_url 
                   ? `<img src="${post.image_url}" alt="${post.title}">`
@@ -505,10 +809,12 @@
         imageEl.style.display = 'none';
       }
       
-      // Show System Builder CTA only for the specific post about paid systems
-      const systemBuilderCta = document.getElementById('system-builder-cta');
-      const isSystemBuilderPost = post.title && post.title.toLowerCase().includes('expertise') && post.title.toLowerCase().includes('paid system');
-      systemBuilderCta.style.display = isSystemBuilderPost ? 'block' : 'none';
+      // Show System Builder CTA only for members on the specific post
+      if (isLoggedIn) {
+        const systemBuilderCta = document.getElementById('system-builder-cta');
+        const isSystemBuilderPost = post.title && post.title.toLowerCase().includes('expertise') && post.title.toLowerCase().includes('paid system');
+        systemBuilderCta.style.display = isSystemBuilderPost ? 'block' : 'none';
+      }
       
       document.getElementById('blog-modal').classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -524,38 +830,9 @@
       if (e.target.id === 'blog-modal') closeBlogModal();
     });
 
-    // Load content
+    // Initialize
+    checkAuthStatus();
     loadBlogPosts();
   </script>
-  <script src="/member-common.js"></script>
-  <!-- PWA Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('ServiceWorker registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-          });
-      });
-    }
-    // Show admin link for pin #01 only
-    async function checkAdminAccess() {
-      try {
-        const res = await fetch('/api/members/me');
-        if (res.ok) {
-          const member = await res.json();
-          if (member.pin_number === 1) {
-            const adminLink = document.getElementById('admin-nav-link');
-            if (adminLink) adminLink.style.display = 'flex';
-          }
-        }
-      } catch (err) {}
-    }
-    checkAdminAccess();
-  </script>
-  <script src="/pwa-nav.js"></script>
 </body>
 </html>
