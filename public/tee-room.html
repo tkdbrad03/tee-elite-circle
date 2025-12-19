@@ -538,8 +538,11 @@
 
     /* Responsive */
     @media (max-width: 900px) {
-      .header-nav {
-        display: none;
+      .header-nav,
+      .header-nav.visitor-only,
+      .header-nav.member-only,
+      body.is-member .header-nav.member-only {
+        display: none !important;
       }
 
       .mobile-menu-btn {
