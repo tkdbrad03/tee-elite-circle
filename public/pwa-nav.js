@@ -7,8 +7,8 @@
   
   const isActive = (page) => {
     if (page === '/home.html' && (currentPage === '/home.html' || currentPage === '/')) return ' active';
-    if (page === '/from-the-fairway.html' && currentPage === '/from-the-fairway.html') return ' active';
-    if (page === '/resources.html' && currentPage === '/resources.html') return ' active';
+    if (page === '/tee-room.html' && currentPage === '/tee-room.html') return ' active';
+    if (page === '/fairway.html' && currentPage === '/fairway.html') return ' active';
     if (page === '/profile.html' && currentPage === '/profile.html') return ' active';
     if (page === '/admin.html' && currentPage === '/admin.html') return ' active';
     return '';
@@ -22,13 +22,13 @@
           <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span>Home</span>
         </a>
-        <a href="/from-the-fairway.html" class="pwa-nav-item${isActive('/from-the-fairway.html')}">
+        <a href="/tee-room.html" class="pwa-nav-item${isActive('/tee-room.html')}">
           <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path></svg>
-          <span>Fairway</span>
-        </a>
-        <a href="/resources.html" class="pwa-nav-item${isActive('/resources.html')}">
-          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
           <span>Tee Room</span>
+        </a>
+        <a href="/fairway.html" class="pwa-nav-item${isActive('/fairway.html')}">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span>Fairway</span>
         </a>
         <a href="/profile.html" class="pwa-nav-item${isActive('/profile.html')}">
           <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
