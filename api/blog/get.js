@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
 
     // Get published blog posts - public access, no auth required
     const result = await client.query(
-      'SELECT id, title, excerpt, content, image_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
+      'SELECT id, title, excerpt, content, image_url, video_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
     );
 
     return res.status(200).json(result.rows);
