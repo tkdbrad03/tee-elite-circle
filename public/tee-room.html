@@ -272,6 +272,34 @@
       opacity: 0.5;
     }
 
+    .blog-image {
+      position: relative;
+    }
+
+    .blog-video-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 3px;
+    }
+
+    .blog-video-badge svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+      stroke: none;
+      opacity: 1;
+    }
+
     .blog-content {
       padding: 28px;
     }
@@ -405,6 +433,22 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    .blog-modal-video {
+      width: 100%;
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      background: #000;
+    }
+
+    .blog-modal-video iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
     .blog-modal-body {
@@ -676,6 +720,7 @@
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
       <div class="blog-modal-image" id="blog-modal-image"></div>
+      <div class="blog-modal-video" id="blog-modal-video" style="display: none;"></div>
       <div class="blog-modal-body">
         <p class="blog-modal-date" id="blog-modal-date"></p>
         <h2 class="blog-modal-title" id="blog-modal-title"></h2>
@@ -793,12 +838,13 @@
                 ? `<img src="${post.image_url}" alt="${post.title}">`
                 : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
               }
+              ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
             </div>
             <div class="blog-content">
               <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
               <h3 class="blog-title">${post.title}</h3>
               ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
-              <span class="blog-read-more">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+              <span class="blog-read-more">${post.video_url ? 'Watch Now' : 'Read More'} <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
             </div>
           </div>
         `).join('');
@@ -814,6 +860,24 @@
     }
 
     // Blog modal functions
+    function getVideoEmbedUrl(url) {
+      if (!url) return null;
+      
+      // YouTube
+      const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+      if (youtubeMatch) {
+        return `https://www.youtube.com/embed/${youtubeMatch[1]}?rel=0`;
+      }
+      
+      // Vimeo
+      const vimeoMatch = url.match(/(?:vimeo\.com\/)(\d+)/);
+      if (vimeoMatch) {
+        return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+      }
+      
+      return null;
+    }
+
     function openBlogModal(index) {
       const post = window.blogPosts[index];
       if (!post) return;
@@ -823,11 +887,23 @@
       document.getElementById('blog-modal-content').innerHTML = post.content || post.excerpt || 'No content available.';
       
       const imageEl = document.getElementById('blog-modal-image');
-      if (post.image_url) {
+      const videoEl = document.getElementById('blog-modal-video');
+      
+      // Check for video first
+      const embedUrl = getVideoEmbedUrl(post.video_url);
+      if (embedUrl) {
+        videoEl.innerHTML = `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        videoEl.style.display = 'block';
+        imageEl.style.display = 'none';
+      } else if (post.image_url) {
         imageEl.innerHTML = `<img src="${post.image_url}" alt="${post.title}">`;
         imageEl.style.display = 'block';
+        videoEl.style.display = 'none';
+        videoEl.innerHTML = '';
       } else {
         imageEl.style.display = 'none';
+        videoEl.style.display = 'none';
+        videoEl.innerHTML = '';
       }
       
       // Show System Builder CTA only for members on the specific post
@@ -844,6 +920,8 @@
     function closeBlogModal() {
       document.getElementById('blog-modal').classList.remove('open');
       document.body.style.overflow = '';
+      // Stop video when closing modal
+      document.getElementById('blog-modal-video').innerHTML = '';
     }
     
     // Close modal on backdrop click
