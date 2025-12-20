@@ -1174,6 +1174,12 @@
                 </div>
               </div>
 
+              <div class="form-group">
+                <label>Video URL (YouTube or Vimeo)</label>
+                <input type="text" id="blog-video" placeholder="e.g., https://youtube.com/watch?v=xxxxx or https://vimeo.com/xxxxx">
+                <p style="font-size: 11px; color: #888; margin-top: 4px;">Paste the full video URL - it will be embedded automatically</p>
+              </div>
+
               <div class="form-group form-checkbox">
                 <input type="checkbox" id="blog-published">
                 <label>Publish immediately</label>
@@ -1754,6 +1760,7 @@
         excerpt: document.getElementById('blog-excerpt').value,
         content: quill.root.innerHTML,
         image_url: document.getElementById('blog-image').value,
+        video_url: document.getElementById('blog-video').value,
         published: isPublished,
         scheduled_for: (!isPublished && scheduledValue) ? new Date(scheduledValue).toISOString() : null
       };
@@ -1881,6 +1888,9 @@
         previewEl.innerHTML = '<span>No image selected</span>';
       }
       
+      // Handle video
+      document.getElementById('blog-video').value = post.video_url || '';
+      
       // Change button text and show cancel
       document.getElementById('blog-submit-btn').textContent = 'Update Post';
       document.getElementById('blog-cancel-btn').style.display = 'inline-block';
@@ -1895,6 +1905,7 @@
       quill.root.innerHTML = '';
       document.getElementById('blog-image').value = '';
       document.getElementById('blog-image-preview').innerHTML = '<span>No image selected</span>';
+      document.getElementById('blog-video').value = '';
       document.getElementById('upload-status').textContent = '';
       document.getElementById('blog-submit-btn').textContent = 'Add Post';
       document.getElementById('blog-cancel-btn').style.display = 'none';
