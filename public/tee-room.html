@@ -1051,6 +1051,13 @@
         videoEl.innerHTML = '';
       }
       
+      // Hide Apply CTA for Morning Briefs (posts without images) - let briefs build trust first
+      const applyCta = document.getElementById('blog-modal-apply');
+      const isFeaturePost = post.image_url || post.video_url;
+      if (applyCta) {
+        applyCta.style.display = isFeaturePost ? 'block' : 'none';
+      }
+      
       // Show System Builder CTA only for members on the specific post
       if (isLoggedIn) {
         const systemBuilderCta = document.getElementById('system-builder-cta');
