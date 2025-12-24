@@ -1819,14 +1819,17 @@
             } else {
               statusText = 'Draft';
             }
+            const pinnedBadge = item.is_pinned ? '<span style="background: var(--deep-forest); color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 10px; margin-left: 8px;">PINNED</span>' : '';
+            const pinBtnText = item.is_pinned ? 'Unpin' : 'Pin';
             return `
-            <div class="item-row">
+            <div class="item-row" ${item.is_pinned ? 'style="background: rgba(45,87,44,0.05); border-left: 3px solid var(--deep-forest);"' : ''}>
               <div class="item-info">
-                <div class="item-name">${item.title}</div>
+                <div class="item-name">${item.title}${pinnedBadge}</div>
                 <div class="item-meta">${statusText} • ${new Date(item.created_at).toLocaleDateString()}</div>
               </div>
               <div class="item-actions">
                 <button onclick="editBlogPost(${item.id})">Edit</button>
+                <button onclick="togglePinPost(${item.id}, ${!item.is_pinned})">${pinBtnText}</button>
                 <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish Now'}</button>
                 <button class="delete" onclick="deleteBlogPost(${item.id})">Delete</button>
               </div>
@@ -1835,6 +1838,19 @@
           
           // Store posts for editing
           window.blogPostsData = items;
+        }
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    async function togglePinPost(id, pin) {
+      try {
+        const res = await fetch('/api/admin/blog-pin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, pin })
+        });
+        if (res.ok) {
+          loadBlogPosts();
         }
       } catch (err) { console.error('Error:', err); }
     }
