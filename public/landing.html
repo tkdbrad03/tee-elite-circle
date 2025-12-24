@@ -2044,11 +2044,12 @@
           
           // Separate briefs (no image) from feature posts (with image)
           const briefs = posts.filter(p => !p.image_url);
+          const unpinnedBriefs = briefs.filter(p => !p.is_pinned);
           const featurePosts = posts.filter(p => p.image_url);
           
-          // Render Today's Brief (most recent brief)
-          if (briefs.length > 0) {
-            const latestBrief = briefs[0];
+          // Render Today's Brief (newest non-pinned brief)
+          if (unpinnedBriefs.length > 0) {
+            const latestBrief = unpinnedBriefs[0];
             const briefIndex = posts.findIndex(p => p.id === latestBrief.id);
             
             briefSection.innerHTML = `
