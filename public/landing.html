@@ -1623,7 +1623,7 @@
         <h2 class="blog-modal-title" id="blog-modal-title"></h2>
         <div class="blog-modal-content" id="blog-modal-content"></div>
         
-        <div class="blog-modal-apply">
+        <div class="blog-modal-apply" id="blog-modal-apply">
           <p>Ready to be in the room where it happens?</p>
           <a href="#apply" onclick="closeBlogModal()">Apply for Membership</a>
         </div>
@@ -2111,6 +2111,12 @@
         imageEl.style.display = 'block';
       } else {
         imageEl.style.display = 'none';
+      }
+      
+      // Hide Apply CTA for Morning Briefs (posts without images)
+      const applyCta = document.getElementById('blog-modal-apply');
+      if (applyCta) {
+        applyCta.style.display = post.image_url ? 'block' : 'none';
       }
       
       document.getElementById('blog-modal').classList.add('open');
