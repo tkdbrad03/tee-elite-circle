@@ -300,6 +300,23 @@
       opacity: 1;
     }
 
+    .blog-pinned-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--deep-forest);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 3px;
+    }
+
+    .blog-card.pinned {
+      border: 2px solid var(--deep-forest);
+    }
+
     .blog-content {
       padding: 28px;
     }
@@ -832,13 +849,14 @@
         window.blogPosts = posts;
         
         grid.innerHTML = posts.map((post, index) => `
-          <div class="blog-card" onclick="openBlogModal(${index})">
+          <div class="blog-card${post.is_pinned ? ' pinned' : ''}" onclick="openBlogModal(${index})">
             <div class="blog-image">
               ${post.image_url 
                 ? `<img src="${post.image_url}" alt="${post.title}">`
                 : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
               }
               ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
+              ${post.is_pinned ? `<div class="blog-pinned-badge">Pinned</div>` : ''}
             </div>
             <div class="blog-content">
               <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
