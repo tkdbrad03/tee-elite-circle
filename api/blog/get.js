@@ -23,10 +23,18 @@ module.exports = async (req, res) => {
     );
 
     // Get published blog posts - public access, no auth required
-    // Pinned posts appear first, then sorted by created_at descending
-    const result = await client.query(
-      'SELECT id, title, excerpt, content, image_url, video_url, is_pinned, created_at FROM blog_posts WHERE published = true ORDER BY is_pinned DESC NULLS LAST, created_at DESC'
-    );
+    // Try to order by is_pinned first, fall back if column doesn't exist
+    let result;
+    try {
+      result = await client.query(
+        'SELECT id, title, excerpt, content, image_url, video_url, is_pinned, created_at FROM blog_posts WHERE published = true ORDER BY is_pinned DESC NULLS LAST, created_at DESC'
+      );
+    } catch (columnError) {
+      // Fallback if is_pinned column doesn't exist yet
+      result = await client.query(
+        'SELECT id, title, excerpt, content, image_url, video_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
+      );
+    }
 
     return res.status(200).json(result.rows);
   } catch (error) {
