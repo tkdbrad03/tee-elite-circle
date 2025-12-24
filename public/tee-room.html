@@ -234,6 +234,92 @@
       align-items: start;
     }
 
+    /* TODAY'S BRIEF SECTION */
+    .todays-brief-section {
+      margin-bottom: 60px;
+    }
+
+    .todays-brief-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-left: 4px solid var(--deep-forest);
+      padding: 32px 40px;
+      max-width: 700px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .todays-brief-card:hover {
+      border-color: var(--tmac-blush);
+      border-left-color: var(--deep-forest);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .todays-brief-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .todays-brief-date {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .todays-brief-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .todays-brief-excerpt {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .todays-brief-link {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .todays-brief-link svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* FEATURE POSTS SECTION */
+    .feature-posts-section {
+      padding-top: 40px;
+      border-top: 1px solid #eee;
+    }
+
+    .feature-section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 32px;
+    }
+
     .blog-card {
       background: #fff;
       border: 1px solid #eee;
@@ -247,44 +333,6 @@
       border-color: var(--tmac-blush);
       box-shadow: 0 12px 32px rgba(0,0,0,0.1);
       transform: translateY(-4px);
-    }
-
-    /* Text-only card style for posts without images */
-    .blog-card.text-only {
-      border-left: 4px solid var(--deep-forest);
-      background: #fafafa;
-      position: relative;
-    }
-
-    .blog-card.text-only .blog-content {
-      padding: 28px;
-    }
-
-    .blog-card.text-only .blog-title {
-      font-size: 20px;
-      margin-bottom: 12px;
-      line-height: 1.3;
-      padding-right: 50px;
-    }
-
-    .blog-card.text-only .blog-excerpt {
-      font-size: 14px;
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-
-    .blog-card.text-only .blog-date {
-      color: var(--deep-forest);
-      font-weight: 500;
-    }
-
-    .blog-card.text-only .blog-pinned-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      left: auto;
-      font-size: 8px;
-      padding: 4px 8px;
     }
 
     .blog-image {
@@ -758,11 +806,20 @@
       <p class="page-subtitle">Thoughts on business, wealth, golf, and living at the highest level — from Dr. TMac.</p>
     </div>
 
-    <div class="blog-grid" id="blog-grid">
-      <div class="blog-empty">
-        <p>Loading...</p>
+    <!-- TODAY'S BRIEF SECTION -->
+    <section class="todays-brief-section" id="todays-brief-section">
+      <!-- Loaded dynamically -->
+    </section>
+
+    <!-- FEATURE POSTS SECTION -->
+    <section class="feature-posts-section">
+      <p class="feature-section-label">Featured Stories</p>
+      <div class="blog-grid" id="blog-grid">
+        <div class="blog-empty">
+          <p>Loading...</p>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <!-- BLOG MODAL -->
@@ -853,12 +910,15 @@
 
     // Load Blog Posts dynamically
     async function loadBlogPosts() {
+      const briefSection = document.getElementById('todays-brief-section');
       const grid = document.getElementById('blog-grid');
+      
       try {
         const res = await fetch('/api/blog/get');
         
         if (!res.ok) {
           console.error('Blog API error:', res.status, res.statusText);
+          briefSection.innerHTML = '';
           grid.innerHTML = `
             <div class="blog-empty">
               <p>Stories coming soon.</p>
@@ -871,6 +931,7 @@
         const posts = await res.json();
         
         if (!posts || posts.length === 0) {
+          briefSection.innerHTML = '';
           grid.innerHTML = `
             <div class="blog-empty">
               <p>Stories coming soon.</p>
@@ -880,23 +941,40 @@
           return;
         }
 
-        // Store posts for modal access
+        // Store all posts for modal access
         window.blogPosts = posts;
         
-        grid.innerHTML = posts.map((post, index) => {
-          const hasImage = post.image_url || post.video_url;
-          const cardClasses = `blog-card${post.is_pinned ? ' pinned' : ''}${!hasImage ? ' text-only' : ''}`;
+        // Separate briefs (no image) from feature posts (with image)
+        const briefs = posts.filter(p => !p.image_url && !p.video_url);
+        const featurePosts = posts.filter(p => p.image_url || p.video_url);
+        
+        // Render Today's Brief section (most recent brief)
+        if (briefs.length > 0) {
+          const latestBrief = briefs[0]; // Already sorted by date from API
+          const briefIndex = posts.findIndex(p => p.id === latestBrief.id);
           
-          if (hasImage) {
+          briefSection.innerHTML = `
+            <div class="todays-brief-card" onclick="openBlogModal(${briefIndex})">
+              <p class="todays-brief-label">Today's Brief</p>
+              <p class="todays-brief-date">${new Date(latestBrief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+              <h2 class="todays-brief-title">${latestBrief.title}</h2>
+              ${latestBrief.excerpt ? `<p class="todays-brief-excerpt">${latestBrief.excerpt}</p>` : ''}
+              <span class="todays-brief-link">Read Today's Brief <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+            </div>
+          `;
+        } else {
+          briefSection.innerHTML = '';
+        }
+        
+        // Render Feature Posts grid
+        if (featurePosts.length > 0) {
+          grid.innerHTML = featurePosts.map((post) => {
+            const postIndex = posts.findIndex(p => p.id === post.id);
             return `
-              <div class="${cardClasses}" onclick="openBlogModal(${index})">
+              <div class="blog-card" onclick="openBlogModal(${postIndex})">
                 <div class="blog-image">
-                  ${post.image_url 
-                    ? `<img src="${post.image_url}" alt="${post.title}">`
-                    : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
-                  }
+                  <img src="${post.image_url}" alt="${post.title}">
                   ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
-                  ${post.is_pinned ? `<div class="blog-pinned-badge">Pinned</div>` : ''}
                 </div>
                 <div class="blog-content">
                   <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
@@ -906,23 +984,17 @@
                 </div>
               </div>
             `;
-          } else {
-            // Text-only card - no image section
-            return `
-              <div class="${cardClasses}" onclick="openBlogModal(${index})">
-                ${post.is_pinned ? `<div class="blog-pinned-badge">Pinned</div>` : ''}
-                <div class="blog-content">
-                  <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-                  <h3 class="blog-title">${post.title}</h3>
-                  ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
-                  <span class="blog-read-more">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-                </div>
-              </div>
-            `;
-          }
-        }).join('');
+          }).join('');
+        } else {
+          grid.innerHTML = `
+            <div class="blog-empty">
+              <p>Feature stories coming soon.</p>
+            </div>
+          `;
+        }
       } catch (err) {
         console.error('Error loading blog posts:', err);
+        briefSection.innerHTML = '';
         grid.innerHTML = `
           <div class="blog-empty">
             <p>Stories coming soon.</p>
