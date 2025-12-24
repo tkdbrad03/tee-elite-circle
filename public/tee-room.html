@@ -234,6 +234,84 @@
       align-items: start;
     }
 
+    /* PINNED SECTION */
+    .pinned-section {
+      margin-bottom: 48px;
+    }
+
+    .pinned-card {
+      background: linear-gradient(135deg, #fafafa 0%, #fff 100%);
+      border: 1px solid #eee;
+      border-left: 4px solid var(--tmac-bronze);
+      padding: 28px 36px;
+      max-width: 700px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .pinned-card:hover {
+      border-color: var(--tmac-blush);
+      border-left-color: var(--tmac-bronze);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .pinned-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--tmac-bronze);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 2px;
+    }
+
+    .pinned-card-date {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 10px;
+    }
+
+    .pinned-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+      line-height: 1.3;
+      padding-right: 60px;
+    }
+
+    .pinned-card-excerpt {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .pinned-card-link {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pinned-card-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
     /* TODAY'S BRIEF SECTION */
     .todays-brief-section {
       margin-bottom: 60px;
@@ -806,6 +884,11 @@
       <p class="page-subtitle">Thoughts on business, wealth, golf, and living at the highest level — from Dr. TMac.</p>
     </div>
 
+    <!-- PINNED SECTION -->
+    <section class="pinned-section" id="pinned-section">
+      <!-- Loaded dynamically -->
+    </section>
+
     <!-- TODAY'S BRIEF SECTION -->
     <section class="todays-brief-section" id="todays-brief-section">
       <!-- Loaded dynamically -->
@@ -918,6 +1001,7 @@
         
         if (!res.ok) {
           console.error('Blog API error:', res.status, res.statusText);
+          document.getElementById('pinned-section').innerHTML = '';
           briefSection.innerHTML = '';
           grid.innerHTML = `
             <div class="blog-empty">
@@ -931,6 +1015,7 @@
         const posts = await res.json();
         
         if (!posts || posts.length === 0) {
+          document.getElementById('pinned-section').innerHTML = '';
           briefSection.innerHTML = '';
           grid.innerHTML = `
             <div class="blog-empty">
@@ -944,13 +1029,34 @@
         // Store all posts for modal access
         window.blogPosts = posts;
         
-        // Separate briefs (no image) from feature posts (with image)
+        // Separate content types
         const briefs = posts.filter(p => !p.image_url && !p.video_url);
+        const pinnedBriefs = briefs.filter(p => p.is_pinned);
+        const unpinnedBriefs = briefs.filter(p => !p.is_pinned);
         const featurePosts = posts.filter(p => p.image_url || p.video_url);
         
-        // Render Today's Brief section (most recent brief)
-        if (briefs.length > 0) {
-          const latestBrief = briefs[0]; // Already sorted by date from API
+        // Render Pinned Section (pinned briefs like Welcome post)
+        const pinnedSection = document.getElementById('pinned-section');
+        if (pinnedBriefs.length > 0) {
+          pinnedSection.innerHTML = pinnedBriefs.map(brief => {
+            const briefIndex = posts.findIndex(p => p.id === brief.id);
+            return `
+              <div class="pinned-card" onclick="openBlogModal(${briefIndex})">
+                <span class="pinned-badge">Pinned</span>
+                <p class="pinned-card-date">${new Date(brief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <h3 class="pinned-card-title">${brief.title}</h3>
+                ${brief.excerpt ? `<p class="pinned-card-excerpt">${brief.excerpt}</p>` : ''}
+                <span class="pinned-card-link">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+              </div>
+            `;
+          }).join('');
+        } else {
+          pinnedSection.innerHTML = '';
+        }
+        
+        // Render Today's Brief section (newest non-pinned brief)
+        if (unpinnedBriefs.length > 0) {
+          const latestBrief = unpinnedBriefs[0]; // Sorted by date from API
           const briefIndex = posts.findIndex(p => p.id === latestBrief.id);
           
           briefSection.innerHTML = `
@@ -994,6 +1100,7 @@
         }
       } catch (err) {
         console.error('Error loading blog posts:', err);
+        document.getElementById('pinned-section').innerHTML = '';
         briefSection.innerHTML = '';
         grid.innerHTML = `
           <div class="blog-empty">
