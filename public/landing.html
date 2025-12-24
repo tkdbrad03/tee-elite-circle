@@ -486,6 +486,92 @@
       margin: 0 auto;
     }
 
+    /* TODAY'S BRIEF - LANDING PAGE */
+    .todays-brief-preview {
+      margin-bottom: 48px;
+    }
+
+    .todays-brief-preview-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-left: 4px solid var(--deep-forest);
+      padding: 28px 32px;
+      max-width: 600px;
+      margin: 0 auto;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .todays-brief-preview-card:hover {
+      border-color: var(--tmac-blush);
+      border-left-color: var(--deep-forest);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .todays-brief-preview-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .todays-brief-preview-date {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 10px;
+    }
+
+    .todays-brief-preview-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .todays-brief-preview-excerpt {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .todays-brief-preview-link {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .todays-brief-preview-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
     .tee-room-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1508,6 +1594,13 @@
         <p class="tee-room-subhead">Insights from Dr. TMac — for women who refuse to play small.</p>
       </div>
 
+      <!-- Today's Brief -->
+      <div class="todays-brief-preview" id="todays-brief-preview">
+        <!-- Loaded dynamically -->
+      </div>
+
+      <!-- Feature Posts -->
+      <p class="feature-label" id="feature-label" style="display: none;">Featured Stories</p>
       <div class="tee-room-grid" id="tee-room-grid">
         <!-- Blog posts loaded dynamically -->
       </div>
@@ -1931,41 +2024,74 @@
   <script>
     // Load blog posts for preview
     async function loadTeeRoomPreview() {
+      const briefSection = document.getElementById('todays-brief-preview');
+      const featureLabel = document.getElementById('feature-label');
       const grid = document.getElementById('tee-room-grid');
+      
       try {
         const res = await fetch('/api/blog/get');
         if (res.ok) {
           const posts = await res.json();
           
           if (posts.length === 0) {
+            briefSection.innerHTML = '';
             grid.innerHTML = '<div class="tee-room-empty">New insights coming soon.</div>';
             return;
           }
 
-          // Store posts for modal access
+          // Store all posts for modal access
           window.blogPosts = posts;
           
-          // Show up to 3 posts
-          const previewPosts = posts.slice(0, 3);
+          // Separate briefs (no image) from feature posts (with image)
+          const briefs = posts.filter(p => !p.image_url);
+          const featurePosts = posts.filter(p => p.image_url);
           
-          grid.innerHTML = previewPosts.map((post, index) => `
-            <div class="tee-room-card" onclick="openBlogModal(${index})">
-              <div class="tee-room-card-image">
-                ${post.image_url 
-                  ? `<img src="${post.image_url}" alt="${post.title}">`
-                  : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
-                }
+          // Render Today's Brief (most recent brief)
+          if (briefs.length > 0) {
+            const latestBrief = briefs[0];
+            const briefIndex = posts.findIndex(p => p.id === latestBrief.id);
+            
+            briefSection.innerHTML = `
+              <div class="todays-brief-preview-card" onclick="openBlogModal(${briefIndex})">
+                <p class="todays-brief-preview-label">Today's Brief</p>
+                <p class="todays-brief-preview-date">${new Date(latestBrief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <h3 class="todays-brief-preview-title">${latestBrief.title}</h3>
+                ${latestBrief.excerpt ? `<p class="todays-brief-preview-excerpt">${latestBrief.excerpt}</p>` : ''}
+                <span class="todays-brief-preview-link">Read Today's Brief <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
               </div>
-              <div class="tee-room-card-content">
-                <p class="tee-room-card-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-                <h3 class="tee-room-card-title">${post.title}</h3>
-                ${post.excerpt ? `<p class="tee-room-card-excerpt">${post.excerpt}</p>` : ''}
-              </div>
-            </div>
-          `).join('');
+            `;
+          } else {
+            briefSection.innerHTML = '';
+          }
+          
+          // Render Feature Posts (up to 3)
+          if (featurePosts.length > 0) {
+            featureLabel.style.display = 'block';
+            const previewPosts = featurePosts.slice(0, 3);
+            
+            grid.innerHTML = previewPosts.map((post) => {
+              const postIndex = posts.findIndex(p => p.id === post.id);
+              return `
+                <div class="tee-room-card" onclick="openBlogModal(${postIndex})">
+                  <div class="tee-room-card-image">
+                    <img src="${post.image_url}" alt="${post.title}">
+                  </div>
+                  <div class="tee-room-card-content">
+                    <p class="tee-room-card-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                    <h3 class="tee-room-card-title">${post.title}</h3>
+                    ${post.excerpt ? `<p class="tee-room-card-excerpt">${post.excerpt}</p>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('');
+          } else {
+            featureLabel.style.display = 'none';
+            grid.innerHTML = '';
+          }
         }
       } catch (err) {
         console.error('Error loading blog posts:', err);
+        briefSection.innerHTML = '';
         grid.innerHTML = '<div class="tee-room-empty">New insights coming soon.</div>';
       }
     }
