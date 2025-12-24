@@ -248,6 +248,32 @@
       transform: translateY(-4px);
     }
 
+    /* Text-only card style for posts without images */
+    .blog-card.text-only {
+      border-left: 4px solid var(--deep-forest);
+      background: linear-gradient(135deg, #fafafa 0%, #fff 100%);
+      position: relative;
+    }
+
+    .blog-card.text-only .blog-content {
+      padding: 32px;
+    }
+
+    .blog-card.text-only .blog-title {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .blog-card.text-only .blog-excerpt {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .blog-card.text-only .blog-date {
+      color: var(--deep-forest);
+      font-weight: 500;
+    }
+
     .blog-image {
       aspect-ratio: 16/9;
       background: linear-gradient(135deg, var(--deep-forest) 0%, #1a2e1a 100%);
@@ -848,24 +874,44 @@
         // Store posts for modal access
         window.blogPosts = posts;
         
-        grid.innerHTML = posts.map((post, index) => `
-          <div class="blog-card${post.is_pinned ? ' pinned' : ''}" onclick="openBlogModal(${index})">
-            <div class="blog-image">
-              ${post.image_url 
-                ? `<img src="${post.image_url}" alt="${post.title}">`
-                : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
-              }
-              ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
-              ${post.is_pinned ? `<div class="blog-pinned-badge">Pinned</div>` : ''}
-            </div>
-            <div class="blog-content">
-              <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-              <h3 class="blog-title">${post.title}</h3>
-              ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
-              <span class="blog-read-more">${post.video_url ? 'Watch Now' : 'Read More'} <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-            </div>
-          </div>
-        `).join('');
+        grid.innerHTML = posts.map((post, index) => {
+          const hasImage = post.image_url || post.video_url;
+          const cardClasses = `blog-card${post.is_pinned ? ' pinned' : ''}${!hasImage ? ' text-only' : ''}`;
+          
+          if (hasImage) {
+            return `
+              <div class="${cardClasses}" onclick="openBlogModal(${index})">
+                <div class="blog-image">
+                  ${post.image_url 
+                    ? `<img src="${post.image_url}" alt="${post.title}">`
+                    : `<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
+                  }
+                  ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
+                  ${post.is_pinned ? `<div class="blog-pinned-badge">Pinned</div>` : ''}
+                </div>
+                <div class="blog-content">
+                  <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  <h3 class="blog-title">${post.title}</h3>
+                  ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
+                  <span class="blog-read-more">${post.video_url ? 'Watch Now' : 'Read More'} <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+                </div>
+              </div>
+            `;
+          } else {
+            // Text-only card - no image section
+            return `
+              <div class="${cardClasses}" onclick="openBlogModal(${index})">
+                ${post.is_pinned ? `<div class="blog-pinned-badge" style="position: absolute; top: 12px; right: 12px;">Pinned</div>` : ''}
+                <div class="blog-content">
+                  <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  <h3 class="blog-title">${post.title}</h3>
+                  ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
+                  <span class="blog-read-more">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+                </div>
+              </div>
+            `;
+          }
+        }).join('');
       } catch (err) {
         console.error('Error loading blog posts:', err);
         grid.innerHTML = `
