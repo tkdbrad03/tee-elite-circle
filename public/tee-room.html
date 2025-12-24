@@ -1043,7 +1043,7 @@
             return `
               <div class="pinned-card" onclick="openBlogModal(${briefIndex})">
                 <span class="pinned-badge">Pinned</span>
-                <p class="pinned-card-date">${new Date(brief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <p class="pinned-card-date">${new Date(brief.scheduled_for || brief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                 <h3 class="pinned-card-title">${brief.title}</h3>
                 ${brief.excerpt ? `<p class="pinned-card-excerpt">${brief.excerpt}</p>` : ''}
                 <span class="pinned-card-link">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
@@ -1062,7 +1062,7 @@
           briefSection.innerHTML = `
             <div class="todays-brief-card" onclick="openBlogModal(${briefIndex})">
               <p class="todays-brief-label">Today's Brief</p>
-              <p class="todays-brief-date">${new Date(latestBrief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+              <p class="todays-brief-date">${new Date(latestBrief.scheduled_for || latestBrief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
               <h2 class="todays-brief-title">${latestBrief.title}</h2>
               ${latestBrief.excerpt ? `<p class="todays-brief-excerpt">${latestBrief.excerpt}</p>` : ''}
               <span class="todays-brief-link">Read Today's Brief <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
@@ -1083,7 +1083,7 @@
                   ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
                 </div>
                 <div class="blog-content">
-                  <p class="blog-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  <p class="blog-date">${new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   <h3 class="blog-title">${post.title}</h3>
                   ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
                   <span class="blog-read-more">${post.video_url ? 'Watch Now' : 'Read More'} <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
@@ -1135,7 +1135,7 @@
       if (!post) return;
       
       document.getElementById('blog-modal-title').textContent = post.title;
-      document.getElementById('blog-modal-date').textContent = new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('blog-modal-date').textContent = new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       document.getElementById('blog-modal-content').innerHTML = post.content || post.excerpt || 'No content available.';
       
       const imageEl = document.getElementById('blog-modal-image');
