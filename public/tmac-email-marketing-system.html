@@ -879,6 +879,28 @@
         </div>
 
         <div class="calendar-section">
+          <h4>Quarterly Engagement Poll Reminders</h4>
+          <div class="calendar-buttons">
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q1', 1, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q1: Jan 23
+            </a>
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q2', 4, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q2: Apr 23
+            </a>
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q3', 7, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q3: Jul 23
+            </a>
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q4', 10, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q4: Oct 23
+            </a>
+          </div>
+        </div>
+
+        <div class="calendar-section">
           <h4>Add All Reminders at Once</h4>
           <div class="calendar-buttons">
             <a class="gcal-btn" style="background: var(--deep-forest); color: white; border-color: var(--deep-forest);" href="#" onclick="addAllReminders(); return false;">
@@ -981,6 +1003,13 @@
                 <td>Fear will always have opinions</td>
                 <td>58</td>
                 <td class="status-scheduled">✓ Scheduled</td>
+              </tr>
+              <tr>
+                <td>Thu Jan 23</td>
+                <td><span class="type-badge type-story">Poll</span></td>
+                <td>Quick question for you</td>
+                <td>-</td>
+                <td class="status-pending">Pending</td>
               </tr>
               <tr>
                 <td>Fri Jan 30</td>
@@ -1197,6 +1226,17 @@
               <li><strong>CTA:</strong> "Reply ELITE"</li>
               <li><strong>Link:</strong> None (reply-based)</li>
               <li><strong>Tone:</strong> Confident, selective</li>
+            </ul>
+          </div>
+
+          <div class="email-type-card">
+            <h4>Engagement Poll</h4>
+            <p>Simple question to gauge interest and boost engagement.</p>
+            <ul>
+              <li><strong>Frequency:</strong> Once per quarter</li>
+              <li><strong>CTA:</strong> "Reply A, B, or C"</li>
+              <li><strong>Link:</strong> None (reply-based)</li>
+              <li><strong>Tone:</strong> Casual, curious</li>
             </ul>
           </div>
 
@@ -1417,6 +1457,29 @@
           </ul>
         </div>
       </div>
+
+      <div class="card">
+        <h2>Engagement Poll Template</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 16px;">Send once per quarter (late in the month) to gauge interest and boost engagement.</p>
+        <div class="notes-box">
+          <h4>Subject Line</h4>
+          <p style="font-size: 14px; margin-bottom: 16px;">Quick question for you</p>
+          
+          <h4>Body Copy</h4>
+          <p style="font-size: 14px; line-height: 1.8; white-space: pre-line;">I am planning content for the next few months and want to make sure I am writing what actually matters to you.
+
+Which of these do you want more of?
+
+Reply with A, B, or C:
+
+A) Golf and business strategy
+B) Wealth building and investing
+C) Reinvention and second acts
+
+Just hit reply. One letter. That is it.</p>
+        </div>
+        <button class="copy-btn" style="margin-top: 16px;" onclick="copyPollTemplate(this)">Copy Full Template</button>
+      </div>
     </div>
 
   </div>
@@ -1448,6 +1511,32 @@
         btn.classList.add('copied');
         setTimeout(() => {
           btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    // Copy poll template
+    function copyPollTemplate(btn) {
+      const template = `Subject: Quick question for you
+
+I am planning content for the next few months and want to make sure I am writing what actually matters to you.
+
+Which of these do you want more of?
+
+Reply with A, B, or C:
+
+A) Golf and business strategy
+B) Wealth building and investing
+C) Reinvention and second acts
+
+Just hit reply. One letter. That is it.`;
+      
+      navigator.clipboard.writeText(template).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy Full Template';
           btn.classList.remove('copied');
         }, 1500);
       });
@@ -1722,6 +1811,24 @@
       window.open(url, '_blank');
     }
     
+    function addPollReminder(quarter, month, day) {
+      const year = 2026;
+      const startDate = new Date(year, month - 1, day, 9, 0);
+      const endDate = new Date(year, month - 1, day, 10, 0);
+      
+      const formatDate = (d) => {
+        return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+      };
+      
+      const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text=' + encodeURIComponent('TMac: ' + quarter + ' Engagement Poll Email') +
+        '&dates=' + formatDate(startDate) + '/' + formatDate(endDate) +
+        '&details=' + encodeURIComponent('Send your quarterly engagement poll to gauge audience interest.\n\nSubject: Quick question for you\n\nAsk them to reply A, B, or C to choose what content they want more of.\n\nFrom your TMac Email Marketing System') +
+        '&sf=true&output=xml';
+      
+      window.open(url, '_blank');
+    }
+    
     function addAllReminders() {
       alert('This will open multiple Google Calendar tabs. Click OK to continue, then save each event in Google Calendar.\n\nTip: When saving, set each monthly reminder to "Repeat monthly" so you only need to do this once!');
       
@@ -1729,11 +1836,17 @@
       setTimeout(() => addToCalendar('Create Monthly Briefs', 'Create all 31 Morning Briefs for the month. Upload to admin panel with scheduled dates.', 1, 9, 0), 500);
       setTimeout(() => addToCalendar('Schedule Monthly Emails', 'Create weekly brief emails and feature email. Schedule all in Brevo.', 3, 9, 0), 1500);
       
-      // Quarterly reminders
+      // Quarterly invitation reminders
       setTimeout(() => addQuarterlyReminder('Q1', 1, 25), 2500);
       setTimeout(() => addQuarterlyReminder('Q2', 4, 1), 3500);
       setTimeout(() => addQuarterlyReminder('Q3', 7, 1), 4500);
       setTimeout(() => addQuarterlyReminder('Q4', 10, 1), 5500);
+      
+      // Quarterly poll reminders
+      setTimeout(() => addPollReminder('Q1', 1, 23), 6500);
+      setTimeout(() => addPollReminder('Q2', 4, 23), 7500);
+      setTimeout(() => addPollReminder('Q3', 7, 23), 8500);
+      setTimeout(() => addPollReminder('Q4', 10, 23), 9500);
     }
 
     // Initialize on page load
