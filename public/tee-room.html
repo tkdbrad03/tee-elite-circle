@@ -1188,9 +1188,24 @@
       if (e.target.id === 'blog-modal') closeBlogModal();
     });
 
+    // Check URL for specific post to open
+    function checkUrlForPost() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('post');
+      
+      if (postId && window.blogPosts) {
+        const postIndex = window.blogPosts.findIndex(p => p.id === parseInt(postId));
+        if (postIndex !== -1) {
+          openBlogModal(postIndex);
+        }
+      }
+    }
+
     // Initialize
     checkAuthStatus();
-    loadBlogPosts();
+    loadBlogPosts().then(() => {
+      checkUrlForPost();
+    });
   </script>
 </body>
 </html>
