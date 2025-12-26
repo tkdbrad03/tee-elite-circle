@@ -1828,6 +1828,7 @@
                 <div class="item-meta">${statusText} • ${new Date(item.created_at).toLocaleDateString()}</div>
               </div>
               <div class="item-actions">
+                <button onclick="copyPostLink(${item.id})" title="Copy direct link">Copy Link</button>
                 <button onclick="editBlogPost(${item.id})">Edit</button>
                 <button onclick="togglePinPost(${item.id}, ${!item.is_pinned})">${pinBtnText}</button>
                 <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish Now'}</button>
@@ -1853,6 +1854,26 @@
           loadBlogPosts();
         }
       } catch (err) { console.error('Error:', err); }
+    }
+
+    function copyPostLink(id) {
+      const link = `https://tmacmastermind.com/tee-room.html?post=${id}`;
+      navigator.clipboard.writeText(link).then(() => {
+        // Show brief confirmation
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.background = 'var(--deep-forest)';
+        btn.style.color = '#fff';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.style.color = '';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+        alert('Link: ' + link);
+      });
     }
 
     async function deleteBlogPost(id) {
