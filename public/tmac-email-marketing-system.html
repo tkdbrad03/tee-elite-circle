@@ -765,7 +765,7 @@
             <div class="step-number">1</div>
             <div class="step-text">
               <strong>Create Morning Briefs</strong>
-              <span>Generate all 31 daily briefs for the month using Claude. Match day-of-week themes.</span>
+              <span>Generate all daily briefs for the month using Claude. Match day-of-week themes. (28-31 days depending on month)</span>
             </div>
           </div>
 
@@ -855,7 +855,7 @@
         <div class="calendar-section">
           <h4>Monthly Content Creation Reminders</h4>
           <div class="calendar-buttons">
-            <a class="gcal-btn" href="#" onclick="addToCalendar('Create Monthly Briefs', 'Create all 31 Morning Briefs for the month. Upload to admin panel with scheduled dates.', 1, 9, 0); return false;">
+            <a class="gcal-btn" href="#" onclick="addToCalendar('Create Monthly Briefs', 'Create all Morning Briefs for the month. Upload to admin panel with scheduled dates. (28-31 briefs depending on month)', 1, 9, 0); return false;">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
               1st of Month: Create Briefs
             </a>
@@ -1675,6 +1675,10 @@ Just hit reply. One letter. That is it.`;
       const dayOfMonth = today.getDate();
       const month = today.getMonth(); // 0-indexed
       const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const nextMonth = (month + 1) % 12;
+      const nextMonthName = monthNames[nextMonth];
+      const briefMonth = (month + 2) % 12; // Two months ahead for brief creation
+      const briefMonthName = monthNames[briefMonth];
       
       const banner = document.getElementById('notification-banner');
       const title = document.getElementById('notification-title');
@@ -1688,31 +1692,31 @@ Just hit reply. One letter. That is it.`;
       const states = saved ? JSON.parse(saved) : [];
       const completed = states.filter(s => s).length;
       
-      if (dayOfMonth <= 3) {
-        // First 3 days of month - time to create briefs
+      if (dayOfMonth >= 25 && dayOfMonth <= 31) {
+        // End of month - time to create briefs for TWO months ahead
         icon = '🚨';
-        title.textContent = "It's " + monthNames[month] + " " + dayOfMonth + " - Time to Create Your Briefs!";
-        message.textContent = "Start of the month: Create and upload all 31 Morning Briefs for " + monthNames[month] + ".";
-      } else if (dayOfMonth <= 5) {
-        // Days 4-5 - schedule emails
+        title.textContent = "Time to Create " + briefMonthName + " Briefs!";
+        message.textContent = nextMonthName + " is already handled. Now create and upload all " + briefMonthName + " Morning Briefs.";
+      } else if (dayOfMonth >= 1 && dayOfMonth <= 3) {
+        // First 3 days - schedule emails for NEXT month
         icon = '📧';
-        title.textContent = "Time to Schedule Your Emails";
-        message.textContent = "Create your weekly brief emails and feature email, then schedule everything in Brevo.";
-      } else if (dayOfMonth >= 25 && dayOfMonth <= 28) {
-        // End of month - prep for next month
-        icon = '📅';
-        title.textContent = "Next Month is Coming";
-        message.textContent = "Start thinking about " + monthNames[(month + 1) % 12] + " briefs. You've got a few days to prepare.";
+        title.textContent = "Schedule " + nextMonthName + " Emails";
+        message.textContent = "Create and schedule " + nextMonthName + " emails in Brevo this week.";
+      } else if (dayOfMonth >= 4 && dayOfMonth <= 7) {
+        // Days 4-7 - verify everything is scheduled
+        icon = '✅';
+        title.textContent = "Verify Your Schedule";
+        message.textContent = "Double-check that all " + nextMonthName + " emails are scheduled in Brevo. Then relax.";
       } else if (completed < 8) {
         // Incomplete workflow
         icon = '⏳';
         title.textContent = "Workflow In Progress";
-        message.textContent = completed + " of 8 steps complete for this month. Keep going!";
+        message.textContent = completed + " of 8 steps complete. Keep going!";
       } else {
         // All done!
         icon = '✅';
-        title.textContent = "You're All Set for " + monthNames[month] + "!";
-        message.textContent = "All tasks complete. Your emails are scheduled and running. Enjoy your golf!";
+        title.textContent = "You're Ahead of the Game!";
+        message.textContent = "All tasks complete. Your system is running. Enjoy your life!";
       }
       
       // Check for quarterly reminder
@@ -1750,29 +1754,38 @@ Just hit reply. One letter. That is it.`;
       const today = new Date();
       const dayOfMonth = today.getDate();
       const month = today.getMonth();
+      const year = today.getFullYear();
       const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      
+      // You work ONE MONTH AHEAD
+      // In late December, you create February briefs (January is already done)
+      // In early January, you schedule February emails
+      const workingOnMonth = (month + 2) % 12; // Two months ahead since current month is done
+      const workingOnMonthName = monthNames[workingOnMonth];
       
       let tasks = [];
       
-      // Calculate next occurrences
-      const nextMonth = new Date(today.getFullYear(), month + 1, 1);
-      const nextMonthName = monthNames[nextMonth.getMonth()];
-      
-      // 1st of next month - Create briefs
-      let briefDate = new Date(today.getFullYear(), month, 1);
-      if (dayOfMonth > 1) {
-        briefDate = new Date(today.getFullYear(), month + 1, 1);
+      // Late month (25-31): Time to create briefs for month after next
+      if (dayOfMonth >= 25) {
+        const daysLeft = 31 - dayOfMonth; // Approximate days left in month
+        tasks.push({
+          text: 'Create ' + workingOnMonthName + ' Morning Briefs',
+          days: daysLeft,
+          urgent: daysLeft <= 3
+        });
       }
-      const briefDaysUntil = Math.ceil((briefDate - today) / (1000 * 60 * 60 * 24));
       
-      // 3rd of month - Schedule emails
-      let emailDate = new Date(today.getFullYear(), month, 3);
-      if (dayOfMonth > 3) {
-        emailDate = new Date(today.getFullYear(), month + 1, 3);
+      // Early month (1-7): Time to schedule emails for next month
+      if (dayOfMonth <= 7) {
+        const nextMonthName = monthNames[(month + 1) % 12];
+        tasks.push({
+          text: 'Schedule ' + nextMonthName + ' Emails in Brevo',
+          days: 7 - dayOfMonth,
+          urgent: dayOfMonth <= 3
+        });
       }
-      const emailDaysUntil = Math.ceil((emailDate - today) / (1000 * 60 * 60 * 24));
       
-      // Quarterly dates
+      // Quarterly invitation dates
       const quarterlyDates = [
         { q: 'Q1', month: 0, day: 25 },
         { q: 'Q2', month: 3, day: 1 },
@@ -1780,28 +1793,11 @@ Just hit reply. One letter. That is it.`;
         { q: 'Q4', month: 9, day: 1 }
       ];
       
-      // Add tasks
-      if (briefDaysUntil <= 7) {
-        tasks.push({
-          text: 'Create ' + monthNames[briefDate.getMonth()] + ' Morning Briefs',
-          days: briefDaysUntil,
-          urgent: briefDaysUntil <= 2
-        });
-      }
-      
-      if (emailDaysUntil <= 7 && emailDaysUntil > 0) {
-        tasks.push({
-          text: 'Schedule ' + monthNames[emailDate.getMonth()] + ' Emails in Brevo',
-          days: emailDaysUntil,
-          urgent: emailDaysUntil <= 2
-        });
-      }
-      
       // Check quarterly
       quarterlyDates.forEach(q => {
-        let qDate = new Date(today.getFullYear(), q.month, q.day);
+        let qDate = new Date(year, q.month, q.day);
         if (qDate < today) {
-          qDate = new Date(today.getFullYear() + 1, q.month, q.day);
+          qDate = new Date(year + 1, q.month, q.day);
         }
         const qDaysUntil = Math.ceil((qDate - today) / (1000 * 60 * 60 * 24));
         if (qDaysUntil <= 14) {
@@ -1813,12 +1809,35 @@ Just hit reply. One letter. That is it.`;
         }
       });
       
+      // Quarterly poll dates
+      const pollDates = [
+        { q: 'Q1', month: 0, day: 23 },
+        { q: 'Q2', month: 3, day: 23 },
+        { q: 'Q3', month: 6, day: 23 },
+        { q: 'Q4', month: 9, day: 23 }
+      ];
+      
+      pollDates.forEach(q => {
+        let qDate = new Date(year, q.month, q.day);
+        if (qDate < today) {
+          qDate = new Date(year + 1, q.month, q.day);
+        }
+        const qDaysUntil = Math.ceil((qDate - today) / (1000 * 60 * 60 * 24));
+        if (qDaysUntil <= 14) {
+          tasks.push({
+            text: q.q + ' Engagement Poll Email',
+            days: qDaysUntil,
+            urgent: qDaysUntil <= 3
+          });
+        }
+      });
+      
       // Sort by days until
       tasks.sort((a, b) => a.days - b.days);
       
       // Render
       if (tasks.length === 0) {
-        container.innerHTML = '<div class="upcoming-item"><span style="color: #666;">No urgent tasks. You\'re on track!</span></div>';
+        container.innerHTML = '<div class="upcoming-item"><span style="color: #2d6a4f; font-weight: 500;">✓ You\'re ahead of schedule. No urgent tasks!</span></div>';
       } else {
         container.innerHTML = tasks.map(task => {
           let urgencyClass = '';
@@ -1904,7 +1923,7 @@ Just hit reply. One letter. That is it.`;
       alert('This will open multiple Google Calendar tabs. Click OK to continue, then save each event in Google Calendar.\n\nTip: When saving, set each monthly reminder to "Repeat monthly" so you only need to do this once!');
       
       // Monthly reminders
-      setTimeout(() => addToCalendar('Create Monthly Briefs', 'Create all 31 Morning Briefs for the month. Upload to admin panel with scheduled dates.', 1, 9, 0), 500);
+      setTimeout(() => addToCalendar('Create Monthly Briefs', 'Create all Morning Briefs for the month. Upload to admin panel with scheduled dates. (28-31 briefs depending on month)', 1, 9, 0), 500);
       setTimeout(() => addToCalendar('Schedule Monthly Emails', 'Create weekly brief emails and feature email. Schedule all in Brevo.', 3, 9, 0), 1500);
       
       // Quarterly invitation reminders
