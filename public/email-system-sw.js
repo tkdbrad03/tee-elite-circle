@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tmac-email-system-v1';
+const CACHE_NAME = 'tmac-email-system-v2';
 const urlsToCache = [
   'tmac-email-marketing-system.html',
   'email-system-manifest.json',
@@ -18,10 +18,11 @@ self.addEventListener('install', event => {
         console.log('Cache install error:', err);
       })
   );
+  // Force the waiting service worker to become active
   self.skipWaiting();
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches and take control immediately
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -33,43 +34,30 @@ self.addEventListener('activate', event => {
           }
         })
       );
+    }).then(() => {
+      // Take control of all clients immediately
+      return self.clients.claim();
     })
   );
-  self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - network first, then cache fallback
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Return cached version or fetch from network
-        if (response) {
-          return response;
-        }
-        
-        return fetch(event.request).then(response => {
-          // Don't cache non-successful responses or non-GET requests
-          if (!response || response.status !== 200 || response.type !== 'basic' || event.request.method !== 'GET') {
-            return response;
-          }
-
-          // Clone the response
+        // If we got a valid response, clone it and update the cache
+        if (response && response.status === 200) {
           const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        });
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return response;
       })
       .catch(() => {
-        // Offline fallback for HTML pages
-        if (event.request.mode === 'navigate') {
-          return caches.match('tmac-email-marketing-system.html');
-        }
+        // Network failed, try cache
+        return caches.match(event.request);
       })
   );
 });
