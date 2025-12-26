@@ -251,6 +251,70 @@
       color: #666;
     }
 
+    .email-calendar input.editable-field {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      background: #fafafa;
+    }
+
+    .email-calendar input.editable-field:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: white;
+    }
+
+    .email-calendar input.post-id-field {
+      width: 60px;
+      text-align: center;
+    }
+
+    .email-calendar .subject-cell {
+      min-width: 250px;
+    }
+
+    .add-email-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--light-gray);
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: #666;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .add-email-btn:hover {
+      background: white;
+      border-color: var(--deep-forest);
+      color: var(--deep-forest);
+    }
+
+    .delete-row-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+    }
+
+    .delete-row-btn:hover {
+      color: #e53e3e;
+    }
+
+    .type-badge.type-quarterly {
+      background: #7c3aed;
+      color: white;
+    }
+
     .type-badge {
       display: inline-block;
       padding: 4px 8px;
@@ -963,233 +1027,74 @@
       <div class="card">
         <h2>Email Calendar</h2>
         
-        <div class="month-selector">
-          <button class="month-btn active" onclick="showMonth('jan')">January</button>
-          <button class="month-btn" onclick="showMonth('feb')">February</button>
-          <button class="month-btn" onclick="showMonth('mar')">March</button>
+        <div class="month-selector" id="month-selector">
+          <!-- Generated dynamically -->
         </div>
 
-        <!-- January -->
-        <div id="month-jan" class="month-content">
-          <h3>January 2026</h3>
-          <table class="email-calendar">
-            <thead>
-              <tr>
-                <th style="width: 50px;">Done</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Subject Line</th>
-                <th>Post ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="jan-1" onchange="saveCalendarProgress()"></td>
-                <td>Mon Jan 5</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>The right rooms rarely have open doors</td>
-                <td>37</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="jan-2" onchange="saveCalendarProgress()"></td>
-                <td>Thu Jan 9</td>
-                <td><span class="type-badge type-feature">Feature</span></td>
-                <td>There is a secret the most connected women know</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="jan-3" onchange="saveCalendarProgress()"></td>
-                <td>Mon Jan 12</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>The woman who tries to do everything herself builds a job</td>
-                <td>44</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="jan-4" onchange="saveCalendarProgress()"></td>
-                <td>Mon Jan 19</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>The dreams we remember today were called unrealistic once</td>
-                <td>51</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="jan-5" onchange="saveCalendarProgress()"></td>
-                <td>Thu Jan 23</td>
-                <td><span class="type-badge type-story">Poll</span></td>
-                <td>Quick question for you</td>
-                <td>-</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="jan-6" onchange="saveCalendarProgress()"></td>
-                <td>Mon Jan 26</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>Fear will always have opinions</td>
-                <td>58</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="jan-7" onchange="saveCalendarProgress()"></td>
-                <td>Fri Jan 30</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>January is complete. You earned this ground.</td>
-                <td>62</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="calendar-progress" id="jan-progress" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 7 scheduled</p>
-        </div>
-
-        <!-- February -->
-        <div id="month-feb" class="month-content" style="display: none;">
-          <h3>February 2026</h3>
-          <table class="email-calendar">
-            <thead>
-              <tr>
-                <th style="width: 50px;">Done</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Subject Line</th>
-                <th>Post ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="feb-1" onchange="saveCalendarProgress()"></td>
-                <td>Mon Feb 2</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="feb-2" onchange="saveCalendarProgress()"></td>
-                <td>Mon Feb 9</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="feb-3" onchange="saveCalendarProgress()"></td>
-                <td>Mon Feb 16</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="feb-4" onchange="saveCalendarProgress()"></td>
-                <td>Thu Feb 19</td>
-                <td><span class="type-badge type-feature">Feature</span></td>
-                <td>Three moves. No course taught me this.</td>
-                <td>13</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="feb-5" onchange="saveCalendarProgress()"></td>
-                <td>Mon Feb 23</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="calendar-progress" id="feb-progress" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 5 scheduled</p>
-          <p style="margin-top: 8px; font-size: 13px; color: #666;"><strong>Feature Post:</strong> The Three Money Moves That Changed Everything (publishes Feb 18)</p>
-        </div>
-
-        <!-- March -->
-        <div id="month-mar" class="month-content" style="display: none;">
-          <h3>March 2026</h3>
-          <table class="email-calendar">
-            <thead>
-              <tr>
-                <th style="width: 50px;">Done</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Subject Line</th>
-                <th>Post ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="mar-1" onchange="saveCalendarProgress()"></td>
-                <td>Mon Mar 2</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="mar-2" onchange="saveCalendarProgress()"></td>
-                <td>Mon Mar 9</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="mar-3" onchange="saveCalendarProgress()"></td>
-                <td>Mon Mar 16</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="mar-4" onchange="saveCalendarProgress()"></td>
-                <td>Mon Mar 23</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="mar-5" onchange="saveCalendarProgress()"></td>
-                <td>Thu Mar 26</td>
-                <td><span class="type-badge type-feature">Feature</span></td>
-                <td>The rounds where deals happen are not posted online</td>
-                <td>16</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="calendar-check" data-id="mar-6" onchange="saveCalendarProgress()"></td>
-                <td>Mon Mar 30</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>[Create email]</td>
-                <td>TBD</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="calendar-progress" id="mar-progress" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 6 scheduled</p>
-          <p style="margin-top: 8px; font-size: 13px; color: #666;"><strong>Feature Post:</strong> How to Get Invited to the Golf Rounds Where Deals Happen (publishes Mar 25)</p>
+        <div id="calendar-container">
+          <!-- Generated dynamically -->
         </div>
       </div>
 
       <div class="card">
-        <h2>Quarterly Invitation Schedule</h2>
+        <h2>Quarterly Schedule</h2>
         <table class="email-calendar">
           <thead>
             <tr>
+              <th style="width: 50px;">Done</th>
               <th>Quarter</th>
+              <th>Type</th>
               <th>Send Window</th>
-              <th>Focus</th>
-              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q1-invite" onchange="saveCalendarProgress()"></td>
               <td>Q1 2026</td>
-              <td>Late January / Early February</td>
-              <td>ELITE or RICH invitation</td>
-              <td class="status-pending">Pending</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
+              <td>Late January</td>
             </tr>
             <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q1-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q1 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Jan 23</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q2-invite" onchange="saveCalendarProgress()"></td>
               <td>Q2 2026</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
               <td>Early April</td>
-              <td>ELITE or RICH invitation</td>
-              <td class="status-pending">Pending</td>
             </tr>
             <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q2-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q2 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Apr 23</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q3-invite" onchange="saveCalendarProgress()"></td>
               <td>Q3 2026</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
               <td>Early July</td>
-              <td>ELITE or RICH invitation</td>
-              <td class="status-pending">Pending</td>
             </tr>
             <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q3-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q3 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Jul 23</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q4-invite" onchange="saveCalendarProgress()"></td>
               <td>Q4 2026</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
               <td>Early October</td>
-              <td>ELITE or RICH invitation</td>
-              <td class="status-pending">Pending</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q4-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q4 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Oct 23</td>
             </tr>
           </tbody>
         </table>
@@ -1512,52 +1417,317 @@ Just hit reply. One letter. That is it.</p>
     }
 
     // Month selector
-    function showMonth(month) {
+    function showMonth(monthKey) {
       document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.month-content').forEach(c => c.style.display = 'none');
       
-      event.target.classList.add('active');
-      document.getElementById('month-' + month).style.display = 'block';
+      document.querySelector('[data-month="' + monthKey + '"]').classList.add('active');
+      document.getElementById('month-' + monthKey).style.display = 'block';
     }
 
-    // Copy subject line
-    function copySubject(btn) {
-      const text = btn.parentElement.querySelector('span').textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'Copy';
-          btn.classList.remove('copied');
-        }, 1500);
-      });
-    }
-
-    // Copy poll template
-    function copyPollTemplate(btn) {
-      const template = `Subject: Quick question for you
-
-I am planning content for the next few months and want to make sure I am writing what actually matters to you.
-
-Which of these do you want more of?
-
-Reply with A, B, or C:
-
-A) Golf and business strategy
-B) Wealth building and investing
-C) Reinvention and second acts
-
-Just hit reply. One letter. That is it.`;
+    // Dynamic Calendar Generation
+    function generateDynamicCalendar() {
+      const today = new Date();
+      const currentMonth = today.getMonth();
+      const currentYear = today.getFullYear();
       
-      navigator.clipboard.writeText(template).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'Copy Full Template';
-          btn.classList.remove('copied');
-        }, 1500);
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthKeys = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      
+      // You work ONE MONTH AHEAD, so show NEXT month + 3 more (skip current month - it's done)
+      const monthsToShow = [];
+      for (let i = 1; i <= 4; i++) {
+        const monthIndex = (currentMonth + i) % 12;
+        const year = currentYear + Math.floor((currentMonth + i) / 12);
+        monthsToShow.push({ index: monthIndex, year: year, key: monthKeys[monthIndex], name: monthNames[monthIndex] });
+      }
+      
+      // Generate month selector buttons
+      const selectorContainer = document.getElementById('month-selector');
+      selectorContainer.innerHTML = monthsToShow.map((m, i) => 
+        '<button class="month-btn ' + (i === 0 ? 'active' : '') + '" data-month="' + m.key + m.year + '" onclick="showMonth(\'' + m.key + m.year + '\')">' + m.name + ' ' + m.year + '</button>'
+      ).join('');
+      
+      // Generate calendar content for each month
+      const calendarContainer = document.getElementById('calendar-container');
+      calendarContainer.innerHTML = monthsToShow.map((m, i) => {
+        const monthKey = m.key + m.year;
+        return `
+          <div id="month-${monthKey}" class="month-content" style="display: ${i === 0 ? 'block' : 'none'};">
+            <h3>${m.name} ${m.year}</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 16px;">${daysInMonth[m.index]} days this month</p>
+            <table class="email-calendar">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">Done</th>
+                  <th style="width: 100px;">Date</th>
+                  <th style="width: 80px;">Type</th>
+                  <th class="subject-cell">Subject Line</th>
+                  <th style="width: 70px;">Post ID</th>
+                  <th style="width: 40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="tbody-${monthKey}">
+              </tbody>
+            </table>
+            <button class="add-email-btn" onclick="addEmailRow('${monthKey}')">+ Add Email</button>
+            <p class="calendar-progress" id="progress-${monthKey}" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 0 scheduled</p>
+          </div>
+        `;
+      }).join('');
+      
+      // Load saved data for each month
+      monthsToShow.forEach(m => {
+        loadMonthData(m.key + m.year);
       });
     }
+
+    // Get saved calendar data
+    function getCalendarData() {
+      const saved = localStorage.getItem('tmac-calendar-data');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+      
+      // Pre-seed January 2026 data (already scheduled in Brevo)
+      const seedData = {
+        'jan2026': [
+          { date: 'Mon Jan 5', type: 'Brief', subject: 'The right rooms rarely have open doors', postId: '37', done: true },
+          { date: 'Thu Jan 9', type: 'Feature', subject: 'There is a secret the most connected women know', postId: '30', done: true },
+          { date: 'Mon Jan 12', type: 'Brief', subject: 'The woman who tries to do everything herself builds a job', postId: '44', done: true },
+          { date: 'Mon Jan 19', type: 'Brief', subject: 'The dreams we remember today were called unrealistic once', postId: '51', done: true },
+          { date: 'Thu Jan 23', type: 'Poll', subject: 'Quick question for you', postId: '-', done: false },
+          { date: 'Mon Jan 26', type: 'Brief', subject: 'Fear will always have opinions', postId: '58', done: true },
+          { date: 'Fri Jan 30', type: 'Brief', subject: 'January is complete. You earned this ground.', postId: '62', done: true }
+        ]
+      };
+      saveCalendarData(seedData);
+      return seedData;
+    }
+
+    // Save calendar data
+    function saveCalendarData(data) {
+      localStorage.setItem('tmac-calendar-data', JSON.stringify(data));
+    }
+
+    // Load month data from localStorage
+    function loadMonthData(monthKey) {
+      const data = getCalendarData();
+      const monthData = data[monthKey] || [];
+      const tbody = document.getElementById('tbody-' + monthKey);
+      
+      if (monthData.length === 0) {
+        // Add default rows for a new month (Mondays + 1 feature)
+        addDefaultRows(monthKey);
+      } else {
+        monthData.forEach((row, index) => {
+          addEmailRowWithData(monthKey, row, index);
+        });
+      }
+      updateMonthProgress(monthKey);
+    }
+
+    // Add default email rows for a month
+    function addDefaultRows(monthKey) {
+      const monthNames = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+      const monthIndex = monthNames[monthKey.slice(0, 3)];
+      const year = parseInt(monthKey.slice(3));
+      
+      // Find all Mondays in the month
+      const mondays = [];
+      const date = new Date(year, monthIndex, 1);
+      while (date.getMonth() === monthIndex) {
+        if (date.getDay() === 1) { // Monday
+          mondays.push(new Date(date));
+        }
+        date.setDate(date.getDate() + 1);
+      }
+      
+      // Add rows for each Monday (Brief) + 1 Feature (mid-month Thursday)
+      const rows = [];
+      mondays.forEach((monday, i) => {
+        rows.push({
+          date: formatDate(monday),
+          type: 'Brief',
+          subject: '',
+          postId: '',
+          done: false
+        });
+      });
+      
+      // Add feature row (3rd Thursday of month)
+      const thirdThursday = getThirdThursday(year, monthIndex);
+      rows.push({
+        date: formatDate(thirdThursday),
+        type: 'Feature',
+        subject: '',
+        postId: '',
+        done: false
+      });
+      
+      // Sort by date
+      rows.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      // Save and render
+      const data = getCalendarData();
+      data[monthKey] = rows;
+      saveCalendarData(data);
+      
+      rows.forEach((row, index) => {
+        addEmailRowWithData(monthKey, row, index);
+      });
+    }
+
+    function getThirdThursday(year, month) {
+      const date = new Date(year, month, 1);
+      let count = 0;
+      while (count < 3) {
+        if (date.getDay() === 4) count++;
+        if (count < 3) date.setDate(date.getDate() + 1);
+      }
+      return date;
+    }
+
+    function formatDate(date) {
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return days[date.getDay()] + ' ' + months[date.getMonth()] + ' ' + date.getDate();
+    }
+
+    // Add email row with data
+    function addEmailRowWithData(monthKey, rowData, index) {
+      const tbody = document.getElementById('tbody-' + monthKey);
+      const row = document.createElement('tr');
+      if (rowData.done) row.classList.add('completed');
+      
+      const typeClass = rowData.type === 'Brief' ? 'type-brief' : 
+                        rowData.type === 'Feature' ? 'type-feature' : 
+                        rowData.type === 'Poll' ? 'type-story' : 'type-brief';
+      
+      row.innerHTML = `
+        <td><input type="checkbox" class="calendar-check" data-month="${monthKey}" data-index="${index}" ${rowData.done ? 'checked' : ''} onchange="toggleEmailDone('${monthKey}', ${index})"></td>
+        <td>${rowData.date}</td>
+        <td>
+          <select class="editable-field" style="width: 80px;" onchange="updateEmailType('${monthKey}', ${index}, this.value)">
+            <option value="Brief" ${rowData.type === 'Brief' ? 'selected' : ''}>Brief</option>
+            <option value="Feature" ${rowData.type === 'Feature' ? 'selected' : ''}>Feature</option>
+            <option value="Poll" ${rowData.type === 'Poll' ? 'selected' : ''}>Poll</option>
+          </select>
+        </td>
+        <td class="subject-cell"><input type="text" class="editable-field" placeholder="Enter subject line..." value="${rowData.subject || ''}" onchange="updateEmailSubject('${monthKey}', ${index}, this.value)"></td>
+        <td><input type="text" class="editable-field post-id-field" placeholder="ID" value="${rowData.postId || ''}" onchange="updateEmailPostId('${monthKey}', ${index}, this.value)"></td>
+        <td><button class="delete-row-btn" onclick="deleteEmailRow('${monthKey}', ${index})">×</button></td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    // Add new email row
+    function addEmailRow(monthKey) {
+      const data = getCalendarData();
+      if (!data[monthKey]) data[monthKey] = [];
+      
+      const newRow = {
+        date: 'TBD',
+        type: 'Brief',
+        subject: '',
+        postId: '',
+        done: false
+      };
+      data[monthKey].push(newRow);
+      saveCalendarData(data);
+      
+      addEmailRowWithData(monthKey, newRow, data[monthKey].length - 1);
+      updateMonthProgress(monthKey);
+    }
+
+    // Toggle email done status
+    function toggleEmailDone(monthKey, index) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index] !== undefined) {
+        // Get the checkbox state directly
+        const checkbox = document.querySelector(`[data-month="${monthKey}"][data-index="${index}"]`);
+        data[monthKey][index].done = checkbox.checked;
+        saveCalendarData(data);
+        
+        const row = checkbox.closest('tr');
+        if (checkbox.checked) {
+          row.classList.add('completed');
+        } else {
+          row.classList.remove('completed');
+        }
+        updateMonthProgress(monthKey);
+      }
+    }
+
+    // Update email type
+    function updateEmailType(monthKey, index, value) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index]) {
+        data[monthKey][index].type = value;
+        saveCalendarData(data);
+      }
+    }
+
+    // Update email subject
+    function updateEmailSubject(monthKey, index, value) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index]) {
+        data[monthKey][index].subject = value;
+        saveCalendarData(data);
+      }
+    }
+
+    // Update email post ID
+    function updateEmailPostId(monthKey, index, value) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index]) {
+        data[monthKey][index].postId = value;
+        saveCalendarData(data);
+      }
+    }
+
+    // Delete email row
+    function deleteEmailRow(monthKey, index) {
+      if (!confirm('Delete this email row?')) return;
+      
+      const data = getCalendarData();
+      if (data[monthKey]) {
+        data[monthKey].splice(index, 1);
+        saveCalendarData(data);
+        
+        // Re-render the month
+        const tbody = document.getElementById('tbody-' + monthKey);
+        tbody.innerHTML = '';
+        data[monthKey].forEach((row, i) => {
+          addEmailRowWithData(monthKey, row, i);
+        });
+        updateMonthProgress(monthKey);
+      }
+    }
+
+    // Update month progress counter
+    function updateMonthProgress(monthKey) {
+      const data = getCalendarData();
+      const monthData = data[monthKey] || [];
+      const total = monthData.length;
+      const done = monthData.filter(r => r.done).length;
+      
+      const progressEl = document.getElementById('progress-' + monthKey);
+      if (progressEl) {
+        progressEl.textContent = done + ' of ' + total + ' scheduled';
+        if (done === total && total > 0) {
+          progressEl.style.color = '#2d6a4f';
+          progressEl.style.fontWeight = '600';
+        } else {
+          progressEl.style.color = '#666';
+          progressEl.style.fontWeight = 'normal';
+        }
+      }
+    }
+
+    // Initialize dynamic calendar on page load
+    generateDynamicCalendar();
 
     // Progress tracking
     function updateProgress() {
@@ -1612,62 +1782,80 @@ Just hit reply. One letter. That is it.`;
       }
     }
 
-    // Calendar Progress Functions
-    function saveCalendarProgress() {
-      const checkboxes = document.querySelectorAll('.calendar-check');
-      const states = {};
-      checkboxes.forEach(cb => {
-        states[cb.dataset.id] = cb.checked;
-        // Update row styling
-        const row = cb.closest('tr');
-        if (cb.checked) {
-          row.classList.add('completed');
-        } else {
-          row.classList.remove('completed');
-        }
+    // Copy subject line
+    function copySubject(btn) {
+      const text = btn.parentElement.querySelector('span').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
       });
-      localStorage.setItem('tmac-calendar-progress', JSON.stringify(states));
-      updateCalendarCounts();
     }
 
-    function loadCalendarProgress() {
-      const saved = localStorage.getItem('tmac-calendar-progress');
+    // Copy poll template
+    function copyPollTemplate(btn) {
+      const template = `Subject: Quick question for you
+
+I am planning content for the next few months and want to make sure I am writing what actually matters to you.
+
+Which of these do you want more of?
+
+Reply with A, B, or C:
+
+A) Golf and business strategy
+B) Wealth building and investing
+C) Reinvention and second acts
+
+Just hit reply. One letter. That is it.`;
+      
+      navigator.clipboard.writeText(template).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy Full Template';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    // Quarterly Progress Functions (for quarterly schedule table)
+    function saveCalendarProgress() {
+      const checkboxes = document.querySelectorAll('.calendar-check[data-id]');
+      const states = {};
+      checkboxes.forEach(cb => {
+        if (cb.dataset.id) {
+          states[cb.dataset.id] = cb.checked;
+          const row = cb.closest('tr');
+          if (cb.checked) {
+            row.classList.add('completed');
+          } else {
+            row.classList.remove('completed');
+          }
+        }
+      });
+      localStorage.setItem('tmac-quarterly-progress', JSON.stringify(states));
+    }
+
+    function loadQuarterlyProgress() {
+      const saved = localStorage.getItem('tmac-quarterly-progress');
       if (saved) {
         const states = JSON.parse(saved);
-        const checkboxes = document.querySelectorAll('.calendar-check');
+        const checkboxes = document.querySelectorAll('.calendar-check[data-id]');
         checkboxes.forEach(cb => {
-          if (states[cb.dataset.id]) {
+          if (cb.dataset.id && states[cb.dataset.id]) {
             cb.checked = true;
             cb.closest('tr').classList.add('completed');
           }
         });
-        updateCalendarCounts();
       }
-    }
-
-    function updateCalendarCounts() {
-      // January
-      const janChecks = document.querySelectorAll('[data-id^="jan-"]');
-      const janComplete = document.querySelectorAll('[data-id^="jan-"]:checked').length;
-      const janProgress = document.getElementById('jan-progress');
-      if (janProgress) janProgress.textContent = janComplete + ' of ' + janChecks.length + ' scheduled';
-
-      // February
-      const febChecks = document.querySelectorAll('[data-id^="feb-"]');
-      const febComplete = document.querySelectorAll('[data-id^="feb-"]:checked').length;
-      const febProgress = document.getElementById('feb-progress');
-      if (febProgress) febProgress.textContent = febComplete + ' of ' + febChecks.length + ' scheduled';
-
-      // March
-      const marChecks = document.querySelectorAll('[data-id^="mar-"]');
-      const marComplete = document.querySelectorAll('[data-id^="mar-"]:checked').length;
-      const marProgress = document.getElementById('mar-progress');
-      if (marProgress) marProgress.textContent = marComplete + ' of ' + marChecks.length + ' scheduled';
     }
 
     // Load saved progress on page load
     loadProgress();
-    loadCalendarProgress();
+    loadQuarterlyProgress();
 
     // Notification System
     function checkNotification() {
