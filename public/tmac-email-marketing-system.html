@@ -237,6 +237,20 @@
       background: var(--light-gray);
     }
 
+    .email-calendar input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .email-calendar tr.completed {
+      background: #f0fdf4;
+    }
+
+    .email-calendar tr.completed td {
+      color: #666;
+    }
+
     .type-badge {
       display: inline-block;
       padding: 4px 8px;
@@ -961,65 +975,66 @@
           <table class="email-calendar">
             <thead>
               <tr>
+                <th style="width: 50px;">Done</th>
                 <th>Date</th>
                 <th>Type</th>
                 <th>Subject Line</th>
                 <th>Post ID</th>
-                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="jan-1" onchange="saveCalendarProgress()"></td>
                 <td>Mon Jan 5</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>The right rooms rarely have open doors</td>
                 <td>37</td>
-                <td class="status-scheduled">✓ Scheduled</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="jan-2" onchange="saveCalendarProgress()"></td>
                 <td>Thu Jan 9</td>
                 <td><span class="type-badge type-feature">Feature</span></td>
                 <td>There is a secret the most connected women know</td>
                 <td>30</td>
-                <td class="status-scheduled">✓ Scheduled</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="jan-3" onchange="saveCalendarProgress()"></td>
                 <td>Mon Jan 12</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>The woman who tries to do everything herself builds a job</td>
                 <td>44</td>
-                <td class="status-scheduled">✓ Scheduled</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="jan-4" onchange="saveCalendarProgress()"></td>
                 <td>Mon Jan 19</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>The dreams we remember today were called unrealistic once</td>
                 <td>51</td>
-                <td class="status-scheduled">✓ Scheduled</td>
               </tr>
               <tr>
-                <td>Mon Jan 26</td>
-                <td><span class="type-badge type-brief">Brief</span></td>
-                <td>Fear will always have opinions</td>
-                <td>58</td>
-                <td class="status-scheduled">✓ Scheduled</td>
-              </tr>
-              <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="jan-5" onchange="saveCalendarProgress()"></td>
                 <td>Thu Jan 23</td>
                 <td><span class="type-badge type-story">Poll</span></td>
                 <td>Quick question for you</td>
                 <td>-</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="jan-6" onchange="saveCalendarProgress()"></td>
+                <td>Mon Jan 26</td>
+                <td><span class="type-badge type-brief">Brief</span></td>
+                <td>Fear will always have opinions</td>
+                <td>58</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="jan-7" onchange="saveCalendarProgress()"></td>
                 <td>Fri Jan 30</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>January is complete. You earned this ground.</td>
                 <td>62</td>
-                <td class="status-scheduled">✓ Scheduled</td>
               </tr>
             </tbody>
           </table>
+          <p class="calendar-progress" id="jan-progress" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 7 scheduled</p>
         </div>
 
         <!-- February -->
@@ -1028,52 +1043,53 @@
           <table class="email-calendar">
             <thead>
               <tr>
+                <th style="width: 50px;">Done</th>
                 <th>Date</th>
                 <th>Type</th>
                 <th>Subject Line</th>
                 <th>Post ID</th>
-                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="feb-1" onchange="saveCalendarProgress()"></td>
                 <td>Mon Feb 2</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="feb-2" onchange="saveCalendarProgress()"></td>
                 <td>Mon Feb 9</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="feb-3" onchange="saveCalendarProgress()"></td>
                 <td>Mon Feb 16</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="feb-4" onchange="saveCalendarProgress()"></td>
                 <td>Thu Feb 19</td>
                 <td><span class="type-badge type-feature">Feature</span></td>
                 <td>Three moves. No course taught me this.</td>
                 <td>13</td>
-                <td class="status-scheduled">✓ Ready</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="feb-5" onchange="saveCalendarProgress()"></td>
                 <td>Mon Feb 23</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
             </tbody>
           </table>
-          <p style="margin-top: 16px; font-size: 13px; color: #666;"><strong>Feature Post:</strong> The Three Money Moves That Changed Everything (publishes Feb 18)</p>
+          <p class="calendar-progress" id="feb-progress" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 5 scheduled</p>
+          <p style="margin-top: 8px; font-size: 13px; color: #666;"><strong>Feature Post:</strong> The Three Money Moves That Changed Everything (publishes Feb 18)</p>
         </div>
 
         <!-- March -->
@@ -1082,59 +1098,60 @@
           <table class="email-calendar">
             <thead>
               <tr>
+                <th style="width: 50px;">Done</th>
                 <th>Date</th>
                 <th>Type</th>
                 <th>Subject Line</th>
                 <th>Post ID</th>
-                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="mar-1" onchange="saveCalendarProgress()"></td>
                 <td>Mon Mar 2</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="mar-2" onchange="saveCalendarProgress()"></td>
                 <td>Mon Mar 9</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="mar-3" onchange="saveCalendarProgress()"></td>
                 <td>Mon Mar 16</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="mar-4" onchange="saveCalendarProgress()"></td>
                 <td>Mon Mar 23</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="mar-5" onchange="saveCalendarProgress()"></td>
                 <td>Thu Mar 26</td>
                 <td><span class="type-badge type-feature">Feature</span></td>
                 <td>The rounds where deals happen are not posted online</td>
                 <td>16</td>
-                <td class="status-scheduled">✓ Ready</td>
               </tr>
               <tr>
+                <td><input type="checkbox" class="calendar-check" data-id="mar-6" onchange="saveCalendarProgress()"></td>
                 <td>Mon Mar 30</td>
                 <td><span class="type-badge type-brief">Brief</span></td>
                 <td>[Create email]</td>
                 <td>TBD</td>
-                <td class="status-pending">Pending</td>
               </tr>
             </tbody>
           </table>
-          <p style="margin-top: 16px; font-size: 13px; color: #666;"><strong>Feature Post:</strong> How to Get Invited to the Golf Rounds Where Deals Happen (publishes Mar 25)</p>
+          <p class="calendar-progress" id="mar-progress" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 6 scheduled</p>
+          <p style="margin-top: 8px; font-size: 13px; color: #666;"><strong>Feature Post:</strong> How to Get Invited to the Golf Rounds Where Deals Happen (publishes Mar 25)</p>
         </div>
       </div>
 
@@ -1595,8 +1612,62 @@ Just hit reply. One letter. That is it.`;
       }
     }
 
+    // Calendar Progress Functions
+    function saveCalendarProgress() {
+      const checkboxes = document.querySelectorAll('.calendar-check');
+      const states = {};
+      checkboxes.forEach(cb => {
+        states[cb.dataset.id] = cb.checked;
+        // Update row styling
+        const row = cb.closest('tr');
+        if (cb.checked) {
+          row.classList.add('completed');
+        } else {
+          row.classList.remove('completed');
+        }
+      });
+      localStorage.setItem('tmac-calendar-progress', JSON.stringify(states));
+      updateCalendarCounts();
+    }
+
+    function loadCalendarProgress() {
+      const saved = localStorage.getItem('tmac-calendar-progress');
+      if (saved) {
+        const states = JSON.parse(saved);
+        const checkboxes = document.querySelectorAll('.calendar-check');
+        checkboxes.forEach(cb => {
+          if (states[cb.dataset.id]) {
+            cb.checked = true;
+            cb.closest('tr').classList.add('completed');
+          }
+        });
+        updateCalendarCounts();
+      }
+    }
+
+    function updateCalendarCounts() {
+      // January
+      const janChecks = document.querySelectorAll('[data-id^="jan-"]');
+      const janComplete = document.querySelectorAll('[data-id^="jan-"]:checked').length;
+      const janProgress = document.getElementById('jan-progress');
+      if (janProgress) janProgress.textContent = janComplete + ' of ' + janChecks.length + ' scheduled';
+
+      // February
+      const febChecks = document.querySelectorAll('[data-id^="feb-"]');
+      const febComplete = document.querySelectorAll('[data-id^="feb-"]:checked').length;
+      const febProgress = document.getElementById('feb-progress');
+      if (febProgress) febProgress.textContent = febComplete + ' of ' + febChecks.length + ' scheduled';
+
+      // March
+      const marChecks = document.querySelectorAll('[data-id^="mar-"]');
+      const marComplete = document.querySelectorAll('[data-id^="mar-"]:checked').length;
+      const marProgress = document.getElementById('mar-progress');
+      if (marProgress) marProgress.textContent = marComplete + ' of ' + marChecks.length + ' scheduled';
+    }
+
     // Load saved progress on page load
     loadProgress();
+    loadCalendarProgress();
 
     // Notification System
     function checkNotification() {
