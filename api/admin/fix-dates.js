@@ -1,7 +1,8 @@
 const { Client } = require('pg');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
+  // Allow both GET and POST for easy browser access
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -43,3 +44,8 @@ module.exports = async (req, res) => {
     await client.end();
   }
 };
+```
+
+Then commit, push, wait for deployment, and visit:
+```
+https://tmacmastermind.com/api/admin/fix-dates
