@@ -19,8 +19,14 @@ module.exports = async (req, res) => {
 
     await client.connect();
 
+    // FIXED: When publishing, set scheduled_for to NOW if it's null
+    // This preserves the date for display purposes
     await client.query(
-      'UPDATE blog_posts SET published = $1, updated_at = NOW() WHERE id = $2',
+      `UPDATE blog_posts 
+       SET published = $1, 
+           scheduled_for = COALESCE(scheduled_for, NOW()),
+           updated_at = NOW() 
+       WHERE id = $2`,
       [published, id]
     );
 
