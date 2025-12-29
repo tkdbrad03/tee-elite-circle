@@ -13,8 +13,9 @@ module.exports = async (req, res) => {
   try {
     await client.connect();
 
+    // Use scheduled_for for ordering (with fallback to created_at)
     const result = await client.query(
-      'SELECT * FROM blog_posts ORDER BY created_at DESC'
+      'SELECT * FROM blog_posts ORDER BY COALESCE(scheduled_for, created_at) DESC'
     );
 
     return res.status(200).json(result.rows);
