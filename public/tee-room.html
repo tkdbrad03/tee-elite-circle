@@ -1062,7 +1062,6 @@
           briefSection.innerHTML = `
             <div class="todays-brief-card" onclick="openBlogModal(${briefIndex})">
               <p class="todays-brief-label">Today's Brief</p>
-              <p class="todays-brief-date">${new Date(latestBrief.scheduled_for || latestBrief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
               <h2 class="todays-brief-title">${latestBrief.title}</h2>
               ${latestBrief.excerpt ? `<p class="todays-brief-excerpt">${latestBrief.excerpt}</p>` : ''}
               <span class="todays-brief-link">Read Today's Brief <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
