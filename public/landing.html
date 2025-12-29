@@ -2102,7 +2102,7 @@
       if (!post) return;
       
       document.getElementById('blog-modal-title').textContent = post.title;
-      document.getElementById('blog-modal-date').textContent = new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('blog-modal-date').style.display = 'none';      
       document.getElementById('blog-modal-content').innerHTML = post.content || post.excerpt || 'No content available.';
       
       const imageEl = document.getElementById('blog-modal-image');
