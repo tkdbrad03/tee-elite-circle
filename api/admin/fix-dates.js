@@ -1,7 +1,6 @@
 const { Client } = require('pg');
 
 module.exports = async (req, res) => {
-  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   
@@ -19,13 +18,13 @@ module.exports = async (req, res) => {
 
     await client.connect();
 
-    // Update December 25-29 posts with their correct scheduled dates
+    // Update with Eastern Time zone timestamps
     const queries = [
-      `UPDATE blog_posts SET scheduled_for = '2025-12-25 06:00:00' WHERE title LIKE '%December 25, 2025%'`,
-      `UPDATE blog_posts SET scheduled_for = '2025-12-26 06:00:00' WHERE title LIKE '%December 26, 2025%'`,
-      `UPDATE blog_posts SET scheduled_for = '2025-12-27 06:00:00' WHERE title LIKE '%December 27, 2025%'`,
-      `UPDATE blog_posts SET scheduled_for = '2025-12-28 06:00:00' WHERE title LIKE '%December 28, 2025%'`,
-      `UPDATE blog_posts SET scheduled_for = '2025-12-29 06:00:00' WHERE title LIKE '%December 29, 2025%'`
+      `UPDATE blog_posts SET scheduled_for = '2025-12-25 11:00:00+00' WHERE title LIKE '%December 25, 2025%'`,
+      `UPDATE blog_posts SET scheduled_for = '2025-12-26 11:00:00+00' WHERE title LIKE '%December 26, 2025%'`,
+      `UPDATE blog_posts SET scheduled_for = '2025-12-27 11:00:00+00' WHERE title LIKE '%December 27, 2025%'`,
+      `UPDATE blog_posts SET scheduled_for = '2025-12-28 11:00:00+00' WHERE title LIKE '%December 28, 2025%'`,
+      `UPDATE blog_posts SET scheduled_for = '2025-12-29 11:00:00+00' WHERE title LIKE '%December 29, 2025%'`
     ];
 
     let totalUpdated = 0;
@@ -37,7 +36,7 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({ 
       success: true, 
-      message: `Successfully updated ${totalUpdated} posts`,
+      message: `Successfully updated ${totalUpdated} posts with EST timezone`,
       updated: totalUpdated
     });
 
@@ -45,8 +44,7 @@ module.exports = async (req, res) => {
     console.error('Fix dates error:', error);
     return res.status(500).json({ 
       error: 'Database error',
-      message: error.message,
-      details: error.toString()
+      message: error.message
     });
   } finally {
     if (client) {
