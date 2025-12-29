@@ -2053,9 +2053,9 @@
             const briefIndex = posts.findIndex(p => p.id === latestBrief.id);
             
             briefSection.innerHTML = `
-              <div class="todays-brief-preview-card" onclick="openBlogModal(${briefIndex})">
-                <p class="todays-brief-preview-label">Today's Brief</p>
-                <h3 class="todays-brief-preview-title">${latestBrief.title}</h3>
+  <div class="todays-brief-preview-card" onclick="openBlogModal(${briefIndex})">
+    <p class="todays-brief-preview-label">Today's Brief</p>
+    <h3 class="todays-brief-preview-title">${latestBrief.title}</h3>
                 ${latestBrief.excerpt ? `<p class="todays-brief-preview-excerpt">${latestBrief.excerpt}</p>` : ''}
                 <span class="todays-brief-preview-link">Read Today's Brief <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
               </div>
