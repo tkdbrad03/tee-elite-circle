@@ -14,25 +14,31 @@ module.exports = async (req, res) => {
     await client.connect();
 
     // Auto-publish any scheduled posts whose time has come
+    // IMPORTANT: Keep scheduled_for date for display purposes
     await client.query(
       `UPDATE blog_posts 
-       SET published = true, scheduled_for = NULL 
+       SET published = true
        WHERE published = false 
        AND scheduled_for IS NOT NULL 
        AND scheduled_for <= NOW()`
     );
 
-    // Get published blog posts - public access, no auth required
-    // Try to order by is_pinned first, fall back if column doesn't exist
+    // Get published blog posts - use scheduled_for for ordering
     let result;
     try {
       result = await client.query(
-        'SELECT id, title, excerpt, content, image_url, video_url, is_pinned, created_at FROM blog_posts WHERE published = true ORDER BY is_pinned DESC NULLS LAST, created_at DESC'
+        `SELECT id, title, excerpt, content, image_url, video_url, is_pinned, created_at, scheduled_for
+         FROM blog_posts 
+         WHERE published = true 
+         ORDER BY is_pinned DESC NULLS LAST, COALESCE(scheduled_for, created_at) DESC`
       );
     } catch (columnError) {
       // Fallback if is_pinned column doesn't exist yet
       result = await client.query(
-        'SELECT id, title, excerpt, content, image_url, video_url, created_at FROM blog_posts WHERE published = true ORDER BY created_at DESC'
+        `SELECT id, title, excerpt, content, image_url, video_url, created_at, scheduled_for
+         FROM blog_posts 
+         WHERE published = true 
+         ORDER BY COALESCE(scheduled_for, created_at) DESC`
       );
     }
 
