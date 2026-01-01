@@ -336,6 +336,8 @@
     .action-btn.primary { background: var(--deep-forest); color: #fff; }
     .action-btn.secondary { background: var(--tmac-blush); color: var(--charcoal); }
     .action-btn.danger { background: #fde8e8; color: #c0392b; }
+    .action-btn.delete { background: #dc3545; color: #fff; }
+    .action-btn.delete:hover { background: #c82333; }
 
     /* Content Section Styles */
     .content-section {
@@ -1474,6 +1476,7 @@
           <td>
             <button class="action-btn secondary" onclick="viewApplication(${app.id})">View</button>
             ${!app.paid_in_full ? `<button class="action-btn primary" onclick="markPaidInFull(${app.id})">Mark Paid</button>` : ''}
+            <button class="action-btn delete" onclick="deleteMember(${app.id}, '${app.full_name}')">Delete</button>
           </td>
         </tr>
       `).join('');
@@ -1613,6 +1616,29 @@
           alert('Error: ' + err.error);
         }
       } catch (err) { console.error('Error:', err); }
+    }
+
+    async function deleteMember(id, name) {
+      if (!confirm(`⚠️ DELETE ${name}?\n\nThis will permanently delete:\n• Their member account\n• Their application data\n• This CANNOT be undone\n\nAre you absolutely sure?`)) return;
+      
+      try {
+        const res = await fetch(`/api/admin/delete-member?id=${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (res.ok) {
+          alert('✓ Member deleted successfully');
+          loadApplications();
+          closeModal();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) {
+        console.error('Delete error:', err);
+        alert('Error deleting member. Please try again.');
+      }
     }
 
     document.getElementById('detail-modal').addEventListener('click', (e) => {
