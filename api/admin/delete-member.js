@@ -1,33 +1,49 @@
-import { getDb } from '../lib/db.js';
+const { Client } = require('pg');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== 'DELETE' && req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Admin check would go here - for now allowing all authenticated requests
   const memberId = req.query.id || req.body?.id;
 
   if (!memberId) {
     return res.status(400).json({ error: 'Member ID required' });
   }
 
+  const client = new Client({
+    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+
   try {
-    const db = await getDb();
+    await client.connect();
 
-    // Delete the member
-    const result = await db.run('DELETE FROM members WHERE id = ?', [memberId]);
+    // Delete from members table
+    const memberResult = await client.query(
+      'DELETE FROM members WHERE id = $1',
+      [memberId]
+    );
 
-    if (result.changes === 0) {
+    // Delete from applications table (if exists)
+    await client.query(
+      'DELETE FROM applications WHERE id = $1',
+      [memberId]
+    );
+
+    if (memberResult.rowCount === 0) {
       return res.status(404).json({ error: 'Member not found' });
     }
 
-    res.json({
+    return res.status(200).json({
       success: true,
       message: 'Member deleted successfully'
     });
-  } catch (err) {
-    console.error('Delete member error:', err);
-    res.status(500).json({ error: 'Failed to delete member' });
+
+  } catch (error) {
+    console.error('Delete member error:', error);
+    return res.status(500).json({ error: 'Failed to delete member: ' + error.message });
+  } finally {
+    await client.end();
   }
-}
+};
