@@ -1529,6 +1529,7 @@
       `;
 
       document.getElementById('modal-actions').innerHTML = `
+        ${app.pin_number ? `<button class="action-btn secondary" onclick="editPin(${app.id}, ${app.pin_number})">Edit Pin</button>` : ''}
         ${!app.deposit_paid ? `<button class="action-btn secondary" onclick="markDepositPaid(${app.id})">Mark Deposit Paid</button>` : ''}
         ${!app.paid_in_full ? `<button class="action-btn primary" onclick="markPaidInFull(${app.id})">Mark Paid in Full</button>` : `<span style="color: #27ae60; font-weight: 500;">✓ Active Member</span>`}
       `;
@@ -1638,6 +1639,42 @@
       } catch (err) {
         console.error('Delete error:', err);
         alert('Error deleting member. Please try again.');
+      }
+    }
+
+    async function editPin(memberId, currentPin) {
+      const newPin = prompt(`Change Pin Number\n\nCurrent Pin: #${String(currentPin).padStart(2, '0')}\n\nEnter new pin number (1-12):`, currentPin);
+      
+      if (!newPin || newPin === String(currentPin)) return;
+      
+      const pinNumber = parseInt(newPin);
+      
+      if (isNaN(pinNumber) || pinNumber < 1 || pinNumber > 12) {
+        alert('Please enter a valid pin number between 1 and 12');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/admin/update-pin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            member_id: memberId, 
+            new_pin: pinNumber 
+          })
+        });
+        
+        if (res.ok) {
+          alert(`✓ Pin updated to #${String(pinNumber).padStart(2, '0')}`);
+          loadApplications();
+          closeModal();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) {
+        console.error('Update pin error:', err);
+        alert('Error updating pin. Please try again.');
       }
     }
 
