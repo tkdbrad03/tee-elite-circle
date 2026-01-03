@@ -84,7 +84,7 @@
 
     /* Circle Logo */
     .splash-logo {
-      width: 320px;
+      width: 280px;
       height: auto;
       max-width: 80vw;
       filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.4));
@@ -93,7 +93,7 @@
     /* Buttons */
     .splash-buttons {
       position: absolute;
-      bottom: 60px;
+      bottom: 80px;
       left: 0;
       right: 0;
       display: flex;
@@ -120,26 +120,28 @@
     }
 
     .splash-btn.primary {
-      background: #e8ccc8;
-      color: #2d3b2d;
+      background: rgba(45, 59, 45, 0.95);
+      color: #e8ccc8;
+      border: 1px solid rgba(232, 204, 200, 0.3);
       font-weight: 600;
     }
 
     .splash-btn.primary:hover {
-      background: #fff;
+      background: #2d3b2d;
+      border-color: #e8ccc8;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(232, 204, 200, 0.4);
+      box-shadow: 0 8px 24px rgba(45, 59, 45, 0.4);
     }
 
     .splash-btn.secondary {
-      background: rgba(45, 59, 45, 0.9);
-      color: #e8ccc8;
-      border: 1px solid rgba(232, 204, 200, 0.3);
+      background: #e8ccc8;
+      color: #2d3b2d;
     }
 
     .splash-btn.secondary:hover {
-      background: #2d3b2d;
-      border-color: #e8ccc8;
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(232, 204, 200, 0.4);
     }
 
     /* Animations */
@@ -173,13 +175,13 @@
     /* Responsive */
     @media (max-width: 480px) {
       .splash-logo {
-        width: 280px;
+        width: 245px;
       }
 
       .splash-buttons {
         flex-direction: column;
         align-items: center;
-        bottom: 50px;
+        bottom: 70px;
         gap: 12px;
       }
 
@@ -190,20 +192,20 @@
 
     @media (min-width: 768px) {
       .splash-logo {
-        width: 380px;
+        width: 335px;
       }
     }
 
     @media (min-width: 1200px) {
       .splash-logo {
-        width: 420px;
+        width: 370px;
       }
     }
 
     /* Safe area for notched phones */
     @supports (padding-bottom: env(safe-area-inset-bottom)) {
       .splash-buttons {
-        bottom: calc(50px + env(safe-area-inset-bottom));
+        bottom: calc(70px + env(safe-area-inset-bottom));
       }
     }
   </style>
