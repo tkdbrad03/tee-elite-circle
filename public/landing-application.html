@@ -4,10 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Tee Elite Circle — Application</title>
+    <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a2e1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tee Elite">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --tmac-blush: #e8ccc8;
+            --deep-forest: #1a2f23;
+            --soft-cream: #FAF8F5;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -20,7 +34,7 @@
 
         body {
             font-family: 'Cormorant Garamond', serif;
-            background: #1a3a2e;
+            background: var(--deep-forest);
             color: #f5f1e8;
             overflow-x: hidden;
         }
@@ -41,7 +55,7 @@
         }
 
         .nav-logo {
-            height: 60px;
+            height: 50px;
             width: auto;
         }
 
@@ -72,7 +86,7 @@
         /* Application Section */
         .application-section {
             padding: 5rem 2rem;
-            min-height: calc(100vh - 116px);
+            min-height: calc(100vh - 106px);
         }
 
         .application-container {
@@ -129,12 +143,22 @@
             transition: all 0.3s ease;
         }
 
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: rgba(245, 241, 232, 0.4);
+        }
+
         .form-input:focus,
         .form-select:focus,
         .form-textarea:focus {
             outline: none;
             border-color: rgba(245, 241, 232, 0.4);
             background: rgba(245, 241, 232, 0.08);
+        }
+
+        .form-select option {
+            background: var(--deep-forest);
+            color: #f5f1e8;
         }
 
         .form-textarea {
@@ -161,6 +185,7 @@
             width: 18px;
             height: 18px;
             cursor: pointer;
+            accent-color: var(--tmac-blush);
         }
 
         .form-submit {
@@ -168,7 +193,7 @@
             padding: 1.1rem;
             background: #f5f1e8;
             border: none;
-            color: #1a3a2e;
+            color: var(--deep-forest);
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.1rem;
             letter-spacing: 0.1em;
@@ -179,7 +204,7 @@
         }
 
         .form-submit:hover {
-            background: #e8ccc8;
+            background: var(--tmac-blush);
         }
 
         .form-submit:disabled {
@@ -195,6 +220,7 @@
             color: #ff6b6b;
             margin-top: 1rem;
             font-size: 0.9rem;
+            border-radius: 4px;
         }
 
         .form-error.visible {
@@ -239,7 +265,7 @@
             }
 
             .nav-logo {
-                height: 50px;
+                height: 40px;
             }
 
             .application-section {
@@ -259,10 +285,10 @@
     <!-- Navigation -->
     <nav class="hero-nav">
         <div class="logo-area">
-            <img src="/images/tmac-tee-elite-header.png" alt="TMac Inspired presents The Tee Elite Circle" class="nav-logo">
+            <img src="/images/tmac-logo.png" alt="TMac Inspired" class="nav-logo">
         </div>
         <div class="nav-links">
-            <a href="/login" class="nav-cta">Member Login</a>
+            <a href="/member-login.html" class="nav-cta">Member Login</a>
         </div>
     </nav>
 
@@ -287,67 +313,68 @@
 
                 <div class="form-group">
                     <label class="form-label">Phone</label>
-                    <input type="tel" name="phone" class="form-input">
+                    <input type="tel" name="phone" class="form-input" placeholder="For private invitations">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Location (City, State) *</label>
-                    <input type="text" name="location" class="form-input" required>
+                    <input type="text" name="location" class="form-input" required placeholder="City, State">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Your Relationship with Golf *</label>
                     <div class="radio-group">
                         <label class="radio-label">
-                            <input type="radio" name="golfStatus" value="play_regularly" required>
-                            <span>I play regularly</span>
+                            <input type="radio" name="golfStatus" value="New to golf" required>
+                            <span>New to golf</span>
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="golfStatus" value="learning">
-                            <span>I'm learning</span>
+                            <input type="radio" name="golfStatus" value="Returning to the game">
+                            <span>Returning to the game</span>
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="golfStatus" value="ready_to_start">
-                            <span>I'm ready to start</span>
+                            <input type="radio" name="golfStatus" value="Active golfer">
+                            <span>Active golfer</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Season of Life *</label>
+                    <label class="form-label">What Season of Life Are You In? *</label>
                     <select name="ageRange" class="form-select" required>
-                        <option value="">Select...</option>
-                        <option value="30s">30s</option>
-                        <option value="40s">40s</option>
-                        <option value="50s">50s</option>
-                        <option value="60s">60s</option>
+                        <option value="">Select one</option>
+                        <option value="Under 35">Under 35</option>
+                        <option value="35-39">35–39</option>
+                        <option value="40-49">40–49</option>
+                        <option value="50-59">50–59</option>
+                        <option value="60-69">60–69</option>
                         <option value="70+">70+</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">What draws you to The Tee Elite Circle? *</label>
-                    <textarea name="drawnToCircle" class="form-textarea" required></textarea>
+                    <label class="form-label">What Draws You to The Tee Elite Circle? *</label>
+                    <textarea name="drawnToCircle" class="form-textarea" required placeholder="Tell us what resonated with you about this invitation..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">What do you want to elevate in the next 12 months? *</label>
-                    <textarea name="elevateNext" class="form-textarea" required></textarea>
+                    <label class="form-label">What Are You Most Ready to Elevate? *</label>
+                    <textarea name="elevateNext" class="form-textarea" required placeholder="Wealth, lifestyle, business, confidence, connections, golf mastery..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Interest Level *</label>
+                    <label class="form-label">Your Level of Interest *</label>
                     <select name="interestLevel" class="form-select" required>
-                        <option value="">Select...</option>
-                        <option value="exploring">Exploring</option>
-                        <option value="serious">Serious</option>
-                        <option value="ready_now">Ready Now</option>
+                        <option value="">Select one</option>
+                        <option value="Curious — send me more details">Curious — send me more details</option>
+                        <option value="Likely to join if dates and location align">Likely to join if dates and location align</option>
+                        <option value="Ready to secure my founding seat">Ready to secure my founding seat</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Anything Else We Should Know?</label>
-                    <textarea name="notes" class="form-textarea"></textarea>
+                    <textarea name="notes" class="form-textarea" placeholder="Optional: Share anything that would help us understand if this is the right fit..."></textarea>
                 </div>
 
                 <button type="submit" class="form-submit">Submit Application</button>
