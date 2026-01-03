@@ -3,11 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Tee Elite Circle — Visual Story</title>
+    <title>The Tee Elite Circle</title>
+    <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a2e1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tee Elite">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --tmac-blush: #e8ccc8;
+            --deep-forest: #1a2f23;
+            --soft-cream: #FAF8F5;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -20,8 +34,8 @@
 
         body {
             font-family: 'Cormorant Garamond', serif;
-            background: #f5f1e8;
-            color: #1a3a2e;
+            background: var(--soft-cream);
+            color: var(--deep-forest);
             overflow-x: hidden;
         }
 
@@ -31,7 +45,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 28px 48px;
-            background: #1a3a2e;
+            background: var(--deep-forest);
         }
 
         .logo-area {
@@ -41,7 +55,7 @@
         }
 
         .nav-logo {
-            height: 60px;
+            height: 50px;
             width: auto;
         }
 
@@ -72,7 +86,7 @@
         /* Visual Section */
         .visual-section {
             padding: 4rem 2rem;
-            min-height: calc(100vh - 116px);
+            min-height: calc(100vh - 106px);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -115,9 +129,9 @@
         .continue-btn {
             display: inline-block;
             padding: 1rem 3.5rem;
-            border: 1.5px solid #1a3a2e;
+            border: 1.5px solid var(--deep-forest);
             background: transparent;
-            color: #1a3a2e;
+            color: var(--deep-forest);
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.1rem;
             letter-spacing: 0.1em;
@@ -130,8 +144,8 @@
         }
 
         .continue-btn:hover {
-            background: #1a3a2e;
-            color: #f5f1e8;
+            background: var(--deep-forest);
+            color: var(--soft-cream);
         }
 
         /* Mobile Adjustments */
@@ -141,7 +155,7 @@
             }
 
             .nav-logo {
-                height: 50px;
+                height: 40px;
             }
 
             .image-grid {
@@ -171,24 +185,24 @@
     <!-- Navigation -->
     <nav class="hero-nav">
         <div class="logo-area">
-            <img src="/images/tmac-tee-elite-header.png" alt="TMac Inspired presents The Tee Elite Circle" class="nav-logo">
+            <img src="/images/tmac-logo.png" alt="TMac Inspired" class="nav-logo">
         </div>
         <div class="nav-links">
-            <a href="/login" class="nav-cta">Member Login</a>
+            <a href="/member-login.html" class="nav-cta">Member Login</a>
         </div>
     </nav>
 
     <!-- Visual Section -->
     <section class="visual-section">
         <div class="image-grid">
-            <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=800&q=80" alt="Golf course at golden hour">
-            <img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=800&q=80" alt="Pristine golf course">
-            <img src="https://images.unsplash.com/photo-1593111774240-d529f12d0e67?w=1200&q=80" alt="Golf scorecard and accessories">
+            <img src="/images/tee-elite-circle.png" alt="The Tee Elite Circle">
+            <img src="/images/the-long-game.png" alt="The long game">
+            <img src="/images/gold-golf-ball.png" alt="Gold golf ball">
         </div>
 
         <div class="closing-statement">
             <p>This is Not About Golf. This is About Who Belongs.</p>
-            <a href="application.html" class="continue-btn">Continue to Application</a>
+            <a href="/landing-application.html" class="continue-btn">Continue to Application</a>
         </div>
     </section>
 </body>
