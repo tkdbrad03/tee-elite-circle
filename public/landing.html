@@ -3,25 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Tee Elite Circle</title>
-    <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
-    <!-- PWA Meta Tags -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#1a2e1a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Tee Elite">
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <title>The Tee Elite Circle — A Private Society</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --tmac-blush: #e8ccc8;
-            --deep-forest: #1a2f23;
-            --soft-cream: #FAF8F5;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -34,8 +20,7 @@
 
         body {
             font-family: 'Cormorant Garamond', serif;
-            background: var(--soft-cream);
-            color: var(--deep-forest);
+            color: #f5f1e8;
             overflow-x: hidden;
         }
 
@@ -45,7 +30,11 @@
             justify-content: space-between;
             align-items: center;
             padding: 28px 48px;
-            background: var(--deep-forest);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
         }
 
         .logo-area {
@@ -55,7 +44,7 @@
         }
 
         .nav-logo {
-            height: 50px;
+            height: 60px;
             width: auto;
         }
 
@@ -83,55 +72,81 @@
             color: #e8ccc8;
         }
 
-        /* Visual Section */
-        .visual-section {
-            padding: 4rem 2rem;
-            min-height: calc(100vh - 106px);
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a3a2e 0%, #2d5a45 100%);
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
-        }
-
-        .image-grid {
-            max-width: 1200px;
-            margin: 0 auto 4rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .image-grid img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .image-grid img:last-child {
-            grid-column: 1 / -1;
-            height: 350px;
-        }
-
-        .closing-statement {
             text-align: center;
             padding: 2rem;
+            position: relative;
         }
 
-        .closing-statement p {
-            font-size: clamp(1.3rem, 3vw, 1.8rem);
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin-top: 60px;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 300;
-            font-style: italic;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
         }
 
-        .continue-btn {
+        .lifestyle {
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .hero-subtext {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-weight: 300;
+            margin: 2rem 0 3rem;
+            letter-spacing: 0.01em;
+            opacity: 0.95;
+        }
+
+        .tagline {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-style: italic;
+            margin: 2rem 0 3rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .founding-notice {
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin: 2rem 0;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .enter-btn {
             display: inline-block;
             padding: 1rem 3.5rem;
-            border: 1.5px solid var(--deep-forest);
+            border: 1.5px solid #f5f1e8;
             background: transparent;
-            color: var(--deep-forest);
+            color: #f5f1e8;
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.1rem;
             letter-spacing: 0.1em;
@@ -143,9 +158,9 @@
             margin-top: 1rem;
         }
 
-        .continue-btn:hover {
-            background: var(--deep-forest);
-            color: var(--soft-cream);
+        .enter-btn:hover {
+            background: #f5f1e8;
+            color: #1a3a2e;
         }
 
         /* Mobile Adjustments */
@@ -155,25 +170,24 @@
             }
 
             .nav-logo {
-                height: 40px;
+                height: 50px;
             }
 
-            .image-grid {
-                grid-template-columns: 1fr;
+            .hero {
+                padding: 1.5rem;
             }
 
-            .image-grid img:last-child {
-                grid-column: 1;
-                height: 300px;
-            }
-
-            .continue-btn {
+            .enter-btn {
                 padding: 0.9rem 2.5rem;
                 font-size: 1rem;
             }
         }
 
         @media (max-width: 480px) {
+            .founding-notice {
+                letter-spacing: 0.1em;
+            }
+
             .nav-cta {
                 font-size: 10px;
                 padding: 10px 18px;
@@ -185,24 +199,28 @@
     <!-- Navigation -->
     <nav class="hero-nav">
         <div class="logo-area">
-            <img src="/images/tmac-logo.png" alt="TMac Inspired" class="nav-logo">
+            <img src="/images/tmac-tee-elite-header.png" alt="TMac Inspired presents The Tee Elite Circle" class="nav-logo">
         </div>
         <div class="nav-links">
-            <a href="/member-login.html" class="nav-cta">Member Login</a>
+            <a href="/login" class="nav-cta">Member Login</a>
         </div>
     </nav>
 
-    <!-- Visual Section -->
-    <section class="visual-section">
-        <div class="image-grid">
-            <img src="/images/tee-elite-circle.png" alt="The Tee Elite Circle">
-            <img src="/images/the-long-game.png" alt="The long game">
-            <img src="/images/gold-golf-ball.png" alt="Gold golf ball">
-        </div>
-
-        <div class="closing-statement">
-            <p>This is Not About Golf. This is About Who Belongs.</p>
-            <a href="/landing-application.html" class="continue-btn">Continue to Application</a>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                Not a league.<br>
+                A <span class="lifestyle">lifestyle.</span>
+            </h1>
+            
+            <p class="hero-subtext">You've already built. Now, you play.</p>
+            
+            <p class="tagline">Among women who've already built. Now, you play.</p>
+            
+            <p class="founding-notice">Founding Circle ~ 4 seated</p>
+            
+            <a href="bridge.html" class="enter-btn">Enter</a>
         </div>
     </section>
 </body>
