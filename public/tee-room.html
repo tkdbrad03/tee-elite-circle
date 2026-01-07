@@ -629,6 +629,26 @@
       border: none;
     }
 
+    .blog-modal-video video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Custom video player styling */
+    .blog-modal-video video::-webkit-media-controls-panel {
+      background: linear-gradient(to top, rgba(26, 47, 35, 0.9), transparent);
+    }
+
+    .blog-modal-video video::-webkit-media-controls-play-button,
+    .blog-modal-video video::-webkit-media-controls-current-time-display,
+    .blog-modal-video video::-webkit-media-controls-time-remaining-display {
+      color: #fff;
+    }
+
     .blog-modal-body {
       padding: 32px;
     }
@@ -1030,10 +1050,12 @@
         window.blogPosts = posts;
         
         // Separate content types
-        const briefs = posts.filter(p => !p.image_url && !p.video_url);
+        // Briefs = no featured image (but can have video)
+        // Feature Posts = has featured image (image-first content)
+        const briefs = posts.filter(p => !p.image_url);
         const pinnedBriefs = briefs.filter(p => p.is_pinned);
         const unpinnedBriefs = briefs.filter(p => !p.is_pinned);
-        const featurePosts = posts.filter(p => p.image_url || p.video_url);
+        const featurePosts = posts.filter(p => p.image_url);
         
         // Render Pinned Section (pinned briefs like Welcome post)
         const pinnedSection = document.getElementById('pinned-section');
@@ -1129,6 +1151,11 @@
       return null;
     }
 
+    function isUploadedVideo(url) {
+      // Check if it's a blob storage URL (uploaded video) vs embed URL (YouTube/Vimeo)
+      return url && (url.includes('vercel-storage') || url.includes('blob.vercel-app') || url.endsWith('.mp4') || url.endsWith('.mov') || url.endsWith('.webm'));
+    }
+
     function openBlogModal(index) {
       const post = window.blogPosts[index];
       if (!post) return;
@@ -1141,9 +1168,22 @@
       const videoEl = document.getElementById('blog-modal-video');
       
       // Check for video first
-      const embedUrl = getVideoEmbedUrl(post.video_url);
-      if (embedUrl) {
-        videoEl.innerHTML = `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      if (post.video_url) {
+        if (isUploadedVideo(post.video_url)) {
+          // Uploaded video - use HTML5 video tag
+          videoEl.innerHTML = `
+            <video controls style="width: 100%; border-radius: 4px; background: #000;">
+              <source src="${post.video_url}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          `;
+        } else {
+          // Embedded video (YouTube/Vimeo) - use iframe
+          const embedUrl = getVideoEmbedUrl(post.video_url);
+          if (embedUrl) {
+            videoEl.innerHTML = `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+          }
+        }
         videoEl.style.display = 'block';
         imageEl.style.display = 'none';
       } else if (post.image_url) {
