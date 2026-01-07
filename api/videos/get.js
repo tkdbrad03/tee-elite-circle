@@ -1,5 +1,7 @@
-// API endpoint: /api/videos/get
-// Retrieves video data by ID or post slug
+export const config = {
+  runtime: 'nodejs',
+};
+
 
 const { query } = require('../lib/db');  // Change to this
 
