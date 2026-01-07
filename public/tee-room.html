@@ -405,6 +405,46 @@
       border-top: 1px solid #eee;
     }
 
+    .brief-archive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brief-archive-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: transparent;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: var(--deep-forest);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .brief-archive-toggle:hover {
+      background: #fafafa;
+      border-color: var(--deep-forest);
+    }
+
+    .brief-archive-toggle svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    #archive-count {
+      font-size: 11px;
+      color: #999;
+      font-weight: 400;
+    }
+
     .brief-archive-list {
       display: flex;
       flex-direction: column;
@@ -993,8 +1033,17 @@
 
     <!-- BRIEF ARCHIVE SECTION -->
     <section class="brief-archive-section" id="brief-archive-section" style="display: none;">
-      <p class="feature-section-label">Brief Archive</p>
-      <div class="brief-archive-list" id="brief-archive-list">
+      <div class="brief-archive-header">
+        <p class="feature-section-label" style="margin: 0;">Brief Archive</p>
+        <button class="brief-archive-toggle" id="brief-archive-toggle" onclick="toggleBriefArchive()">
+          <span id="archive-toggle-text">View Past Briefs</span>
+          <span id="archive-count"></span>
+          <svg id="archive-toggle-icon" viewBox="0 0 24 24" style="transform: rotate(0deg); transition: transform 0.3s ease;">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+      <div class="brief-archive-list" id="brief-archive-list" style="display: none; margin-top: 24px;">
         <!-- Loaded dynamically -->
       </div>
     </section>
@@ -1199,9 +1248,12 @@
         const archiveBriefs = unpinnedBriefs.slice(1); // Skip the first (latest) brief
         const archiveSection = document.getElementById('brief-archive-section');
         const archiveList = document.getElementById('brief-archive-list');
+        const archiveCount = document.getElementById('archive-count');
         
         if (archiveBriefs.length > 0) {
           archiveSection.style.display = 'block';
+          archiveCount.textContent = `(${archiveBriefs.length})`;
+          
           archiveList.innerHTML = archiveBriefs.map(brief => {
             const briefIndex = posts.findIndex(p => p.id === brief.id);
             const dateObj = new Date(brief.scheduled_for || brief.created_at);
@@ -1220,6 +1272,35 @@
         } else {
           archiveSection.style.display = 'none';
         }
+      } catch (err) {
+        console.error('Error loading blog posts:', err);
+        document.getElementById('pinned-section').innerHTML = '';
+        briefSection.innerHTML = '';
+        grid.innerHTML = `
+          <div class="blog-empty">
+            <p>Stories coming soon.</p>
+            <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+          </div>
+        `;
+      }
+    }
+
+    // Toggle Brief Archive
+    function toggleBriefArchive() {
+      const archiveList = document.getElementById('brief-archive-list');
+      const toggleText = document.getElementById('archive-toggle-text');
+      const toggleIcon = document.getElementById('archive-toggle-icon');
+      
+      if (archiveList.style.display === 'none') {
+        archiveList.style.display = 'flex';
+        toggleText.textContent = 'Hide Past Briefs';
+        toggleIcon.style.transform = 'rotate(180deg)';
+      } else {
+        archiveList.style.display = 'none';
+        toggleText.textContent = 'View Past Briefs';
+        toggleIcon.style.transform = 'rotate(0deg)';
+      }
+    }
       } catch (err) {
         console.error('Error loading blog posts:', err);
         document.getElementById('pinned-section').innerHTML = '';
