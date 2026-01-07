@@ -1156,6 +1156,13 @@
             </div>
             <div id="blog-message"></div>
             
+            <div style="margin-bottom: 20px;">
+              <button type="button" class="btn btn-secondary" onclick="loadBriefTemplate()" style="font-size: 12px; padding: 8px 16px;">
+                📋 Load Brief Template
+              </button>
+              <span style="margin-left: 12px; font-size: 11px; color: #888;">Auto-fills title format, excerpt, and first liner</span>
+            </div>
+            
             <form id="blog-form">
               <div class="form-group">
                 <label>Title *</label>
@@ -2156,6 +2163,37 @@
         console.error('Fix error:', err);
         messageEl.innerHTML = '<div class="message error">Failed to fix database</div>';
       }
+    }
+
+    // Load Brief Template
+    function loadBriefTemplate() {
+      // Get current date for title
+      const today = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = today.toLocaleDateString('en-US', options);
+      
+      // Set title
+      document.getElementById('blog-title').value = `TMac Morning Brief | ${dateStr}`;
+      
+      // Set excerpt
+      document.getElementById('blog-excerpt').value = 'Daily permission for women ready to stop negotiating with the life they want.';
+      
+      // Set first liner in Quill editor
+      if (quill) {
+        quill.setText('You already know what to do.\n\n');
+        // Move cursor to end
+        quill.setSelection(quill.getLength());
+      }
+      
+      // Show success message
+      const messageEl = document.getElementById('blog-message');
+      messageEl.innerHTML = '<div class="message success">✓ Brief template loaded! Add your content below the first liner.</div>';
+      setTimeout(() => {
+        messageEl.innerHTML = '';
+      }, 3000);
+      
+      // Scroll to title field
+      document.getElementById('blog-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     // Clinics
