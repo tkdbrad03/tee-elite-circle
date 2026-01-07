@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/videos/upload.js": {
+    "api/videos/upload.node.js": {
       "maxDuration": 60,
       "memory": 1024
     },
