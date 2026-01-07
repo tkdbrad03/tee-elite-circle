@@ -36,9 +36,17 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'No query parameters provided' });
     }
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Video not found' });
-    }
+    if (all === 'true') {
+  return res.status(200).json({
+    success: true,
+    videos: result.rows, // empty array is OK
+  });
+}
+
+if (result.rows.length === 0) {
+  return res.status(404).json({ error: 'Video not found' });
+}
+
 
     return res.status(200).json({
       success: true,
