@@ -883,19 +883,6 @@
       const file = e.target.files[0];
       if (!file) return;
       
-      // Check file size - Vercel Blob Pro allows larger files
-      const sizeMB = file.size / (1024 * 1024);
-      if (sizeMB > 50) {
-        alert(`Video is ${sizeMB.toFixed(1)}MB. Please use a video under 50MB.`);
-        return;
-      }
-      
-      // Warn for larger files
-      if (sizeMB > 10) {
-        const proceed = confirm(`Video is ${sizeMB.toFixed(1)}MB. Large files may take a while to upload. Continue?`);
-        if (!proceed) return;
-      }
-      
       await handleMediaUpload(file, 'video');
     });
 
@@ -905,12 +892,6 @@
       if (!file) return;
       
       // Check file size
-      const sizeMB = file.size / (1024 * 1024);
-      if (sizeMB > 50) {
-        alert(`Video is ${sizeMB.toFixed(1)}MB. Please record a shorter video (under 50MB).`);
-        return;
-      }
-      
       await handleMediaUpload(file, 'video');
     });
 
@@ -919,7 +900,15 @@
       const file = e.target.files[0];
       if (!file) return;
       
+      // Check file size (100MB limit)
+      if (file.size > 100 * 1024 * 1024) {
+        alert('Document must be under 100MB');
+        return;
+      }
       
+      await handleMediaUpload(file, 'document', file.name);
+    });
+
 async function handleMediaUpload(file, type, fileName = '') {
   const preview = document.getElementById('upload-preview');
   
