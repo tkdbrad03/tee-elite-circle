@@ -446,6 +446,7 @@
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchTab('workflow')">Monthly Workflow</button>
+      <button class="nav-tab" onclick="switchTab('tracker')">Upload Tracker</button>
       <button class="nav-tab" onclick="switchTab('canon')">Canon Reference</button>
       <button class="nav-tab" onclick="switchTab('themes')">Theme Bank</button>
       <button class="nav-tab" onclick="switchTab('links')">Quick Links</button>
@@ -470,7 +471,7 @@
             <div class="checklist-checkbox" onclick="toggleTask('task1')"></div>
             <div class="checklist-content">
               <div class="checklist-title">1. Identify 4 Weekly Themes</div>
-              <div class="checklist-desc">Choose one permission theme for each week of the month. Use Theme Bank for inspiration.</div>
+              <div class="checklist-desc">Choose one permission theme for each week of the month. Use Theme Bank for inspiration. <a href="https://drive.google.com/drive/folders/1v0GeXEGMrYJk4Hg68OHp3Ivx6gmJ94id?usp=sharing" target="_blank" style="color: #1a2f23; text-decoration: underline;">Open in Google Drive →</a></div>
             </div>
           </div>
 
@@ -478,7 +479,7 @@
             <div class="checklist-checkbox" onclick="toggleTask('task2')"></div>
             <div class="checklist-content">
               <div class="checklist-title">2. Write 4 Blog Posts</div>
-              <div class="checklist-desc">One blog post per weekly theme. Use Canon format. Include featured images. 600-1200 words each.</div>
+              <div class="checklist-desc">One blog post per weekly theme. Use Canon format. Include featured images. 600-1200 words each. <a href="https://drive.google.com/drive/folders/1v0GeXEGMrYJk4Hg68OHp3Ivx6gmJ94id?usp=sharing" target="_blank" style="color: #1a2f23; text-decoration: underline;">Open in Google Drive →</a></div>
             </div>
           </div>
 
@@ -486,7 +487,7 @@
             <div class="checklist-checkbox" onclick="toggleTask('task3')"></div>
             <div class="checklist-content">
               <div class="checklist-title">3. Record 4 Podcast Episodes</div>
-              <div class="checklist-desc">One episode per theme (same as blogs). 8-15 minutes each. Use standard opening/closing scripts.</div>
+              <div class="checklist-desc">One episode per theme (same as blogs). 8-15 minutes each. Use standard opening/closing scripts. <a href="https://my.captivate.fm/dashboard/podcast/79f2d016-e2fb-4e33-b9cb-403d6c45aa5b/episode" target="_blank" style="color: #1a2f23; text-decoration: underline;">Open in Captivate →</a></div>
             </div>
           </div>
 
@@ -518,7 +519,7 @@
             <div class="checklist-checkbox" onclick="toggleTask('task7')"></div>
             <div class="checklist-content">
               <div class="checklist-title">7. Upload Podcasts to Captivate</div>
-              <div class="checklist-desc">Upload all 4 episodes to Captivate. Mark 2 public, 2 members-only. Schedule releases.</div>
+              <div class="checklist-desc">Upload all 4 episodes to Captivate. Mark 2 public, 2 members-only. Schedule releases. <a href="https://my.captivate.fm/dashboard/podcast/79f2d016-e2fb-4e33-b9cb-403d6c45aa5b/episode" target="_blank" style="color: #1a2f23; text-decoration: underline;">Open in Captivate →</a></div>
             </div>
           </div>
 
@@ -535,7 +536,150 @@
       </div>
     </div>
 
-    <!-- Tab 2: Canon Reference -->
+    <!-- Tab 2: Upload Tracker -->
+    <div id="tracker" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">6-Week Content Upload Tracker</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 24px;">Track your progress uploading pre-written content to the Admin panel. 40 pieces total.</p>
+
+        <div style="background: #f9f9f9; padding: 20px; border-radius: 6px; margin-bottom: 24px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; text-align: center;">
+            <div>
+              <div style="font-size: 28px; font-weight: 500; color: var(--deep-forest);" id="uploadedCount">0</div>
+              <div style="font-size: 12px; color: #666;">Uploaded</div>
+            </div>
+            <div>
+              <div style="font-size: 28px; font-weight: 500; color: #888;">40</div>
+              <div style="font-size: 12px; color: #666;">Total Pieces</div>
+            </div>
+            <div>
+              <div style="font-size: 28px; font-weight: 500; color: var(--gold);" id="uploadPercentage">0%</div>
+              <div style="font-size: 12px; color: #666;">Complete</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 1 -->
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span>Week 1: Permission to Admit You've Outgrown It (9 pieces)</span>
+            <span class="collapsible-icon">▼</span>
+          </div>
+          <div class="collapsible-content">
+            <p style="font-size: 13px; color: #666; margin-bottom: 16px;"><strong>Theme:</strong> Discipline vs. Alignment | <strong>Dates:</strong> January 8-14, 2026</p>
+            
+            <div class="checklist-item" data-upload="week1-jan8">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-jan8')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 8 - Outgrown It</div>
+                <div class="checklist-desc">File: Jan-8-outgrown-it.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-jan9">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-jan9')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 9 - Procrastination</div>
+                <div class="checklist-desc">File: Jan-9-procrastination.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-jan10">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-jan10')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 10 - Self-Trust</div>
+                <div class="checklist-desc">File: Jan-10-self-trust.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-jan11">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-jan11')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 11 - Pride</div>
+                <div class="checklist-desc">File: Jan-11-pride.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-jan12">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-jan12')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 12 - Burnout</div>
+                <div class="checklist-desc">File: Jan-12-burnout.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-jan13">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-jan13')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 13 - Breakdown</div>
+                <div class="checklist-desc">File: Jan-13-breakdown.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-jan14">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-jan14')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 14 - Relief</div>
+                <div class="checklist-desc">File: Jan-14-relief.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-blog">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-blog')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 14 - Blog: You Don't Need to Be More Disciplined</div>
+                <div class="checklist-desc">File: week-1-discipline-vs-alignment.txt</div>
+              </div>
+            </div>
+
+            <div class="checklist-item" data-upload="week1-podcast">
+              <div class="checklist-checkbox" onclick="toggleUpload('week1-podcast')"></div>
+              <div class="checklist-content">
+                <div class="checklist-title">Jan 14 - Podcast: You Don't Need to Be More Disciplined</div>
+                <div class="checklist-desc">File: week-1-discipline-podcast.txt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 2-6 Collapsed (add similar structure) -->
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span>Week 2: Permission to Want More (9 pieces)</span>
+            <span class="collapsible-icon">▼</span>
+          </div>
+          <div class="collapsible-content">
+            <p style="font-size: 13px; color: #666; margin-bottom: 16px;"><strong>Theme:</strong> Desire as Information | <strong>Dates:</strong> January 15-21, 2026</p>
+            <p style="font-size: 13px; color: #888;">7 Daily Briefs + 1 Blog + 1 Podcast (files in week-2-briefs folder)</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span>Week 3-6: Remaining Content (22 pieces)</span>
+            <span class="collapsible-icon">▼</span>
+          </div>
+          <div class="collapsible-content">
+            <p style="font-size: 13px; color: #888;">Week 3: Charge & Receive | Week 4: Stop Explaining | Week 5: Rest Without Guilt | Week 6: Seen Without Performing</p>
+            <p style="font-size: 13px; color: #888; margin-top: 12px;">All files organized in content-extraction folder in Google Drive</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; padding: 20px; background: #f9f9f9; border-radius: 6px;">
+          <strong style="font-size: 14px; color: var(--deep-forest);">Upload Workflow:</strong>
+          <ol style="font-size: 13px; color: #666; margin-top: 12px; line-height: 1.8;">
+            <li>Open file from Google Drive</li>
+            <li>Go to Admin → Click "Load Brief Template"</li>
+            <li>Copy/paste content</li>
+            <li>Set schedule date (6:00 AM)</li>
+            <li>Click "Add Post"</li>
+            <li>Return here and check box</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Canon Reference -->
     <div id="canon" class="tab-content">
       <div class="card">
         <h2 class="card-title">The Rich Friends Canon</h2>
@@ -772,13 +916,8 @@
             <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
           </a>
 
-          <a href="https://app.captivate.fm/" class="quick-link" target="_blank">
+          <a href="https://my.captivate.fm/dashboard/podcast/79f2d016-e2fb-4e33-b9cb-403d6c45aa5b/episode" class="quick-link" target="_blank">
             <span>Captivate Podcasts</span>
-            <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
-
-          <a href="https://claude.ai" class="quick-link" target="_blank">
-            <span>Claude (Content Creation)</span>
             <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
           </a>
         </div>
@@ -820,6 +959,38 @@
       tasks[taskId] = !tasks[taskId];
       localStorage.setItem('permissionTasks', JSON.stringify(tasks));
       updateChecklist();
+    }
+
+    // Upload Tracker Management
+    function toggleUpload(uploadId) {
+      const uploads = JSON.parse(localStorage.getItem('uploadTracker') || '{}');
+      uploads[uploadId] = !uploads[uploadId];
+      localStorage.setItem('uploadTracker', JSON.stringify(uploads));
+      updateUploadTracker();
+    }
+
+    function updateUploadTracker() {
+      const uploads = JSON.parse(localStorage.getItem('uploadTracker') || '{}');
+      
+      document.querySelectorAll('[data-upload]').forEach(item => {
+        const uploadId = item.dataset.upload;
+        const checkbox = item.querySelector('.checklist-checkbox');
+        
+        if (uploads[uploadId]) {
+          checkbox.classList.add('checked');
+        } else {
+          checkbox.classList.remove('checked');
+        }
+      });
+
+      // Update count (total of 40 pieces)
+      const totalUploaded = Object.values(uploads).filter(Boolean).length;
+      const percentage = Math.round((totalUploaded / 40) * 100);
+
+      if (document.getElementById('uploadedCount')) {
+        document.getElementById('uploadedCount').textContent = totalUploaded;
+        document.getElementById('uploadPercentage').textContent = percentage + '%';
+      }
     }
 
     function updateChecklist() {
@@ -942,6 +1113,7 @@ You already know what to do.`
     // Initialize on load
     window.addEventListener('DOMContentLoaded', () => {
       updateChecklist();
+      updateUploadTracker();
       
       if (localStorage.getItem('installDismissed')) {
         document.getElementById('installPrompt').style.display = 'none';
