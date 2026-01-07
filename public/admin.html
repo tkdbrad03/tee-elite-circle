@@ -1148,7 +1148,12 @@
         <!-- Blog Posts Panel -->
         <div class="content-panel" id="blog-panel">
           <div class="content-section">
-            <h2>Add Blog Post</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h2 style="margin: 0;">Add Blog Post</h2>
+              <button type="button" class="btn btn-secondary" onclick="fixEmptyImageUrls()" style="font-size: 11px; padding: 10px 16px;">
+                Fix Database Issues
+              </button>
+            </div>
             <div id="blog-message"></div>
             
             <form id="blog-form">
@@ -1916,8 +1921,8 @@
         title: document.getElementById('blog-title').value,
         excerpt: document.getElementById('blog-excerpt').value,
         content: quill.root.innerHTML,
-        image_url: document.getElementById('blog-image').value,
-        video_url: document.getElementById('blog-video').value,
+        image_url: document.getElementById('blog-image').value || null,
+        video_url: document.getElementById('blog-video').value || null,
         published: isPublished,
         scheduled_for: (!isPublished && scheduledValue) ? new Date(scheduledValue).toISOString() : null
       };
@@ -2124,6 +2129,42 @@
         });
         if (res.ok) loadBlogPosts();
       } catch (err) { console.error('Error:', err); }
+    }
+
+    // Fix empty image URLs in database
+    async function fixEmptyImageUrls() {
+      const messageEl = document.getElementById('blog-message');
+      
+      if (!confirm('This will fix database issues where empty image URLs are preventing Briefs from displaying correctly. Continue?')) {
+        return;
+      }
+      
+      messageEl.innerHTML = '<div class="message">Fixing database...</div>';
+      
+      try {
+        const res = await fetch('/api/admin/fix-empty-images', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          messageEl.innerHTML = `<div class="message success">✓ Fixed ${data.message}. Refresh the Tee Room page to see changes.</div>`;
+          console.log('Database fix results:', data.posts);
+          
+          // Reload blog posts to show updated state
+          setTimeout(() => {
+            loadBlogPosts();
+            messageEl.innerHTML = '';
+          }, 3000);
+        } else {
+          messageEl.innerHTML = `<div class="message error">Fix failed: ${data.error}</div>`;
+        }
+      } catch (err) {
+        console.error('Fix error:', err);
+        messageEl.innerHTML = '<div class="message error">Failed to fix database</div>';
+      }
     }
 
     // Clinics
