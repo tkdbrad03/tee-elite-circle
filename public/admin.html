@@ -576,6 +576,7 @@
     }
 
     .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .image-preview video { width: 100%; height: 100%; object-fit: cover; }
     .image-preview span { font-size: 11px; color: #999; text-align: center; padding: 8px; }
 
     /* Retreats Section */
@@ -1177,9 +1178,19 @@
               </div>
 
               <div class="form-group">
-                <label>Video URL (YouTube or Vimeo)</label>
-                <input type="text" id="blog-video" placeholder="e.g., https://youtube.com/watch?v=xxxxx or https://vimeo.com/xxxxx">
-                <p style="font-size: 11px; color: #888; margin-top: 4px;">Paste the full video URL - it will be embedded automatically</p>
+                <label>Video (optional)</label>
+                <div class="image-upload-wrap">
+                  <input type="file" id="blog-video-file" accept="video/mp4,video/quicktime,video/webm" style="display: none;">
+                  <input type="hidden" id="blog-video" value="">
+                  <div class="image-preview" id="blog-video-preview">
+                    <span>No video selected</span>
+                  </div>
+                  <button type="button" class="btn btn-secondary" onclick="document.getElementById('blog-video-file').click()">
+                    Upload Video
+                  </button>
+                  <span id="video-upload-status" style="margin-left: 12px; font-size: 12px; color: #888;"></span>
+                </div>
+                <p style="font-size: 11px; color: #888; margin-top: 4px;">Max 50MB. MP4, MOV, or WebM format. For 1-2 minute videos.</p>
               </div>
 
               <div class="form-group form-checkbox">
@@ -1811,6 +1822,53 @@
       }
     });
 
+    // Video upload handler
+    document.getElementById('blog-video-file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById('video-upload-status');
+      const previewEl = document.getElementById('blog-video-preview');
+      const videoInput = document.getElementById('blog-video');
+
+      // Check file size (50MB max)
+      const maxSize = 50 * 1024 * 1024; // 50MB
+      if (file.size > maxSize) {
+        statusEl.textContent = 'File too large. Max 50MB.';
+        statusEl.style.color = '#c62828';
+        e.target.value = ''; // Clear the input
+        return;
+      }
+
+      statusEl.textContent = 'Uploading video...';
+      statusEl.style.color = '#888';
+
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': file.type,
+            'x-filename': file.name
+          },
+          body: file
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          videoInput.value = data.url;
+          previewEl.innerHTML = `<video src="${data.url}" style="max-width: 100%; max-height: 150px;"></video>`;
+          statusEl.textContent = 'Uploaded ✓';
+          statusEl.style.color = '#2e7d32';
+        } else {
+          statusEl.textContent = 'Upload failed';
+          statusEl.style.color = '#c62828';
+        }
+      } catch (err) {
+        statusEl.textContent = 'Upload failed';
+        statusEl.style.color = '#c62828';
+      }
+    });
+
     document.getElementById('blog-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const messageEl = document.getElementById('blog-message');
@@ -1990,6 +2048,12 @@
       
       // Handle video
       document.getElementById('blog-video').value = post.video_url || '';
+      const videoPreviewEl = document.getElementById('blog-video-preview');
+      if (post.video_url) {
+        videoPreviewEl.innerHTML = `<video src="${post.video_url}" style="max-width: 100%; max-height: 150px;"></video>`;
+      } else {
+        videoPreviewEl.innerHTML = '<span>No video selected</span>';
+      }
       
       // Change button text and show cancel
       document.getElementById('blog-submit-btn').textContent = 'Update Post';
@@ -2006,7 +2070,9 @@
       document.getElementById('blog-image').value = '';
       document.getElementById('blog-image-preview').innerHTML = '<span>No image selected</span>';
       document.getElementById('blog-video').value = '';
+      document.getElementById('blog-video-preview').innerHTML = '<span>No video selected</span>';
       document.getElementById('upload-status').textContent = '';
+      document.getElementById('video-upload-status').textContent = '';
       document.getElementById('blog-submit-btn').textContent = 'Add Post';
       document.getElementById('blog-cancel-btn').style.display = 'none';
       document.getElementById('blog-scheduled').value = '';
