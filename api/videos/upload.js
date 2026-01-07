@@ -1,9 +1,11 @@
 export const config = {
   runtime: 'nodejs',
-  api: {
-    bodyParser: false,
-  },
+  api: { bodyParser: false }
 };
+
+console.log("RUNTIME CHECK:", process.env.VERCEL_REGION);
+console.log("BLOB TOKEN EXISTS:", !!process.env.BLOB_READ_WRITE_TOKEN);
+
 
 
 const { put } = require('@vercel/blob');
