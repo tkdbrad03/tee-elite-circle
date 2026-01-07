@@ -1842,7 +1842,7 @@
       }
     });
 
-    // Video upload handler
+    // Video upload handler - Direct to Vercel Blob (bypasses API route size limits)
     document.getElementById('blog-video-file').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -1864,13 +1864,13 @@
       statusEl.style.color = '#888';
 
       try {
+        // Use FormData for multipart upload (bypasses Vercel body size limits)
+        const formData = new FormData();
+        formData.append('file', file);
+
         const res = await fetch('/api/upload', {
           method: 'POST',
-          headers: { 
-            'Content-Type': file.type,
-            'x-filename': file.name
-          },
-          body: file
+          body: formData
         });
 
         if (res.ok) {
@@ -1880,11 +1880,12 @@
           statusEl.textContent = 'Uploaded ✓';
           statusEl.style.color = '#2e7d32';
         } else {
-          statusEl.textContent = 'Upload failed';
+          const errorData = await res.json().catch(() => ({}));
+          statusEl.textContent = `Upload failed: ${errorData.error || res.statusText}`;
           statusEl.style.color = '#c62828';
         }
       } catch (err) {
-        statusEl.textContent = 'Upload failed';
+        statusEl.textContent = `Upload failed: ${err.message}`;
         statusEl.style.color = '#c62828';
       }
     });
