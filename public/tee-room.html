@@ -5,7 +5,7 @@
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
   <title>The Tee Room — The Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Insights from Dr. TMac on business, wealth, golf, and living at the highest level. For women who refuse to play small.">
+  <meta name="description" content="Where accomplished women get permission to play their own game.">
   <!-- PWA Meta Tags -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#1a2e1a">
@@ -394,6 +394,162 @@
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
+      color: #999;
+      margin-bottom: 24px;
+    }
+
+    /* BRIEF ARCHIVE SECTION */
+    .brief-archive-section {
+      padding-top: 40px;
+      margin-top: 40px;
+      border-top: 1px solid #eee;
+    }
+
+    .brief-archive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brief-archive-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: transparent;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: var(--deep-forest);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .brief-archive-toggle:hover {
+      background: #fafafa;
+      border-color: var(--deep-forest);
+    }
+
+    .brief-archive-toggle svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    #archive-count {
+      font-size: 11px;
+      color: #999;
+      font-weight: 400;
+    }
+
+    .brief-archive-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 800px;
+    }
+
+    .archive-month-group {
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .archive-month-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: #fafafa;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .archive-month-header:hover {
+      background: #f5f5f5;
+    }
+
+    .archive-month-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    .archive-month-icon {
+      width: 18px;
+      height: 18px;
+      stroke: var(--deep-forest);
+      stroke-width: 2;
+      fill: none;
+      transition: transform 0.3s ease;
+    }
+
+    .archive-month-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 0;
+    }
+
+    .brief-archive-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .brief-archive-item:last-child {
+      border-bottom: none;
+    }
+
+    .brief-archive-item:hover {
+      background: #fafafa;
+      border-left-color: var(--deep-forest);
+    }
+
+    .brief-archive-date {
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: #999;
+      text-transform: uppercase;
+      min-width: 140px;
+      padding-top: 2px;
+    }
+
+    .brief-archive-content {
+      flex: 1;
+    }
+
+    .brief-archive-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--deep-forest);
+      margin: 0 0 8px 0;
+      line-height: 1.3;
+    }
+
+    .brief-archive-excerpt {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .feature-section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
       color: var(--tmac-bronze);
       margin-bottom: 32px;
     }
@@ -627,6 +783,26 @@
       width: 100%;
       height: 100%;
       border: none;
+    }
+
+    .blog-modal-video video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Custom video player styling */
+    .blog-modal-video video::-webkit-media-controls-panel {
+      background: linear-gradient(to top, rgba(26, 47, 35, 0.9), transparent);
+    }
+
+    .blog-modal-video video::-webkit-media-controls-play-button,
+    .blog-modal-video video::-webkit-media-controls-current-time-display,
+    .blog-modal-video video::-webkit-media-controls-time-remaining-display {
+      color: #fff;
     }
 
     .blog-modal-body {
@@ -881,7 +1057,7 @@
     <div class="page-header">
       <p class="page-label">Insights & Inspiration</p>
       <h1 class="page-title">The Tee Room</h1>
-      <p class="page-subtitle">Thoughts on business, wealth, golf, and living at the highest level — from Dr. TMac.</p>
+      <p class="page-subtitle">Where accomplished women get permission to play their own game.</p>
     </div>
 
     <!-- PINNED SECTION -->
@@ -901,6 +1077,23 @@
         <div class="blog-empty">
           <p>Loading...</p>
         </div>
+      </div>
+    </section>
+
+    <!-- BRIEF ARCHIVE SECTION -->
+    <section class="brief-archive-section" id="brief-archive-section" style="display: none;">
+      <div class="brief-archive-header">
+        <p class="feature-section-label" style="margin: 0;">Brief Archive</p>
+        <button class="brief-archive-toggle" id="brief-archive-toggle" onclick="toggleBriefArchive()">
+          <span id="archive-toggle-text">View Past Briefs</span>
+          <span id="archive-count"></span>
+          <svg id="archive-toggle-icon" viewBox="0 0 24 24" style="transform: rotate(0deg); transition: transform 0.3s ease;">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+      <div class="brief-archive-list" id="brief-archive-list" style="display: none; margin-top: 24px;">
+        <!-- Loaded dynamically -->
       </div>
     </section>
   </main>
@@ -1030,10 +1223,12 @@
         window.blogPosts = posts;
         
         // Separate content types
-        const briefs = posts.filter(p => !p.image_url && !p.video_url);
+        // Briefs = no featured image (but can have video)
+        // Feature Posts = has featured image (image-first content)
+        const briefs = posts.filter(p => !p.image_url);
         const pinnedBriefs = briefs.filter(p => p.is_pinned);
         const unpinnedBriefs = briefs.filter(p => !p.is_pinned);
-        const featurePosts = posts.filter(p => p.image_url || p.video_url);
+        const featurePosts = posts.filter(p => p.image_url);
         
         // Render Pinned Section (pinned briefs like Welcome post)
         const pinnedSection = document.getElementById('pinned-section');
@@ -1097,6 +1292,65 @@
             </div>
           `;
         }
+
+        // Render Brief Archive (all briefs except the latest one and pinned ones)
+        const archiveBriefs = unpinnedBriefs.slice(1); // Skip the first (latest) brief
+        const archiveSection = document.getElementById('brief-archive-section');
+        const archiveList = document.getElementById('brief-archive-list');
+        const archiveCount = document.getElementById('archive-count');
+        
+        if (archiveBriefs.length > 0) {
+          archiveSection.style.display = 'block';
+          archiveCount.textContent = `(${archiveBriefs.length})`;
+          
+          // Group briefs by month/year
+          const briefsByMonth = {};
+          archiveBriefs.forEach(brief => {
+            const dateObj = new Date(brief.scheduled_for || brief.created_at);
+            const monthYear = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            if (!briefsByMonth[monthYear]) {
+              briefsByMonth[monthYear] = [];
+            }
+            briefsByMonth[monthYear].push(brief);
+          });
+          
+          // Render grouped briefs with accordion
+          archiveList.innerHTML = Object.keys(briefsByMonth).map((monthYear, groupIndex) => {
+            const briefs = briefsByMonth[monthYear];
+            const isFirstGroup = groupIndex === 0;
+            
+            return `
+              <div class="archive-month-group">
+                <button class="archive-month-header" onclick="toggleArchiveMonth(${groupIndex})">
+                  <span class="archive-month-title">${monthYear} (${briefs.length})</span>
+                  <svg class="archive-month-icon" id="archive-month-icon-${groupIndex}" viewBox="0 0 24 24" style="transform: rotate(${isFirstGroup ? '180deg' : '0deg'});">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="archive-month-content" id="archive-month-${groupIndex}" style="display: ${isFirstGroup ? 'flex' : 'none'};">
+                  ${briefs.map(brief => {
+                    const briefIndex = posts.findIndex(p => p.id === brief.id);
+                    const dateObj = new Date(brief.scheduled_for || brief.created_at);
+                    const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    
+                    return `
+                      <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
+                        <div class="brief-archive-date">${dateStr}</div>
+                        <div class="brief-archive-content">
+                          <h3 class="brief-archive-title">${brief.title}</h3>
+                          ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          archiveSection.style.display = 'none';
+        }
       } catch (err) {
         console.error('Error loading blog posts:', err);
         document.getElementById('pinned-section').innerHTML = '';
@@ -1107,6 +1361,37 @@
             <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
           </div>
         `;
+      }
+    }
+
+    // Toggle Brief Archive
+    function toggleBriefArchive() {
+      const archiveList = document.getElementById('brief-archive-list');
+      const toggleText = document.getElementById('archive-toggle-text');
+      const toggleIcon = document.getElementById('archive-toggle-icon');
+      
+      if (archiveList.style.display === 'none') {
+        archiveList.style.display = 'flex';
+        toggleText.textContent = 'Hide Past Briefs';
+        toggleIcon.style.transform = 'rotate(180deg)';
+      } else {
+        archiveList.style.display = 'none';
+        toggleText.textContent = 'View Past Briefs';
+        toggleIcon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Toggle Archive Month Group
+    function toggleArchiveMonth(groupIndex) {
+      const content = document.getElementById(`archive-month-${groupIndex}`);
+      const icon = document.getElementById(`archive-month-icon-${groupIndex}`);
+      
+      if (content.style.display === 'none') {
+        content.style.display = 'flex';
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        content.style.display = 'none';
+        icon.style.transform = 'rotate(0deg)';
       }
     }
 
@@ -1129,6 +1414,19 @@
       return null;
     }
 
+    function isUploadedVideo(url) {
+      // Check if it's a blob storage URL (uploaded video) vs embed URL (YouTube/Vimeo)
+      return url && (
+        url.includes('vercel-storage') || 
+        url.includes('blob.vercel-app') || 
+        url.includes('firebasestorage.googleapis.com') ||  // Firebase Storage
+        url.includes('firebasestorage.app') ||  // Firebase Storage new domain
+        url.endsWith('.mp4') || 
+        url.endsWith('.mov') || 
+        url.endsWith('.webm')
+      );
+    }
+
     function openBlogModal(index) {
       const post = window.blogPosts[index];
       if (!post) return;
@@ -1141,9 +1439,22 @@
       const videoEl = document.getElementById('blog-modal-video');
       
       // Check for video first
-      const embedUrl = getVideoEmbedUrl(post.video_url);
-      if (embedUrl) {
-        videoEl.innerHTML = `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      if (post.video_url) {
+        if (isUploadedVideo(post.video_url)) {
+          // Uploaded video - use HTML5 video tag
+          videoEl.innerHTML = `
+            <video controls style="width: 100%; border-radius: 4px; background: #000;">
+              <source src="${post.video_url}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          `;
+        } else {
+          // Embedded video (YouTube/Vimeo) - use iframe
+          const embedUrl = getVideoEmbedUrl(post.video_url);
+          if (embedUrl) {
+            videoEl.innerHTML = `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+          }
+        }
         videoEl.style.display = 'block';
         imageEl.style.display = 'none';
       } else if (post.image_url) {

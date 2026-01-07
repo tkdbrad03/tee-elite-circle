@@ -21,6 +21,12 @@
   <!-- Quill Editor -->
   <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <script src="firebase-upload.js"></script>
+  
   <style>
     :root {
       --tmac-blush: #e8ccc8;
@@ -576,6 +582,7 @@
     }
 
     .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .image-preview video { width: 100%; height: 100%; object-fit: cover; }
     .image-preview span { font-size: 11px; color: #999; text-align: center; padding: 8px; }
 
     /* Retreats Section */
@@ -1141,8 +1148,20 @@
         <!-- Blog Posts Panel -->
         <div class="content-panel" id="blog-panel">
           <div class="content-section">
-            <h2>Add Blog Post</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h2 style="margin: 0;">Add Blog Post</h2>
+              <button type="button" class="btn btn-secondary" onclick="fixEmptyImageUrls()" style="font-size: 11px; padding: 10px 16px;">
+                Fix Database Issues
+              </button>
+            </div>
             <div id="blog-message"></div>
+            
+            <div style="margin-bottom: 20px;">
+              <button type="button" class="btn btn-secondary" onclick="loadBriefTemplate()" style="font-size: 12px; padding: 8px 16px;">
+                📋 Load Brief Template
+              </button>
+              <span style="margin-left: 12px; font-size: 11px; color: #888;">Auto-fills title format, excerpt, and first liner</span>
+            </div>
             
             <form id="blog-form">
               <div class="form-group">
@@ -1177,9 +1196,19 @@
               </div>
 
               <div class="form-group">
-                <label>Video URL (YouTube or Vimeo)</label>
-                <input type="text" id="blog-video" placeholder="e.g., https://youtube.com/watch?v=xxxxx or https://vimeo.com/xxxxx">
-                <p style="font-size: 11px; color: #888; margin-top: 4px;">Paste the full video URL - it will be embedded automatically</p>
+                <label>Video (optional)</label>
+                <div class="image-upload-wrap">
+                  <input type="file" id="blog-video-file" accept="video/mp4,video/quicktime,video/webm" style="display: none;">
+                  <input type="hidden" id="blog-video" value="">
+                  <div class="image-preview" id="blog-video-preview">
+                    <span>No video selected</span>
+                  </div>
+                  <button type="button" class="btn btn-secondary" onclick="document.getElementById('blog-video-file').click()">
+                    Upload Video
+                  </button>
+                  <span id="video-upload-status" style="margin-left: 12px; font-size: 12px; color: #888;"></span>
+                </div>
+                <p style="font-size: 11px; color: #888; margin-top: 4px;">MP4, MOV, or WebM format. Supports large files via Firebase Storage.</p>
               </div>
 
               <div class="form-group form-checkbox">
@@ -1340,6 +1369,19 @@
   </div>
 
   <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-9xRyX8yOSoejgmq-7ZEdCzQg__ntuHs",
+      authDomain: "tee-elite.firebaseapp.com",
+      projectId: "tee-elite",
+      storageBucket: "tee-elite.firebasestorage.app",
+      messagingSenderId: "59306538414",
+      appId: "1:59306538414:web:5fbf03f74663775074c43f"
+    };
+    
+    // Initialize Firebase
+    initializeFirebase(firebaseConfig);
+    
     const ADMIN_PASSWORD = 'TeeElite2026Admin';
     let applications = [];
     let currentFilter = 'all';
@@ -1369,20 +1411,40 @@
       loadBlogPosts();
     }
 
-    // Initialize Quill editor
-    var quill = new Quill('#blog-editor', {
-      theme: 'snow',
-      placeholder: 'Write your blog post here... You can paste from Word or Google Docs!',
-      modules: {
-        toolbar: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['link'],
-          ['clean']
-        ]
+    // Initialize Quill editor - wait for DOM and Quill library to load
+    let quill;
+    function initQuill() {
+      if (typeof Quill === 'undefined') {
+        console.error('Quill library not loaded yet, retrying...');
+        setTimeout(initQuill, 100);
+        return;
       }
-    });
+      if (!document.getElementById('blog-editor')) {
+        console.error('Blog editor element not found, retrying...');
+        setTimeout(initQuill, 100);
+        return;
+      }
+      quill = new Quill('#blog-editor', {
+        theme: 'snow',
+        placeholder: 'Write your blog post here... You can paste from Word or Google Docs!',
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['link'],
+            ['clean']
+          ]
+        }
+      });
+    }
+    
+    // Initialize Quill when page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initQuill);
+    } else {
+      initQuill();
+    }
 
     function logout() {
       localStorage.removeItem('adminAuth');
@@ -1811,6 +1873,41 @@
       }
     });
 
+    // Video upload handler - Firebase Storage for large files
+    document.getElementById('blog-video-file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById('video-upload-status');
+      const previewEl = document.getElementById('blog-video-preview');
+      const videoInput = document.getElementById('blog-video');
+
+      statusEl.textContent = 'Uploading video... 0%';
+      statusEl.style.color = '#888';
+
+      try {
+        // Upload to Firebase Storage with progress tracking
+        const result = await uploadToFirebase(file, 'blog-videos', (progress, state) => {
+          statusEl.textContent = `Uploading video... ${Math.round(progress)}%`;
+          if (state === 'paused') {
+            statusEl.textContent = 'Upload paused...';
+          }
+        });
+
+        // Success - update UI
+        videoInput.value = result.url;
+        previewEl.innerHTML = `<video src="${result.url}" style="max-width: 100%; max-height: 150px;"></video>`;
+        statusEl.textContent = 'Uploaded ✓';
+        statusEl.style.color = '#2e7d32';
+        
+        console.log('✅ Video uploaded to Firebase:', result.url);
+      } catch (err) {
+        console.error('Upload error:', err);
+        statusEl.textContent = `Upload failed: ${err.message}`;
+        statusEl.style.color = '#c62828';
+      }
+    });
+
     document.getElementById('blog-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const messageEl = document.getElementById('blog-message');
@@ -1822,8 +1919,8 @@
         title: document.getElementById('blog-title').value,
         excerpt: document.getElementById('blog-excerpt').value,
         content: quill.root.innerHTML,
-        image_url: document.getElementById('blog-image').value,
-        video_url: document.getElementById('blog-video').value,
+        image_url: document.getElementById('blog-image').value || null,
+        video_url: document.getElementById('blog-video').value || null,
         published: isPublished,
         scheduled_for: (!isPublished && scheduledValue) ? new Date(scheduledValue).toISOString() : null
       };
@@ -1990,6 +2087,12 @@
       
       // Handle video
       document.getElementById('blog-video').value = post.video_url || '';
+      const videoPreviewEl = document.getElementById('blog-video-preview');
+      if (post.video_url) {
+        videoPreviewEl.innerHTML = `<video src="${post.video_url}" style="max-width: 100%; max-height: 150px;"></video>`;
+      } else {
+        videoPreviewEl.innerHTML = '<span>No video selected</span>';
+      }
       
       // Change button text and show cancel
       document.getElementById('blog-submit-btn').textContent = 'Update Post';
@@ -2006,7 +2109,9 @@
       document.getElementById('blog-image').value = '';
       document.getElementById('blog-image-preview').innerHTML = '<span>No image selected</span>';
       document.getElementById('blog-video').value = '';
+      document.getElementById('blog-video-preview').innerHTML = '<span>No video selected</span>';
       document.getElementById('upload-status').textContent = '';
+      document.getElementById('video-upload-status').textContent = '';
       document.getElementById('blog-submit-btn').textContent = 'Add Post';
       document.getElementById('blog-cancel-btn').style.display = 'none';
       document.getElementById('blog-scheduled').value = '';
@@ -2022,6 +2127,75 @@
         });
         if (res.ok) loadBlogPosts();
       } catch (err) { console.error('Error:', err); }
+    }
+
+    // Fix empty image URLs in database
+    async function fixEmptyImageUrls() {
+      const messageEl = document.getElementById('blog-message');
+      
+      if (!confirm('This will fix database issues where empty image URLs are preventing Briefs from displaying correctly. Continue?')) {
+        return;
+      }
+      
+      messageEl.innerHTML = '<div class="message">Fixing database...</div>';
+      
+      try {
+        const res = await fetch('/api/admin/fix-empty-images', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          messageEl.innerHTML = `<div class="message success">✓ Fixed ${data.message}. Refresh the Tee Room page to see changes.</div>`;
+          console.log('Database fix results:', data.posts);
+          
+          // Reload blog posts to show updated state
+          setTimeout(() => {
+            loadBlogPosts();
+            messageEl.innerHTML = '';
+          }, 3000);
+        } else {
+          messageEl.innerHTML = `<div class="message error">Fix failed: ${data.error}</div>`;
+        }
+      } catch (err) {
+        console.error('Fix error:', err);
+        messageEl.innerHTML = '<div class="message error">Failed to fix database</div>';
+      }
+    }
+
+    // Load Brief Template
+    function loadBriefTemplate() {
+      // Get current date for title
+      const today = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = today.toLocaleDateString('en-US', options);
+      
+      // Set title
+      document.getElementById('blog-title').value = `TMac Morning Brief | ${dateStr}`;
+      
+      // Set excerpt
+      document.getElementById('blog-excerpt').value = 'Daily permission for women ready to stop negotiating with the life they want.';
+      
+      // Set first liner in Quill editor with italic formatting
+      if (quill) {
+        quill.setText('You already know what to do.\n\n');
+        // Apply italic to the first line
+        quill.formatText(0, 'You already know what to do.'.length, 'italic', true);
+        // Move cursor to end
+        quill.setSelection(quill.getLength());
+      }
+      
+      // Show success message
+      const messageEl = document.getElementById('blog-message');
+      messageEl.innerHTML = '<div class="message success">✓ Brief template loaded! Add your content below the first liner.</div>';
+      setTimeout(() => {
+        messageEl.innerHTML = '';
+      }, 3000);
+      
+      // Scroll to title field
+      document.getElementById('blog-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     // Clinics

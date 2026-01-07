@@ -626,6 +626,11 @@
       }
     }
   </style>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <script src="firebase-upload.js"></script>
 </head>
 <body class="member-body">
   
@@ -801,6 +806,19 @@
   </footer>
 
   <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-9xRyX8yOSoejgmq-7ZEdCzQg__ntuHs",
+      authDomain: "tee-elite.firebaseapp.com",
+      projectId: "tee-elite",
+      storageBucket: "tee-elite.firebasestorage.app",
+      messagingSenderId: "59306538414",
+      appId: "1:59306538414:web:5fbf03f74663775074c43f"
+    };
+    
+    // Initialize Firebase
+    initializeFirebase(firebaseConfig);
+    
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileNav = document.getElementById('mobile-nav');
@@ -865,19 +883,6 @@
       const file = e.target.files[0];
       if (!file) return;
       
-      // Check file size - Vercel Blob Pro allows larger files
-      const sizeMB = file.size / (1024 * 1024);
-      if (sizeMB > 50) {
-        alert(`Video is ${sizeMB.toFixed(1)}MB. Please use a video under 50MB.`);
-        return;
-      }
-      
-      // Warn for larger files
-      if (sizeMB > 10) {
-        const proceed = confirm(`Video is ${sizeMB.toFixed(1)}MB. Large files may take a while to upload. Continue?`);
-        if (!proceed) return;
-      }
-      
       await handleMediaUpload(file, 'video');
     });
 
@@ -887,12 +892,6 @@
       if (!file) return;
       
       // Check file size
-      const sizeMB = file.size / (1024 * 1024);
-      if (sizeMB > 50) {
-        alert(`Video is ${sizeMB.toFixed(1)}MB. Please record a shorter video (under 50MB).`);
-        return;
-      }
-      
       await handleMediaUpload(file, 'video');
     });
 
@@ -920,23 +919,41 @@ async function handleMediaUpload(file, type, fileName = '') {
   try {
     console.log('Uploading file:', file.name, 'Type:', file.type, 'Size:', sizeMB + 'MB');
     
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      headers: {
-        'Content-Type': file.type || 'application/octet-stream',
-        'X-Filename': encodeURIComponent(file.name)
-      },
-      body: file
-    });
+    let blobUrl;
+    
+    // Use Firebase for videos and large files, Vercel Blob for images/small files
+    if (shouldUseFirebase(file, type)) {
+      console.log('Using Firebase Storage for large file/video');
+      
+      // Upload to Firebase with progress
+      const result = await uploadToFirebase(file, 'discussion-media', (progress) => {
+        preview.innerHTML = `<div class="upload-status">Uploading ${type}... ${Math.round(progress)}%<br>Please wait.</div>`;
+      });
+      
+      blobUrl = result.url;
+      console.log('✅ Uploaded to Firebase:', blobUrl);
+    } else {
+      console.log('Using Vercel Blob for small file');
+      
+      // Use existing Vercel Blob upload for small files
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': file.type || 'application/octet-stream',
+          'X-Filename': encodeURIComponent(file.name)
+        },
+        body: file
+      });
 
-    const data = await res.json();
-    
-    if (!res.ok) {
-      throw new Error(data.error || 'Upload failed');
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Upload failed');
+      }
+      
+      blobUrl = data.url;
+      console.log('✅ Uploaded to Vercel Blob:', blobUrl);
     }
-    
-    const blobUrl = data.url;
-    console.log('✅ Upload complete:', blobUrl);
 
     document.getElementById('thread-media-type').value = type;
     if (type === 'image') document.getElementById('thread-image-url').value = blobUrl;
@@ -970,7 +987,7 @@ async function handleMediaUpload(file, type, fileName = '') {
     console.error('Upload error:', err);
     let errorMsg = err.message;
     if (errorMsg.includes('PayloadTooLarge') || errorMsg.includes('too large')) {
-      errorMsg = 'File too large. Please use a smaller file (under 10MB for videos).';
+      errorMsg = 'File too large. Please use a smaller file.';
     }
     preview.innerHTML = `
       <div class="upload-status" style="color:#c0392b;">
