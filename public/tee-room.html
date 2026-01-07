@@ -452,19 +452,68 @@
       max-width: 800px;
     }
 
+    .archive-month-group {
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .archive-month-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: #fafafa;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .archive-month-header:hover {
+      background: #f5f5f5;
+    }
+
+    .archive-month-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    .archive-month-icon {
+      width: 18px;
+      height: 18px;
+      stroke: var(--deep-forest);
+      stroke-width: 2;
+      fill: none;
+      transition: transform 0.3s ease;
+    }
+
+    .archive-month-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 0;
+    }
+
     .brief-archive-item {
       display: flex;
       gap: 20px;
       padding: 20px;
-      background: #fafafa;
-      border-radius: 8px;
+      background: #fff;
       cursor: pointer;
       transition: all 0.2s ease;
       border-left: 3px solid transparent;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .brief-archive-item:last-child {
+      border-bottom: none;
     }
 
     .brief-archive-item:hover {
-      background: #f5f5f5;
+      background: #fafafa;
       border-left-color: var(--deep-forest);
     }
 
@@ -1008,7 +1057,7 @@
     <div class="page-header">
       <p class="page-label">Insights & Inspiration</p>
       <h1 class="page-title">The Tee Room</h1>
-      <p class="page-subtitle">Where accomplished women get permission to play their own game.</p>
+      <p class="page-subtitle">Thoughts on business, wealth, golf, and living at the highest level — from Dr. TMac.</p>
     </div>
 
     <!-- PINNED SECTION -->
@@ -1254,17 +1303,47 @@
           archiveSection.style.display = 'block';
           archiveCount.textContent = `(${archiveBriefs.length})`;
           
-          archiveList.innerHTML = archiveBriefs.map(brief => {
-            const briefIndex = posts.findIndex(p => p.id === brief.id);
+          // Group briefs by month/year
+          const briefsByMonth = {};
+          archiveBriefs.forEach(brief => {
             const dateObj = new Date(brief.scheduled_for || brief.created_at);
-            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const monthYear = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            if (!briefsByMonth[monthYear]) {
+              briefsByMonth[monthYear] = [];
+            }
+            briefsByMonth[monthYear].push(brief);
+          });
+          
+          // Render grouped briefs with accordion
+          archiveList.innerHTML = Object.keys(briefsByMonth).map((monthYear, groupIndex) => {
+            const briefs = briefsByMonth[monthYear];
+            const isFirstGroup = groupIndex === 0;
             
             return `
-              <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
-                <div class="brief-archive-date">${dateStr}</div>
-                <div class="brief-archive-content">
-                  <h3 class="brief-archive-title">${brief.title}</h3>
-                  ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
+              <div class="archive-month-group">
+                <button class="archive-month-header" onclick="toggleArchiveMonth(${groupIndex})">
+                  <span class="archive-month-title">${monthYear} (${briefs.length})</span>
+                  <svg class="archive-month-icon" id="archive-month-icon-${groupIndex}" viewBox="0 0 24 24" style="transform: rotate(${isFirstGroup ? '180deg' : '0deg'});">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="archive-month-content" id="archive-month-${groupIndex}" style="display: ${isFirstGroup ? 'flex' : 'none'};">
+                  ${briefs.map(brief => {
+                    const briefIndex = posts.findIndex(p => p.id === brief.id);
+                    const dateObj = new Date(brief.scheduled_for || brief.created_at);
+                    const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    
+                    return `
+                      <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
+                        <div class="brief-archive-date">${dateStr}</div>
+                        <div class="brief-archive-content">
+                          <h3 class="brief-archive-title">${brief.title}</h3>
+                          ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
                 </div>
               </div>
             `;
@@ -1299,6 +1378,20 @@
         archiveList.style.display = 'none';
         toggleText.textContent = 'View Past Briefs';
         toggleIcon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Toggle Archive Month Group
+    function toggleArchiveMonth(groupIndex) {
+      const content = document.getElementById(`archive-month-${groupIndex}`);
+      const icon = document.getElementById(`archive-month-icon-${groupIndex}`);
+      
+      if (content.style.display === 'none') {
+        content.style.display = 'flex';
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        content.style.display = 'none';
+        icon.style.transform = 'rotate(0deg)';
       }
     }
 
