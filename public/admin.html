@@ -1926,14 +1926,11 @@
       statusEl.style.color = '#888';
 
       try {
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': file.type,
-            'x-filename': file.name
-          },
-          body: file
-        });
+        fetch('/api/videos/upload.node', {
+  method: 'POST',
+  body: formData
+});
+
 
         if (res.ok) {
           const data = await res.json();
