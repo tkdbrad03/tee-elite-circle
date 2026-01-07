@@ -1875,26 +1875,17 @@
       const previewEl = document.getElementById('blog-video-preview');
       const videoInput = document.getElementById('blog-video');
 
-      // Check file size (150MB max)
-      const maxSize = 150 * 1024 * 1024; // 150MB
-      if (file.size > maxSize) {
-        statusEl.textContent = 'File too large. Max 150MB.';
-        statusEl.style.color = '#c62828';
-        e.target.value = ''; // Clear the input
-        return;
-      }
-
       statusEl.textContent = 'Uploading video... 0%';
-      statusEl.style.color = '#888';
+statusEl.style.color = '#888';
 
-      try {
-        // Upload to Firebase Storage with progress tracking
-        const result = await uploadToFirebase(file, 'blog-videos', (progress, state) => {
-          statusEl.textContent = `Uploading video... ${Math.round(progress)}%`;
-          if (state === 'paused') {
-            statusEl.textContent = 'Upload paused...';
-          }
-        });
+try {
+  // Upload to Firebase Storage with progress tracking
+  const result = await uploadToFirebase(file, 'blog-videos', (progress, state) => {
+    statusEl.textContent = `Uploading video... ${Math.round(progress)}%`;
+    if (state === 'paused') {
+      statusEl.textContent = 'Upload paused...';
+    }
+  });
 
         // Success - update UI
         videoInput.value = result.url;
