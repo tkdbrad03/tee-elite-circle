@@ -2178,9 +2178,11 @@
       // Set excerpt
       document.getElementById('blog-excerpt').value = 'Daily permission for women ready to stop negotiating with the life they want.';
       
-      // Set first liner in Quill editor
+      // Set first liner in Quill editor with italic formatting
       if (quill) {
         quill.setText('You already know what to do.\n\n');
+        // Apply italic to the first line
+        quill.formatText(0, 'You already know what to do.'.length, 'italic', true);
         // Move cursor to end
         quill.setSelection(quill.getLength());
       }
