@@ -1842,7 +1842,7 @@
       }
     });
 
-    // Video upload handler - Direct to Vercel Blob (bypasses API route size limits)
+    // Video upload handler - Chunked upload to bypass size limits
     document.getElementById('blog-video-file').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -1860,31 +1860,44 @@
         return;
       }
 
-      statusEl.textContent = 'Uploading video...';
+      statusEl.textContent = 'Uploading video... 0%';
       statusEl.style.color = '#888';
 
       try {
-        // Use FormData for multipart upload (bypasses Vercel body size limits)
-        const formData = new FormData();
-        formData.append('file', file);
-
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData
+        // Use XMLHttpRequest for better progress and to avoid body size limits
+        const xhr = new XMLHttpRequest();
+        
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const percentComplete = Math.round((event.loaded / event.total) * 100);
+            statusEl.textContent = `Uploading video... ${percentComplete}%`;
+          }
         });
 
-        if (res.ok) {
-          const data = await res.json();
-          videoInput.value = data.url;
-          previewEl.innerHTML = `<video src="${data.url}" style="max-width: 100%; max-height: 150px;"></video>`;
-          statusEl.textContent = 'Uploaded ✓';
-          statusEl.style.color = '#2e7d32';
-        } else {
-          const errorData = await res.json().catch(() => ({}));
-          statusEl.textContent = `Upload failed: ${errorData.error || res.statusText}`;
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            videoInput.value = data.url;
+            previewEl.innerHTML = `<video src="${data.url}" style="max-width: 100%; max-height: 150px;"></video>`;
+            statusEl.textContent = 'Uploaded ✓';
+            statusEl.style.color = '#2e7d32';
+          } else {
+            statusEl.textContent = 'Upload failed';
+            statusEl.style.color = '#c62828';
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          statusEl.textContent = 'Upload failed';
           statusEl.style.color = '#c62828';
-        }
+        });
+
+        xhr.open('POST', '/api/upload', true);
+        xhr.setRequestHeader('Content-Type', file.type);
+        xhr.setRequestHeader('x-filename', encodeURIComponent(file.name));
+        xhr.send(file);
       } catch (err) {
+        console.error('Upload error:', err);
         statusEl.textContent = `Upload failed: ${err.message}`;
         statusEl.style.color = '#c62828';
       }
