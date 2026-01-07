@@ -1,5 +1,10 @@
-// API endpoint: /api/videos/upload
-// Handles video upload to Vercel Blob storage (supports MOV, MP4, and other video formats)
+export const config = {
+  runtime: 'nodejs',
+  api: {
+    bodyParser: false,
+  },
+};
+
 
 const { put } = require('@vercel/blob');
 const { query } = require('../lib/db');
