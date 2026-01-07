@@ -1,14 +1,17 @@
 {
   "functions": {
-    "api/uploads.js": {
+    "api/videos/upload.js": {
+      "runtime": "nodejs18.x",
       "maxDuration": 60,
       "memory": 1024
     },
-    "api/videos/upload.js": {
+    "api/videos/get.js": {
+      "runtime": "nodejs18.x",
       "maxDuration": 60,
       "memory": 1024
     },
     "api/admin/email-campaign.js": {
+      "runtime": "nodejs18.x",
       "maxDuration": 300,
       "memory": 1024
     }
