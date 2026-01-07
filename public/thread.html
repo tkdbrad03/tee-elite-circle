@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>Discussion — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pwa-nav.css">
+  <style>
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      text-decoration: none;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--deep-forest);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .thread-container {
+      max-width: 800px;
+    }
+
+    .thread-main {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    .thread-category {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .thread-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .thread-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .thread-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .thread-author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--tmac-blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thread-author-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .thread-author-avatar span {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    .thread-author-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .thread-date {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .thread-content {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--charcoal);
+      white-space: pre-wrap;
+    }
+
+    .thread-content a {
+      color: var(--tmac-bronze);
+      text-decoration: underline;
+    }
+
+    .thread-attachment {
+      margin-top: 24px;
+    }
+
+    .thread-attachment img,
+    .thread-attachment video {
+      max-width: 100%;
+      max-height: 500px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .thread-doc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: #f8f8f8;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .thread-doc-link:hover {
+      background: #f0f0f0;
+      border-color: var(--tmac-blush);
+    }
+
+    .thread-doc-link svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--tmac-bronze);
+    }
+
+    .doc-name {
+      font-weight: 500;
+    }
+
+    .doc-type {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #888;
+      letter-spacing: 0.05em;
+    }
+
+    /* Comments Section */
+    .comments-section {
+      margin-top: 32px;
+    }
+
+    .comments-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .comments-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+    }
+
+    .comments-count {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .comment-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 20px 24px;
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--tmac-blush-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .comment-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .comment-avatar span {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    .comment-author {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .comment-date {
+      font-size: 12px;
+      color: #aaa;
+      margin-left: auto;
+    }
+
+    .comment-content {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #444;
+      white-space: pre-wrap;
+    }
+
+    .comment-content a {
+      color: var(--tmac-bronze);
+      text-decoration: underline;
+    }
+
+    /* Add Comment Form */
+    .add-comment {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 24px;
+    }
+
+    .add-comment-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .comment-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+      resize: vertical;
+      margin-bottom: 16px;
+    }
+
+    .comment-textarea:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .comment-submit {
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      border: none;
+      padding: 14px 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .comment-submit:hover {
+      background: var(--tmac-blush-light);
+    }
+
+    .comment-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .empty-comments {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .empty-comments p {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .empty-comments span {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    @media (max-width: 600px) {
+      .thread-main {
+        padding: 24px;
+      }
+
+      .thread-meta {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body class="member-body">
+  
+  <!-- HEADER -->
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/tee-room.html" class="nav-link">Tee Room</a>
+        <a href="/fairway.html" class="nav-link">Fairway</a>
+      </nav>
+      <div class="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">FM</span>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/tee-room.html" class="mobile-nav-link">Tee Room</a>
+    <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="member-main">
+    <div class="thread-container">
+      <a href="/between-the-tees.html" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Discussions
+      </a>
+
+      <!-- Thread Content -->
+      <div class="thread-main" id="thread-main">
+        <p style="color: #888;">Loading discussion...</p>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="comments-section">
+        <div class="comments-header">
+          <h2 class="comments-title">Replies</h2>
+          <span class="comments-count" id="comments-count">0 replies</span>
+        </div>
+
+        <div class="comments-list" id="comments-list">
+          <div class="empty-comments">
+            <p>No replies yet.</p>
+            <span>Be the first to share your thoughts.</span>
+          </div>
+        </div>
+
+        <!-- Add Comment -->
+        <div class="add-comment">
+          <h3 class="add-comment-title">Add Your Reply</h3>
+          <textarea class="comment-textarea" id="comment-content" placeholder="Share your thoughts, insights, or encouragement..."></textarea>
+          <button class="comment-submit" id="submit-comment">Post Reply</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="member-footer">
+    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+    });
+
+    // Get thread ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const threadId = urlParams.get('id');
+
+    if (!threadId) {
+      window.location.href = '/between-the-tees.html';
+    }
+
+    // Load thread
+    async function loadThread() {
+      try {
+        const res = await fetch(`/api/posts/get?id=${threadId}`);
+        if (!res.ok) {
+          window.location.href = '/between-the-tees.html';
+          return;
+        }
+        
+        const thread = await res.json();
+        
+        // Update page title
+        document.title = `${thread.title || 'Discussion'} — The Tee Elite Circle`;
+        
+        // Render thread
+        const threadMain = document.getElementById('thread-main');
+        threadMain.innerHTML = `
+          <span class="thread-category">${formatCategory(thread.category)}</span>
+          <h1 class="thread-title">${thread.title || 'Untitled Discussion'}</h1>
+          <div class="thread-meta">
+            <div class="thread-author">
+              <div class="thread-author-avatar">
+                ${thread.author_photo ? 
+                  `<img src="${thread.author_photo}" alt="${thread.author_name}">` : 
+                  `<span>${getInitials(thread.author_name)}</span>`
+                }
+              </div>
+              <span class="thread-author-name">${thread.author_name}</span>
+            </div>
+            <span class="thread-date">${formatDateTime(thread.created_at)}</span>
+          </div>
+          <div class="thread-content">${linkify(thread.content)}</div>
+          ${thread.image_url ? `<div class="thread-attachment">${getMediaElement(thread.image_url)}</div>` : ''}
+        `;
+        
+        // Load comments
+        loadComments();
+      } catch (err) {
+        console.error('Error loading thread:', err);
+      }
+    }
+
+    // Load comments
+    async function loadComments() {
+      try {
+        const res = await fetch(`/api/posts/comments?post_id=${threadId}`);
+        if (!res.ok) return;
+        
+        const comments = await res.json();
+        const commentsList = document.getElementById('comments-list');
+        const commentsCount = document.getElementById('comments-count');
+        
+        commentsCount.textContent = `${comments.length} ${comments.length === 1 ? 'reply' : 'replies'}`;
+        
+        if (comments.length === 0) {
+          commentsList.innerHTML = `
+            <div class="empty-comments">
+              <p>No replies yet.</p>
+              <span>Be the first to share your thoughts.</span>
+            </div>
+          `;
+          return;
+        }
+        
+        commentsList.innerHTML = comments.map(comment => `
+          <div class="comment-card">
+            <div class="comment-header">
+              <div class="comment-avatar">
+                ${comment.author_photo ? 
+                  `<img src="${comment.author_photo}" alt="${comment.author_name}">` : 
+                  `<span>${getInitials(comment.author_name)}</span>`
+                }
+              </div>
+              <span class="comment-author">${comment.author_name}</span>
+              <span class="comment-date">${formatDateTime(comment.created_at)}</span>
+            </div>
+            <div class="comment-content">${linkify(comment.content)}</div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading comments:', err);
+      }
+    }
+
+    // Submit comment
+    document.getElementById('submit-comment').addEventListener('click', async () => {
+      const content = document.getElementById('comment-content').value.trim();
+      const submitBtn = document.getElementById('submit-comment');
+      
+      if (!content) {
+        alert('Please write a reply');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Posting...';
+      
+      try {
+        const res = await fetch('/api/posts/comment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: parseInt(threadId), content })
+        });
+        
+        if (res.ok) {
+          document.getElementById('comment-content').value = '';
+          loadComments();
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Failed to post reply');
+        }
+      } catch (err) {
+        console.error('Error posting comment:', err);
+        alert('Error posting reply');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Post Reply';
+      }
+    });
+
+    // Helper functions
+    function formatCategory(cat) {
+      const labels = {
+        business: 'Business & Strategy',
+        money: 'Money & Wealth',
+        golf: 'Golf & Game',
+        life: 'Life & Legacy',
+        general: 'General'
+      };
+      return labels[cat] || 'General';
+    }
+
+    function getInitials(name) {
+      if (!name) return 'FM';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function formatDateTime(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+    }
+
+    function linkify(text) {
+      if (!text) return '';
+      const urlPattern = /(https?:\/\/[^\s<]+)/g;
+      return text.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    }
+
+    function isVideo(url) {
+      if (!url) return false;
+      const videoExtensions = ['.mp4', '.webm', '.mov', '.avi', '.mkv'];
+      return videoExtensions.some(ext => url.toLowerCase().includes(ext));
+    }
+
+    function isDocument(url) {
+      if (!url) return false;
+      const docExtensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt'];
+      return docExtensions.some(ext => url.toLowerCase().includes(ext));
+    }
+
+    function getFileExt(url) {
+      const match = url.match(/\.([a-zA-Z0-9]+)(?:\?|$)/);
+      return match ? match[1].toUpperCase() : 'FILE';
+    }
+
+    function getMediaElement(url) {
+      if (isVideo(url)) {
+        return `<video src="${url}" controls></video>`;
+      } else if (isDocument(url)) {
+        const ext = getFileExt(url);
+        return `
+          <a href="${url}" target="_blank" class="thread-doc-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <div>
+              <div class="doc-name">View Document</div>
+              <div class="doc-type">${ext}</div>
+            </div>
+          </a>
+        `;
+      } else {
+        return `<img src="${url}" alt="Attachment">`;
+      }
+    }
+
+    // Initialize
+    loadThread();
+  </script>
+  <script src="/member-common.js"></script>
+  <script src="/pwa-nav.js"></script>
+</body>
+</html>

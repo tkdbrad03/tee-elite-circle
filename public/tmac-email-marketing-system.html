@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMac Email Marketing System</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#1E3932">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TMac Emails">
+  <meta name="description" content="The Tee Elite Circle Email Marketing System">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="email-system-manifest.json">
+  
+  <!-- Icons -->
+  <link rel="apple-touch-icon" href="https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png">
+  <link rel="icon" type="image/png" href="https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --deep-forest: #1E3932;
+      --gold: #D4AF7F;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+      --light-gray: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: var(--deep-forest);
+      padding: 24px 32px;
+      color: white;
+    }
+
+    .header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .header p {
+      font-size: 12px;
+      color: var(--gold);
+      margin-top: 4px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: white;
+      border: 1px solid #ddd;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab:hover {
+      background: var(--light-gray);
+    }
+
+    .tab.active {
+      background: var(--deep-forest);
+      color: white;
+      border-color: var(--deep-forest);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: var(--deep-forest);
+    }
+
+    .card h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      color: var(--deep-forest);
+    }
+
+    /* Workflow Checklist */
+    .workflow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .workflow-step:last-child {
+      border-bottom: none;
+    }
+
+    .workflow-step input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .workflow-step.completed .step-text {
+      text-decoration: line-through;
+      color: #888;
+    }
+
+    .step-number {
+      background: var(--deep-forest);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      flex: 1;
+    }
+
+    .step-text strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .step-text span {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* Calendar */
+    .month-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .month-btn {
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid #ddd;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .month-btn:hover {
+      background: var(--light-gray);
+    }
+
+    .month-btn.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--deep-forest);
+      font-weight: 600;
+    }
+
+    .email-calendar {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .email-calendar th {
+      text-align: left;
+      padding: 12px;
+      background: var(--deep-forest);
+      color: white;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .email-calendar td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    .email-calendar tr:hover {
+      background: var(--light-gray);
+    }
+
+    .email-calendar input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .email-calendar tr.completed {
+      background: #f0fdf4;
+    }
+
+    .email-calendar tr.completed td {
+      color: #666;
+    }
+
+    .email-calendar input.editable-field {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      background: #fafafa;
+    }
+
+    .email-calendar input.editable-field:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: white;
+    }
+
+    .email-calendar input.post-id-field {
+      width: 60px;
+      text-align: center;
+    }
+
+    .email-calendar .subject-cell {
+      min-width: 250px;
+    }
+
+    .add-email-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--light-gray);
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: #666;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .add-email-btn:hover {
+      background: white;
+      border-color: var(--deep-forest);
+      color: var(--deep-forest);
+    }
+
+    .delete-row-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+    }
+
+    .delete-row-btn:hover {
+      color: #e53e3e;
+    }
+
+    .type-badge.type-quarterly {
+      background: #7c3aed;
+      color: white;
+    }
+
+    .type-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .type-brief {
+      background: #e8f4ea;
+      color: #2d6a4f;
+    }
+
+    .type-feature {
+      background: #fef3e2;
+      color: #b8860b;
+    }
+
+    .type-story {
+      background: #f3e8ff;
+      color: #7c3aed;
+    }
+
+    .type-quarterly {
+      background: #ffe4e6;
+      color: #be123c;
+    }
+
+    .status-scheduled {
+      color: #2d6a4f;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      color: #b8860b;
+    }
+
+    /* Email Types */
+    .email-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .email-type-card {
+      background: var(--light-gray);
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid var(--deep-forest);
+    }
+
+    .email-type-card h4 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: var(--deep-forest);
+    }
+
+    .email-type-card p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .email-type-card ul {
+      font-size: 13px;
+      color: #444;
+      padding-left: 16px;
+    }
+
+    .email-type-card li {
+      margin-bottom: 4px;
+    }
+
+    /* Subject Lines */
+    .subject-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .subject-line:hover {
+      background: var(--light-gray);
+    }
+
+    .subject-line span {
+      font-size: 14px;
+    }
+
+    .copy-btn {
+      padding: 6px 12px;
+      background: var(--deep-forest);
+      color: white;
+      border: none;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .copy-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .copy-btn.copied {
+      background: var(--gold);
+      color: var(--deep-forest);
+    }
+
+    /* Brief Notes */
+    .notes-box {
+      background: var(--light-gray);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .notes-box h4 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: var(--deep-forest);
+    }
+
+    .notes-box ul {
+      font-size: 13px;
+      color: #444;
+      padding-left: 20px;
+      line-height: 1.8;
+    }
+
+    /* Quick Reference */
+    .quick-ref {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .quick-ref-item {
+      background: var(--light-gray);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .quick-ref-item .number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      color: var(--deep-forest);
+      font-weight: 600;
+    }
+
+    .quick-ref-item .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* Links */
+    .link-box {
+      background: var(--deep-forest);
+      color: white;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .link-box span {
+      font-size: 14px;
+    }
+
+    .link-box a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .link-box a:hover {
+      text-decoration: underline;
+    }
+
+    /* Progress Bar */
+    .progress-section {
+      margin-bottom: 24px;
+    }
+
+    .progress-bar-container {
+      background: #e0e0e0;
+      border-radius: 8px;
+      height: 12px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-bar {
+      background: var(--deep-forest);
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 20px;
+      }
+
+      .container {
+        padding: 20px 16px;
+      }
+
+      .email-calendar {
+        font-size: 12px;
+      }
+
+      .email-calendar th,
+      .email-calendar td {
+        padding: 8px;
+      }
+
+      .notification-banner {
+        padding: 12px 16px;
+      }
+    }
+
+    /* Notification Banner */
+    .notification-banner {
+      background: linear-gradient(135deg, var(--deep-forest) 0%, #2d4a40 100%);
+      padding: 16px 32px;
+      color: white;
+      display: none;
+    }
+
+    .notification-banner.show {
+      display: block;
+    }
+
+    .notification-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .notification-icon {
+      font-size: 24px;
+    }
+
+    .notification-text {
+      flex: 1;
+    }
+
+    .notification-text strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .notification-text span {
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .notification-dismiss {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0 8px;
+      opacity: 0.7;
+    }
+
+    .notification-dismiss:hover {
+      opacity: 1;
+    }
+
+    /* Calendar Buttons */
+    .calendar-section {
+      background: var(--light-gray);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .calendar-section h4 {
+      font-size: 14px;
+      margin-bottom: 16px;
+      color: var(--deep-forest);
+    }
+
+    .calendar-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .gcal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: var(--charcoal);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .gcal-btn:hover {
+      background: var(--deep-forest);
+      color: white;
+      border-color: var(--deep-forest);
+    }
+
+    .gcal-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Upcoming Tasks */
+    .upcoming-tasks {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .upcoming-header {
+      background: var(--gold);
+      color: var(--deep-forest);
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .upcoming-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    .upcoming-item:last-child {
+      border-bottom: none;
+    }
+
+    .upcoming-date {
+      font-size: 12px;
+      color: #666;
+      background: var(--light-gray);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .urgent {
+      background: #ffe4e6;
+      color: #be123c;
+    }
+
+    .soon {
+      background: #fef3e2;
+      color: #b8860b;
+    }
+
+    /* Install Banner */
+    .install-banner {
+      display: none;
+      background: linear-gradient(135deg, var(--gold) 0%, #c9a066 100%);
+      padding: 16px 32px;
+      color: var(--deep-forest);
+    }
+
+    .install-banner-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .install-banner-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .install-banner-text span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .install-banner-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .install-btn {
+      padding: 8px 16px;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .install-btn-primary {
+      background: var(--deep-forest);
+      color: white;
+    }
+
+    .install-btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 1px solid var(--deep-forest);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Email Marketing System</h1>
+    <p>The Tee Elite Circle</p>
+  </div>
+
+  <!-- Install Banner -->
+  <div id="install-banner" class="install-banner">
+    <div class="install-banner-content">
+      <div class="install-banner-text">
+        <span>📲</span>
+        <span>Install this app on your phone for quick access</span>
+      </div>
+      <div class="install-banner-buttons">
+        <button class="install-btn install-btn-primary" onclick="installApp()">Install App</button>
+        <button class="install-btn install-btn-secondary" onclick="dismissInstall()">Not Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Banner -->
+  <div id="notification-banner" class="notification-banner">
+    <div class="notification-content">
+      <span class="notification-icon">📌</span>
+      <div class="notification-text">
+        <strong id="notification-title">Welcome back!</strong>
+        <span id="notification-message">Checking your schedule...</span>
+      </div>
+      <button class="notification-dismiss" onclick="dismissNotification()">×</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('workflow')">Monthly Workflow</button>
+      <button class="tab" onclick="showTab('calendar')">Email Calendar</button>
+      <button class="tab" onclick="showTab('types')">Email Types</button>
+      <button class="tab" onclick="showTab('subjects')">Subject Lines</button>
+      <button class="tab" onclick="showTab('reference')">Quick Reference</button>
+    </div>
+
+    <!-- WORKFLOW TAB -->
+    <div id="workflow" class="tab-content active">
+      
+      <div class="card">
+        <h2>Monthly Workflow Checklist</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Complete these steps at the beginning of each month.</p>
+        
+        <div class="progress-section">
+          <strong style="font-size: 13px;">Monthly Progress</strong>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+          </div>
+          <div class="progress-label">
+            <span id="progress-text">0 of 8 complete</span>
+            <span id="progress-percent">0%</span>
+          </div>
+        </div>
+
+        <div id="workflow-steps">
+          <div class="workflow-step" data-step="1">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">1</div>
+            <div class="step-text">
+              <strong>Create Morning Briefs</strong>
+              <span>Generate all daily briefs for the month using Claude. Match day-of-week themes. (28-31 days depending on month)</span>
+            </div>
+          </div>
+
+          <div class="workflow-step" data-step="2">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">2</div>
+            <div class="step-text">
+              <strong>Upload to Admin Panel</strong>
+              <span>Add all briefs to admin panel with scheduled_for dates (6:00 AM each day).</span>
+            </div>
+          </div>
+
+          <div class="workflow-step" data-step="3">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">3</div>
+            <div class="step-text">
+              <strong>Get Monday Post IDs</strong>
+              <span>Click "Copy Link" on each Monday brief to get post IDs for weekly emails.</span>
+            </div>
+          </div>
+
+          <div class="workflow-step" data-step="4">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">4</div>
+            <div class="step-text">
+              <strong>Identify Video Feature Post</strong>
+              <span>Choose which video post to spotlight this month.</span>
+            </div>
+          </div>
+
+          <div class="workflow-step" data-step="5">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">5</div>
+            <div class="step-text">
+              <strong>Create Weekly Brief Emails</strong>
+              <span>Write 4-5 brief teaser emails linking to each Monday's post.</span>
+            </div>
+          </div>
+
+          <div class="workflow-step" data-step="6">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">6</div>
+            <div class="step-text">
+              <strong>Create Feature Email</strong>
+              <span>Write the monthly feature email for the video post.</span>
+            </div>
+          </div>
+
+          <div class="workflow-step" data-step="7">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">7</div>
+            <div class="step-text">
+              <strong>Schedule in Brevo</strong>
+              <span>Upload all HTML emails and schedule for their send dates.</span>
+            </div>
+          </div>
+
+          <div class="workflow-step" data-step="8">
+            <input type="checkbox" onchange="updateProgress()">
+            <div class="step-number">8</div>
+            <div class="step-text">
+              <strong>Verify and Confirm</strong>
+              <span>Double-check all scheduled campaigns in Brevo. Done until next month!</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="resetWorkflow()" style="margin-top: 20px; padding: 10px 20px; background: #eee; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 12px;">Reset Checklist</button>
+      </div>
+
+      <!-- Upcoming Tasks -->
+      <div class="card">
+        <h2>What's Coming Up</h2>
+        <div class="upcoming-tasks">
+          <div class="upcoming-header">Next Actions</div>
+          <div id="upcoming-items">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Add to Calendar -->
+      <div class="card">
+        <h2>Add Reminders to Google Calendar</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 16px;">Click to add recurring monthly reminders so you never miss a step.</p>
+        
+        <div class="calendar-section">
+          <h4>Monthly Content Creation Reminders</h4>
+          <div class="calendar-buttons">
+            <a class="gcal-btn" href="#" onclick="addToCalendar('Create Monthly Briefs', 'Create all Morning Briefs for the month. Upload to admin panel with scheduled dates. (28-31 briefs depending on month)', 1, 9, 0); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              1st of Month: Create Briefs
+            </a>
+            <a class="gcal-btn" href="#" onclick="addToCalendar('Schedule Monthly Emails', 'Create weekly brief emails and feature email. Schedule all in Brevo.', 3, 9, 0); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              3rd of Month: Schedule Emails
+            </a>
+            <a class="gcal-btn" href="#" onclick="addToCalendar('Verify Brevo Campaigns', 'Double-check all scheduled campaigns in Brevo are ready to send.', 5, 9, 0); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              5th of Month: Verify Campaigns
+            </a>
+          </div>
+        </div>
+
+        <div class="calendar-section">
+          <h4>Quarterly Invitation Reminders</h4>
+          <div class="calendar-buttons">
+            <a class="gcal-btn" href="#" onclick="addQuarterlyReminder('Q1', 1, 25); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q1: Jan 25
+            </a>
+            <a class="gcal-btn" href="#" onclick="addQuarterlyReminder('Q2', 4, 1); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q2: Apr 1
+            </a>
+            <a class="gcal-btn" href="#" onclick="addQuarterlyReminder('Q3', 7, 1); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.89 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q3: Jul 1
+            </a>
+            <a class="gcal-btn" href="#" onclick="addQuarterlyReminder('Q4', 10, 1); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q4: Oct 1
+            </a>
+          </div>
+        </div>
+
+        <div class="calendar-section">
+          <h4>Quarterly Engagement Poll Reminders</h4>
+          <div class="calendar-buttons">
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q1', 1, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q1: Jan 23
+            </a>
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q2', 4, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q2: Apr 23
+            </a>
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q3', 7, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q3: Jul 23
+            </a>
+            <a class="gcal-btn" href="#" onclick="addPollReminder('Q4', 10, 23); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Q4: Oct 23
+            </a>
+          </div>
+        </div>
+
+        <div class="calendar-section">
+          <h4>Add All Reminders at Once</h4>
+          <div class="calendar-buttons">
+            <a class="gcal-btn" style="background: var(--deep-forest); color: white; border-color: var(--deep-forest);" href="#" onclick="addAllReminders(); return false;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              Add All 2026 Reminders to Google Calendar
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Quick Links</h2>
+        <div class="link-box">
+          <span>Admin Panel</span>
+          <a href="https://tmacmastermind.com/admin.html" target="_blank">tmacmastermind.com/admin.html →</a>
+        </div>
+        <div class="link-box">
+          <span>The Tee Room</span>
+          <a href="https://tmacmastermind.com/tee-room.html" target="_blank">tmacmastermind.com/tee-room.html →</a>
+        </div>
+        <div class="link-box">
+          <span>Brevo Campaigns</span>
+          <a href="https://app.brevo.com" target="_blank">app.brevo.com →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Brief Creation Notes</h2>
+        <div class="notes-box">
+          <h4>Format Requirements</h4>
+          <ul>
+            <li><strong>Excerpt:</strong> "Today's TMac Morning Brief. Power, wealth, relationships, and reinvention through a strategic lens."</li>
+            <li><strong>Tagline:</strong> "A daily perspective on power, reinvention, and how grown women actually move."</li>
+            <li><strong>Schedule:</strong> 6:00 AM daily</li>
+            <li><strong>Tone:</strong> Woman who has been in the room (confident, knowing, not preachy)</li>
+            <li>Match day-of-week themes (Monday = momentum, Friday = reflection, Sunday = planning)</li>
+            <li>Include Reinvention Spotlights every few days (fictional composites)</li>
+            <li>End each brief with "The Tee Elite Truth."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDAR TAB -->
+    <div id="calendar" class="tab-content">
+      <div class="card">
+        <h2>Email Calendar</h2>
+        
+        <div class="month-selector" id="month-selector">
+          <!-- Generated dynamically -->
+        </div>
+
+        <div id="calendar-container">
+          <!-- Generated dynamically -->
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Quarterly Schedule</h2>
+        <table class="email-calendar">
+          <thead>
+            <tr>
+              <th style="width: 50px;">Done</th>
+              <th>Quarter</th>
+              <th>Type</th>
+              <th>Send Window</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q1-invite" onchange="saveCalendarProgress()"></td>
+              <td>Q1 2026</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
+              <td>Late January</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q1-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q1 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Jan 23</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q2-invite" onchange="saveCalendarProgress()"></td>
+              <td>Q2 2026</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
+              <td>Early April</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q2-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q2 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Apr 23</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q3-invite" onchange="saveCalendarProgress()"></td>
+              <td>Q3 2026</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
+              <td>Early July</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q3-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q3 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Jul 23</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q4-invite" onchange="saveCalendarProgress()"></td>
+              <td>Q4 2026</td>
+              <td><span class="type-badge type-quarterly">Invitation</span></td>
+              <td>Early October</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="calendar-check" data-id="q4-poll" onchange="saveCalendarProgress()"></td>
+              <td>Q4 2026</td>
+              <td><span class="type-badge type-story">Poll</span></td>
+              <td>Oct 23</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EMAIL TYPES TAB -->
+    <div id="types" class="tab-content">
+      <div class="card">
+        <h2>Email Types</h2>
+        <div class="email-type-grid">
+          
+          <div class="email-type-card">
+            <h4>Weekly Brief Teaser</h4>
+            <p>Short email driving traffic to that week's Morning Brief.</p>
+            <ul>
+              <li><strong>Frequency:</strong> Every Monday</li>
+              <li><strong>Button:</strong> "Read Today's Brief"</li>
+              <li><strong>Link:</strong> Direct to post ID</li>
+              <li><strong>Length:</strong> 3-4 sentences</li>
+            </ul>
+          </div>
+
+          <div class="email-type-card">
+            <h4>Feature Post Spotlight</h4>
+            <p>Monthly email promoting a video blog post.</p>
+            <ul>
+              <li><strong>Frequency:</strong> 1 per month (Thursday)</li>
+              <li><strong>Button:</strong> "Watch the Video"</li>
+              <li><strong>Link:</strong> Direct to post ID</li>
+              <li><strong>Focus:</strong> Video posts only</li>
+            </ul>
+          </div>
+
+          <div class="email-type-card">
+            <h4>Story Email</h4>
+            <p>Personal narrative building connection and driving replies.</p>
+            <ul>
+              <li><strong>Frequency:</strong> 1 per month (optional)</li>
+              <li><strong>CTA:</strong> "Reply ELITE" or "Reply RICH"</li>
+              <li><strong>Link:</strong> None (reply-based)</li>
+              <li><strong>Tone:</strong> Personal, vulnerable</li>
+            </ul>
+          </div>
+
+          <div class="email-type-card">
+            <h4>Quarterly Invitation</h4>
+            <p>Direct invitation to apply for The Tee Elite Circle.</p>
+            <ul>
+              <li><strong>Frequency:</strong> Once per quarter</li>
+              <li><strong>CTA:</strong> "Reply ELITE"</li>
+              <li><strong>Link:</strong> None (reply-based)</li>
+              <li><strong>Tone:</strong> Confident, selective</li>
+            </ul>
+          </div>
+
+          <div class="email-type-card">
+            <h4>Engagement Poll</h4>
+            <p>Simple question to gauge interest and boost engagement.</p>
+            <ul>
+              <li><strong>Frequency:</strong> Once per quarter</li>
+              <li><strong>CTA:</strong> "Reply A, B, or C"</li>
+              <li><strong>Link:</strong> None (reply-based)</li>
+              <li><strong>Tone:</strong> Casual, curious</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Monthly Email Count</h2>
+        <div class="quick-ref">
+          <div class="quick-ref-item">
+            <div class="number">4-5</div>
+            <div class="label">Brief Teasers</div>
+          </div>
+          <div class="quick-ref-item">
+            <div class="number">1</div>
+            <div class="label">Feature Email</div>
+          </div>
+          <div class="quick-ref-item">
+            <div class="number">0-1</div>
+            <div class="label">Story Email</div>
+          </div>
+          <div class="quick-ref-item">
+            <div class="number">5-7</div>
+            <div class="label">Total Monthly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBJECT LINES TAB -->
+    <div id="subjects" class="tab-content">
+      <div class="card">
+        <h2>Subject Line Bank</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Click "Copy" to copy any subject line to your clipboard.</p>
+        
+        <div id="subject-lines">
+          <div class="subject-line">
+            <span>The right rooms rarely have open doors</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>She raised her prices and lost zero clients</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>What nobody tells you about second act wealth</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>I stopped waiting to be invited</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>The cost of being liked</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Your network is not who you know</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Monday belongs to the women who planned on Sunday</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Some relationships have expired</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Golf taught me more than business school</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>The woman who asks awkwardly still wins</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Wealth is quieter than you think</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>What I wish I knew at 45</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Not everyone can come with you</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>The delegation problem nobody talks about</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Rest is not the opposite of ambition</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>I built something and walked away</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>The room I spent 20 years looking for</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>You do not need permission</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>The compound effect keeps receipts</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+          <div class="subject-line">
+            <span>Fear does not get a vote</span>
+            <button class="copy-btn" onclick="copySubject(this)">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK REFERENCE TAB -->
+    <div id="reference" class="tab-content">
+      <div class="card">
+        <h2>Email Design Specs</h2>
+        <div class="notes-box">
+          <ul>
+            <li><strong>Logo URL:</strong> https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png</li>
+            <li><strong>Primary Color:</strong> #1E3932 (Deep Forest)</li>
+            <li><strong>Accent Color:</strong> #D4AF7F (Gold)</li>
+            <li><strong>Body Font:</strong> Arial</li>
+            <li><strong>Accent Font:</strong> Georgia</li>
+            <li><strong>Button Style:</strong> Deep forest background, gold text, uppercase</li>
+            <li><strong>Footer Tagline:</strong> "Where Golf Meets Greatness"</li>
+            <li><strong>Unsubscribe:</strong> {{ unsubscribe }} (Brevo variable)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Button Text by Email Type</h2>
+        <table class="email-calendar">
+          <thead>
+            <tr>
+              <th>Email Type</th>
+              <th>Button Text</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Weekly Brief Teaser</td>
+              <td>READ TODAY'S BRIEF</td>
+            </tr>
+            <tr>
+              <td>Feature Post (Video)</td>
+              <td>WATCH THE VIDEO</td>
+            </tr>
+            <tr>
+              <td>Feature Post (Article)</td>
+              <td>READ THE FULL POST</td>
+            </tr>
+            <tr>
+              <td>Story Email</td>
+              <td>No button (Reply ELITE or Reply RICH)</td>
+            </tr>
+            <tr>
+              <td>Quarterly Invitation</td>
+              <td>No button (Reply ELITE)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Video Posts for Feature Emails</h2>
+        <table class="email-calendar">
+          <thead>
+            <tr>
+              <th>Post Title</th>
+              <th>Publishes</th>
+              <th>Feature Month</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>The 5 Types of Women You Meet on the Golf Course</td>
+              <td>Jan 14</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>What a Bad Shot Taught Me About Business</td>
+              <td>Feb 4</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>The Three Money Moves That Changed Everything</td>
+              <td>Feb 18</td>
+              <td>February</td>
+            </tr>
+            <tr>
+              <td>How to Get Invited to the Golf Rounds Where Deals Happen</td>
+              <td>Mar 25</td>
+              <td>March</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Remember</h2>
+        <div class="notes-box">
+          <ul>
+            <li>Create briefs FIRST, then emails</li>
+            <li>Always grab post links from admin panel before scheduling</li>
+            <li>Schedule all emails at the start of each month</li>
+            <li>Brief emails go out Monday (or Sunday night)</li>
+            <li>Feature emails go out Thursday after post publishes</li>
+            <li>The system runs while you live your life</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Engagement Poll Template</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 16px;">Send once per quarter (late in the month) to gauge interest and boost engagement.</p>
+        <div class="notes-box">
+          <h4>Subject Line</h4>
+          <p style="font-size: 14px; margin-bottom: 16px;">Quick question for you</p>
+          
+          <h4>Body Copy</h4>
+          <p style="font-size: 14px; line-height: 1.8; white-space: pre-line;">I am planning content for the next few months and want to make sure I am writing what actually matters to you.
+
+Which of these do you want more of?
+
+Reply with A, B, or C:
+
+A) Golf and business strategy
+B) Wealth building and investing
+C) Reinvention and second acts
+
+Just hit reply. One letter. That is it.</p>
+        </div>
+        <button class="copy-btn" style="margin-top: 16px;" onclick="copyPollTemplate(this)">Copy Full Template</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Tab functionality
+    function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Month selector
+    function showMonth(monthKey) {
+      document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.month-content').forEach(c => c.style.display = 'none');
+      
+      document.querySelector('[data-month="' + monthKey + '"]').classList.add('active');
+      document.getElementById('month-' + monthKey).style.display = 'block';
+    }
+
+    // Dynamic Calendar Generation
+    function generateDynamicCalendar() {
+      const today = new Date();
+      const currentMonth = today.getMonth();
+      const currentYear = today.getFullYear();
+      
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthKeys = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      
+      // You work ONE MONTH AHEAD, so show NEXT month + 3 more (skip current month - it's done)
+      const monthsToShow = [];
+      for (let i = 1; i <= 4; i++) {
+        const monthIndex = (currentMonth + i) % 12;
+        const year = currentYear + Math.floor((currentMonth + i) / 12);
+        monthsToShow.push({ index: monthIndex, year: year, key: monthKeys[monthIndex], name: monthNames[monthIndex] });
+      }
+      
+      // Generate month selector buttons
+      const selectorContainer = document.getElementById('month-selector');
+      selectorContainer.innerHTML = monthsToShow.map((m, i) => 
+        '<button class="month-btn ' + (i === 0 ? 'active' : '') + '" data-month="' + m.key + m.year + '" onclick="showMonth(\'' + m.key + m.year + '\')">' + m.name + ' ' + m.year + '</button>'
+      ).join('');
+      
+      // Generate calendar content for each month
+      const calendarContainer = document.getElementById('calendar-container');
+      calendarContainer.innerHTML = monthsToShow.map((m, i) => {
+        const monthKey = m.key + m.year;
+        return `
+          <div id="month-${monthKey}" class="month-content" style="display: ${i === 0 ? 'block' : 'none'};">
+            <h3>${m.name} ${m.year}</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 16px;">${daysInMonth[m.index]} days this month</p>
+            <table class="email-calendar">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">Done</th>
+                  <th style="width: 100px;">Date</th>
+                  <th style="width: 80px;">Type</th>
+                  <th class="subject-cell">Subject Line</th>
+                  <th style="width: 70px;">Post ID</th>
+                  <th style="width: 40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="tbody-${monthKey}">
+              </tbody>
+            </table>
+            <button class="add-email-btn" onclick="addEmailRow('${monthKey}')">+ Add Email</button>
+            <p class="calendar-progress" id="progress-${monthKey}" style="margin-top: 12px; font-size: 13px; color: #666;">0 of 0 scheduled</p>
+          </div>
+        `;
+      }).join('');
+      
+      // Load saved data for each month
+      monthsToShow.forEach(m => {
+        loadMonthData(m.key + m.year);
+      });
+    }
+
+    // Get saved calendar data
+    function getCalendarData() {
+      const saved = localStorage.getItem('tmac-calendar-data');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+      
+      // Pre-seed January 2026 data (already scheduled in Brevo)
+      const seedData = {
+        'jan2026': [
+          { date: 'Mon Jan 5', type: 'Brief', subject: 'The right rooms rarely have open doors', postId: '37', done: true },
+          { date: 'Thu Jan 9', type: 'Feature', subject: 'There is a secret the most connected women know', postId: '30', done: true },
+          { date: 'Mon Jan 12', type: 'Brief', subject: 'The woman who tries to do everything herself builds a job', postId: '44', done: true },
+          { date: 'Mon Jan 19', type: 'Brief', subject: 'The dreams we remember today were called unrealistic once', postId: '51', done: true },
+          { date: 'Thu Jan 23', type: 'Poll', subject: 'Quick question for you', postId: '-', done: false },
+          { date: 'Mon Jan 26', type: 'Brief', subject: 'Fear will always have opinions', postId: '58', done: true },
+          { date: 'Fri Jan 30', type: 'Brief', subject: 'January is complete. You earned this ground.', postId: '62', done: true }
+        ]
+      };
+      saveCalendarData(seedData);
+      return seedData;
+    }
+
+    // Save calendar data
+    function saveCalendarData(data) {
+      localStorage.setItem('tmac-calendar-data', JSON.stringify(data));
+    }
+
+    // Load month data from localStorage
+    function loadMonthData(monthKey) {
+      const data = getCalendarData();
+      const monthData = data[monthKey] || [];
+      const tbody = document.getElementById('tbody-' + monthKey);
+      
+      if (monthData.length === 0) {
+        // Add default rows for a new month (Mondays + 1 feature)
+        addDefaultRows(monthKey);
+      } else {
+        monthData.forEach((row, index) => {
+          addEmailRowWithData(monthKey, row, index);
+        });
+      }
+      updateMonthProgress(monthKey);
+    }
+
+    // Add default email rows for a month
+    function addDefaultRows(monthKey) {
+      const monthNames = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+      const monthIndex = monthNames[monthKey.slice(0, 3)];
+      const year = parseInt(monthKey.slice(3));
+      
+      // Find all Mondays in the month
+      const mondays = [];
+      const date = new Date(year, monthIndex, 1);
+      while (date.getMonth() === monthIndex) {
+        if (date.getDay() === 1) { // Monday
+          mondays.push(new Date(date));
+        }
+        date.setDate(date.getDate() + 1);
+      }
+      
+      // Add rows for each Monday (Brief) + 1 Feature (mid-month Thursday)
+      const rows = [];
+      mondays.forEach((monday, i) => {
+        rows.push({
+          date: formatDate(monday),
+          type: 'Brief',
+          subject: '',
+          postId: '',
+          done: false
+        });
+      });
+      
+      // Add feature row (3rd Thursday of month)
+      const thirdThursday = getThirdThursday(year, monthIndex);
+      rows.push({
+        date: formatDate(thirdThursday),
+        type: 'Feature',
+        subject: '',
+        postId: '',
+        done: false
+      });
+      
+      // Sort by date
+      rows.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      // Save and render
+      const data = getCalendarData();
+      data[monthKey] = rows;
+      saveCalendarData(data);
+      
+      rows.forEach((row, index) => {
+        addEmailRowWithData(monthKey, row, index);
+      });
+    }
+
+    function getThirdThursday(year, month) {
+      const date = new Date(year, month, 1);
+      let count = 0;
+      while (count < 3) {
+        if (date.getDay() === 4) count++;
+        if (count < 3) date.setDate(date.getDate() + 1);
+      }
+      return date;
+    }
+
+    function formatDate(date) {
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return days[date.getDay()] + ' ' + months[date.getMonth()] + ' ' + date.getDate();
+    }
+
+    // Add email row with data
+    function addEmailRowWithData(monthKey, rowData, index) {
+      const tbody = document.getElementById('tbody-' + monthKey);
+      const row = document.createElement('tr');
+      if (rowData.done) row.classList.add('completed');
+      
+      const typeClass = rowData.type === 'Brief' ? 'type-brief' : 
+                        rowData.type === 'Feature' ? 'type-feature' : 
+                        rowData.type === 'Poll' ? 'type-story' : 'type-brief';
+      
+      row.innerHTML = `
+        <td><input type="checkbox" class="calendar-check" data-month="${monthKey}" data-index="${index}" ${rowData.done ? 'checked' : ''} onchange="toggleEmailDone('${monthKey}', ${index})"></td>
+        <td>${rowData.date}</td>
+        <td>
+          <select class="editable-field" style="width: 80px;" onchange="updateEmailType('${monthKey}', ${index}, this.value)">
+            <option value="Brief" ${rowData.type === 'Brief' ? 'selected' : ''}>Brief</option>
+            <option value="Feature" ${rowData.type === 'Feature' ? 'selected' : ''}>Feature</option>
+            <option value="Poll" ${rowData.type === 'Poll' ? 'selected' : ''}>Poll</option>
+          </select>
+        </td>
+        <td class="subject-cell"><input type="text" class="editable-field" placeholder="Enter subject line..." value="${rowData.subject || ''}" onchange="updateEmailSubject('${monthKey}', ${index}, this.value)"></td>
+        <td><input type="text" class="editable-field post-id-field" placeholder="ID" value="${rowData.postId || ''}" onchange="updateEmailPostId('${monthKey}', ${index}, this.value)"></td>
+        <td><button class="delete-row-btn" onclick="deleteEmailRow('${monthKey}', ${index})">×</button></td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    // Add new email row
+    function addEmailRow(monthKey) {
+      const data = getCalendarData();
+      if (!data[monthKey]) data[monthKey] = [];
+      
+      const newRow = {
+        date: 'TBD',
+        type: 'Brief',
+        subject: '',
+        postId: '',
+        done: false
+      };
+      data[monthKey].push(newRow);
+      saveCalendarData(data);
+      
+      addEmailRowWithData(monthKey, newRow, data[monthKey].length - 1);
+      updateMonthProgress(monthKey);
+    }
+
+    // Toggle email done status
+    function toggleEmailDone(monthKey, index) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index] !== undefined) {
+        // Get the checkbox state directly
+        const checkbox = document.querySelector(`[data-month="${monthKey}"][data-index="${index}"]`);
+        data[monthKey][index].done = checkbox.checked;
+        saveCalendarData(data);
+        
+        const row = checkbox.closest('tr');
+        if (checkbox.checked) {
+          row.classList.add('completed');
+        } else {
+          row.classList.remove('completed');
+        }
+        updateMonthProgress(monthKey);
+      }
+    }
+
+    // Update email type
+    function updateEmailType(monthKey, index, value) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index]) {
+        data[monthKey][index].type = value;
+        saveCalendarData(data);
+      }
+    }
+
+    // Update email subject
+    function updateEmailSubject(monthKey, index, value) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index]) {
+        data[monthKey][index].subject = value;
+        saveCalendarData(data);
+      }
+    }
+
+    // Update email post ID
+    function updateEmailPostId(monthKey, index, value) {
+      const data = getCalendarData();
+      if (data[monthKey] && data[monthKey][index]) {
+        data[monthKey][index].postId = value;
+        saveCalendarData(data);
+      }
+    }
+
+    // Delete email row
+    function deleteEmailRow(monthKey, index) {
+      if (!confirm('Delete this email row?')) return;
+      
+      const data = getCalendarData();
+      if (data[monthKey]) {
+        data[monthKey].splice(index, 1);
+        saveCalendarData(data);
+        
+        // Re-render the month
+        const tbody = document.getElementById('tbody-' + monthKey);
+        tbody.innerHTML = '';
+        data[monthKey].forEach((row, i) => {
+          addEmailRowWithData(monthKey, row, i);
+        });
+        updateMonthProgress(monthKey);
+      }
+    }
+
+    // Update month progress counter
+    function updateMonthProgress(monthKey) {
+      const data = getCalendarData();
+      const monthData = data[monthKey] || [];
+      const total = monthData.length;
+      const done = monthData.filter(r => r.done).length;
+      
+      const progressEl = document.getElementById('progress-' + monthKey);
+      if (progressEl) {
+        progressEl.textContent = done + ' of ' + total + ' scheduled';
+        if (done === total && total > 0) {
+          progressEl.style.color = '#2d6a4f';
+          progressEl.style.fontWeight = '600';
+        } else {
+          progressEl.style.color = '#666';
+          progressEl.style.fontWeight = 'normal';
+        }
+      }
+    }
+
+    // Initialize dynamic calendar on page load
+    generateDynamicCalendar();
+
+    // Progress tracking
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('#workflow-steps input[type="checkbox"]');
+      const checked = document.querySelectorAll('#workflow-steps input[type="checkbox"]:checked').length;
+      const total = checkboxes.length;
+      const percent = Math.round((checked / total) * 100);
+
+      document.getElementById('progress-bar').style.width = percent + '%';
+      document.getElementById('progress-text').textContent = checked + ' of ' + total + ' complete';
+      document.getElementById('progress-percent').textContent = percent + '%';
+
+      // Update step styling
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          cb.closest('.workflow-step').classList.add('completed');
+        } else {
+          cb.closest('.workflow-step').classList.remove('completed');
+        }
+      });
+
+      // Save to localStorage
+      saveProgress();
+    }
+
+    function saveProgress() {
+      const checkboxes = document.querySelectorAll('#workflow-steps input[type="checkbox"]');
+      const states = [];
+      checkboxes.forEach(cb => states.push(cb.checked));
+      localStorage.setItem('tmac-workflow-progress', JSON.stringify(states));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem('tmac-workflow-progress');
+      if (saved) {
+        const states = JSON.parse(saved);
+        const checkboxes = document.querySelectorAll('#workflow-steps input[type="checkbox"]');
+        checkboxes.forEach((cb, i) => {
+          if (states[i]) {
+            cb.checked = true;
+          }
+        });
+        updateProgress();
+      }
+    }
+
+    function resetWorkflow() {
+      if (confirm('Reset the checklist for a new month?')) {
+        const checkboxes = document.querySelectorAll('#workflow-steps input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = false);
+        updateProgress();
+      }
+    }
+
+    // Copy subject line
+    function copySubject(btn) {
+      const text = btn.parentElement.querySelector('span').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    // Copy poll template
+    function copyPollTemplate(btn) {
+      const template = `Subject: Quick question for you
+
+I am planning content for the next few months and want to make sure I am writing what actually matters to you.
+
+Which of these do you want more of?
+
+Reply with A, B, or C:
+
+A) Golf and business strategy
+B) Wealth building and investing
+C) Reinvention and second acts
+
+Just hit reply. One letter. That is it.`;
+      
+      navigator.clipboard.writeText(template).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy Full Template';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    // Quarterly Progress Functions (for quarterly schedule table)
+    function saveCalendarProgress() {
+      const checkboxes = document.querySelectorAll('.calendar-check[data-id]');
+      const states = {};
+      checkboxes.forEach(cb => {
+        if (cb.dataset.id) {
+          states[cb.dataset.id] = cb.checked;
+          const row = cb.closest('tr');
+          if (cb.checked) {
+            row.classList.add('completed');
+          } else {
+            row.classList.remove('completed');
+          }
+        }
+      });
+      localStorage.setItem('tmac-quarterly-progress', JSON.stringify(states));
+    }
+
+    function loadQuarterlyProgress() {
+      const saved = localStorage.getItem('tmac-quarterly-progress');
+      if (saved) {
+        const states = JSON.parse(saved);
+        const checkboxes = document.querySelectorAll('.calendar-check[data-id]');
+        checkboxes.forEach(cb => {
+          if (cb.dataset.id && states[cb.dataset.id]) {
+            cb.checked = true;
+            cb.closest('tr').classList.add('completed');
+          }
+        });
+      }
+    }
+
+    // Load saved progress on page load
+    loadProgress();
+    loadQuarterlyProgress();
+
+    // Notification System
+    function checkNotification() {
+      const today = new Date();
+      const dayOfMonth = today.getDate();
+      const month = today.getMonth(); // 0-indexed
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const nextMonth = (month + 1) % 12;
+      const nextMonthName = monthNames[nextMonth];
+      const briefMonth = (month + 2) % 12; // Two months ahead for brief creation
+      const briefMonthName = monthNames[briefMonth];
+      
+      const banner = document.getElementById('notification-banner');
+      const title = document.getElementById('notification-title');
+      const message = document.getElementById('notification-message');
+      
+      let showBanner = true;
+      let icon = '📌';
+      
+      // Check workflow progress
+      const saved = localStorage.getItem('tmac-workflow-progress');
+      const states = saved ? JSON.parse(saved) : [];
+      const completed = states.filter(s => s).length;
+      
+      if (dayOfMonth >= 25 && dayOfMonth <= 31) {
+        // End of month - time to create briefs for TWO months ahead
+        icon = '🚨';
+        title.textContent = "Time to Create " + briefMonthName + " Briefs!";
+        message.textContent = nextMonthName + " is already handled. Now create and upload all " + briefMonthName + " Morning Briefs.";
+      } else if (dayOfMonth >= 1 && dayOfMonth <= 3) {
+        // First 3 days - schedule emails for NEXT month
+        icon = '📧';
+        title.textContent = "Schedule " + nextMonthName + " Emails";
+        message.textContent = "Create and schedule " + nextMonthName + " emails in Brevo this week.";
+      } else if (dayOfMonth >= 4 && dayOfMonth <= 7) {
+        // Days 4-7 - verify everything is scheduled
+        icon = '✅';
+        title.textContent = "Verify Your Schedule";
+        message.textContent = "Double-check that all " + nextMonthName + " emails are scheduled in Brevo. Then relax.";
+      } else if (completed < 8) {
+        // Incomplete workflow
+        icon = '⏳';
+        title.textContent = "Workflow In Progress";
+        message.textContent = completed + " of 8 steps complete. Keep going!";
+      } else {
+        // All done!
+        icon = '✅';
+        title.textContent = "You're Ahead of the Game!";
+        message.textContent = "All tasks complete. Your system is running. Enjoy your life!";
+      }
+      
+      // Check for quarterly reminder
+      if ((month === 0 && dayOfMonth >= 20 && dayOfMonth <= 28) || // Late January
+          (month === 3 && dayOfMonth <= 5) || // Early April
+          (month === 6 && dayOfMonth <= 5) || // Early July
+          (month === 9 && dayOfMonth <= 5)) { // Early October
+        icon = '💌';
+        title.textContent = "Quarterly Invitation Time";
+        message.textContent = "This is a good week to send your quarterly ELITE or RICH invitation email.";
+      }
+      
+      document.querySelector('.notification-icon').textContent = icon;
+      banner.classList.add('show');
+    }
+    
+    function dismissNotification() {
+      document.getElementById('notification-banner').classList.remove('show');
+      // Remember dismissal for today
+      localStorage.setItem('tmac-notification-dismissed', new Date().toDateString());
+    }
+    
+    // Check if notification was already dismissed today
+    function initNotification() {
+      const dismissed = localStorage.getItem('tmac-notification-dismissed');
+      const today = new Date().toDateString();
+      if (dismissed !== today) {
+        checkNotification();
+      }
+    }
+
+    // Upcoming Tasks
+    function loadUpcomingTasks() {
+      const container = document.getElementById('upcoming-items');
+      const today = new Date();
+      const dayOfMonth = today.getDate();
+      const month = today.getMonth();
+      const year = today.getFullYear();
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      
+      // You work ONE MONTH AHEAD
+      // In late December, you create February briefs (January is already done)
+      // In early January, you schedule February emails
+      const workingOnMonth = (month + 2) % 12; // Two months ahead since current month is done
+      const workingOnMonthName = monthNames[workingOnMonth];
+      
+      let tasks = [];
+      
+      // Late month (25-31): Time to create briefs for month after next
+      if (dayOfMonth >= 25) {
+        const daysLeft = 31 - dayOfMonth; // Approximate days left in month
+        tasks.push({
+          text: 'Create ' + workingOnMonthName + ' Morning Briefs',
+          days: daysLeft,
+          urgent: daysLeft <= 3
+        });
+      }
+      
+      // Early month (1-7): Time to schedule emails for next month
+      if (dayOfMonth <= 7) {
+        const nextMonthName = monthNames[(month + 1) % 12];
+        tasks.push({
+          text: 'Schedule ' + nextMonthName + ' Emails in Brevo',
+          days: 7 - dayOfMonth,
+          urgent: dayOfMonth <= 3
+        });
+      }
+      
+      // Quarterly invitation dates
+      const quarterlyDates = [
+        { q: 'Q1', month: 0, day: 25 },
+        { q: 'Q2', month: 3, day: 1 },
+        { q: 'Q3', month: 6, day: 1 },
+        { q: 'Q4', month: 9, day: 1 }
+      ];
+      
+      // Check quarterly
+      quarterlyDates.forEach(q => {
+        let qDate = new Date(year, q.month, q.day);
+        if (qDate < today) {
+          qDate = new Date(year + 1, q.month, q.day);
+        }
+        const qDaysUntil = Math.ceil((qDate - today) / (1000 * 60 * 60 * 24));
+        if (qDaysUntil <= 14) {
+          tasks.push({
+            text: q.q + ' Quarterly Invitation Email',
+            days: qDaysUntil,
+            urgent: qDaysUntil <= 3
+          });
+        }
+      });
+      
+      // Quarterly poll dates
+      const pollDates = [
+        { q: 'Q1', month: 0, day: 23 },
+        { q: 'Q2', month: 3, day: 23 },
+        { q: 'Q3', month: 6, day: 23 },
+        { q: 'Q4', month: 9, day: 23 }
+      ];
+      
+      pollDates.forEach(q => {
+        let qDate = new Date(year, q.month, q.day);
+        if (qDate < today) {
+          qDate = new Date(year + 1, q.month, q.day);
+        }
+        const qDaysUntil = Math.ceil((qDate - today) / (1000 * 60 * 60 * 24));
+        if (qDaysUntil <= 14) {
+          tasks.push({
+            text: q.q + ' Engagement Poll Email',
+            days: qDaysUntil,
+            urgent: qDaysUntil <= 3
+          });
+        }
+      });
+      
+      // Sort by days until
+      tasks.sort((a, b) => a.days - b.days);
+      
+      // Render
+      if (tasks.length === 0) {
+        container.innerHTML = '<div class="upcoming-item"><span style="color: #2d6a4f; font-weight: 500;">✓ You\'re ahead of schedule. No urgent tasks!</span></div>';
+      } else {
+        container.innerHTML = tasks.map(task => {
+          let urgencyClass = '';
+          let label = task.days + ' days';
+          if (task.days === 0) {
+            label = 'Today!';
+            urgencyClass = 'urgent';
+          } else if (task.days === 1) {
+            label = 'Tomorrow';
+            urgencyClass = 'urgent';
+          } else if (task.urgent) {
+            urgencyClass = 'urgent';
+          } else if (task.days <= 5) {
+            urgencyClass = 'soon';
+          }
+          return '<div class="upcoming-item"><span>' + task.text + '</span><span class="upcoming-date ' + urgencyClass + '">' + label + '</span></div>';
+        }).join('');
+      }
+    }
+
+    // Google Calendar Integration
+    function addToCalendar(title, description, dayOfMonth, hour, minute) {
+      // Create recurring monthly event for 2026
+      const year = 2026;
+      const events = [];
+      
+      for (let month = 0; month < 12; month++) {
+        const startDate = new Date(year, month, dayOfMonth, hour, minute);
+        const endDate = new Date(year, month, dayOfMonth, hour + 1, minute);
+        
+        const formatDate = (d) => {
+          return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+        };
+        
+        const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+          '&text=' + encodeURIComponent('TMac: ' + title) +
+          '&dates=' + formatDate(startDate) + '/' + formatDate(endDate) +
+          '&details=' + encodeURIComponent(description + '\n\nFrom your TMac Email Marketing System') +
+          '&sf=true&output=xml';
+        
+        window.open(url, '_blank');
+        return; // Just open first one - user can set recurrence in Google Calendar
+      }
+    }
+    
+    function addQuarterlyReminder(quarter, month, day) {
+      const year = 2026;
+      const startDate = new Date(year, month - 1, day, 9, 0);
+      const endDate = new Date(year, month - 1, day, 10, 0);
+      
+      const formatDate = (d) => {
+        return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+      };
+      
+      const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text=' + encodeURIComponent('TMac: ' + quarter + ' Quarterly Invitation Email') +
+        '&dates=' + formatDate(startDate) + '/' + formatDate(endDate) +
+        '&details=' + encodeURIComponent('Send your quarterly ELITE or RICH invitation email.\n\nThis is your chance to personally invite women to apply for The Tee Elite Circle.\n\nFrom your TMac Email Marketing System') +
+        '&sf=true&output=xml';
+      
+      window.open(url, '_blank');
+    }
+    
+    function addPollReminder(quarter, month, day) {
+      const year = 2026;
+      const startDate = new Date(year, month - 1, day, 9, 0);
+      const endDate = new Date(year, month - 1, day, 10, 0);
+      
+      const formatDate = (d) => {
+        return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+      };
+      
+      const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text=' + encodeURIComponent('TMac: ' + quarter + ' Engagement Poll Email') +
+        '&dates=' + formatDate(startDate) + '/' + formatDate(endDate) +
+        '&details=' + encodeURIComponent('Send your quarterly engagement poll to gauge audience interest.\n\nSubject: Quick question for you\n\nAsk them to reply A, B, or C to choose what content they want more of.\n\nFrom your TMac Email Marketing System') +
+        '&sf=true&output=xml';
+      
+      window.open(url, '_blank');
+    }
+    
+    function addAllReminders() {
+      alert('This will open multiple Google Calendar tabs. Click OK to continue, then save each event in Google Calendar.\n\nTip: When saving, set each monthly reminder to "Repeat monthly" so you only need to do this once!');
+      
+      // Monthly reminders
+      setTimeout(() => addToCalendar('Create Monthly Briefs', 'Create all Morning Briefs for the month. Upload to admin panel with scheduled dates. (28-31 briefs depending on month)', 1, 9, 0), 500);
+      setTimeout(() => addToCalendar('Schedule Monthly Emails', 'Create weekly brief emails and feature email. Schedule all in Brevo.', 3, 9, 0), 1500);
+      
+      // Quarterly invitation reminders
+      setTimeout(() => addQuarterlyReminder('Q1', 1, 25), 2500);
+      setTimeout(() => addQuarterlyReminder('Q2', 4, 1), 3500);
+      setTimeout(() => addQuarterlyReminder('Q3', 7, 1), 4500);
+      setTimeout(() => addQuarterlyReminder('Q4', 10, 1), 5500);
+      
+      // Quarterly poll reminders
+      setTimeout(() => addPollReminder('Q1', 1, 23), 6500);
+      setTimeout(() => addPollReminder('Q2', 4, 23), 7500);
+      setTimeout(() => addPollReminder('Q3', 7, 23), 8500);
+      setTimeout(() => addPollReminder('Q4', 10, 23), 9500);
+    }
+
+    // Initialize on page load
+    initNotification();
+    loadUpcomingTasks();
+
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('email-system-sw.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
+    }
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    const installBanner = document.getElementById('install-banner');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Show install banner
+      if (installBanner) {
+        installBanner.style.display = 'block';
+      }
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted install');
+          }
+          deferredPrompt = null;
+          if (installBanner) {
+            installBanner.style.display = 'none';
+          }
+        });
+      }
+    }
+
+    function dismissInstall() {
+      if (installBanner) {
+        installBanner.style.display = 'none';
+      }
+      localStorage.setItem('tmac-install-dismissed', 'true');
+    }
+
+    // Check if already dismissed
+    if (localStorage.getItem('tmac-install-dismissed')) {
+      if (installBanner) {
+        installBanner.style.display = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>

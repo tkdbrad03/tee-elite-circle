@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#1a2e1a">
+  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
+    <title>Retreats - The Tee Elite Circle</title>
+    <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pwa-nav.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --tmac-blush: #e8ccc8;
+            --tmac-blush-light: #f5e6e4;
+            --charcoal: #1a1a1a;
+            --forest: #3d4a3a;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #faf9f7;
+            color: #2d2d2d;
+            min-height: 100vh;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Featured Retreat */
+        .featured-retreat {
+            background: var(--forest);
+            border-radius: 12px;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            color: white;
+        }
+
+        .retreat-info h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .retreat-dates {
+            font-size: 0.95rem;
+            color: var(--tmac-blush);
+            margin-bottom: 1.5rem;
+        }
+
+        .retreat-location {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .retreat-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 2rem;
+        }
+
+        /* Countdown */
+        .countdown {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            line-height: 1;
+            color: var(--tmac-blush);
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .schedule-btn {
+            display: inline-block;
+            background: var(--tmac-blush);
+            color: var(--charcoal);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-btn:hover {
+            background: var(--tmac-blush-light);
+        }
+
+        .retreat-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .retreat-image img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* What to Expect */
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        .expect-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .expect-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .expect-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--tmac-blush);
+            margin-bottom: 1rem;
+        }
+
+        .expect-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: #1a1a1a;
+        }
+
+        .expect-text {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #666;
+        }
+
+        /* Schedule Section */
+        .schedule-section {
+            margin-bottom: 4rem;
+        }
+
+        .schedule-day {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .schedule-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .schedule-day-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--charcoal);
+        }
+
+        .schedule-day-date {
+            font-size: 0.85rem;
+            color: var(--tmac-blush);
+            font-weight: 500;
+        }
+
+        .schedule-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0.75rem 0;
+        }
+
+        .schedule-time {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--forest);
+            min-width: 80px;
+        }
+
+        .schedule-event {
+            font-weight: 500;
+            color: var(--charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .schedule-event-desc {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Past Retreats */
+        .past-retreats {
+            margin-bottom: 4rem;
+        }
+
+        .past-retreats-note {
+            font-size: 0.95rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* RSVP Section */
+        .rsvp-section {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .rsvp-btn {
+            display: inline-block;
+            background: var(--tmac-blush);
+            color: var(--charcoal);
+            padding: 1rem 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .rsvp-btn:hover {
+            background: var(--tmac-blush-light);
+        }
+
+        .rsvp-btn.confirmed {
+            background: var(--forest);
+            color: white;
+            cursor: pointer;
+        }
+
+        .rsvp-btn.confirmed:hover {
+            background: #4a5a47;
+        }
+
+        .rsvp-count {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 900px) {
+
+            .featured-retreat {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+            }
+
+            .retreat-image {
+                order: -1;
+            }
+
+            .expect-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .countdown {
+                gap: 1.5rem;
+            }
+
+            .countdown-number {
+                font-size: 2.5rem;
+            }
+
+            .schedule-day-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="member-header">
+      <div class="header-inner">
+        <a href="/home.html" class="header-logo">
+          <img src="images/tmac-logo.png" alt="TMac Inspired">
+          <span>The Tee Elite Circle</span>
+        </a>
+        <nav class="header-nav">
+          <a href="/home.html" class="nav-link">Home</a>
+          <a href="/members.html" class="nav-link">The Circle</a>
+          <a href="/retreats.html" class="nav-link active">Retreats</a>
+          <a href="/tee-room.html" class="nav-link">Tee Room</a>
+          <a href="/fairway.html" class="nav-link">Fairway</a>
+        </nav>
+        <div class="header-user">
+          <a href="/profile.html" class="user-avatar" id="user-avatar">
+            <span id="user-initials">TM</span>
+          </a>
+        </div>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MOBILE NAV -->
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="/home.html" class="mobile-nav-link">Home</a>
+      <a href="/members.html" class="mobile-nav-link">The Circle</a>
+      <a href="/retreats.html" class="mobile-nav-link active">Retreats</a>
+      <a href="/tee-room.html" class="mobile-nav-link">Tee Room</a>
+      <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
+      <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+      <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
+    </div>
+
+    <main class="main-content">
+        <!-- Featured Retreat -->
+        <section class="featured-retreat">
+            <div class="retreat-info">
+                <h2>Spring Retreat 2026</h2>
+                <p class="retreat-dates">April 15-17, 2026</p>
+                <p class="retreat-location">Location to be announced</p>
+                <p class="retreat-description">Two days of luxury golf, intimate conversations, and connections that will shape your next chapter. Expect the unexpected.</p>
+                
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="days">---</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="hours">--</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="mins">--</div>
+                        <div class="countdown-label">Mins</div>
+                    </div>
+                </div>
+
+                <a href="#schedule" class="schedule-btn">View Schedule</a>
+            </div>
+            <div class="retreat-image">
+                <img src="/images/retreat-spring-2026.jpg" alt="Spring Retreat 2026">
+            </div>
+        </section>
+
+        <!-- What to Expect - All 6 Items -->
+        <h2 class="section-title">What to Expect</h2>
+        <div class="expect-grid">
+            <div class="expect-card">
+                <div class="expect-number">I</div>
+                <h3 class="expect-title">First Tee Ceremony</h3>
+                <p class="expect-text">The ritual that marks your official entry into the room. Receive your numbered Tee pin.</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">II</div>
+                <h3 class="expect-title">Deal on the 9th</h3>
+                <p class="expect-text">Structured networking round. Intentionally paired to explore business synergies.</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">III</div>
+                <h3 class="expect-title">The Finished Scorecard</h3>
+                <p class="expect-text">Visualization session rooted in the power of playing from the end.</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">IV</div>
+                <h3 class="expect-title">Course Conditions</h3>
+                <p class="expect-text">Life and business diagnostic. Where are you? Where's the opportunity?</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">V</div>
+                <h3 class="expect-title">Between the Tees</h3>
+                <p class="expect-text">Intimate roundtable where real dilemmas meet real wisdom from the room.</p>
+            </div>
+            <div class="expect-card">
+                <div class="expect-number">VI</div>
+                <h3 class="expect-title">The Back Nine Dinner</h3>
+                <p class="expect-text">Final night. Real talk about wealth, power, regrets, and dreams.</p>
+            </div>
+        </div>
+
+        <!-- Schedule Section -->
+        <section class="schedule-section" id="schedule">
+            <h2 class="section-title">Retreat Schedule</h2>
+            
+            <div class="schedule-day">
+                <div class="schedule-day-header">
+                    <h3 class="schedule-day-title">Day One</h3>
+                    <span class="schedule-day-date">April 15, 2026</span>
+                </div>
+                <div class="schedule-items">
+                    <div class="schedule-item">
+                        <span class="schedule-time">2:00 PM</span>
+                        <div>
+                            <p class="schedule-event">Arrival & Check-in</p>
+                            <p class="schedule-event-desc">Settle into your accommodations</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">4:00 PM</span>
+                        <div>
+                            <p class="schedule-event">First Tee Ceremony</p>
+                            <p class="schedule-event-desc">Welcome reception and pin presentation</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">6:00 PM</span>
+                        <div>
+                            <p class="schedule-event">Course Conditions Session</p>
+                            <p class="schedule-event-desc">Life & business diagnostic</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:30 PM</span>
+                        <div>
+                            <p class="schedule-event">Welcome Dinner</p>
+                            <p class="schedule-event-desc">Breaking bread together</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-day">
+                <div class="schedule-day-header">
+                    <h3 class="schedule-day-title">Day Two</h3>
+                    <span class="schedule-day-date">April 16, 2026</span>
+                </div>
+                <div class="schedule-items">
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Sunrise Movement</p>
+                            <p class="schedule-event-desc">Optional yoga or walk</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Breakfast</p>
+                            <p class="schedule-event-desc">Fuel for the day ahead</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">9:30 AM</span>
+                        <div>
+                            <p class="schedule-event">Deal on the 9th</p>
+                            <p class="schedule-event-desc">Structured networking round</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">2:00 PM</span>
+                        <div>
+                            <p class="schedule-event">The Finished Scorecard</p>
+                            <p class="schedule-event-desc">Visualization session</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">4:00 PM</span>
+                        <div>
+                            <p class="schedule-event">Between the Tees</p>
+                            <p class="schedule-event-desc">Intimate roundtable discussion</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">7:30 PM</span>
+                        <div>
+                            <p class="schedule-event">The Back Nine Dinner</p>
+                            <p class="schedule-event-desc">Final night — real talk</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-day">
+                <div class="schedule-day-header">
+                    <h3 class="schedule-day-title">Day Three</h3>
+                    <span class="schedule-day-date">April 17, 2026</span>
+                </div>
+                <div class="schedule-items">
+                    <div class="schedule-item">
+                        <span class="schedule-time">8:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Closing Breakfast</p>
+                            <p class="schedule-event-desc">Reflections and commitments</p>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">10:00 AM</span>
+                        <div>
+                            <p class="schedule-event">Departure</p>
+                            <p class="schedule-event-desc">Until we meet again</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP Section -->
+        <section class="rsvp-section">
+            <button class="rsvp-btn" id="rsvp-btn" onclick="toggleRSVP()">I'll Be There</button>
+            <p class="rsvp-count" id="rsvp-count"></p>
+        </section>
+
+        <!-- Past Retreats -->
+        <section class="past-retreats">
+            <h2 class="section-title">Past Retreats</h2>
+            <p class="past-retreats-note">This will be our inaugural retreat. History starts here.</p>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="member-footer">
+      <p>The Tee Elite Circle — A TMac Inspired Experience</p>
+    </footer>
+
+    <script>
+        // Mobile menu
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+          this.classList.toggle('active');
+          document.getElementById('mobile-nav').classList.toggle('open');
+        });
+
+        // Logout
+        document.getElementById('logout-link').addEventListener('click', async (e) => {
+          e.preventDefault();
+          await fetch('/api/auth/logout', { method: 'POST' });
+          window.location.href = '/member-login.html';
+        });
+
+        // Countdown Timer
+        function updateCountdown() {
+            const retreatDate = new Date('April 15, 2026 00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = retreatDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('mins').textContent = mins;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+
+        // Smooth scroll to schedule
+        document.querySelector('.schedule-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('schedule').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        });
+
+        // RSVP functionality
+        const RETREAT_ID = 'spring-2026';
+        let isConfirmed = false;
+
+        async function loadRSVPStatus() {
+            try {
+                const res = await fetch(`/api/retreats/rsvp-status?retreat_id=${RETREAT_ID}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    isConfirmed = data.confirmed;
+                    updateRSVPButton();
+                    updateRSVPCount(data.count);
+                }
+            } catch (err) {
+                console.error('Error loading RSVP status:', err);
+            }
+        }
+
+        async function toggleRSVP() {
+            const btn = document.getElementById('rsvp-btn');
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/retreats/rsvp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ retreat_id: RETREAT_ID })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    isConfirmed = data.confirmed;
+                    updateRSVPButton();
+                    updateRSVPCount(data.count);
+                }
+            } catch (err) {
+                console.error('Error toggling RSVP:', err);
+            }
+
+            btn.disabled = false;
+        }
+
+        function updateRSVPButton() {
+            const btn = document.getElementById('rsvp-btn');
+            if (isConfirmed) {
+                btn.textContent = "You're Confirmed ✓";
+                btn.classList.add('confirmed');
+            } else {
+                btn.textContent = "I'll Be There";
+                btn.classList.remove('confirmed');
+            }
+        }
+
+        function updateRSVPCount(count) {
+            const countEl = document.getElementById('rsvp-count');
+            if (count > 0) {
+                countEl.textContent = `${count} member${count !== 1 ? 's' : ''} confirmed`;
+            } else {
+                countEl.textContent = '';
+            }
+        }
+
+        // Load RSVP status on page load
+        loadRSVPStatus();
+    </script>
+    <script src="/js/member-common.js"></script>
+<!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registered:', registration.scope);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+    // Show admin link for pin #01 only
+    async function checkAdminAccess() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (res.ok) {
+          const member = await res.json();
+          if (member.pin_number === 1) {
+            const adminLink = document.getElementById('admin-nav-link');
+            if (adminLink) adminLink.style.display = 'flex';
+          }
+        }
+      } catch (err) {}
+    }
+    checkAdminAccess();
+  </script>
+    <script src="/pwa-nav.js"></script>
+</body>
+</html>

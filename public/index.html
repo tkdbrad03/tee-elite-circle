@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Tee Elite Circle</title>
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#1a2e1a">
+  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
+  <meta name="description" content="A private society for extraordinary women who use golf as their vehicle for connection, deals, and personal mastery." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tee Elite" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: #1a2a1a;
+    }
+
+    /* Silhouette Background */
+    .splash-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('/images/silhouette.png') center center / cover no-repeat;
+      opacity: 0;
+      animation: fadeIn 1.2s ease-out forwards;
+    }
+
+    /* Dark overlay for better logo visibility */
+    .splash-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    /* Content Container */
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeInScale 0.8s ease-out 0.6s forwards;
+    }
+
+    /* Circle Logo */
+    .splash-logo {
+      width: 280px;
+      height: auto;
+      max-width: 80vw;
+      filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.4));
+    }
+
+    /* Buttons */
+    .splash-buttons {
+      position: absolute;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 0 24px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.6s ease-out 1.2s forwards;
+    }
+
+    .splash-btn {
+      padding: 16px 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .splash-btn.primary {
+      background: rgba(45, 59, 45, 0.95);
+      color: #e8ccc8;
+      border: 1px solid rgba(232, 204, 200, 0.3);
+      font-weight: 600;
+    }
+
+    .splash-btn.primary:hover {
+      background: #2d3b2d;
+      border-color: #e8ccc8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(45, 59, 45, 0.4);
+    }
+
+    .splash-btn.secondary {
+      background: #e8ccc8;
+      color: #2d3b2d;
+    }
+
+    .splash-btn.secondary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(232, 204, 200, 0.4);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .splash-logo {
+        width: 245px;
+      }
+
+      .splash-buttons {
+        flex-direction: column;
+        align-items: center;
+        bottom: 70px;
+        gap: 18px;
+      }
+
+      .splash-btn {
+        width: 200px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .splash-logo {
+        width: 335px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .splash-logo {
+        width: 370px;
+      }
+    }
+
+    /* Safe area for notched phones */
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      .splash-buttons {
+        bottom: calc(70px + env(safe-area-inset-bottom));
+      }
+    }
+    @media (min-width: 1024px) {
+  .splash-bg {
+    background-size: auto 100%;
+    background-position: center center;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- Golf Course Background -->
+  <div class="splash-bg"></div>
+
+
+  <!-- Buttons -->
+  <div class="splash-buttons">
+    <a href="/member-login.html" class="splash-btn primary">Member Login</a>
+    <a href="/landing.html" class="splash-btn secondary">Enter</a>
+  </div>
+  <!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registered:', registration.scope);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

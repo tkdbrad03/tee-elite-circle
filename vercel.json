@@ -1,0 +1,16 @@
+{
+  "functions": {
+    "api/uploads.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "api/videos/upload.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "api/admin/email-campaign.js": {
+      "maxDuration": 300,
+      "memory": 1024
+    }
+  }
+}

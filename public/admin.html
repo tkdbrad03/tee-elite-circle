@@ -1,0 +1,2523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>Admin — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#1a2e1a">
+  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="pwa-nav.css">
+  <!-- Quill Editor -->
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    /* Login Screen */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-box {
+      background: #fff;
+      padding: 48px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .login-box h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--deep-forest);
+      color: #fff;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .login-error {
+      color: #c0392b;
+      font-size: 13px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    /* Admin Dashboard */
+    .admin-dashboard {
+      display: none;
+    }
+
+    .admin-header {
+      background: var(--deep-forest);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .admin-header-btns {
+      display: flex;
+      gap: 12px;
+    }
+
+    .admin-header button {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+      padding: 8px 16px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .admin-header button.add-member-btn {
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+      border: none;
+      font-weight: 500;
+    }
+
+    .admin-header button.add-member-btn:hover {
+      background: #d4b5b0;
+    }
+
+    /* Main Tabs */
+    .main-tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+
+    .main-tab {
+      padding: 16px 32px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .main-tab:hover {
+      color: var(--charcoal);
+    }
+
+    .main-tab.active {
+      color: var(--deep-forest);
+      border-bottom-color: var(--deep-forest);
+    }
+
+    .admin-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: #fff;
+      padding: 24px;
+      border: 1px solid rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      color: var(--deep-forest);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+
+    /* Filters */
+    .filters-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--deep-forest);
+      color: #fff;
+      border-color: var(--deep-forest);
+    }
+
+    /* Applications Table */
+    .applications-table {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      text-align: left;
+      padding: 16px;
+      background: var(--tmac-blush-light);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      font-weight: 500;
+    }
+
+    td {
+      padding: 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      vertical-align: top;
+    }
+
+    tr:hover {
+      background: rgba(232, 204, 200, 0.1);
+    }
+
+    .applicant-name {
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .applicant-email {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .pin-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--deep-forest);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-new { background: #e8f4fd; color: #2980b9; }
+    .status-deposit { background: #fef3e2; color: #d35400; }
+    .status-paid { background: #e8f8f0; color: #27ae60; }
+    .status-declined { background: #fde8e8; color: #c0392b; }
+
+    .interest-badge {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .interest-ready {
+      color: #27ae60;
+      font-weight: 500;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      font-size: 10px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 4px;
+    }
+
+    .action-btn.primary { background: var(--deep-forest); color: #fff; }
+    .action-btn.secondary { background: var(--tmac-blush); color: var(--charcoal); }
+    .action-btn.danger { background: #fde8e8; color: #c0392b; }
+    .action-btn.delete { background: #dc3545; color: #fff; }
+    .action-btn.delete:hover { background: #c82333; }
+
+    /* Content Section Styles */
+    .content-section {
+      background: #fff;
+      padding: 32px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .content-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .content-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .content-nav-btn {
+      padding: 10px 20px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .content-nav-btn:hover,
+    .content-nav-btn.active {
+      background: var(--deep-forest);
+      color: #fff;
+      border-color: var(--deep-forest);
+    }
+
+    .content-panel {
+      display: none;
+    }
+
+    .content-panel.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-checkbox input {
+      width: auto;
+    }
+
+    .form-checkbox label {
+      margin-bottom: 0;
+    }
+
+    .btn {
+      background: var(--deep-forest);
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--charcoal);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 1px solid var(--deep-forest);
+    }
+
+    .btn-secondary:hover {
+      background: var(--deep-forest);
+      color: #fff;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .message.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .message.error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+
+    .items-list {
+      margin-top: 32px;
+      border-top: 1px solid #eee;
+      padding-top: 24px;
+    }
+
+    .items-list h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .item-info { flex: 1; }
+    .item-name { font-weight: 500; color: var(--charcoal); margin-bottom: 4px; }
+    .item-meta { font-size: 12px; color: #888; }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .item-actions button {
+      background: none;
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .item-actions button:hover {
+      border-color: var(--deep-forest);
+      color: var(--deep-forest);
+    }
+
+    .item-actions button.delete:hover {
+      border-color: #c62828;
+      color: #c62828;
+    }
+
+    .signup-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #fafafa;
+      margin-bottom: 8px;
+    }
+
+    /* Quill Editor Styles */
+    #blog-editor {
+      border: 1px solid #ddd;
+      border-top: none;
+    }
+    
+    .ql-toolbar {
+      border: 1px solid #ddd !important;
+      background: #f9f9f9;
+    }
+    
+    .ql-container {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+    }
+    
+    .ql-editor {
+      min-height: 200px;
+    }
+
+    .image-upload-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .image-preview {
+      width: 120px;
+      height: 80px;
+      background: #f0f0f0;
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .image-preview span { font-size: 11px; color: #999; text-align: center; padding: 8px; }
+
+    /* Retreats Section */
+    .rsvp-list {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .rsvp-header {
+      padding: 20px 24px;
+      background: var(--tmac-blush-light);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .rsvp-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .rsvp-header p {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .rsvp-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .rsvp-item:last-child {
+      border-bottom: none;
+    }
+
+    .rsvp-member-name {
+      font-weight: 500;
+    }
+
+    .rsvp-member-email {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .rsvp-date {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .empty-state {
+      padding: 48px 24px;
+      text-align: center;
+      color: #888;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 32px;
+    }
+
+    .modal h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    .modal-field {
+      margin-bottom: 16px;
+    }
+
+    .modal-field label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .modal-field p {
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+
+    .modal-field input,
+    .modal-field select {
+      width: 100%;
+      padding: 12px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    .modal-field input:focus,
+    .modal-field select:focus {
+      border-color: var(--deep-forest);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .form-btn {
+      padding: 12px 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+    }
+
+    .form-btn.primary { background: var(--deep-forest); color: #fff; }
+    .form-btn.secondary { background: #eee; color: var(--charcoal); }
+
+    @media (max-width: 768px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr; }
+      .main-tab { padding: 12px 16px; font-size: 10px; }
+      
+      .admin-header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+      
+      .admin-header h1 {
+        font-size: 16px;
+      }
+      
+      .admin-header-btns {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .admin-main {
+        padding: 16px;
+        padding-bottom: 100px;
+      }
+      
+      .applications-table {
+        font-size: 12px;
+      }
+      
+      th, td {
+        padding: 10px 8px;
+      }
+      
+      .action-btn {
+        padding: 8px 10px;
+        font-size: 9px;
+      }
+      
+      .stat-card {
+        padding: 16px;
+      }
+      
+      .stat-number {
+        font-size: 28px;
+      }
+      
+      .content-section {
+        padding: 20px;
+      }
+      
+      .modal {
+        padding: 20px;
+        margin: 10px;
+        max-height: 90vh;
+      }
+    }
+
+    /* Live Tab Styles */
+    .live-control-panel {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .live-status-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 32px;
+    }
+
+    .live-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #888;
+    }
+
+    .live-status-indicator.live .status-dot {
+      background: #c0392b;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+
+    .status-text {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .live-status-indicator.live .status-text {
+      color: #c0392b;
+      font-weight: 500;
+    }
+
+    .live-form .form-group {
+      margin-bottom: 24px;
+    }
+
+    .live-form label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .live-form input {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    .live-form input:focus {
+      border-color: var(--tmac-blush);
+    }
+
+    .go-live-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .go-live-btn:hover {
+      background: #a93226;
+    }
+
+    .go-live-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .live-active {
+      text-align: center;
+    }
+
+    .live-timer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .live-badge {
+      background: #c0392b;
+      color: #fff;
+      padding: 8px 16px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      animation: pulse 1.5s infinite;
+    }
+
+    .live-duration {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      color: var(--charcoal);
+    }
+
+    .live-topic-display {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    .live-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .join-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: var(--deep-forest);
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .join-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .end-live-btn {
+      padding: 14px 28px;
+      background: none;
+      border: 2px solid #c0392b;
+      color: #c0392b;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .end-live-btn:hover {
+      background: #c0392b;
+      color: #fff;
+    }
+
+    .live-tips {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 24px;
+    }
+
+    .live-tips h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .live-tips ul {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.8;
+      padding-left: 20px;
+    }
+
+    .live-tips li {
+      margin-bottom: 8px;
+    }
+
+    /* Videos Section */
+    .video-card {
+      background: #fff;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(0,0,0,0.06);
+      display: grid;
+      grid-template-columns: 320px 1fr auto;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .video-card video {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .video-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--deep-forest);
+      margin-bottom: 8px;
+    }
+
+    .video-card p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .video-meta {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .video-meta div {
+      margin-bottom: 4px;
+    }
+
+    .video-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .video-actions button {
+      padding: 10px 20px;
+      font-size: 12px;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy {
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+    }
+
+    .btn-copy:hover {
+      background: #d4b5b0;
+    }
+
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #c82333;
+    }
+
+    .empty-videos {
+      background: #fff;
+      padding: 60px 40px;
+      text-align: center;
+      border: 1px solid rgba(0,0,0,0.06);
+      color: #888;
+    }
+
+    @media (max-width: 768px) {
+      .video-card {
+        grid-template-columns: 1fr;
+      }
+      
+      .live-control-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-box">
+      <h1>Admin Access</h1>
+      <p>The Tee Elite Circle</p>
+      <form id="login-form">
+        <input type="password" class="login-input" id="admin-password" placeholder="Enter admin password">
+        <button type="submit" class="login-btn">Enter</button>
+      </form>
+      <p class="login-error" id="login-error">Invalid password</p>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div class="admin-dashboard" id="admin-dashboard">
+    <header class="admin-header">
+      <h1>The Tee Elite Circle — Admin</h1>
+      <div class="admin-header-btns">
+        <button onclick="window.location.href='/email-campaign.html'">📧 Email Campaign</button>
+        <button class="add-member-btn" onclick="openAddMemberModal()">+ Add Member</button>
+        <button onclick="logout()">Log Out</button>
+      </div>
+    </header>
+
+    <!-- MAIN TABS -->
+    <div class="main-tabs">
+      <button class="main-tab active" data-tab="members">Members</button>
+      <button class="main-tab" data-tab="content">Content</button>
+      <button class="main-tab" data-tab="videos">Videos</button>
+      <button class="main-tab" data-tab="retreats">Retreats</button>
+      <button class="main-tab" data-tab="live">🔴 Live</button>
+    </div>
+
+    <main class="admin-main">
+      
+      <!-- MEMBERS TAB -->
+      <div class="tab-content active" id="members-tab">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number" id="stat-total">0</div>
+            <div class="stat-label">Total Applications</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-ready">0</div>
+            <div class="stat-label">Ready to Join</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-deposit">0</div>
+            <div class="stat-label">Deposit Paid</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-members">0</div>
+            <div class="stat-label">Active Members</div>
+          </div>
+        </div>
+
+        <div class="filters-row">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="new">New</button>
+          <button class="filter-btn" data-filter="ready">Ready to Join</button>
+          <button class="filter-btn" data-filter="deposit">Deposit Paid</button>
+          <button class="filter-btn" data-filter="paid">Paid in Full</button>
+        </div>
+
+        <div class="applications-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Pin</th>
+                <th>Applicant</th>
+                <th>Location</th>
+                <th>Interest</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="applications-tbody">
+              <tr>
+                <td colspan="7" style="text-align: center; color: #888;">Loading applications...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CONTENT TAB -->
+      <div class="tab-content" id="content-tab">
+        <div class="content-nav">
+          <button class="content-nav-btn active" data-panel="essentials">Golf Essentials</button>
+          <button class="content-nav-btn" data-panel="blog">Blog Posts</button>
+          <button class="content-nav-btn" data-panel="clinics">Clinic Signups</button>
+        </div>
+
+        <!-- Golf Essentials Panel -->
+        <div class="content-panel active" id="essentials-panel">
+          <div class="content-section">
+            <h2>Add Golf Essential</h2>
+            <div id="essential-message"></div>
+            
+            <form id="essential-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Product Name *</label>
+                  <input type="text" id="essential-name" required placeholder="e.g., Nike Dri-FIT Golf Polo">
+                </div>
+                <div class="form-group">
+                  <label>Category *</label>
+                  <select id="essential-category" required>
+                    <option value="">Select category...</option>
+                    <option value="apparel">Apparel</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="gear">Gear</option>
+                    <option value="travel">Travel</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="essential-description" placeholder="Brief description of the product..."></textarea>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Image URL (right-click Amazon image → Copy image address)</label>
+                  <input type="url" id="essential-image" placeholder="https://m.media-amazon.com/...">
+                </div>
+                <div class="form-group">
+                  <label>Affiliate Link *</label>
+                  <input type="url" id="essential-url" required placeholder="https://amazon.com/...">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Display Order (lower = first)</label>
+                <input type="number" id="essential-order" value="0" min="0">
+              </div>
+              
+              <button type="submit" class="btn">Add Essential</button>
+            </form>
+
+            <div class="items-list">
+              <h3>Current Essentials</h3>
+              <div id="essentials-items">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blog Posts Panel -->
+        <div class="content-panel" id="blog-panel">
+          <div class="content-section">
+            <h2>Add Blog Post</h2>
+            <div id="blog-message"></div>
+            
+            <form id="blog-form">
+              <div class="form-group">
+                <label>Title *</label>
+                <input type="text" id="blog-title" required placeholder="e.g., 5 Tips for Your First Golf Retreat">
+              </div>
+              
+              <div class="form-group">
+                <label>Excerpt (shows on card)</label>
+                <textarea id="blog-excerpt" placeholder="Brief preview of the post..."></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label>Full Content</label>
+                <div id="blog-editor" style="min-height: 250px; background: #fff;"></div>
+                <input type="hidden" id="blog-content">
+              </div>
+              
+              <div class="form-group">
+                <label>Featured Image</label>
+                <div class="image-upload-wrap">
+                  <input type="file" id="blog-image-file" accept="image/*" style="display: none;">
+                  <input type="hidden" id="blog-image" value="">
+                  <div class="image-preview" id="blog-image-preview">
+                    <span>No image selected</span>
+                  </div>
+                  <button type="button" class="btn btn-secondary" onclick="document.getElementById('blog-image-file').click()">
+                    Upload Image
+                  </button>
+                  <span id="upload-status" style="margin-left: 12px; font-size: 12px; color: #888;"></span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Video URL (YouTube or Vimeo)</label>
+                <input type="text" id="blog-video" placeholder="e.g., https://youtube.com/watch?v=xxxxx or https://vimeo.com/xxxxx">
+                <p style="font-size: 11px; color: #888; margin-top: 4px;">Paste the full video URL - it will be embedded automatically</p>
+              </div>
+
+              <div class="form-group form-checkbox">
+                <input type="checkbox" id="blog-published">
+                <label>Publish immediately</label>
+              </div>
+
+              <div class="form-group" id="schedule-group" style="display: none;">
+                <label>Schedule for</label>
+                <input type="datetime-local" id="blog-scheduled" style="padding: 10px; font-family: inherit; border: 1px solid rgba(0,0,0,0.1);">
+                <p style="font-size: 11px; color: #888; margin-top: 4px;">Post will auto-publish at this date/time</p>
+              </div>
+              
+              <div style="display: flex; gap: 12px; align-items: center; margin-top: 24px;">
+                <button type="submit" class="btn" id="blog-submit-btn">Add Post</button>
+                <button type="button" class="btn btn-secondary" onclick="resetBlogForm()" style="display: none;" id="blog-cancel-btn">Cancel Edit</button>
+              </div>
+            </form>
+
+            <div class="items-list">
+              <h3>All Posts</h3>
+              <div id="blog-items">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clinic Signups Panel -->
+        <div class="content-panel" id="clinics-panel">
+          <div class="content-section">
+            <h2>Clinic Signups</h2>
+            <p style="color: #666; font-size: 14px; margin-bottom: 24px;">See who has signed up for each clinic.</p>
+            <div id="clinic-signups">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEOS TAB -->
+      <div class="tab-content" id="videos-tab">
+        <!-- Upload Section -->
+        <div style="background: #fff; padding: 32px; margin-bottom: 32px; border: 1px solid rgba(0,0,0,0.06);">
+          <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-bottom: 24px;">Upload New Video</h2>
+          
+          <form id="video-upload-form">
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Video File *</label>
+              <div class="file-input-wrapper" style="position: relative; overflow: hidden; display: inline-block; width: 100%;">
+                <input type="file" id="video-file" accept="video/*" required style="position: absolute; left: -9999px;">
+                <label for="video-file" style="display: block; width: 100%; padding: 20px; background-color: var(--soft-cream); border: 2px dashed var(--tmac-blush); border-radius: 4px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                  <span id="video-file-button-text">Choose Video File</span>
+                </label>
+              </div>
+              <div id="video-file-info" style="margin-top: 8px; font-size: 13px; color: #666;"></div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label for="video-title" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Video Title *</label>
+              <input type="text" id="video-title" required style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); font-family: 'Montserrat', sans-serif; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label for="video-description" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Description (Optional)</label>
+              <textarea id="video-description" rows="3" style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); font-family: 'Montserrat', sans-serif; font-size: 14px; resize: vertical;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label for="video-post-slug" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Blog Post Slug (Optional)</label>
+              <input type="text" id="video-post-slug" placeholder="e.g., why-waiting-to-be-invited-is-losing" style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); font-family: 'Montserrat', sans-serif; font-size: 14px;">
+              <div style="margin-top: 4px; font-size: 12px; color: #888;">Links this video to a specific blog post</div>
+            </div>
+
+            <div id="video-progress-container" style="display: none; margin-bottom: 20px;">
+              <div style="width: 100%; height: 8px; background-color: #e0e0e0; border-radius: 4px; overflow: hidden;">
+                <div id="video-progress-fill" style="height: 100%; background-color: var(--deep-forest); width: 0%; transition: width 0.3s ease;"></div>
+              </div>
+              <div id="video-progress-text" style="margin-top: 8px; font-size: 13px; color: #666;">Uploading: 0%</div>
+            </div>
+
+            <button type="submit" id="video-upload-button" class="login-btn" style="width: auto; padding: 14px 32px;">Upload Video</button>
+          </form>
+        </div>
+
+        <!-- Videos List -->
+        <div>
+          <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-bottom: 20px;">
+            Uploaded Videos (<span id="videos-count">0</span>)
+          </h2>
+          <div id="videos-list"></div>
+        </div>
+      </div>
+
+      <!-- RETREATS TAB -->
+      <div class="tab-content" id="retreats-tab">
+        <div class="rsvp-list">
+          <div class="rsvp-header">
+            <h3>Spring Retreat 2026</h3>
+            <p>April 15-17, 2026 • <span id="rsvp-count">0</span> members confirmed</p>
+          </div>
+          <div id="rsvp-members">
+            <div class="empty-state">Loading RSVPs...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE TAB -->
+      <div class="tab-content" id="live-tab">
+        <div class="live-control-panel">
+          <div class="live-status-card" id="live-status-card">
+            <div class="live-status-indicator" id="live-status-indicator">
+              <span class="status-dot"></span>
+              <span class="status-text">You are offline</span>
+            </div>
+            
+            <div class="live-form" id="live-form">
+              <div class="form-group">
+                <label>Topic / Title</label>
+                <input type="text" id="live-topic" placeholder="e.g., Quick Golf Tips, Q&A Session, Mindset Monday" value="Live with Dr. TMac">
+              </div>
+              <button class="go-live-btn" id="go-live-btn" onclick="toggleLive()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                </svg>
+                Go Live
+              </button>
+            </div>
+
+            <div class="live-active" id="live-active" style="display: none;">
+              <div class="live-timer">
+                <span class="live-badge">🔴 LIVE NOW</span>
+                <span class="live-duration" id="live-duration">00:00</span>
+              </div>
+              <p class="live-topic-display">Topic: <strong id="current-topic">Live with Dr. TMac</strong></p>
+              <div class="live-actions">
+                <a href="/broadcast.html" target="_blank" class="join-btn">Open Broadcast Studio</a>
+                <button class="end-live-btn" onclick="toggleLive()">End Live</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="live-tips">
+            <h4>Quick Tips</h4>
+            <ul>
+              <li>Make sure you're in a well-lit area</li>
+              <li>Test your microphone before going live</li>
+              <li>Members will see a 🔴 Live banner on their dashboard</li>
+              <li>You can share your screen to show slides or content</li>
+              <li>Use "Raise Hand" to manage who speaks</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- APPLICATION DETAIL MODAL -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal" style="position: relative;">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <h2>Application Details</h2>
+      <div id="modal-content"></div>
+      <div class="modal-actions" id="modal-actions"></div>
+    </div>
+  </div>
+
+  <!-- ADD MEMBER MODAL -->
+  <div class="modal-overlay" id="add-member-modal">
+    <div class="modal" style="position: relative;">
+      <button class="close-modal" onclick="closeAddMemberModal()">&times;</button>
+      <h2>Add Founding Member</h2>
+      <form id="add-member-form">
+        <div class="modal-field">
+          <label>Full Name *</label>
+          <input type="text" id="new-member-name" required placeholder="e.g. Simone Richardson">
+        </div>
+        <div class="modal-field">
+          <label>Email *</label>
+          <input type="email" id="new-member-email" required placeholder="e.g. simone@email.com">
+        </div>
+        <div class="modal-field">
+          <label>Phone</label>
+          <input type="tel" id="new-member-phone" placeholder="e.g. (404) 555-1234">
+        </div>
+        <div class="modal-field">
+          <label>Location *</label>
+          <input type="text" id="new-member-location" required placeholder="e.g. Atlanta, GA">
+        </div>
+        <div class="modal-field">
+          <label>Founding Pin Number *</label>
+          <select id="new-member-pin" required>
+            <option value="">Select pin number...</option>
+            <option value="1">#01</option>
+            <option value="2">#02</option>
+            <option value="3">#03</option>
+            <option value="4">#04</option>
+            <option value="5">#05</option>
+            <option value="6">#06</option>
+            <option value="7">#07</option>
+            <option value="8">#08</option>
+            <option value="9">#09</option>
+            <option value="10">#10</option>
+            <option value="11">#11</option>
+            <option value="12">#12</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="form-btn secondary" onclick="closeAddMemberModal()">Cancel</button>
+          <button type="submit" class="form-btn primary">Add Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = 'TeeElite2026Admin';
+    let applications = [];
+    let currentFilter = 'all';
+
+    // Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const password = document.getElementById('admin-password').value;
+      
+      if (password === ADMIN_PASSWORD) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'block';
+        localStorage.setItem('adminAuth', 'true');
+        loadApplications();
+        loadEssentials();
+        loadBlogPosts();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    });
+
+    if (localStorage.getItem('adminAuth') === 'true') {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-dashboard').style.display = 'block';
+      loadApplications();
+      loadEssentials();
+      loadBlogPosts();
+    }
+
+    // Initialize Quill editor
+    var quill = new Quill('#blog-editor', {
+      theme: 'snow',
+      placeholder: 'Write your blog post here... You can paste from Word or Google Docs!',
+      modules: {
+        toolbar: [
+          [{ 'header': [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['link'],
+          ['clean']
+        ]
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('adminAuth');
+      window.location.reload();
+    }
+
+    // Main tab switching
+    document.querySelectorAll('.main-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+        
+        if (tab.dataset.tab === 'retreats') loadRetreatRSVPs();
+        if (tab.dataset.tab === 'content') loadEssentials();
+        if (tab.dataset.tab === 'live') loadLiveStatus();
+        if (tab.dataset.tab === 'videos') loadVideos();
+      });
+    });
+
+    // Content sub-nav switching
+    document.querySelectorAll('.content-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.content-nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+        
+        btn.classList.add('active');
+        document.getElementById(`${btn.dataset.panel}-panel`).classList.add('active');
+        
+        if (btn.dataset.panel === 'clinics') loadClinicSignups();
+      });
+    });
+
+    // ==================== MEMBERS ====================
+    async function loadApplications() {
+      try {
+        const res = await fetch('/api/admin/applications');
+        if (!res.ok) throw new Error('Failed to load');
+        applications = await res.json();
+        updateStats();
+        renderApplications();
+      } catch (err) {
+        console.error('Error loading applications:', err);
+        document.getElementById('applications-tbody').innerHTML = 
+          '<tr><td colspan="7" style="text-align: center; color: #c0392b;">Error loading applications</td></tr>';
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('stat-total').textContent = applications.length;
+      document.getElementById('stat-ready').textContent = 
+        applications.filter(a => a.interest_level === 'Ready to secure my founding seat').length;
+      document.getElementById('stat-deposit').textContent = 
+        applications.filter(a => a.deposit_paid).length;
+      document.getElementById('stat-members').textContent = 
+        applications.filter(a => a.paid_in_full).length;
+    }
+
+    function renderApplications() {
+      let filtered = applications;
+      
+      if (currentFilter === 'new') filtered = applications.filter(a => a.status === 'new');
+      else if (currentFilter === 'ready') filtered = applications.filter(a => a.interest_level === 'Ready to secure my founding seat');
+      else if (currentFilter === 'deposit') filtered = applications.filter(a => a.deposit_paid && !a.paid_in_full);
+      else if (currentFilter === 'paid') filtered = applications.filter(a => a.paid_in_full);
+
+      const tbody = document.getElementById('applications-tbody');
+      
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #888;">No applications found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(app => `
+        <tr>
+          <td>${app.pin_number ? `<span class="pin-number">#${String(app.pin_number).padStart(2, '0')}</span>` : '—'}</td>
+          <td>
+            <div class="applicant-name">${app.full_name}</div>
+            <div class="applicant-email">${app.email}</div>
+          </td>
+          <td>${app.location}</td>
+          <td>
+            <span class="interest-badge ${app.interest_level && app.interest_level.includes('Ready') ? 'interest-ready' : ''}">
+              ${app.interest_level ? (app.interest_level.includes('Ready') ? '✓ Ready' : 
+                app.interest_level.includes('Likely') ? 'Likely' : 'Curious') : 'Direct Add'}
+            </span>
+          </td>
+          <td><span class="status-badge ${getStatusClass(app)}">${getStatusText(app)}</span></td>
+          <td>${formatDate(app.created_at)}</td>
+          <td>
+            <button class="action-btn secondary" onclick="viewApplication(${app.id})">View</button>
+            ${!app.paid_in_full ? `<button class="action-btn primary" onclick="markPaidInFull(${app.id})">Mark Paid</button>` : ''}
+            <button class="action-btn delete" onclick="deleteMember(${app.id}, '${app.full_name}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function getStatusClass(app) {
+      if (app.paid_in_full) return 'status-paid';
+      if (app.deposit_paid) return 'status-deposit';
+      if (app.status === 'declined') return 'status-declined';
+      return 'status-new';
+    }
+
+    function getStatusText(app) {
+      if (app.paid_in_full) return 'Member';
+      if (app.deposit_paid) return 'Deposit Paid';
+      if (app.status === 'declined') return 'Declined';
+      return 'New';
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderApplications();
+      });
+    });
+
+    function viewApplication(id) {
+      const app = applications.find(a => a.id === id);
+      if (!app) return;
+
+      document.getElementById('modal-content').innerHTML = `
+        ${app.pin_number ? `<div class="modal-field"><label>Founding Pin</label><p style="font-size: 24px; font-family: 'Cormorant Garamond', serif; color: var(--deep-forest);">#${String(app.pin_number).padStart(2, '0')}</p></div>` : ''}
+        <div class="modal-field"><label>Name</label><p>${app.full_name}</p></div>
+        <div class="modal-field"><label>Email</label><p>${app.email}</p></div>
+        <div class="modal-field"><label>Phone</label><p>${app.phone || 'Not provided'}</p></div>
+        <div class="modal-field"><label>Location</label><p>${app.location}</p></div>
+        ${app.golf_relationship ? `<div class="modal-field"><label>Relationship with Golf</label><p>${app.golf_relationship}</p></div>` : ''}
+        ${app.season_of_life ? `<div class="modal-field"><label>Season of Life</label><p>${app.season_of_life}</p></div>` : ''}
+        ${app.what_draws_you ? `<div class="modal-field"><label>What Draws You?</label><p>${app.what_draws_you}</p></div>` : ''}
+        ${app.what_to_elevate ? `<div class="modal-field"><label>What to Elevate?</label><p>${app.what_to_elevate}</p></div>` : ''}
+        ${app.interest_level ? `<div class="modal-field"><label>Interest Level</label><p>${app.interest_level}</p></div>` : ''}
+        ${app.anything_else ? `<div class="modal-field"><label>Anything Else</label><p>${app.anything_else}</p></div>` : ''}
+      `;
+
+      document.getElementById('modal-actions').innerHTML = `
+        ${app.pin_number ? `<button class="action-btn secondary" onclick="editPin(${app.id}, ${app.pin_number})">Edit Pin</button>` : ''}
+        ${!app.deposit_paid ? `<button class="action-btn secondary" onclick="markDepositPaid(${app.id})">Mark Deposit Paid</button>` : ''}
+        ${!app.paid_in_full ? `<button class="action-btn primary" onclick="markPaidInFull(${app.id})">Mark Paid in Full</button>` : `<span style="color: #27ae60; font-weight: 500;">✓ Active Member</span>`}
+      `;
+
+      document.getElementById('detail-modal').classList.add('visible');
+    }
+
+    function closeModal() {
+      document.getElementById('detail-modal').classList.remove('visible');
+    }
+
+    function openAddMemberModal() {
+      document.getElementById('add-member-modal').classList.add('visible');
+    }
+
+    function closeAddMemberModal() {
+      document.getElementById('add-member-modal').classList.remove('visible');
+      document.getElementById('add-member-form').reset();
+    }
+
+    document.getElementById('add-member-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const memberData = {
+        full_name: document.getElementById('new-member-name').value,
+        email: document.getElementById('new-member-email').value,
+        phone: document.getElementById('new-member-phone').value || null,
+        location: document.getElementById('new-member-location').value,
+        pin_number: parseInt(document.getElementById('new-member-pin').value),
+        paid_in_full: true,
+        deposit_paid: true,
+        interest_level: 'Ready to secure my founding seat',
+        status: 'approved'
+      };
+
+      try {
+        const res = await fetch('/api/admin/add-member', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(memberData)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✓ Founding Member Added!\n\nName: ${memberData.full_name}\nPin: #${String(memberData.pin_number).padStart(2, '0')}\nEmail: ${memberData.email}\nTemp Password: ${data.temp_password}`);
+          closeAddMemberModal();
+          loadApplications();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) {
+        console.error('Error adding member:', err);
+        alert('Error adding member. Please try again.');
+      }
+    });
+
+    async function markDepositPaid(id) {
+      if (!confirm('Mark this application as deposit paid?')) return;
+      try {
+        const res = await fetch('/api/admin/update-application', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, deposit_paid: true })
+        });
+        if (res.ok) { loadApplications(); closeModal(); }
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    async function markPaidInFull(id) {
+      if (!confirm('Mark as PAID IN FULL? This will create their member account.')) return;
+      try {
+        const res = await fetch('/api/admin/create-member', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ application_id: id })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          alert(`Member account created!\n\nEmail: ${data.email}\nTemp Password: ${data.temp_password}\nPin: #${String(data.pin_number).padStart(2, '0')}`);
+          loadApplications();
+          closeModal();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    async function deleteMember(id, name) {
+      if (!confirm(`⚠️ DELETE ${name}?\n\nThis will permanently delete:\n• Their member account\n• Their application data\n• This CANNOT be undone\n\nAre you absolutely sure?`)) return;
+      
+      try {
+        const res = await fetch(`/api/admin/delete-member?id=${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (res.ok) {
+          alert('✓ Member deleted successfully');
+          loadApplications();
+          closeModal();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) {
+        console.error('Delete error:', err);
+        alert('Error deleting member. Please try again.');
+      }
+    }
+
+    async function editPin(memberId, currentPin) {
+      const newPin = prompt(`Change Pin Number\n\nCurrent Pin: #${String(currentPin).padStart(2, '0')}\n\nEnter new pin number (1-12):`, currentPin);
+      
+      if (!newPin || newPin === String(currentPin)) return;
+      
+      const pinNumber = parseInt(newPin);
+      
+      if (isNaN(pinNumber) || pinNumber < 1 || pinNumber > 12) {
+        alert('Please enter a valid pin number between 1 and 12');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/admin/update-pin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            member_id: memberId, 
+            new_pin: pinNumber 
+          })
+        });
+        
+        if (res.ok) {
+          alert(`✓ Pin updated to #${String(pinNumber).padStart(2, '0')}`);
+          loadApplications();
+          closeModal();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + err.error);
+        }
+      } catch (err) {
+        console.error('Update pin error:', err);
+        alert('Error updating pin. Please try again.');
+      }
+    }
+
+    document.getElementById('detail-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'detail-modal') closeModal();
+    });
+
+    document.getElementById('add-member-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'add-member-modal') closeAddMemberModal();
+    });
+
+    // ==================== CONTENT ====================
+    
+    // Essentials
+    document.getElementById('essential-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const messageEl = document.getElementById('essential-message');
+      
+      const data = {
+        name: document.getElementById('essential-name').value,
+        category: document.getElementById('essential-category').value,
+        description: document.getElementById('essential-description').value,
+        image_url: document.getElementById('essential-image').value,
+        affiliate_url: document.getElementById('essential-url').value,
+        display_order: parseInt(document.getElementById('essential-order').value) || 0
+      };
+
+      try {
+        const res = await fetch('/api/admin/essential-create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          messageEl.innerHTML = '<div class="message success">Essential added!</div>';
+          document.getElementById('essential-form').reset();
+          loadEssentials();
+        } else {
+          const err = await res.json();
+          messageEl.innerHTML = `<div class="message error">${err.error}</div>`;
+        }
+      } catch (err) {
+        messageEl.innerHTML = '<div class="message error">Error adding essential</div>';
+      }
+    });
+
+    async function loadEssentials() {
+      try {
+        const res = await fetch('/api/admin/essentials-list');
+        if (res.ok) {
+          const items = await res.json();
+          const container = document.getElementById('essentials-items');
+          
+          if (items.length === 0) {
+            container.innerHTML = '<p style="color: #888;">No essentials added yet.</p>';
+            return;
+          }
+
+          container.innerHTML = items.map(item => `
+            <div class="item-row">
+              <div class="item-info">
+                <div class="item-name">${item.name}</div>
+                <div class="item-meta">${item.category} • Order: ${item.display_order}</div>
+              </div>
+              <div class="item-actions">
+                <button class="delete" onclick="deleteEssential(${item.id})">Delete</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    async function deleteEssential(id) {
+      if (!confirm('Delete this essential?')) return;
+      try {
+        const res = await fetch('/api/admin/essential-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        if (res.ok) loadEssentials();
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    // Blog
+    
+    // Toggle schedule field visibility
+    document.getElementById('blog-published').addEventListener('change', (e) => {
+      const scheduleGroup = document.getElementById('schedule-group');
+      if (e.target.checked) {
+        scheduleGroup.style.display = 'none';
+        document.getElementById('blog-scheduled').value = '';
+      } else {
+        scheduleGroup.style.display = 'block';
+      }
+    });
+
+    document.getElementById('blog-image-file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById('upload-status');
+      const previewEl = document.getElementById('blog-image-preview');
+      const imageInput = document.getElementById('blog-image');
+
+      statusEl.textContent = 'Uploading...';
+      statusEl.style.color = '#888';
+
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': file.type,
+            'x-filename': file.name
+          },
+          body: file
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          imageInput.value = data.url;
+          previewEl.innerHTML = `<img src="${data.url}" alt="Preview">`;
+          statusEl.textContent = 'Uploaded ✓';
+          statusEl.style.color = '#2e7d32';
+        } else {
+          statusEl.textContent = 'Upload failed';
+          statusEl.style.color = '#c62828';
+        }
+      } catch (err) {
+        statusEl.textContent = 'Upload failed';
+        statusEl.style.color = '#c62828';
+      }
+    });
+
+    document.getElementById('blog-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const messageEl = document.getElementById('blog-message');
+      
+      const isPublished = document.getElementById('blog-published').checked;
+      const scheduledValue = document.getElementById('blog-scheduled').value;
+      
+      const data = {
+        title: document.getElementById('blog-title').value,
+        excerpt: document.getElementById('blog-excerpt').value,
+        content: quill.root.innerHTML,
+        image_url: document.getElementById('blog-image').value,
+        video_url: document.getElementById('blog-video').value,
+        published: isPublished,
+        scheduled_for: (!isPublished && scheduledValue) ? new Date(scheduledValue).toISOString() : null
+      };
+
+      try {
+        let res;
+        if (editingBlogId) {
+          // Update existing post
+          data.id = editingBlogId;
+          res = await fetch('/api/admin/blog-update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        } else {
+          // Create new post
+          res = await fetch('/api/admin/blog-create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
+
+        if (res.ok) {
+          messageEl.innerHTML = `<div class="message success">Blog post ${editingBlogId ? 'updated' : 'added'}!</div>`;
+          resetBlogForm();
+          loadBlogPosts();
+        } else {
+          const err = await res.json();
+          messageEl.innerHTML = `<div class="message error">${err.error}</div>`;
+        }
+      } catch (err) {
+        messageEl.innerHTML = '<div class="message error">Error saving post</div>';
+      }
+    });
+
+    async function loadBlogPosts() {
+      try {
+        const res = await fetch('/api/admin/blog-list');
+        if (res.ok) {
+          const items = await res.json();
+          const container = document.getElementById('blog-items');
+          
+          if (items.length === 0) {
+            container.innerHTML = '<p style="color: #888;">No blog posts yet.</p>';
+            return;
+          }
+
+          container.innerHTML = items.map(item => {
+            let statusText = '';
+            if (item.published) {
+              statusText = '✓ Published';
+            } else if (item.scheduled_for) {
+              const schedDate = new Date(item.scheduled_for);
+              statusText = `🕐 Scheduled: ${schedDate.toLocaleDateString()} ${schedDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            } else {
+              statusText = 'Draft';
+            }
+            const pinnedBadge = item.is_pinned ? '<span style="background: var(--deep-forest); color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 10px; margin-left: 8px;">PINNED</span>' : '';
+            const pinBtnText = item.is_pinned ? 'Unpin' : 'Pin';
+            return `
+            <div class="item-row" ${item.is_pinned ? 'style="background: rgba(45,87,44,0.05); border-left: 3px solid var(--deep-forest);"' : ''}>
+              <div class="item-info">
+                <div class="item-name">${item.title}${pinnedBadge}</div>
+                <div class="item-meta">${statusText} • ${new Date(item.created_at).toLocaleDateString()}</div>
+              </div>
+              <div class="item-actions">
+                <button onclick="copyPostLink(${item.id})" title="Copy direct link">Copy Link</button>
+                <button onclick="editBlogPost(${item.id})">Edit</button>
+                <button onclick="togglePinPost(${item.id}, ${!item.is_pinned})">${pinBtnText}</button>
+                <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish Now'}</button>
+                <button class="delete" onclick="deleteBlogPost(${item.id})">Delete</button>
+              </div>
+            </div>
+          `}).join('');
+          
+          // Store posts for editing
+          window.blogPostsData = items;
+        }
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    async function togglePinPost(id, pin) {
+      try {
+        const res = await fetch('/api/admin/blog-pin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, pin })
+        });
+        if (res.ok) {
+          loadBlogPosts();
+        }
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    function copyPostLink(id) {
+      const link = `https://tmacmastermind.com/tee-room.html?post=${id}`;
+      navigator.clipboard.writeText(link).then(() => {
+        // Show brief confirmation
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.background = 'var(--deep-forest)';
+        btn.style.color = '#fff';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.style.color = '';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+        alert('Link: ' + link);
+      });
+    }
+
+    async function deleteBlogPost(id) {
+      if (!confirm('Delete this post?')) return;
+      try {
+        const res = await fetch('/api/admin/blog-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        if (res.ok) loadBlogPosts();
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    // Edit blog post - populate form with existing data
+    let editingBlogId = null;
+    
+    function editBlogPost(id) {
+      const post = window.blogPostsData.find(p => p.id === id);
+      if (!post) return;
+      
+      editingBlogId = id;
+      
+      // Populate the form
+      document.getElementById('blog-title').value = post.title || '';
+      document.getElementById('blog-excerpt').value = post.excerpt || '';
+      quill.root.innerHTML = post.content || '';
+      document.getElementById('blog-published').checked = post.published || false;
+      
+      // Handle scheduled_for
+      const scheduleGroup = document.getElementById('schedule-group');
+      const scheduledInput = document.getElementById('blog-scheduled');
+      if (post.scheduled_for) {
+        const schedDate = new Date(post.scheduled_for);
+        // Format for datetime-local input (YYYY-MM-DDTHH:mm)
+        scheduledInput.value = schedDate.toISOString().slice(0, 16);
+        scheduleGroup.style.display = 'block';
+      } else {
+        scheduledInput.value = '';
+        scheduleGroup.style.display = post.published ? 'none' : 'block';
+      }
+      
+      // Handle image
+      document.getElementById('blog-image').value = post.image_url || '';
+      const previewEl = document.getElementById('blog-image-preview');
+      if (post.image_url) {
+        previewEl.innerHTML = `<img src="${post.image_url}" alt="Preview">`;
+      } else {
+        previewEl.innerHTML = '<span>No image selected</span>';
+      }
+      
+      // Handle video
+      document.getElementById('blog-video').value = post.video_url || '';
+      
+      // Change button text and show cancel
+      document.getElementById('blog-submit-btn').textContent = 'Update Post';
+      document.getElementById('blog-cancel-btn').style.display = 'inline-block';
+      
+      // Scroll to form
+      document.getElementById('blog-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function resetBlogForm() {
+      editingBlogId = null;
+      document.getElementById('blog-form').reset();
+      quill.root.innerHTML = '';
+      document.getElementById('blog-image').value = '';
+      document.getElementById('blog-image-preview').innerHTML = '<span>No image selected</span>';
+      document.getElementById('blog-video').value = '';
+      document.getElementById('upload-status').textContent = '';
+      document.getElementById('blog-submit-btn').textContent = 'Add Post';
+      document.getElementById('blog-cancel-btn').style.display = 'none';
+      document.getElementById('blog-scheduled').value = '';
+      document.getElementById('schedule-group').style.display = 'none';
+    }
+
+    async function togglePublish(id, publish) {
+      try {
+        const res = await fetch('/api/admin/blog-publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, published: publish })
+        });
+        if (res.ok) loadBlogPosts();
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    // Clinics
+    async function loadClinicSignups() {
+      try {
+        const res = await fetch('/api/admin/clinic-signups');
+        if (res.ok) {
+          const data = await res.json();
+          const container = document.getElementById('clinic-signups');
+          
+          if (data.length === 0) {
+            container.innerHTML = '<p style="color: #888;">No signups yet.</p>';
+            return;
+          }
+
+          const clinics = {};
+          data.forEach(signup => {
+            if (!clinics[signup.clinic_id]) clinics[signup.clinic_id] = [];
+            clinics[signup.clinic_id].push(signup);
+          });
+
+          container.innerHTML = Object.entries(clinics).map(([clinicId, signups]) => `
+            <div style="margin-bottom: 24px;">
+              <h3 style="margin-bottom: 12px; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em; color: var(--deep-forest);">${clinicId.replace('-', ' ').toUpperCase()}</h3>
+              <p style="margin-bottom: 12px; font-size: 14px;"><strong>${signups.length}</strong> member${signups.length !== 1 ? 's' : ''} attending</p>
+              ${signups.map(s => `
+                <div class="signup-item">
+                  <span>${s.member_name}</span>
+                  <span style="color: #888; font-size: 12px;">${s.member_email}</span>
+                </div>
+              `).join('')}
+            </div>
+          `).join('');
+        }
+      } catch (err) { console.error('Error:', err); }
+    }
+
+    // ==================== RETREATS ====================
+    async function loadRetreatRSVPs() {
+      try {
+        const res = await fetch('/api/admin/retreat-rsvps?retreat_id=spring-2026');
+        if (res.ok) {
+          const data = await res.json();
+          const container = document.getElementById('rsvp-members');
+          document.getElementById('rsvp-count').textContent = data.length;
+          
+          if (data.length === 0) {
+            container.innerHTML = '<div class="empty-state">No RSVPs yet.</div>';
+            return;
+          }
+
+          container.innerHTML = data.map(rsvp => `
+            <div class="rsvp-item">
+              <div>
+                <div class="rsvp-member-name">${rsvp.member_name}</div>
+                <div class="rsvp-member-email">${rsvp.member_email}</div>
+              </div>
+              <div class="rsvp-date">Confirmed ${formatDate(rsvp.created_at)}</div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error loading RSVPs:', err);
+        document.getElementById('rsvp-members').innerHTML = '<div class="empty-state">Error loading RSVPs</div>';
+      }
+    }
+
+    // ==================== LIVE STREAMING ====================
+    let isLive = false;
+    let liveStartTime = null;
+    let liveDurationInterval = null;
+
+    async function loadLiveStatus() {
+      try {
+        const res = await fetch('/api/live/status');
+        if (res.ok) {
+          const status = await res.json();
+          isLive = status.is_live;
+          
+          if (isLive) {
+            liveStartTime = new Date(status.started_at);
+            showLiveActive(status.topic);
+          } else {
+            showLiveForm();
+          }
+        }
+      } catch (err) {
+        console.error('Error loading live status:', err);
+      }
+    }
+
+    function showLiveForm() {
+      document.getElementById('live-form').style.display = 'block';
+      document.getElementById('live-active').style.display = 'none';
+      document.getElementById('live-status-indicator').classList.remove('live');
+      document.querySelector('.status-text').textContent = 'You are offline';
+      
+      if (liveDurationInterval) {
+        clearInterval(liveDurationInterval);
+        liveDurationInterval = null;
+      }
+    }
+
+    function showLiveActive(topic) {
+      document.getElementById('live-form').style.display = 'none';
+      document.getElementById('live-active').style.display = 'block';
+      document.getElementById('live-status-indicator').classList.add('live');
+      document.querySelector('.status-text').textContent = 'You are LIVE';
+      document.getElementById('current-topic').textContent = topic || 'Live with Dr. TMac';
+      
+      // Start duration timer
+      updateLiveDuration();
+      liveDurationInterval = setInterval(updateLiveDuration, 1000);
+    }
+
+    function updateLiveDuration() {
+      if (!liveStartTime) return;
+      
+      const now = new Date();
+      const diff = Math.floor((now - liveStartTime) / 1000);
+      const mins = Math.floor(diff / 60).toString().padStart(2, '0');
+      const secs = (diff % 60).toString().padStart(2, '0');
+      
+      document.getElementById('live-duration').textContent = `${mins}:${secs}`;
+    }
+
+    async function toggleLive() {
+      if (!isLive) {
+        // Not live - open the broadcast studio
+        window.open('/broadcast.html', '_blank');
+        return;
+      }
+      
+      // Currently live - stop the broadcast
+      try {
+        const res = await fetch('/api/admin/go-live', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'stop' })
+        });
+
+        if (res.ok) {
+          isLive = false;
+          showLiveForm();
+          alert('Live session ended successfully!');
+        } else {
+          const error = await res.json();
+          alert(error.error || 'Failed to end live session');
+        }
+      } catch (err) {
+        console.error('Error ending live:', err);
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // ==================== VIDEOS ====================
+    let selectedVideoFile = null;
+
+    // Video file input handling
+    const videoFileInput = document.getElementById('video-file');
+    const videoFileButtonText = document.getElementById('video-file-button-text');
+    const videoFileInfo = document.getElementById('video-file-info');
+    const videoTitleInput = document.getElementById('video-title');
+
+    if (videoFileInput) {
+      videoFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (!file.type.startsWith('video/')) {
+            alert('Please select a valid video file');
+            videoFileInput.value = '';
+            return;
+          }
+          selectedVideoFile = file;
+          videoFileButtonText.textContent = file.name;
+          videoFileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+          
+          // Auto-fill title if empty
+          if (!videoTitleInput.value) {
+            videoTitleInput.value = file.name.replace(/\.[^/.]+$/, '');
+          }
+        }
+      });
+    }
+
+    // Video upload form handling
+    const videoUploadForm = document.getElementById('video-upload-form');
+    const videoUploadButton = document.getElementById('video-upload-button');
+    const videoProgressContainer = document.getElementById('video-progress-container');
+    const videoProgressFill = document.getElementById('video-progress-fill');
+    const videoProgressText = document.getElementById('video-progress-text');
+
+    if (videoUploadForm) {
+      videoUploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!selectedVideoFile) {
+          alert('Please select a video file');
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('video', selectedVideoFile);
+        formData.append('title', document.getElementById('video-title').value);
+        formData.append('description', document.getElementById('video-description').value);
+        formData.append('postSlug', document.getElementById('video-post-slug').value);
+
+        videoUploadButton.disabled = true;
+        videoProgressContainer.style.display = 'block';
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', (e) => {
+          if (e.lengthComputable) {
+            const percentComplete = Math.round((e.loaded / e.total) * 100);
+            videoProgressFill.style.width = percentComplete + '%';
+            videoProgressText.textContent = `Uploading: ${percentComplete}%`;
+          }
+        });
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            if (data.success) {
+              alert('Video uploaded successfully!');
+              videoUploadForm.reset();
+              selectedVideoFile = null;
+              videoFileButtonText.textContent = 'Choose Video File';
+              videoFileInfo.textContent = '';
+              loadVideos();
+            } else {
+              alert('Upload failed: ' + (data.error || 'Unknown error'));
+            }
+          } else {
+            alert('Upload failed. Please try again.');
+          }
+          videoUploadButton.disabled = false;
+          videoProgressContainer.style.display = 'none';
+          videoProgressFill.style.width = '0%';
+        });
+
+        xhr.addEventListener('error', () => {
+          alert('Upload failed. Please check your connection and try again.');
+          videoUploadButton.disabled = false;
+          videoProgressContainer.style.display = 'none';
+          videoProgressFill.style.width = '0%';
+        });
+
+        xhr.open('POST', '/api/videos/upload');
+        xhr.send(formData);
+      });
+    }
+
+    // Load videos
+    async function loadVideos() {
+      const videosList = document.getElementById('videos-list');
+      const videosCount = document.getElementById('videos-count');
+
+      if (!videosList) return;
+
+      videosList.innerHTML = '<div style="text-align: center; padding: 40px; color: #888;">Loading videos...</div>';
+
+      try {
+        const response = await fetch('/api/videos/get?all=true');
+        const data = await response.json();
+
+        if (data.success && data.videos.length > 0) {
+          videosCount.textContent = data.videos.length;
+          videosList.innerHTML = data.videos.map(video => `
+            <div class="video-card">
+              <div>
+                <video src="${video.blob_url}" controls></video>
+              </div>
+              <div>
+                <h3>${video.title}</h3>
+                ${video.description ? `<p>${video.description}</p>` : ''}
+                <div class="video-meta">
+                  ${video.post_slug ? `<div>Blog Post: ${video.post_slug}</div>` : ''}
+                  <div>Uploaded: ${new Date(video.created_at).toLocaleDateString()}</div>
+                  ${video.file_size ? `<div>Size: ${(video.file_size / 1024 / 1024).toFixed(2)} MB</div>` : ''}
+                </div>
+              </div>
+              <div class="video-actions">
+                <button class="btn-copy" onclick="copyVideoEmbedCode('${video.blob_url}')">
+                  Copy Embed Code
+                </button>
+                <button class="btn-delete" onclick="deleteVideo(${video.id})">
+                  Delete
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          videosCount.textContent = '0';
+          videosList.innerHTML = '<div class="empty-videos">No videos uploaded yet</div>';
+        }
+      } catch (error) {
+        console.error('Error loading videos:', error);
+        videosList.innerHTML = '<div class="empty-videos">Failed to load videos</div>';
+      }
+    }
+
+    // Copy video embed code
+    function copyVideoEmbedCode(videoUrl) {
+      const embedCode = `<div style="margin: 30px 0; padding: 20px; background-color: #FAF8F5; border-radius: 8px;">
+  <video controls preload="metadata" style="width: 100%; max-width: 800px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <source src="${videoUrl}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>`;
+
+      navigator.clipboard.writeText(embedCode).then(() => {
+        alert('Embed code copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy. Here is the code:\n\n' + embedCode);
+      });
+    }
+
+    // Delete video
+    async function deleteVideo(id) {
+      if (!confirm('Are you sure you want to delete this video?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/videos/delete?id=${id}`, {
+          method: 'DELETE'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          alert('Video deleted successfully');
+          loadVideos();
+        } else {
+          alert('Failed to delete video: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error deleting video:', error);
+        alert('Failed to delete video');
+      }
+    }
+  </script>
+  <!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registered:', registration.scope);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+  </script>
+  <script src="/pwa-nav.js"></script>
+</body>
+</html>

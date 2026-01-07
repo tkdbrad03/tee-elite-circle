@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>The Tee Room — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Insights from Dr. TMac on business, wealth, golf, and living at the highest level. For women who refuse to play small.">
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#1a2e1a">
+  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      line-height: 1.7;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--deep-forest);
+      padding: 20px 48px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .header-logo img {
+      height: 32px;
+      width: auto;
+    }
+
+    .header-logo span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-blush);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--tmac-blush);
+    }
+
+    .nav-cta {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--tmac-blush);
+      padding: 12px 24px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-cta:hover {
+      background: #fff;
+    }
+
+    .header-user {
+      display: none;
+    }
+
+    .header-user.logged-in {
+      display: block;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--tmac-blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--deep-forest);
+    }
+
+    /* Mobile menu button */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .mobile-menu-btn span {
+      width: 24px;
+      height: 2px;
+      background: var(--tmac-blush);
+      transition: all 0.3s ease;
+    }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: var(--deep-forest);
+      padding: 24px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav-link {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+      color: var(--tmac-blush);
+    }
+
+    /* Main content */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+
+    .page-header {
+      margin-bottom: 60px;
+      text-align: center;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .page-label {
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 16px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 20px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.8;
+    }
+
+    /* Blog Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* PINNED SECTION */
+    .pinned-section {
+      margin-bottom: 48px;
+    }
+
+    .pinned-card {
+      background: linear-gradient(135deg, #fafafa 0%, #fff 100%);
+      border: 1px solid #eee;
+      border-left: 4px solid var(--tmac-bronze);
+      padding: 28px 36px;
+      max-width: 700px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .pinned-card:hover {
+      border-color: var(--tmac-blush);
+      border-left-color: var(--tmac-bronze);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .pinned-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--tmac-bronze);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 2px;
+    }
+
+    .pinned-card-date {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 10px;
+    }
+
+    .pinned-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+      line-height: 1.3;
+      padding-right: 60px;
+    }
+
+    .pinned-card-excerpt {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .pinned-card-link {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pinned-card-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* TODAY'S BRIEF SECTION */
+    .todays-brief-section {
+      margin-bottom: 60px;
+    }
+
+    .todays-brief-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-left: 4px solid var(--deep-forest);
+      padding: 32px 40px;
+      max-width: 700px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .todays-brief-card:hover {
+      border-color: var(--tmac-blush);
+      border-left-color: var(--deep-forest);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .todays-brief-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .todays-brief-date {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .todays-brief-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .todays-brief-excerpt {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .todays-brief-link {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .todays-brief-link svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* FEATURE POSTS SECTION */
+    .feature-posts-section {
+      padding-top: 40px;
+      border-top: 1px solid #eee;
+    }
+
+    .feature-section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 32px;
+    }
+
+    .blog-card {
+      background: #fff;
+      border: 1px solid #eee;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: block;
+      cursor: pointer;
+    }
+
+    .blog-card:hover {
+      border-color: var(--tmac-blush);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+    }
+
+    .blog-image {
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, var(--deep-forest) 0%, #1a2e1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .blog-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-image svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--tmac-blush);
+      stroke-width: 1;
+      fill: none;
+      opacity: 0.5;
+    }
+
+    .blog-image {
+      position: relative;
+    }
+
+    .blog-video-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 3px;
+    }
+
+    .blog-video-badge svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+      stroke: none;
+      opacity: 1;
+    }
+
+    .blog-pinned-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--deep-forest);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 3px;
+    }
+
+    .blog-content {
+      padding: 28px;
+    }
+
+    .blog-date {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 10px;
+    }
+
+    .blog-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--charcoal);
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .blog-excerpt {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .blog-read-more {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .blog-read-more svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .blog-empty {
+      text-align: center;
+      padding: 80px 32px;
+      background: #fafafa;
+      border: 1px dashed #ddd;
+      grid-column: 1 / -1;
+    }
+
+    .blog-empty p {
+      color: #888;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .blog-empty span {
+      font-size: 13px;
+      color: #aaa;
+      font-style: italic;
+    }
+
+    /* Blog Modal */
+    .blog-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .blog-modal-overlay.open {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .blog-modal {
+      background: #fff;
+      max-width: 700px;
+      width: 100%;
+      margin: 40px auto;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .blog-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .blog-modal-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    .blog-modal-close:hover {
+      background: rgba(0,0,0,0.7);
+    }
+
+    .blog-modal-image {
+      width: 100%;
+      max-height: 300px;
+      overflow: hidden;
+    }
+
+    .blog-modal-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-modal-video {
+      width: 100%;
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      background: #000;
+    }
+
+    .blog-modal-video iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .blog-modal-body {
+      padding: 32px;
+    }
+
+    .blog-modal-date {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .blog-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .blog-modal-content {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    .blog-modal-content p {
+      margin-bottom: 16px;
+    }
+
+    /* Apply CTA in modal for visitors */
+    .blog-modal-apply {
+      background: var(--deep-forest);
+      padding: 28px;
+      margin-top: 32px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .blog-modal-apply p {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .blog-modal-apply a {
+      display: inline-block;
+      background: var(--tmac-blush);
+      color: var(--charcoal);
+      padding: 14px 28px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .blog-modal-apply a:hover {
+      background: #fff;
+    }
+
+    /* System Builder CTA for members */
+    .blog-modal-cta {
+      display: none;
+      background: linear-gradient(145deg, #1a2f23, #234530);
+      border-radius: 12px;
+      padding: 32px;
+      margin-top: 32px;
+      text-align: center;
+    }
+
+    .blog-modal-cta-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+
+    .blog-modal-cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .blog-modal-cta-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .blog-modal-cta-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: var(--tmac-blush);
+      color: var(--deep-forest);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .blog-modal-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232, 204, 200, 0.3);
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--deep-forest);
+      padding: 48px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .header-nav,
+      .header-nav.visitor-only,
+      .header-nav.member-only,
+      body.is-member .header-nav.member-only {
+        display: none !important;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .site-header {
+        padding: 16px 24px;
+      }
+
+      .main-content {
+        padding: 60px 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .blog-modal {
+        margin: 20px auto;
+      }
+      
+      .blog-modal-body {
+        padding: 24px;
+      }
+      
+      .blog-modal-title {
+        font-size: 24px;
+      }
+    }
+
+    /* Hide elements based on auth state */
+    .visitor-only { }
+    .member-only { display: none !important; }
+    
+    body.is-member .visitor-only { display: none !important; }
+    body.is-member .member-only { display: flex !important; }
+    
+    /* Mobile nav controlled by JS only - always hidden until .open */
+    .mobile-nav {
+      display: none !important;
+    }
+    .mobile-nav.open {
+      display: flex !important;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/landing.html" class="header-logo" id="logo-link">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+        <span>The Tee Elite Circle</span>
+      </a>
+
+      <!-- Visitor Navigation -->
+      <nav class="header-nav visitor-only" id="visitor-nav">
+        <a href="/landing.html" class="nav-link">Home</a>
+        <a href="/tee-room.html" class="nav-link active">Tee Room</a>
+        <a href="/landing.html#apply" class="nav-link">Apply</a>
+        <a href="/member-login.html" class="nav-cta">Member Login</a>
+      </nav>
+
+      <!-- Member Navigation -->
+      <nav class="header-nav member-only" id="member-nav">
+        <a href="/home.html" class="nav-link">Home</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/tee-room.html" class="nav-link active">Tee Room</a>
+        <a href="/fairway.html" class="nav-link">Fairway</a>
+      </nav>
+
+      <div class="header-user member-only" id="header-user">
+        <a href="/profile.html" class="user-avatar" id="user-avatar">
+          <span id="user-initials">TM</span>
+        </a>
+      </div>
+
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV - Visitor -->
+  <div class="mobile-nav" id="mobile-nav-visitor">
+    <a href="/landing.html" class="mobile-nav-link">Home</a>
+    <a href="/tee-room.html" class="mobile-nav-link active">Tee Room</a>
+    <a href="/landing.html#apply" class="mobile-nav-link">Apply for Membership</a>
+    <a href="/member-login.html" class="mobile-nav-link">Member Login</a>
+  </div>
+
+  <!-- MOBILE NAV - Member -->
+  <div class="mobile-nav" id="mobile-nav-member">
+    <a href="/home.html" class="mobile-nav-link">Home</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/tee-room.html" class="mobile-nav-link active">Tee Room</a>
+    <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
+    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="page-header">
+      <p class="page-label">Insights & Inspiration</p>
+      <h1 class="page-title">The Tee Room</h1>
+      <p class="page-subtitle">Thoughts on business, wealth, golf, and living at the highest level — from Dr. TMac.</p>
+    </div>
+
+    <!-- PINNED SECTION -->
+    <section class="pinned-section" id="pinned-section">
+      <!-- Loaded dynamically -->
+    </section>
+
+    <!-- TODAY'S BRIEF SECTION -->
+    <section class="todays-brief-section" id="todays-brief-section">
+      <!-- Loaded dynamically -->
+    </section>
+
+    <!-- FEATURE POSTS SECTION -->
+    <section class="feature-posts-section">
+      <p class="feature-section-label">Featured Stories</p>
+      <div class="blog-grid" id="blog-grid">
+        <div class="blog-empty">
+          <p>Loading...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BLOG MODAL -->
+  <div class="blog-modal-overlay" id="blog-modal">
+    <div class="blog-modal">
+      <button class="blog-modal-close" onclick="closeBlogModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="blog-modal-image" id="blog-modal-image"></div>
+      <div class="blog-modal-video" id="blog-modal-video" style="display: none;"></div>
+      <div class="blog-modal-body">
+        <p class="blog-modal-date" id="blog-modal-date"></p>
+        <h2 class="blog-modal-title" id="blog-modal-title"></h2>
+        <div class="blog-modal-content" id="blog-modal-content"></div>
+        
+        <!-- Apply CTA for visitors -->
+        <div class="blog-modal-apply visitor-only" id="blog-modal-apply">
+          <p>Ready to be in the room where it happens?</p>
+          <a href="/landing.html#apply">Apply for Membership</a>
+        </div>
+
+        <!-- System Builder CTA for members (only on specific post - controlled by JS) -->
+        <div class="blog-modal-cta" id="system-builder-cta" style="display: none;">
+          <p class="blog-modal-cta-label">Ready to Take Action?</p>
+          <h3 class="blog-modal-cta-title">Design Your First Paid System</h3>
+          <p class="blog-modal-cta-text">
+            A guided 10-minute exercise to identify, structure, and commit to building a system from your expertise.
+          </p>
+          <a href="system-builder.html" class="blog-modal-cta-btn">Start the System Builder →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p class="footer-text">The Tee Elite Circle — A TMac Inspired Experience</p>
+  </footer>
+
+  <script>
+    // Check if user is logged in
+    let isLoggedIn = false;
+
+    async function checkAuthStatus() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (res.ok) {
+          const member = await res.json();
+          isLoggedIn = true;
+          document.body.classList.add('is-member');
+          
+          // Update logo link for members
+          document.getElementById('logo-link').href = '/home.html';
+          
+          // Update user avatar
+          if (member.first_name && member.last_name) {
+            document.getElementById('user-initials').textContent = 
+              member.first_name[0] + member.last_name[0];
+          }
+        }
+      } catch (err) {
+        // Not logged in - visitor nav will show by default
+      }
+    }
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    mobileMenuBtn.addEventListener('click', () => {
+      if (isLoggedIn) {
+        document.getElementById('mobile-nav-member').classList.toggle('open');
+        document.getElementById('mobile-nav-visitor').classList.remove('open');
+      } else {
+        document.getElementById('mobile-nav-visitor').classList.toggle('open');
+        document.getElementById('mobile-nav-member').classList.remove('open');
+      }
+    });
+
+    // Logout handler
+    document.getElementById('logout-link')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+      window.location.href = '/member-login.html';
+    });
+
+    // Load Blog Posts dynamically
+    async function loadBlogPosts() {
+      const briefSection = document.getElementById('todays-brief-section');
+      const grid = document.getElementById('blog-grid');
+      
+      try {
+        const res = await fetch('/api/blog/get');
+        
+        if (!res.ok) {
+          console.error('Blog API error:', res.status, res.statusText);
+          document.getElementById('pinned-section').innerHTML = '';
+          briefSection.innerHTML = '';
+          grid.innerHTML = `
+            <div class="blog-empty">
+              <p>Stories coming soon.</p>
+              <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+            </div>
+          `;
+          return;
+        }
+        
+        const posts = await res.json();
+        
+        if (!posts || posts.length === 0) {
+          document.getElementById('pinned-section').innerHTML = '';
+          briefSection.innerHTML = '';
+          grid.innerHTML = `
+            <div class="blog-empty">
+              <p>Stories coming soon.</p>
+              <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+            </div>
+          `;
+          return;
+        }
+
+        // Store all posts for modal access
+        window.blogPosts = posts;
+        
+        // Separate content types
+        const briefs = posts.filter(p => !p.image_url && !p.video_url);
+        const pinnedBriefs = briefs.filter(p => p.is_pinned);
+        const unpinnedBriefs = briefs.filter(p => !p.is_pinned);
+        const featurePosts = posts.filter(p => p.image_url || p.video_url);
+        
+        // Render Pinned Section (pinned briefs like Welcome post)
+        const pinnedSection = document.getElementById('pinned-section');
+        if (pinnedBriefs.length > 0) {
+          pinnedSection.innerHTML = pinnedBriefs.map(brief => {
+            const briefIndex = posts.findIndex(p => p.id === brief.id);
+            return `
+              <div class="pinned-card" onclick="openBlogModal(${briefIndex})">
+                <span class="pinned-badge">Pinned</span>
+                <p class="pinned-card-date">${new Date(brief.scheduled_for || brief.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <h3 class="pinned-card-title">${brief.title}</h3>
+                ${brief.excerpt ? `<p class="pinned-card-excerpt">${brief.excerpt}</p>` : ''}
+                <span class="pinned-card-link">Read More <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+              </div>
+            `;
+          }).join('');
+        } else {
+          pinnedSection.innerHTML = '';
+        }
+        
+        // Render Today's Brief section (newest non-pinned brief)
+        if (unpinnedBriefs.length > 0) {
+          const latestBrief = unpinnedBriefs[0]; // Sorted by date from API
+          const briefIndex = posts.findIndex(p => p.id === latestBrief.id);
+          
+          briefSection.innerHTML = `
+            <div class="todays-brief-card" onclick="openBlogModal(${briefIndex})">
+              <p class="todays-brief-label">Today's Brief</p>
+              <h2 class="todays-brief-title">${latestBrief.title}</h2>
+              ${latestBrief.excerpt ? `<p class="todays-brief-excerpt">${latestBrief.excerpt}</p>` : ''}
+              <span class="todays-brief-link">Read Today's Brief <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+            </div>
+          `;
+        } else {
+          briefSection.innerHTML = '';
+        }
+        
+        // Render Feature Posts grid
+        if (featurePosts.length > 0) {
+          grid.innerHTML = featurePosts.map((post) => {
+            const postIndex = posts.findIndex(p => p.id === post.id);
+            return `
+              <div class="blog-card" onclick="openBlogModal(${postIndex})">
+                <div class="blog-image">
+                  <img src="${post.image_url}" alt="${post.title}">
+                  ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
+                </div>
+                <div class="blog-content">
+                  <p class="blog-date">${new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  <h3 class="blog-title">${post.title}</h3>
+                  ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
+                  <span class="blog-read-more">${post.video_url ? 'Watch Now' : 'Read More'} <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          grid.innerHTML = `
+            <div class="blog-empty">
+              <p>Feature stories coming soon.</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Error loading blog posts:', err);
+        document.getElementById('pinned-section').innerHTML = '';
+        briefSection.innerHTML = '';
+        grid.innerHTML = `
+          <div class="blog-empty">
+            <p>Stories coming soon.</p>
+            <span>Check back for insights, inspiration, and behind-the-scenes from Dr. TMac.</span>
+          </div>
+        `;
+      }
+    }
+
+    // Blog modal functions
+    function getVideoEmbedUrl(url) {
+      if (!url) return null;
+      
+      // YouTube
+      const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+      if (youtubeMatch) {
+        return `https://www.youtube.com/embed/${youtubeMatch[1]}?rel=0`;
+      }
+      
+      // Vimeo
+      const vimeoMatch = url.match(/(?:vimeo\.com\/)(\d+)/);
+      if (vimeoMatch) {
+        return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+      }
+      
+      return null;
+    }
+
+    function openBlogModal(index) {
+      const post = window.blogPosts[index];
+      if (!post) return;
+      
+      document.getElementById('blog-modal-title').textContent = post.title;
+      document.getElementById('blog-modal-date').textContent = new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('blog-modal-content').innerHTML = post.content || post.excerpt || 'No content available.';
+      
+      const imageEl = document.getElementById('blog-modal-image');
+      const videoEl = document.getElementById('blog-modal-video');
+      
+      // Check for video first
+      const embedUrl = getVideoEmbedUrl(post.video_url);
+      if (embedUrl) {
+        videoEl.innerHTML = `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        videoEl.style.display = 'block';
+        imageEl.style.display = 'none';
+      } else if (post.image_url) {
+        imageEl.innerHTML = `<img src="${post.image_url}" alt="${post.title}">`;
+        imageEl.style.display = 'block';
+        videoEl.style.display = 'none';
+        videoEl.innerHTML = '';
+      } else {
+        imageEl.style.display = 'none';
+        videoEl.style.display = 'none';
+        videoEl.innerHTML = '';
+      }
+      
+      // Hide Apply CTA for Morning Briefs (posts without images) - let briefs build trust first
+      const applyCta = document.getElementById('blog-modal-apply');
+      const isFeaturePost = post.image_url || post.video_url;
+      if (applyCta) {
+        applyCta.style.display = isFeaturePost ? 'block' : 'none';
+      }
+      
+      // Show System Builder CTA only for members on the specific post
+      if (isLoggedIn) {
+        const systemBuilderCta = document.getElementById('system-builder-cta');
+        const isSystemBuilderPost = post.title && post.title.toLowerCase().includes('expertise') && post.title.toLowerCase().includes('paid system');
+        systemBuilderCta.style.display = isSystemBuilderPost ? 'block' : 'none';
+      }
+      
+      document.getElementById('blog-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeBlogModal() {
+      document.getElementById('blog-modal').classList.remove('open');
+      document.body.style.overflow = '';
+      // Stop video when closing modal
+      document.getElementById('blog-modal-video').innerHTML = '';
+    }
+    
+    // Close modal on backdrop click
+    document.getElementById('blog-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'blog-modal') closeBlogModal();
+    });
+
+    // Check URL for specific post to open
+    function checkUrlForPost() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('post');
+      
+      if (postId && window.blogPosts) {
+        const postIndex = window.blogPosts.findIndex(p => p.id === parseInt(postId));
+        if (postIndex !== -1) {
+          openBlogModal(postIndex);
+        }
+      }
+    }
+
+    // Initialize
+    checkAuthStatus();
+    loadBlogPosts().then(() => {
+      checkUrlForPost();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>Secure Your Founding Seat - The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    .page-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* Logo */
+    .logo-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo-header img {
+      height: 50px;
+      margin-bottom: 12px;
+    }
+
+    .logo-header p {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+    }
+
+    /* Urgency Banner */
+    .urgency-banner {
+      background: var(--deep-forest);
+      color: #fff;
+      text-align: center;
+      padding: 14px 20px;
+      margin-bottom: 40px;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+    }
+
+    .urgency-banner strong {
+      color: var(--tmac-blush);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.7;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    /* Video Section */
+    .video-section {
+      margin-bottom: 48px;
+    }
+
+    .video-container {
+      position: relative;
+      background: var(--deep-forest);
+      max-width: 380px;
+      margin: 0 auto;
+      aspect-ratio: 9/16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-caption {
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-top: 16px;
+      font-style: italic;
+    }
+
+    /* What You Get */
+    .benefits-section {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .benefit-item {
+      display: flex;
+      gap: 14px;
+      padding: 16px;
+      background: var(--soft-cream);
+      border-radius: 8px;
+    }
+
+    .benefit-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--deep-forest);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--tmac-blush);
+    }
+
+    .benefit-content h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--charcoal);
+    }
+
+    .benefit-content p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* About Dr. TMac */
+    .about-section {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .about-image {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 4px solid var(--tmac-blush);
+    }
+
+    .about-content h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .about-content p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .about-credentials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .credential {
+      font-size: 11px;
+      background: var(--tmac-blush-light);
+      color: var(--charcoal);
+      padding: 6px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.03em;
+    }
+
+    /* Social Proof */
+    .social-proof {
+      margin-bottom: 32px;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .testimonial {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 24px;
+      position: relative;
+    }
+
+    .testimonial::before {
+      content: '"';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 60px;
+      color: var(--tmac-blush);
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      line-height: 1;
+    }
+
+    .testimonial p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      padding-left: 30px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-left: 30px;
+    }
+
+    .testimonial-author img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .testimonial-author .name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    .testimonial-author .title {
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* Investment Section */
+    .investment-section {
+      background: var(--deep-forest);
+      color: #fff;
+      padding: 48px 40px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .investment-section .section-title {
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .investment-subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 32px;
+    }
+
+    .price-display {
+      margin-bottom: 32px;
+    }
+
+    .price-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 56px;
+      color: #fff;
+    }
+
+    .price-label {
+      font-size: 13px;
+      color: var(--tmac-blush);
+      margin-top: 8px;
+    }
+
+    .price-note {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 16px;
+    }
+
+    .investment-details {
+      text-align: left;
+      max-width: 400px;
+      margin: 0 auto 32px;
+    }
+
+    .investment-details li {
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      padding: 10px 0;
+      padding-left: 28px;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .investment-details li:last-child {
+      border-bottom: none;
+    }
+
+    .investment-details li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--tmac-blush);
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--tmac-blush);
+      color: var(--deep-forest);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 20px 48px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-btn:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .secure-badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .faq-item {
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .faq-item:first-child {
+      padding-top: 0;
+    }
+
+    .faq-question {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+
+    .faq-answer {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      text-align: center;
+      padding: 40px;
+      background: var(--tmac-blush-light);
+      margin-bottom: 32px;
+    }
+
+    .contact-section h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .contact-section p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .contact-link {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--deep-forest);
+      text-decoration: none;
+      padding: 14px 32px;
+      border: 2px solid var(--deep-forest);
+      transition: all 0.3s;
+    }
+
+    .contact-link:hover {
+      background: var(--deep-forest);
+      color: #fff;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      text-align: center;
+      padding: 48px 24px;
+    }
+
+    .final-cta p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .page-container {
+        padding: 40px 16px;
+      }
+
+      .about-section {
+        flex-direction: column;
+        text-align: center;
+        padding: 32px 24px;
+      }
+
+      .benefits-section,
+      .investment-section,
+      .faq-section {
+        padding: 32px 24px;
+      }
+
+      .price-main {
+        font-size: 44px;
+      }
+
+      .about-credentials {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    
+    <!-- Logo -->
+    <div class="logo-header">
+      <img src="images/tmac-logo.png" alt="TMac Inspired">
+      <p>presents The Tee Elite Circle</p>
+    </div>
+
+    <!-- Urgency Banner -->
+    <div class="urgency-banner">
+      Founding Member Seats: <strong>Only 8 of 12 Remaining</strong>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero-section">
+      <p class="hero-label">You've Been Invited</p>
+      <h1 class="hero-title">Secure Your Founding Seat</h1>
+      <p class="hero-subtitle">
+        You're one step away from joining an exclusive circle of ambitious women who are rewriting the rules - on the golf course and in life.
+      </p>
+    </div>
+
+    <!-- What You Get -->
+    <div class="benefits-section">
+      <h2 class="section-title">What's Included in Your Founding Membership</h2>
+      
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-icon">I</div>
+          <div class="benefit-content">
+            <h4>4 Luxury Golf Retreats</h4>
+            <p>Exclusive destinations with world-class courses, accommodations, and experiences curated for us.</p>
+          </div>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">II</div>
+          <div class="benefit-content">
+            <h4>Private Community Access</h4>
+            <p>Connect with 11 other ambitious women building wealth, wellness, and legacy through golf.</p>
+          </div>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">III</div>
+          <div class="benefit-content">
+            <h4>Monthly Virtual Hangouts</h4>
+            <p>Stay connected between retreats with casual conversations, golf tips, and business insights.</p>
+          </div>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">IV</div>
+          <div class="benefit-content">
+            <h4>Founding Member Perks</h4>
+            <p>Exclusive gear, partner discounts, and priority access to every future Circle experience.</p>
+          </div>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">V</div>
+          <div class="benefit-content">
+            <h4>High-Level Network</h4>
+            <p>Golf with women who are CEOs, investors, and leaders - relationships that open real doors.</p>
+          </div>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">VI</div>
+          <div class="benefit-content">
+            <h4>Locked Founding Rate</h4>
+            <p>Your $25K rate is locked for life - future members will pay significantly more.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Dr. TMac -->
+    <div class="about-section">
+      <img src="images/tmac-photo.jpg" alt="Dr. TMac" class="about-image">
+      <div class="about-content">
+        <h3>Meet Your Host: Dr. TMac</h3>
+        <p>
+          31 years as a nurse. 29 years as an entrepreneur. 2x best selling author. Real estate investor since 2018, private money lender, owner of two group homes, and newly certified ALF Administrator. I taught over 1,100 nurses to invest in real estate and ran a mastermind that grew from $25K to $50K per year. Then I discovered golf - and everything changed.
+        </p>
+        <p>
+          In my first full year, I hit two holes-in-one and became 2x Player of the Month. But the real win? The relationships. Business owners, investors, executives - all made on the course.
+        </p>
+        <p>
+          The Tee Elite Circle is where I bring together ambitious women who want the same thing: connections that matter, in places that inspire.
+        </p>
+        <div class="about-credentials">
+          <span class="credential">PhD, MSN-Ed, RN</span>
+          <span class="credential">Tech CEO</span>
+          <span class="credential">2x Best Selling Author</span>
+          <span class="credential">Real Estate Investor Since 2018</span>
+          <span class="credential">Private Money Lender</span>
+          <span class="credential">Group Home Owner x2</span>
+          <span class="credential">ALF Administrator Certified (2025)</span>
+          <span class="credential">2 Years Playing Golf</span>
+          <span class="credential">2x Hole-in-One (2025)</span>
+          <span class="credential">2x Player of the Month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonials / Social Proof -->
+    <div class="social-proof">
+      <div class="testimonial-grid">
+        <div class="testimonial">
+          <p>Dr. TMac creates spaces where women can just be themselves while leveling up. Her energy is contagious and her connections are real. This isn't networking - it's sisterhood.</p>
+          <div class="testimonial-author">
+            <div>
+              <div class="name">Golf Community Member</div>
+              <div class="title">Florida Players Group</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investment Section -->
+    <div class="investment-section">
+      <h2 class="section-title">Secure Your Founding Seat</h2>
+      <p class="investment-subtitle">Join the first 12 women shaping The Tee Elite Circle</p>
+      
+      <div class="price-display">
+        <div class="price-main">$2,000</div>
+        <div class="price-label">Founding Member Deposit</div>
+        <p class="price-note">Applies directly to your $25,000 lifetime membership</p>
+      </div>
+
+      <ul class="investment-details">
+        <li>Locks in your founding member rate for life</li>
+        <li>Remaining $23,000 due before your first retreat</li>
+        <li>Flexible payment plans available on your welcome call</li>
+        <li>Immediate access to the private member community</li>
+      </ul>
+
+      <a href="https://buy.stripe.com/00wdR98O37zT7ppaZh1Fe0K" class="cta-btn" id="payment-btn">
+        Claim My Founding Seat
+      </a>
+      
+      <div class="secure-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>Secure payment powered by Stripe</span>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+      <h2 class="section-title">Questions?</h2>
+      
+      <div class="faq-item">
+        <div class="faq-question">What if I'm a beginner at golf?</div>
+        <div class="faq-answer">Perfect. Several founding members are brand new to the game. This is about the experience and the connections - not your handicap. We'll have support for all skill levels at every retreat.</div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">What if I can't make every retreat?</div>
+        <div class="faq-answer">Life happens. While we encourage attending all four retreats to get the full experience, missing one won't affect your membership. You'll still have community access and can join the next one.</div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">What's included in the $25,000?</div>
+        <div class="faq-answer">All four retreats (accommodations, golf, most meals, and curated experiences), year-round community access, monthly virtual hangouts, and founding member perks. Flights are the only thing not included.</div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">Can I do a payment plan?</div>
+        <div class="faq-answer">Absolutely. After your $2,000 deposit, we'll set up a plan that works for you on your welcome call. Most members split the remaining $23,000 over 3-6 months.</div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">When is the first retreat?</div>
+        <div class="faq-answer">Dates and location will be announced to founding members first. We're targeting Q1 2025 for our inaugural retreat. You'll have input on dates that work best for the group.</div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-section">
+      <h3>Still Have Questions?</h3>
+      <p>Let's chat. I'm happy to hop on a quick call or answer any questions via text.</p>
+      <a href="sms:+15613203585" class="contact-link">Text Dr. TMac</a>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="final-cta">
+      <p>"The golf course is where deals are made, relationships are built, and legacies begin. Your seat at the table is waiting."</p>
+      <a href="https://buy.stripe.com/00wdR98O37zT7ppaZh1Fe0K" class="cta-btn" style="background: var(--deep-forest); color: #fff;">
+        I'm Ready - Claim My Seat
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    // Get email from URL if passed from application
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => console.log('SW registered'))
+          .catch(error => console.log('SW failed:', error));
+      });
+    }
+  </script>
+</body>
+</html>

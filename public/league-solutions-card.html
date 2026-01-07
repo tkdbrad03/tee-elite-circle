@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. TMac | CompliTrst™ League Solutions</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="images/complitrst-favicon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="League Solutions">
+    
+    <!-- Social Sharing / Open Graph -->
+    <meta property="og:title" content="Dr. TMac | CompliTrst™ League Solutions">
+    <meta property="og:description" content="Custom Golf League Apps That Build Community">
+    <meta property="og:type" content="website">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #1B4332;
+            --forest-light: #2D6A4F;
+            --forest-dark: #143325;
+            --mint: #D8F3DC;
+            --mint-dark: #B7E4C7;
+            --gold: #C9A227;
+            --gold-light: #E8D48A;
+            --white: #ffffff;
+            --cream: #f8faf8;
+            --text-dark: #1a1a1a;
+            --text-muted: #6b6b6b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: 50%;
+        }
+
+        .profile-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            object-fit: cover;
+            object-position: center top;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .complitrst-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 16px;
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            color: var(--white);
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .profile-credentials {
+            color: var(--gold-light);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .profile-title {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .card-body {
+            padding: 40px 25px 30px;
+        }
+
+        .tagline {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--forest);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .sub-tagline {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .links-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+        }
+
+        .link-btn.primary {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);
+        }
+
+        .link-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(27, 67, 50, 0.4);
+        }
+
+        .link-btn.secondary {
+            background: var(--mint);
+            color: var(--forest);
+        }
+
+        .link-btn.secondary:hover {
+            background: var(--mint-dark);
+            transform: translateY(-2px);
+        }
+
+        .link-btn.outline {
+            background: transparent;
+            border-color: var(--forest);
+            color: var(--forest);
+        }
+
+        .link-btn.outline:hover {
+            background: var(--forest);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .link-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--mint-dark);
+            margin: 24px 0;
+        }
+
+        .contact-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .contact-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .contact-btn.email {
+            background: var(--forest);
+            color: var(--white);
+        }
+
+        .contact-btn.email:hover {
+            background: var(--forest-dark);
+        }
+
+        .contact-btn.website {
+            background: var(--mint);
+            color: var(--forest);
+        }
+
+        .contact-btn.website:hover {
+            background: var(--mint-dark);
+        }
+
+        .contact-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .save-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--gold) 0%, #d4af37 100%);
+            color: var(--forest-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+        }
+
+        .save-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(201, 162, 39, 0.4);
+        }
+
+        .save-contact svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 0 25px 25px;
+        }
+
+        .footer p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .footer-brand span {
+            font-size: 0.8rem;
+            color: var(--forest);
+            font-weight: 600;
+        }
+
+        /* Animations */
+        .link-btn, .contact-btn, .save-contact {
+            animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .links-section .link-btn:nth-child(1) { animation-delay: 0.1s; }
+        .links-section .link-btn:nth-child(2) { animation-delay: 0.15s; }
+        .links-section .link-btn:nth-child(3) { animation-delay: 0.2s; }
+        .contact-row { animation-delay: 0.25s; }
+        .save-contact { animation-delay: 0.3s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <img src="images/complitrst-favicon.png" alt="CompliTrst" class="complitrst-logo">
+            <img src="images/founder-photo.png" alt="Dr. TMac" class="profile-photo">
+            <h1 class="profile-name">Tasha McCray</h1>
+            <p class="profile-credentials">Ph.D, MSN-Ed., RN</p>
+            <p class="profile-title">Founder & CEO</p>
+        </div>
+
+        <div class="card-body">
+            <p class="tagline">Custom Golf League Apps</p>
+            <p class="sub-tagline">That build community & keep members engaged</p>
+
+            <div class="links-section">
+                <a href="https://league-solutions.complitrst.com/" target="_blank" class="link-btn primary">
+                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    View League Solutions
+                </a>
+
+                <a href="https://complitrst-booking.web.app/?type=league-solutions" target="_blank" class="link-btn secondary">
+                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Schedule a Demo
+                </a>
+
+                <a href="https://complitrst.com" target="_blank" class="link-btn outline">
+                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    CompliTrst Home
+                </a>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="contact-row">
+                <a href="/cdn-cgi/l/email-protection#4c3f393c3c233e380c2f23213c2025383e3f38622f2321" class="contact-btn email">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Email
+                </a>
+                <a href="https://league-solutions.complitrst.com/" target="_blank" class="contact-btn website">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    Website
+                </a>
+            </div>
+
+            <a href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3ATasha%20McCray%2C%20Ph.D%0AORG%3ACompliTrst%20League%20Solutions%0ATITLE%3AFounder%20%26%20CEO%0AEMAIL%3Asupport%40complitrst.com%0AURL%3Ahttps%3A%2F%2Fleague-solutions.complitrst.com%0ANOTE%3ACustom%20Golf%20League%20Apps%20-%20Community%20First%0AEND%3AVCARD" download="TMac-League-Solutions.vcf" class="save-contact">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save Contact
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Building golf communities, one league at a time</p>
+            <div class="footer-brand">
+                <span>Customized League Solutions</span>
+            </di

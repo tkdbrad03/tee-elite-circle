@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasha McCray, Ph.D | The Tee Elite Circle</title>
+    <link rel="icon" type="image/png" href="images/tee-elite-favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/tee-elite-favicon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dr. TMac">
+    
+    <!-- Social Sharing / Open Graph -->
+    <meta property="og:title" content="Tasha McCray, Ph.D | The Tee Elite Circle">
+    <meta property="og:description" content="Tech CEO | Golf Enthusiast | Community Builder">
+    <meta property="og:image" content="images/tee-elite-logo.png">
+    <meta property="og:type" content="website">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #2d4a3e;
+            --forest-dark: #1e3329;
+            --cream: #faf8f5;
+            --cream-dark: #f5f0e8;
+            --blush: #f4e4dc;
+            --blush-dark: #e8d4ca;
+            --gold: #c9a227;
+            --white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-muted: #6b6b6b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            background: var(--forest);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            margin-bottom: 24px;
+        }
+
+        .logo-img {
+            width: 100px;
+            height: auto;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--blush);
+            object-fit: cover;
+            object-position: center top;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            color: var(--white);
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .profile-credentials {
+            color: var(--blush);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .profile-title {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .card-body {
+            padding: 30px 25px;
+        }
+
+        .tagline {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .links-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+        }
+
+        .link-btn.primary {
+            background: var(--blush);
+            color: var(--text-dark);
+        }
+
+        .link-btn.primary:hover {
+            background: var(--blush-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .link-btn.outline {
+            background: transparent;
+            border-color: var(--forest);
+            color: var(--forest);
+        }
+
+        .link-btn.outline:hover {
+            background: var(--forest);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .link-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--cream-dark);
+            margin: 24px 0;
+        }
+
+        .contact-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .contact-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .contact-btn.email {
+            background: var(--forest);
+            color: var(--white);
+        }
+
+        .contact-btn.email:hover {
+            background: var(--forest-dark);
+        }
+
+        .contact-btn.website {
+            background: var(--cream);
+            color: var(--text-dark);
+        }
+
+        .contact-btn.website:hover {
+            background: var(--cream-dark);
+        }
+
+        .contact-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .save-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            border-radius: 8px;
+            background: var(--forest);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .save-contact:hover {
+            background: var(--forest-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 74, 62, 0.3);
+        }
+
+        .save-contact svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 0 25px 25px;
+        }
+
+        .footer p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Animations */
+        .link-btn, .contact-btn, .save-contact {
+            animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .links-section .link-btn:nth-child(1) { animation-delay: 0.1s; }
+        .links-section .link-btn:nth-child(2) { animation-delay: 0.15s; }
+        .contact-row { animation-delay: 0.2s; }
+        .save-contact { animation-delay: 0.25s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <div class="logo-container">
+                <img src="images/tee-elite-logo.png" alt="The Tee Elite Circle" class="logo-img">
+            </div>
+            <img src="images/founder-photo.png" alt="Dr. TMac" class="profile-photo">
+            <h1 class="profile-name">Tasha McCray</h1>
+            <p class="profile-credentials">Ph.D, MSN-Ed., RN</p>
+            <p class="profile-title">Tech CEO</p>
+        </div>
+
+        <div class="card-body">
+            <p class="tagline">Elevate your game. Elevate your circle.</p>
+
+            <div class="links-section">
+                <a href="https://tmacmastermind.com/landing.html" target="_blank" class="link-btn primary">
+                    Join The Circle
+                </a>
+
+                <a href="https://complitrst-booking.web.app/?type=tee-elite-circle" class="link-btn outline">
+                    Book a Consultation
+                </a>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="contact-row">
+                <a href="/cdn-cgi/l/email-protection#b1d8dfd7def1c5dcd0d2dcd0c2c5d4c3dcd8dfd59fd2dedc" class="contact-btn email">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Email
+                </a>
+                <a href="https://tmacmastermind.com" target="_blank" class="contact-btn website">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    Website
+                </a>
+            </div>
+
+            <a href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3ATasha%20McCray%2C%20Ph.D%0AORG%3AThe%20Tee%20Elite%20Circle%0ATITLE%3ATech%20CEO%0AEMAIL%3Ainfo%40tmacmastermind.com%0AURL%3Ahttps%3A%2F%2Ftmacmastermind.com%0AEND%3AVCARD" download="Tasha-McCray.vcf" class="save-contact">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save Contact
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Building communities, one connection at a time<

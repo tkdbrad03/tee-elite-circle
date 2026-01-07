@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>You're In — The Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#1a2e1a">
+  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tmac-blush: #e8ccc8;
+      --tmac-bronze: #a67c52;
+      --tmac-blush-light: #f7f0ef;
+      --deep-forest: #1a2f23;
+      --soft-cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--soft-cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    .page-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .logo-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .logo-header img {
+      height: 50px;
+      margin-bottom: 16px;
+    }
+
+    /* Celebration Section */
+    .celebration-section {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .celebration-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--deep-forest);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .celebration-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--tmac-blush);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .celebration-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 52px);
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .celebration-subtitle {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Next Steps */
+    .next-steps-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      text-align: center;
+      color: var(--charcoal);
+      margin-bottom: 32px;
+    }
+
+    .steps-grid {
+      display: grid;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .step-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 32px;
+    }
+
+    .step-number {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+
+    .step-description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .step-action {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      text-decoration: none;
+      border-bottom: 1px solid var(--tmac-bronze);
+      padding-bottom: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .step-action:hover {
+      color: var(--tmac-bronze);
+    }
+
+    /* Wire Info Box */
+    .wire-info {
+      background: var(--tmac-blush-light);
+      padding: 24px;
+      margin-top: 16px;
+      font-size: 13px;
+      line-height: 1.8;
+      display: none;
+    }
+
+    .wire-info.visible {
+      display: block;
+    }
+
+    .wire-info strong {
+      color: var(--charcoal);
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-forest);
+      cursor: pointer;
+      border-bottom: 1px solid var(--tmac-bronze);
+      padding-bottom: 4px;
+    }
+
+    /* Book Call CTA */
+    .book-call-section {
+      background: var(--deep-forest);
+      padding: 48px;
+      text-align: center;
+    }
+
+    .book-call-section h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .book-call-section p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 24px;
+    }
+
+    .book-call-btn {
+      display: inline-block;
+      background: var(--tmac-blush);
+      color: var(--deep-forest);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 16px 40px;
+      transition: all 0.3s ease;
+    }
+
+    .book-call-btn:hover {
+      background: #fff;
+    }
+
+    /* Footer Note */
+    .footer-note {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .footer-note a {
+      color: var(--tmac-bronze);
+    }
+
+    @media (max-width: 600px) {
+      .page-container {
+        padding: 40px 20px;
+      }
+
+      .step-card {
+        padding: 24px;
+      }
+
+      .book-call-section {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    
+    <!-- Logo -->
+    <div class="logo-header">
+      <img src="images/tmac-logo.png" alt="TMac Inspired">
+    </div>
+
+    <!-- Celebration -->
+    <div class="celebration-section">
+      <div class="celebration-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 6L9 17l-5-5"></path>
+        </svg>
+      </div>
+      <h1 class="celebration-title">You're In.</h1>
+      <p class="celebration-subtitle">
+        Congratulations, Founding Member. Your seat at the table is secured. 
+        Here's what happens next.
+      </p>
+    </div>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps-title">Complete Your Investment</h2>
+
+    <div class="steps-grid">
+      
+      <!-- Option 1: Wire Transfer -->
+      <div class="step-card">
+        <p class="step-number">Option 1</p>
+        <h3 class="step-title">Wire the Remaining Balance</h3>
+        <p class="step-description">
+          Complete your $25,000 investment by wiring the remaining $23,000. 
+          Once received, you'll get immediate access to The Tee Elite Circle member portal.
+        </p>
+        <button class="toggle-btn" onclick="toggleWireInfo()">View Wiring Instructions</button>
+        
+        <div class="wire-info" id="wire-info">
+          <strong>Bank:</strong> GTE Financial<br>
+          <strong>ABA Routing:</strong> 263182794<br>
+          <strong>Account:</strong> 482377168<br>
+          <strong>Business Name:</strong> TMac Inspired LLC<br>
+          <strong>Name (if needed):</strong> Tasha McCray<br>
+          <strong>Address:</strong> 5228 Admiral Pointe Drive, Apollo Beach, FL 33572
+        </div>
+      </div>
+
+      <!-- Option 2: Need Funding -->
+      <div class="step-card">
+        <p class="step-number">Option 2</p>
+        <h3 class="step-title">Need Funding?</h3>
+        <p class="step-description">
+          If you'd like to explore funding options for your investment, we've partnered 
+          with Eaze Consulting. Credit score 620+ and $40K+ income required.
+        </p>
+        <a href="https://www.eazeconsulting.com/apply?cl=FZD4W&ag=XLIXA1QT23" target="_blank" class="step-action">
+          Apply for Funding →
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Book a Call -->
+    <div class="book-call-section">
+      <h3>Let's Talk</h3>
+      <p>Have questions? Want to discuss payment arrangements? Book your welcome call.</p>
+      <a href="https://complitrst-booking.web.app/?type=tee-elite-circle" target="_blank" class="book-call-btn">
+        Schedule Your Call
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <p class="footer-note">
+      Questions? Email us at <a href="mailto:info@tmacmastermind.com">info@tmacmastermind.com</a>
+    </p>
+
+  </div>
+
+  <script>
+    function toggleWireInfo() {
+      const wireInfo = document.getElementById('wire-info');
+      wireInfo.classList.toggle('visible');
+    }
+  </script>
+
+  <!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registered:', registration.scope);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>
