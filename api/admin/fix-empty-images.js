@@ -1,51 +1,81 @@
-const { Client } = require('pg');
+// Firebase Storage Upload Utility
+// This handles large file uploads directly to Firebase Storage
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+// Firebase config will be injected by the pages that use this
+let firebaseApp = null;
+let storage = null;
+
+function initializeFirebase(config) {
+  if (!firebaseApp) {
+    firebaseApp = firebase.initializeApp(config);
+    storage = firebase.storage();
+  }
+  return storage;
+}
+
+// Upload file to Firebase Storage with progress tracking
+async function uploadToFirebase(file, folder = 'videos', onProgress = null) {
+  if (!storage) {
+    throw new Error('Firebase not initialized');
   }
 
-  const client = new Client({
-    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+  // Create a unique filename
+  const timestamp = Date.now();
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+  const filename = `${folder}/${timestamp}_${sanitizedName}`;
+  
+  // Create storage reference
+  const storageRef = storage.ref();
+  const fileRef = storageRef.child(filename);
+  
+  // Create upload task
+  const uploadTask = fileRef.put(file, {
+    contentType: file.type,
+    customMetadata: {
+      uploadedAt: new Date().toISOString()
+    }
   });
+  
+  // Track progress
+  return new Promise((resolve, reject) => {
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        // Progress callback
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        if (onProgress) {
+          onProgress(progress, snapshot.state);
+        }
+      },
+      (error) => {
+        // Error callback
+        console.error('Firebase upload error:', error);
+        reject(error);
+      },
+      async () => {
+        // Success callback
+        try {
+          const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+          resolve({
+            url: downloadURL,
+            filename: filename,
+            size: file.size,
+            type: file.type
+          });
+        } catch (error) {
+          reject(error);
+        }
+      }
+    );
+  });
+}
 
-  try {
-    await client.connect();
-
-    // Fix empty image_url values - set them to NULL
-    const updateResult = await client.query(`
-      UPDATE blog_posts 
-      SET image_url = NULL 
-      WHERE image_url = '' OR image_url = 'null'
-    `);
-
-    // Get summary of all posts
-    const summaryResult = await client.query(`
-      SELECT 
-        id, 
-        title,
-        CASE WHEN image_url IS NULL OR image_url = '' THEN false ELSE true END as has_image,
-        CASE WHEN video_url IS NULL OR video_url = '' THEN false ELSE true END as has_video,
-        LENGTH(image_url) as image_url_length,
-        LENGTH(video_url) as video_url_length
-      FROM blog_posts 
-      ORDER BY created_at DESC
-    `);
-
-    return res.status(200).json({
-      success: true,
-      message: `Fixed ${updateResult.rowCount} posts with empty image_url`,
-      posts: summaryResult.rows
-    });
-
-  } catch (error) {
-    console.error('Fix image URLs error:', error);
-    return res.status(500).json({ 
-      error: 'Failed to fix image URLs',
-      details: error.message 
-    });
-  } finally {
-    await client.end();
-  }
-};
+// Check if file should use Firebase (large videos) or Vercel Blob (images/small files)
+function shouldUseFirebase(file, type) {
+  // Use Firebase for:
+  // - All videos
+  // - Files over 4MB
+  const isVideo = type === 'video' || file.type.startsWith('video/');
+  const isLarge = file.size > 4 * 1024 * 1024; // 4MB
+  
+  return isVideo || isLarge;
+}
