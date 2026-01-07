@@ -394,6 +394,73 @@
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
+      color: #999;
+      margin-bottom: 24px;
+    }
+
+    /* BRIEF ARCHIVE SECTION */
+    .brief-archive-section {
+      padding-top: 40px;
+      margin-top: 40px;
+      border-top: 1px solid #eee;
+    }
+
+    .brief-archive-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 800px;
+    }
+
+    .brief-archive-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      background: #fafafa;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .brief-archive-item:hover {
+      background: #f5f5f5;
+      border-left-color: var(--deep-forest);
+    }
+
+    .brief-archive-date {
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: #999;
+      text-transform: uppercase;
+      min-width: 140px;
+      padding-top: 2px;
+    }
+
+    .brief-archive-content {
+      flex: 1;
+    }
+
+    .brief-archive-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--deep-forest);
+      margin: 0 0 8px 0;
+      line-height: 1.3;
+    }
+
+    .brief-archive-excerpt {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .feature-section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
       color: var(--tmac-bronze);
       margin-bottom: 32px;
     }
@@ -923,6 +990,14 @@
         </div>
       </div>
     </section>
+
+    <!-- BRIEF ARCHIVE SECTION -->
+    <section class="brief-archive-section" id="brief-archive-section" style="display: none;">
+      <p class="feature-section-label">Brief Archive</p>
+      <div class="brief-archive-list" id="brief-archive-list">
+        <!-- Loaded dynamically -->
+      </div>
+    </section>
   </main>
 
   <!-- BLOG MODAL -->
@@ -1118,6 +1193,32 @@
               <p>Feature stories coming soon.</p>
             </div>
           `;
+        }
+
+        // Render Brief Archive (all briefs except the latest one and pinned ones)
+        const archiveBriefs = unpinnedBriefs.slice(1); // Skip the first (latest) brief
+        const archiveSection = document.getElementById('brief-archive-section');
+        const archiveList = document.getElementById('brief-archive-list');
+        
+        if (archiveBriefs.length > 0) {
+          archiveSection.style.display = 'block';
+          archiveList.innerHTML = archiveBriefs.map(brief => {
+            const briefIndex = posts.findIndex(p => p.id === brief.id);
+            const dateObj = new Date(brief.scheduled_for || brief.created_at);
+            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            return `
+              <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
+                <div class="brief-archive-date">${dateStr}</div>
+                <div class="brief-archive-content">
+                  <h3 class="brief-archive-title">${brief.title}</h3>
+                  ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          archiveSection.style.display = 'none';
         }
       } catch (err) {
         console.error('Error loading blog posts:', err);
