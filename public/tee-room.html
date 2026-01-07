@@ -1153,7 +1153,15 @@
 
     function isUploadedVideo(url) {
       // Check if it's a blob storage URL (uploaded video) vs embed URL (YouTube/Vimeo)
-      return url && (url.includes('vercel-storage') || url.includes('blob.vercel-app') || url.endsWith('.mp4') || url.endsWith('.mov') || url.endsWith('.webm'));
+      return url && (
+        url.includes('vercel-storage') || 
+        url.includes('blob.vercel-app') || 
+        url.includes('firebasestorage.googleapis.com') ||  // Firebase Storage
+        url.includes('firebasestorage.app') ||  // Firebase Storage new domain
+        url.endsWith('.mp4') || 
+        url.endsWith('.mov') || 
+        url.endsWith('.webm')
+      );
     }
 
     function openBlogModal(index) {
