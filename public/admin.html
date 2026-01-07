@@ -1190,7 +1190,7 @@
                   </button>
                   <span id="video-upload-status" style="margin-left: 12px; font-size: 12px; color: #888;"></span>
                 </div>
-                <p style="font-size: 11px; color: #888; margin-top: 4px;">Max 100MB. MP4, MOV, or WebM format. For 1-2 minute videos.</p>
+                <p style="font-size: 11px; color: #888; margin-top: 4px;">Max 150MB. MP4, MOV, or WebM format. For 1-2 minute videos.</p>
               </div>
 
               <div class="form-group form-checkbox">
@@ -1380,20 +1380,40 @@
       loadBlogPosts();
     }
 
-    // Initialize Quill editor
-    var quill = new Quill('#blog-editor', {
-      theme: 'snow',
-      placeholder: 'Write your blog post here... You can paste from Word or Google Docs!',
-      modules: {
-        toolbar: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['link'],
-          ['clean']
-        ]
+    // Initialize Quill editor - wait for DOM and Quill library to load
+    let quill;
+    function initQuill() {
+      if (typeof Quill === 'undefined') {
+        console.error('Quill library not loaded yet, retrying...');
+        setTimeout(initQuill, 100);
+        return;
       }
-    });
+      if (!document.getElementById('blog-editor')) {
+        console.error('Blog editor element not found, retrying...');
+        setTimeout(initQuill, 100);
+        return;
+      }
+      quill = new Quill('#blog-editor', {
+        theme: 'snow',
+        placeholder: 'Write your blog post here... You can paste from Word or Google Docs!',
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['link'],
+            ['clean']
+          ]
+        }
+      });
+    }
+    
+    // Initialize Quill when page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initQuill);
+    } else {
+      initQuill();
+    }
 
     function logout() {
       localStorage.removeItem('adminAuth');
@@ -1831,10 +1851,10 @@
       const previewEl = document.getElementById('blog-video-preview');
       const videoInput = document.getElementById('blog-video');
 
-      // Check file size (100MB max)
-      const maxSize = 100 * 1024 * 1024; // 100MB
+      // Check file size (150MB max)
+      const maxSize = 150 * 1024 * 1024; // 150MB
       if (file.size > maxSize) {
-        statusEl.textContent = 'File too large. Max 100MB.';
+        statusEl.textContent = 'File too large. Max 150MB.';
         statusEl.style.color = '#c62828';
         e.target.value = ''; // Clear the input
         return;
