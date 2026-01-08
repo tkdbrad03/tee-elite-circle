@@ -1069,11 +1069,6 @@
         database.ref(`${TRACKER_PATH}/tasks`).set({});
       }
     }
-      if (confirm('Reset all tasks? This will clear your progress.')) {
-        localStorage.removeItem('permissionTasks');
-        updateChecklist();
-      }
-    }
 
     // Collapsible Sections
     function toggleCollapsible(header) {
