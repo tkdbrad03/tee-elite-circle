@@ -3,7 +3,7 @@ const urlsToCache = [
   'permission-content-system.html',
   'permission-content-system-manifest.json',
   'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap',
-  'https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png'
+  'images/tee-elite-favicon.png'
 ];
 
 self.addEventListener('install', event => {
