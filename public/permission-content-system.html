@@ -9,9 +9,19 @@
   <meta name="theme-color" content="#1E3932">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Permission System">
+  <link rel="apple-touch-icon" href="https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  
   <style>
     :root {
       --deep-forest: #1a2f23;
@@ -933,6 +943,24 @@
   </div>
 
   <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-9xRyX8yOSoejgmq-7ZEdCzQg__ntuHs",
+      authDomain: "tee-elite.firebaseapp.com",
+      projectId: "tee-elite",
+      storageBucket: "tee-elite.firebasestorage.app",
+      messagingSenderId: "59306538414",
+      appId: "1:59306538414:web:5fbf03f74663775074c43f",
+      databaseURL: "https://tee-elite-default-rtdb.firebaseio.com"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const database = firebase.database();
+    const TRACKER_PATH = 'permission-system/dr-tmac';
+
     // Tab Switching
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -953,71 +981,94 @@
       if (tabBtn) tabBtn.click();
     });
 
-    // Checklist Management
+    // Checklist Management with Firebase
     function toggleTask(taskId) {
-      const tasks = JSON.parse(localStorage.getItem('permissionTasks') || '{}');
-      tasks[taskId] = !tasks[taskId];
-      localStorage.setItem('permissionTasks', JSON.stringify(tasks));
-      updateChecklist();
-    }
-
-    // Upload Tracker Management
-    function toggleUpload(uploadId) {
-      const uploads = JSON.parse(localStorage.getItem('uploadTracker') || '{}');
-      uploads[uploadId] = !uploads[uploadId];
-      localStorage.setItem('uploadTracker', JSON.stringify(uploads));
-      updateUploadTracker();
-    }
-
-    function updateUploadTracker() {
-      const uploads = JSON.parse(localStorage.getItem('uploadTracker') || '{}');
+      const taskRef = database.ref(`${TRACKER_PATH}/tasks/${taskId}`);
       
-      document.querySelectorAll('[data-upload]').forEach(item => {
-        const uploadId = item.dataset.upload;
-        const checkbox = item.querySelector('.checklist-checkbox');
-        
-        if (uploads[uploadId]) {
-          checkbox.classList.add('checked');
-        } else {
-          checkbox.classList.remove('checked');
-        }
+      taskRef.once('value').then(snapshot => {
+        const currentValue = snapshot.val() || false;
+        taskRef.set(!currentValue);
       });
+    }
 
-      // Update count (total of 40 pieces)
-      const totalUploaded = Object.values(uploads).filter(Boolean).length;
-      const percentage = Math.round((totalUploaded / 40) * 100);
-
-      if (document.getElementById('uploadedCount')) {
-        document.getElementById('uploadedCount').textContent = totalUploaded;
-        document.getElementById('uploadPercentage').textContent = percentage + '%';
-      }
+    // Upload Tracker Management with Firebase
+    function toggleUpload(uploadId) {
+      const uploadRef = database.ref(`${TRACKER_PATH}/uploads/${uploadId}`);
+      
+      uploadRef.once('value').then(snapshot => {
+        const currentValue = snapshot.val() || false;
+        uploadRef.set(!currentValue);
+      });
     }
 
     function updateChecklist() {
-      const tasks = JSON.parse(localStorage.getItem('permissionTasks') || '{}');
-      
-      document.querySelectorAll('.checklist-item').forEach(item => {
-        const taskId = item.dataset.task;
-        const checkbox = item.querySelector('.checklist-checkbox');
+      database.ref(`${TRACKER_PATH}/tasks`).on('value', snapshot => {
+        const tasks = snapshot.val() || {};
         
-        if (tasks[taskId]) {
-          checkbox.classList.add('checked');
-        } else {
-          checkbox.classList.remove('checked');
+        document.querySelectorAll('.checklist-item').forEach(item => {
+          const taskId = item.dataset.task;
+          const checkbox = item.querySelector('.checklist-checkbox');
+          
+          if (taskId && checkbox) {
+            if (tasks[taskId]) {
+              checkbox.classList.add('checked');
+            } else {
+              checkbox.classList.remove('checked');
+            }
+          }
+        });
+
+        // Update progress
+        const totalTasks = 8;
+        const completedTasks = Object.values(tasks).filter(Boolean).length;
+        const percentage = Math.round((completedTasks / totalTasks) * 100);
+
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        if (progressBar && progressText) {
+          progressBar.style.width = percentage + '%';
+          progressText.textContent = `${completedTasks} of ${totalTasks} complete (${percentage}%)`;
         }
       });
+    }
 
-      // Update progress
-      const totalTasks = 8;
-      const completedTasks = Object.values(tasks).filter(Boolean).length;
-      const percentage = Math.round((completedTasks / totalTasks) * 100);
+    function updateUploadTracker() {
+      database.ref(`${TRACKER_PATH}/uploads`).on('value', snapshot => {
+        const uploads = snapshot.val() || {};
+        
+        document.querySelectorAll('[data-upload]').forEach(item => {
+          const uploadId = item.dataset.upload;
+          const checkbox = item.querySelector('.checklist-checkbox');
+          
+          if (uploadId && checkbox) {
+            if (uploads[uploadId]) {
+              checkbox.classList.add('checked');
+            } else {
+              checkbox.classList.remove('checked');
+            }
+          }
+        });
 
-      document.getElementById('progressBar').style.width = percentage + '%';
-      document.getElementById('progressText').textContent = 
-        `${completedTasks} of ${totalTasks} complete (${percentage}%)`;
+        // Update count (total of 40 pieces)
+        const totalUploaded = Object.values(uploads).filter(Boolean).length;
+        const percentage = Math.round((totalUploaded / 40) * 100);
+
+        const uploadedCount = document.getElementById('uploadedCount');
+        const uploadPercentage = document.getElementById('uploadPercentage');
+        
+        if (uploadedCount && uploadPercentage) {
+          uploadedCount.textContent = totalUploaded;
+          uploadPercentage.textContent = percentage + '%';
+        }
+      });
     }
 
     function resetChecklist() {
+      if (confirm('Reset all tasks? This will clear your progress.')) {
+        database.ref(`${TRACKER_PATH}/tasks`).set({});
+      }
+    }
       if (confirm('Reset all tasks? This will clear your progress.')) {
         localStorage.removeItem('permissionTasks');
         updateChecklist();
