@@ -9,13 +9,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png",
+      "src": "images/tee-elite-favicon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://tmacinspired.com/wp-content/uploads/2025/04/cropped-icon-512x512-1.png",
+      "src": "images/tee-elite-favicon.png",
       "sizes": "192x192",
       "type": "image/png"
     }
