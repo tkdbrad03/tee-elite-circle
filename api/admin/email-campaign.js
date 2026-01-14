@@ -31,44 +31,27 @@ function makeUnsubUrl(baseUrl, email) {
   return `${baseUrl}/api/unsubscribe?e=${e}&t=${t}`;
 }
 
-// ---------- Suppression storage (Upstash REST; fallback = in-memory for quick tests) ----------
-async function upstashCmd(cmdArr) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+// ---------- Suppression (Google Apps Script Web App) ----------
+async function fetchSuppressionSet() {
+  const url = process.env.SUPPRESSION_WEBAPP_URL;
+  const token = process.env.SUPPRESSION_TOKEN;
+  if (!url || !token) throw new Error('Missing SUPPRESSION_WEBAPP_URL or SUPPRESSION_TOKEN');
 
-  if (!url || !token) return null;
+  // Apps Script endpoint: ?action=list&token=...
+  const endpoint = `${url}${url.includes('?') ? '&' : '?'}action=list&token=${encodeURIComponent(token)}`;
 
-  const endpoint = `${url}/${cmdArr.map(encodeURIComponent).join('/')}`;
-  const resp = await fetch(endpoint, {
-    method: 'GET',
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  const resp = await fetch(endpoint, { method: 'GET' });
+  if (!resp.ok) throw new Error(`Suppression list fetch failed (${resp.status})`);
 
-  if (!resp.ok) throw new Error(`Upstash error: ${resp.status}`);
-  return resp.json();
-}
+  const data = await resp.json();
+  if (!data.ok) throw new Error(data.error || 'Suppression list error');
 
-function getMemorySet() {
-  if (!globalThis.__tmac_unsub_set) globalThis.__tmac_unsub_set = new Set();
-  return globalThis.__tmac_unsub_set;
-}
-
-async function isSuppressed(email) {
-  const e = String(email || '').toLowerCase().trim();
-  if (!e) return false;
-
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    const key = `unsub:${e}`;
-    const data = await upstashCmd(['get', key]);
-    return Boolean(data && data.result);
-  }
-
-  // fallback (not reliable across cold starts)
-  return getMemorySet().has(e);
+  const set = new Set((data.emails || []).map(e => String(e).toLowerCase().trim()).filter(Boolean));
+  return set;
 }
 
 function buildUnsubFooterHtml(unsubUrl) {
-  // No font specified here so it inherits your template fonts automatically
+  // No font specified; it inherits your template fonts
   return `
     <div style="margin-top:24px; padding-top:16px; border-top:1px solid rgba(0,0,0,0.10); font-size:12px; color:rgba(0,0,0,0.55);">
       <a href="${unsubUrl}" style="color:rgba(0,0,0,0.65); text-decoration:underline;">Unsubscribe</a>
@@ -82,18 +65,14 @@ function buildUnsubFooterText(unsubUrl) {
 
 module.exports = async (req, res) => {
   try {
-    if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method not allowed' });
-    }
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     const { contacts, subject, template, useTemplate } = req.body;
 
     if (!contacts || !Array.isArray(contacts) || contacts.length === 0) {
       return res.status(400).json({ error: 'Contacts array required' });
     }
-    if (!subject) {
-      return res.status(400).json({ error: 'Subject required' });
-    }
+    if (!subject) return res.status(400).json({ error: 'Subject required' });
     if (!template || String(template).trim().length === 0) {
       return res.status(400).json({ error: 'Email template required' });
     }
@@ -101,12 +80,20 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: 'Missing Gmail environment variables' });
     }
     if (!process.env.UNSUB_SECRET) {
-      return res.status(500).json({ error: 'Missing UNSUB_SECRET environment variable' });
+      return res.status(500).json({ error: 'Missing UNSUB_SECRET env var' });
+    }
+
+    // Pull suppression list once per campaign run
+    let suppressionSet = new Set();
+    try {
+      suppressionSet = await fetchSuppressionSet();
+    } catch (err) {
+      // If the suppression list fails, don’t risk sending without it
+      return res.status(500).json({ error: `Suppression list unavailable: ${err.message}` });
     }
 
     const baseUrl = getBaseUrl(req);
 
-    // Create transporter
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -115,15 +102,7 @@ module.exports = async (req, res) => {
       }
     });
 
-    // Track results
-    const results = {
-      sent: 0,
-      failed: 0,
-      details: []
-    };
-
-    // --- KEEP YOUR ORIGINAL WRAPPERS / FONTS ---
-    // Plain wrapper (unchanged styling; only change is: ${content} instead of content.replace)
+    // Keep your original wrappers / fonts (only change is: inject content AS-IS)
     const createPlainEmail = (content) => `
 <!DOCTYPE html>
 <html>
@@ -139,7 +118,6 @@ module.exports = async (req, res) => {
 </html>
 `;
 
-    // Branded wrapper (keeps your Georgia serif + colors exactly)
     const createBrandedEmail = (content) => `
 <!DOCTYPE html>
 <html>
@@ -153,16 +131,13 @@ module.exports = async (req, res) => {
     <tr>
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
-          
-          <!-- Header -->
           <tr>
             <td style="background-color: #1a2f23; padding: 40px 48px; text-align: center;">
               <p style="margin: 0 0 8px 0; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #e8ccc8; font-style: italic;">TMac Inspired presents</p>
               <h1 style="margin: 0; font-size: 32px; font-weight: 400; color: #ffffff; letter-spacing: 0.05em;">The Tee Elite Circle</h1>
             </td>
           </tr>
-          
-          <!-- Content -->
+
           <tr>
             <td style="background-color: #ffffff; padding: 48px;">
               <div style="font-size: 15px; line-height: 1.8; color: #555555;">
@@ -170,15 +145,13 @@ module.exports = async (req, res) => {
               </div>
             </td>
           </tr>
-          
-          <!-- Footer -->
+
           <tr>
             <td style="background-color: #1a2f23; padding: 32px 48px; text-align: center;">
               <p style="margin: 0 0 8px 0; font-size: 14px; color: #ffffff;">The Tee Elite Circle</p>
               <p style="margin: 0 0 16px 0; font-size: 11px; letter-spacing: 0.15em; color: #e8ccc8;">WHERE GOLF MEETS GREATNESS</p>
             </td>
           </tr>
-          
         </table>
       </td>
     </tr>
@@ -187,11 +160,10 @@ module.exports = async (req, res) => {
 </html>
 `;
 
-    // Gmail-friendly pacing
     const DELAY_BETWEEN_EMAILS = 3000;
-
-    // Sanitize once, then personalize
     const safeTemplate = sanitizeEmailHtml(template);
+
+    const results = { sent: 0, failed: 0, details: [] };
 
     for (let i = 0; i < contacts.length; i++) {
       const contact = contacts[i];
@@ -205,31 +177,24 @@ module.exports = async (req, res) => {
         continue;
       }
 
-      // Suppression check
-      if (await isSuppressed(email)) {
+      if (suppressionSet.has(email)) {
         results.details.push({ email, first_name: firstName, success: true, error: 'Skipped (unsubscribed)', timestamp });
         continue;
       }
 
       const unsubUrl = makeUnsubUrl(baseUrl, email);
+      const personalized = safeTemplate.replace(/{first_name}/gi, firstName);
+      const contentWithFooter = `${personalized}${buildUnsubFooterHtml(unsubUrl)}`;
 
-      const personalizedContent = safeTemplate.replace(/{first_name}/gi, firstName);
-
-      // Add unsubscribe footer inside the email content (inherits fonts)
-      const contentWithFooter = `${personalizedContent}${buildUnsubFooterHtml(unsubUrl)}`;
-
-      const htmlContent = useTemplate
-        ? createBrandedEmail(contentWithFooter)
-        : createPlainEmail(contentWithFooter);
+      const htmlContent = useTemplate ? createBrandedEmail(contentWithFooter) : createPlainEmail(contentWithFooter);
 
       const textFallback =
-        sanitizeEmailHtml(personalizedContent)
+        sanitizeEmailHtml(personalized)
           .replace(/<br\s*\/?>/gi, '\n')
           .replace(/<\/p>/gi, '\n')
           .replace(/<[^>]+>/g, '')
           .trim() + buildUnsubFooterText(unsubUrl);
 
-      // Headers to help Gmail show a native unsubscribe option
       const listUnsub = `<${unsubUrl}>, <mailto:${process.env.GMAIL_USER}?subject=unsubscribe>`;
       const headers = {
         'List-Unsubscribe': listUnsub,
@@ -247,16 +212,15 @@ module.exports = async (req, res) => {
 
       try {
         await transporter.sendMail(mailOptions);
-
         results.sent++;
         results.details.push({ email, first_name: firstName, success: true, error: '', timestamp });
-      } catch (error) {
+      } catch (err) {
         results.failed++;
-        results.details.push({ email, first_name: firstName, success: false, error: error?.message || 'Send failed', timestamp });
+        results.details.push({ email, first_name: firstName, success: false, error: err?.message || 'Send failed', timestamp });
       }
 
       if (i < contacts.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, DELAY_BETWEEN_EMAILS));
+        await new Promise((r) => setTimeout(r, DELAY_BETWEEN_EMAILS));
       }
     }
 
