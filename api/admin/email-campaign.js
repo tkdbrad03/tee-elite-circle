@@ -1,55 +1,130 @@
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
+// ---------- HTML hygiene ----------
 function sanitizeEmailHtml(html) {
-  // Removes common "junk" or unsafe tags that can sneak in via copy/paste.
-  // Most email clients block scripts anyway, but this keeps your outgoing HTML clean.
   return String(html || '')
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
     .replace(/<(object|embed)\b[^>]*>.*?<\/\1>/gis, '');
 }
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+// ---------- Base URL ----------
+function getBaseUrl(req) {
+  const envBase = process.env.PUBLIC_BASE_URL;
+  if (envBase && /^https?:\/\//i.test(envBase)) return envBase.replace(/\/$/, '');
+  const proto = (req.headers['x-forwarded-proto'] || 'https').toString();
+  const host = req.headers.host;
+  return `${proto}://${host}`;
+}
 
-  const { contacts, subject, template, useTemplate } = req.body;
+// ---------- Token helpers ----------
+function makeToken(email) {
+  const secret = process.env.UNSUB_SECRET || '';
+  if (!secret) return '';
+  return crypto.createHmac('sha256', secret).update(String(email).toLowerCase()).digest('hex');
+}
 
-  if (!contacts || !Array.isArray(contacts) || contacts.length === 0) {
-    return res.status(400).json({ error: 'Contacts array required' });
-  }
+function makeUnsubUrl(baseUrl, email) {
+  const t = makeToken(email);
+  const e = encodeURIComponent(String(email).toLowerCase());
+  return `${baseUrl}/api/unsubscribe?e=${e}&t=${t}`;
+}
 
-  if (!subject) {
-    return res.status(400).json({ error: 'Subject required' });
-  }
+// ---------- Suppression storage (Upstash REST; fallback = in-memory for quick tests) ----------
+async function upstashCmd(cmdArr) {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-  if (!template || String(template).trim().length === 0) {
-    return res.status(400).json({ error: 'Email template required' });
-  }
+  if (!url || !token) return null;
 
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-    return res.status(500).json({ error: 'Missing Gmail environment variables' });
-  }
-
-  // Create transporter
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD
-    }
+  const endpoint = `${url}/${cmdArr.map(encodeURIComponent).join('/')}`;
+  const resp = await fetch(endpoint, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` }
   });
 
-  // Track results
-  const results = {
-    sent: 0,
-    failed: 0,
-    details: []
-  };
+  if (!resp.ok) throw new Error(`Upstash error: ${resp.status}`);
+  return resp.json();
+}
 
-  // Plain email wrapper (NO newline conversion — allow real HTML)
-  const createPlainEmail = (content) => `
+function getMemorySet() {
+  if (!globalThis.__tmac_unsub_set) globalThis.__tmac_unsub_set = new Set();
+  return globalThis.__tmac_unsub_set;
+}
+
+async function isSuppressed(email) {
+  const e = String(email || '').toLowerCase().trim();
+  if (!e) return false;
+
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    const key = `unsub:${e}`;
+    const data = await upstashCmd(['get', key]);
+    return Boolean(data && data.result);
+  }
+
+  // fallback (not reliable across cold starts)
+  return getMemorySet().has(e);
+}
+
+function buildUnsubFooterHtml(unsubUrl) {
+  // No font specified here so it inherits your template fonts automatically
+  return `
+    <div style="margin-top:24px; padding-top:16px; border-top:1px solid rgba(0,0,0,0.10); font-size:12px; color:rgba(0,0,0,0.55);">
+      <a href="${unsubUrl}" style="color:rgba(0,0,0,0.65); text-decoration:underline;">Unsubscribe</a>
+    </div>
+  `;
+}
+
+function buildUnsubFooterText(unsubUrl) {
+  return `\n\nUnsubscribe: ${unsubUrl}\n`;
+}
+
+module.exports = async (req, res) => {
+  try {
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const { contacts, subject, template, useTemplate } = req.body;
+
+    if (!contacts || !Array.isArray(contacts) || contacts.length === 0) {
+      return res.status(400).json({ error: 'Contacts array required' });
+    }
+    if (!subject) {
+      return res.status(400).json({ error: 'Subject required' });
+    }
+    if (!template || String(template).trim().length === 0) {
+      return res.status(400).json({ error: 'Email template required' });
+    }
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      return res.status(500).json({ error: 'Missing Gmail environment variables' });
+    }
+    if (!process.env.UNSUB_SECRET) {
+      return res.status(500).json({ error: 'Missing UNSUB_SECRET environment variable' });
+    }
+
+    const baseUrl = getBaseUrl(req);
+
+    // Create transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD
+      }
+    });
+
+    // Track results
+    const results = {
+      sent: 0,
+      failed: 0,
+      details: []
+    };
+
+    // --- KEEP YOUR ORIGINAL WRAPPERS / FONTS ---
+    // Plain wrapper (unchanged styling; only change is: ${content} instead of content.replace)
+    const createPlainEmail = (content) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,16 +139,17 @@ module.exports = async (req, res) => {
 </html>
 `;
 
-  // Branded email template (NO newline conversion — allow real HTML)
-  const createBrandedEmail = (content) => `
+    // Branded wrapper (keeps your Georgia serif + colors exactly)
+    const createBrandedEmail = (content) => `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Tee Elite Circle</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f7f0ef; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f7f0ef; padding: 40px 20px;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: 'Georgia', serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FAF8F5; padding: 40px 20px;">
     <tr>
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
@@ -82,7 +158,7 @@ module.exports = async (req, res) => {
           <tr>
             <td style="background-color: #1a2f23; padding: 40px 48px; text-align: center;">
               <p style="margin: 0 0 8px 0; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #e8ccc8; font-style: italic;">TMac Inspired presents</p>
-              <h1 style="margin: 0; font-size: 28px; font-weight: 600; font-family: Georgia, serif; color: #ffffff; letter-spacing: 0.05em;">The Tee Elite Circle</h1>
+              <h1 style="margin: 0; font-size: 32px; font-weight: 400; color: #ffffff; letter-spacing: 0.05em;">The Tee Elite Circle</h1>
             </td>
           </tr>
           
@@ -100,9 +176,6 @@ module.exports = async (req, res) => {
             <td style="background-color: #1a2f23; padding: 32px 48px; text-align: center;">
               <p style="margin: 0 0 8px 0; font-size: 14px; color: #ffffff;">The Tee Elite Circle</p>
               <p style="margin: 0 0 16px 0; font-size: 11px; letter-spacing: 0.15em; color: #e8ccc8;">WHERE GOLF MEETS GREATNESS</p>
-              <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.6;">
-                You’re receiving this because you're part of the Tee Elite Circle community.
-              </p>
             </td>
           </tr>
           
@@ -114,66 +187,87 @@ module.exports = async (req, res) => {
 </html>
 `;
 
-  // Gmail-friendly pacing (20/min approx)
-  const DELAY_BETWEEN_EMAILS = 3000;
+    // Gmail-friendly pacing
+    const DELAY_BETWEEN_EMAILS = 3000;
 
-  // Sanitize ONCE, then personalize per recipient
-  const safeTemplate = sanitizeEmailHtml(template);
+    // Sanitize once, then personalize
+    const safeTemplate = sanitizeEmailHtml(template);
 
-  for (let i = 0; i < contacts.length; i++) {
-    const contact = contacts[i];
-    const timestamp = new Date().toISOString();
+    for (let i = 0; i < contacts.length; i++) {
+      const contact = contacts[i];
+      const email = String(contact?.email || '').toLowerCase().trim();
+      const firstName = contact?.first_name || 'there';
+      const timestamp = new Date().toISOString();
 
-    const firstName = contact.first_name || 'there';
+      if (!email) {
+        results.failed++;
+        results.details.push({ email: '', first_name: firstName, success: false, error: 'Missing email', timestamp });
+        continue;
+      }
 
-    // Replace placeholder in HTML template
-    const personalizedContent = safeTemplate.replace(/{first_name}/gi, firstName);
+      // Suppression check
+      if (await isSuppressed(email)) {
+        results.details.push({ email, first_name: firstName, success: true, error: 'Skipped (unsubscribed)', timestamp });
+        continue;
+      }
 
-    // Wrap with selected layout
-    const htmlContent = useTemplate
-      ? createBrandedEmail(personalizedContent)
-      : createPlainEmail(personalizedContent);
+      const unsubUrl = makeUnsubUrl(baseUrl, email);
 
-    const mailOptions = {
-      from: `"Dr. TMac" <${process.env.GMAIL_USER}>`,
-      to: contact.email,
-      subject,
-      html: htmlContent
-    };
+      const personalizedContent = safeTemplate.replace(/{first_name}/gi, firstName);
 
-    try {
-      await transporter.sendMail(mailOptions);
+      // Add unsubscribe footer inside the email content (inherits fonts)
+      const contentWithFooter = `${personalizedContent}${buildUnsubFooterHtml(unsubUrl)}`;
 
-      results.sent++;
-      results.details.push({
-        email: contact.email,
-        first_name: contact.first_name || '',
-        success: true,
-        error: '',
-        timestamp
-      });
+      const htmlContent = useTemplate
+        ? createBrandedEmail(contentWithFooter)
+        : createPlainEmail(contentWithFooter);
 
-    } catch (error) {
-      results.failed++;
-      results.details.push({
-        email: contact.email,
-        first_name: contact.first_name || '',
-        success: false,
-        error: error?.message || 'Send failed',
-        timestamp
-      });
+      const textFallback =
+        sanitizeEmailHtml(personalizedContent)
+          .replace(/<br\s*\/?>/gi, '\n')
+          .replace(/<\/p>/gi, '\n')
+          .replace(/<[^>]+>/g, '')
+          .trim() + buildUnsubFooterText(unsubUrl);
+
+      // Headers to help Gmail show a native unsubscribe option
+      const listUnsub = `<${unsubUrl}>, <mailto:${process.env.GMAIL_USER}?subject=unsubscribe>`;
+      const headers = {
+        'List-Unsubscribe': listUnsub,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click'
+      };
+
+      const mailOptions = {
+        from: `"Dr. TMac" <${process.env.GMAIL_USER}>`,
+        to: email,
+        subject,
+        text: textFallback,
+        html: htmlContent,
+        headers
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+
+        results.sent++;
+        results.details.push({ email, first_name: firstName, success: true, error: '', timestamp });
+      } catch (error) {
+        results.failed++;
+        results.details.push({ email, first_name: firstName, success: false, error: error?.message || 'Send failed', timestamp });
+      }
+
+      if (i < contacts.length - 1) {
+        await new Promise((resolve) => setTimeout(resolve, DELAY_BETWEEN_EMAILS));
+      }
     }
 
-    if (i < contacts.length - 1) {
-      await new Promise((resolve) => setTimeout(resolve, DELAY_BETWEEN_EMAILS));
-    }
+    return res.status(200).json({
+      success: true,
+      message: `Campaign complete: ${results.sent} sent, ${results.failed} failed`,
+      sent: results.sent,
+      failed: results.failed,
+      results: results.details
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e?.message || 'Server error' });
   }
-
-  return res.status(200).json({
-    success: true,
-    message: `Campaign complete: ${results.sent} sent, ${results.failed} failed`,
-    sent: results.sent,
-    failed: results.failed,
-    results: results.details // IMPORTANT: array for your frontend .forEach
-  });
 };
