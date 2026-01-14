@@ -6,40 +6,26 @@ function makeToken(email) {
   return crypto.createHmac('sha256', secret).update(String(email).toLowerCase()).digest('hex');
 }
 
-async function upstashCmd(cmdArr) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
+async function addToSuppression(email) {
+  const url = process.env.SUPPRESSION_WEBAPP_URL;
+  const token = process.env.SUPPRESSION_TOKEN;
+  if (!url || !token) throw new Error('Missing SUPPRESSION_WEBAPP_URL or SUPPRESSION_TOKEN');
 
-  const endpoint = `${url}/${cmdArr.map(encodeURIComponent).join('/')}`;
+  const endpoint = `${url}${url.includes('?') ? '&' : '?'}action=add&token=${encodeURIComponent(token)}`;
+
   const resp = await fetch(endpoint, {
-    method: 'GET',
-    headers: { Authorization: `Bearer ${token}` }
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, source: 'unsubscribe' })
   });
-  if (!resp.ok) throw new Error(`Upstash error: ${resp.status}`);
-  return resp.json();
-}
 
-function getMemorySet() {
-  if (!globalThis.__tmac_unsub_set) globalThis.__tmac_unsub_set = new Set();
-  return globalThis.__tmac_unsub_set;
-}
-
-async function suppress(email) {
-  const e = String(email || '').toLowerCase().trim();
-  if (!e) return;
-
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    await upstashCmd(['set', `unsub:${e}`, '1']);
-    return;
-  }
-
-  // fallback (not reliable across cold starts)
-  getMemorySet().add(e);
+  if (!resp.ok) throw new Error(`Suppression add failed (${resp.status})`);
+  const data = await resp.json();
+  if (!data.ok) throw new Error(data.error || 'Suppression add error');
+  return data;
 }
 
 function page(title, bodyHtml) {
-  // Simple, clean page; email fonts aren’t affected by this page
   return `<!doctype html>
 <html>
 <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title></head>
@@ -53,8 +39,8 @@ function page(title, bodyHtml) {
 
 module.exports = async (req, res) => {
   try {
-    const email = String(req.query.e || req.body?.e || '').toLowerCase().trim();
-    const token = String(req.query.t || req.body?.t || '').trim();
+    const email = String(req.query.e || '').toLowerCase().trim();
+    const token = String(req.query.t || '').trim();
 
     if (!email || !token) {
       res.status(200).setHeader('Content-Type', 'text/html');
@@ -81,7 +67,7 @@ module.exports = async (req, res) => {
       );
     }
 
-    await suppress(email);
+    await addToSuppression(email);
 
     res.status(200).setHeader('Content-Type', 'text/html');
     return res.end(
