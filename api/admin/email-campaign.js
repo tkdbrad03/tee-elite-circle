@@ -1,5 +1,14 @@
 const nodemailer = require('nodemailer');
 
+function sanitizeEmailHtml(html) {
+  // Removes common "junk" or unsafe tags that can sneak in via copy/paste.
+  // Most email clients block scripts anyway, but this keeps your outgoing HTML clean.
+  return String(html || '')
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/<(object|embed)\b[^>]*>.*?<\/\1>/gis, '');
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -15,8 +24,12 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Subject required' });
   }
 
-  if (!template) {
+  if (!template || String(template).trim().length === 0) {
     return res.status(400).json({ error: 'Email template required' });
+  }
+
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    return res.status(500).json({ error: 'Missing Gmail environment variables' });
   }
 
   // Create transporter
@@ -28,14 +41,14 @@ module.exports = async (req, res) => {
     }
   });
 
-  // Track results with details
+  // Track results
   const results = {
     sent: 0,
     failed: 0,
     details: []
   };
 
-  // Simple plain text email wrapper (no branding template)
+  // Plain email wrapper (NO newline conversion — allow real HTML)
   const createPlainEmail = (content) => `
 <!DOCTYPE html>
 <html>
@@ -45,23 +58,22 @@ module.exports = async (req, res) => {
 </head>
 <body style="margin: 0; padding: 40px 20px; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <div style="max-width: 600px; margin: 0 auto; font-size: 16px; line-height: 1.8; color: #333333;">
-    ${content.replace(/\n/g, '<br>')}
+    ${content}
   </div>
 </body>
 </html>
 `;
 
-  // Branded email template
+  // Branded email template (NO newline conversion — allow real HTML)
   const createBrandedEmail = (content) => `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Tee Elite Circle</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: 'Georgia', serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FAF8F5; padding: 40px 20px;">
+<body style="margin: 0; padding: 0; background-color: #f7f0ef; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f7f0ef; padding: 40px 20px;">
     <tr>
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
@@ -69,8 +81,8 @@ module.exports = async (req, res) => {
           <!-- Header -->
           <tr>
             <td style="background-color: #1a2f23; padding: 40px 48px; text-align: center;">
-              <p style="margin: 0 0 8px 0; font-size: 12px; letter-spacing: 0.2em; color: #e8ccc8; font-style: italic;">TMac Inspired presents</p>
-              <h1 style="margin: 0; font-size: 28px; font-weight: 400; color: #ffffff; letter-spacing: 0.05em;">The Tee Elite Circle</h1>
+              <p style="margin: 0 0 8px 0; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #e8ccc8; font-style: italic;">TMac Inspired presents</p>
+              <h1 style="margin: 0; font-size: 28px; font-weight: 600; font-family: Georgia, serif; color: #ffffff; letter-spacing: 0.05em;">The Tee Elite Circle</h1>
             </td>
           </tr>
           
@@ -78,7 +90,7 @@ module.exports = async (req, res) => {
           <tr>
             <td style="background-color: #ffffff; padding: 48px;">
               <div style="font-size: 15px; line-height: 1.8; color: #555555;">
-                ${content.replace(/\n/g, '<br>')}
+                ${content}
               </div>
             </td>
           </tr>
@@ -88,7 +100,9 @@ module.exports = async (req, res) => {
             <td style="background-color: #1a2f23; padding: 32px 48px; text-align: center;">
               <p style="margin: 0 0 8px 0; font-size: 14px; color: #ffffff;">The Tee Elite Circle</p>
               <p style="margin: 0 0 16px 0; font-size: 11px; letter-spacing: 0.15em; color: #e8ccc8;">WHERE GOLF MEETS GREATNESS</p>
-              <p style="margin: 0; font-size: 11px; color: rgba(255,255,255,0.4);">A TMac Inspired Experience</p>
+              <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.6;">
+                You’re receiving this because you're part of the Tee Elite Circle community.
+              </p>
             </td>
           </tr>
           
@@ -100,59 +114,66 @@ module.exports = async (req, res) => {
 </html>
 `;
 
-  // Send emails with PROPER rate limiting for Gmail
-  // Gmail Workspace allows ~2000/day but recommends max 20/minute to avoid issues
-  const DELAY_BETWEEN_EMAILS = 3000; // 3 seconds between each email (20 per minute)
-  
+  // Gmail-friendly pacing (20/min approx)
+  const DELAY_BETWEEN_EMAILS = 3000;
+
+  // Sanitize ONCE, then personalize per recipient
+  const safeTemplate = sanitizeEmailHtml(template);
+
   for (let i = 0; i < contacts.length; i++) {
     const contact = contacts[i];
     const timestamp = new Date().toISOString();
-    
-    // Replace {first_name} placeholder
+
     const firstName = contact.first_name || 'there';
-    const personalizedContent = template.replace(/{first_name}/gi, firstName);
-    
-    // Choose template style
-    const htmlContent = useTemplate 
-      ? createBrandedEmail(personalizedContent) 
+
+    // Replace placeholder in HTML template
+    const personalizedContent = safeTemplate.replace(/{first_name}/gi, firstName);
+
+    // Wrap with selected layout
+    const htmlContent = useTemplate
+      ? createBrandedEmail(personalizedContent)
       : createPlainEmail(personalizedContent);
 
     const mailOptions = {
       from: `"Dr. TMac" <${process.env.GMAIL_USER}>`,
       to: contact.email,
-      subject: subject,
+      subject,
       html: htmlContent
     };
 
     try {
       await transporter.sendMail(mailOptions);
+
       results.sent++;
       results.details.push({
         email: contact.email,
-        name: contact.first_name || '',
-        status: 'sent',
+        first_name: contact.first_name || '',
+        success: true,
+        error: '',
         timestamp
       });
+
     } catch (error) {
       results.failed++;
       results.details.push({
         email: contact.email,
-        name: contact.first_name || '',
-        status: 'failed',
-        error: error.message,
+        first_name: contact.first_name || '',
+        success: false,
+        error: error?.message || 'Send failed',
         timestamp
       });
     }
-    
-    // Wait between emails to respect Gmail rate limits
+
     if (i < contacts.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_EMAILS));
+      await new Promise((resolve) => setTimeout(resolve, DELAY_BETWEEN_EMAILS));
     }
   }
 
   return res.status(200).json({
     success: true,
     message: `Campaign complete: ${results.sent} sent, ${results.failed} failed`,
-    results
+    sent: results.sent,
+    failed: results.failed,
+    results: results.details // IMPORTANT: array for your frontend .forEach
   });
 };
