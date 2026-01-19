@@ -321,6 +321,92 @@
     if (email) {
         document.getElementById('userEmail').textContent = email;
     }
+
+    // Engagement tracking function
+    async function trackEvent(eventType, eventData = {}) {
+        if (!email) return;
+        
+        try {
+            await fetch('/api/track-engagement', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    eventType: eventType,
+                    eventData: eventData
+                })
+            });
+        } catch (error) {
+            console.error('Tracking error:', error);
+        }
+    }
+
+    // Track page view (someone completed audit and viewing results)
+    trackEvent('results_viewed', { score: score, category: category });
+
+    // Track PDF download
+    document.querySelector('a[download]')?.addEventListener('click', function() {
+        trackEvent('pdf_download', { source: 'results_page' });
+    });
+
+    // Track flipbook open
+    document.querySelector('a[href*="designrr"]')?.addEventListener('click', function() {
+        trackEvent('flipbook_open', { source: 'results_page' });
+    });
+
+    // Video tracking (will work once video is embedded)
+    // This tracks when video starts, progress at 25%, 50%, 75%, and completion
+    function setupVideoTracking() {
+        const video = document.querySelector('video');
+        if (!video) return;
+
+        let tracked = { 25: false, 50: false, 75: false, 90: false };
+        let startTime = null;
+
+        video.addEventListener('play', function() {
+            if (!startTime) {
+                startTime = Date.now();
+                trackEvent('video_started', { duration: video.duration });
+            }
+        });
+
+        video.addEventListener('timeupdate', function() {
+            const percent = (video.currentTime / video.duration) * 100;
+            
+            if (percent >= 25 && !tracked[25]) {
+                tracked[25] = true;
+                trackEvent('video_progress', { 
+                    percentWatched: 25,
+                    watchTime: Math.round((Date.now() - startTime) / 1000)
+                });
+            }
+            if (percent >= 50 && !tracked[50]) {
+                tracked[50] = true;
+                trackEvent('video_progress', { 
+                    percentWatched: 50,
+                    watchTime: Math.round((Date.now() - startTime) / 1000)
+                });
+            }
+            if (percent >= 75 && !tracked[75]) {
+                tracked[75] = true;
+                trackEvent('video_progress', { 
+                    percentWatched: 75,
+                    watchTime: Math.round((Date.now() - startTime) / 1000)
+                });
+            }
+            if (percent >= 90 && !tracked[90]) {
+                tracked[90] = true;
+                trackEvent('video_progress', { 
+                    percentWatched: 90,
+                    watchTime: Math.round((Date.now() - startTime) / 1000),
+                    completed: true
+                });
+            }
+        });
+    }
+
+    // Call this after video is loaded
+    window.addEventListener('load', setupVideoTracking);
 </script>
 
 </body>
