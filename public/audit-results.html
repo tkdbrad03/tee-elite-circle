@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Matriarch Audit Results</title>
+    <style>
+        :root {
+            --gold: #b59a5d;
+            --dark: #1a2f23;
+            --light-bg: #fdfdfd;
+            --text-gray: #4a4a4a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .results-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 50px;
+            border: 1px solid #eee;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 30px;
+            margin-bottom: 45px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .score-display {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .score-circle {
+            display: inline-block;
+            width: 150px;
+            height: 150px;
+            border: 4px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .category-name {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .category-description {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .video-section {
+            margin: 50px 0;
+            background: #f9f9f9;
+            padding: 40px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .video-section h2 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .video-section p {
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+
+        .video-placeholder {
+            background: #000;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 4px;
+        }
+
+        .cta-section {
+            margin: 50px 0;
+            text-align: center;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 20px 50px;
+            background-color: var(--gold);
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 10px;
+            transition: all 0.3s;
+            border: 2px solid var(--gold);
+        }
+
+        .download-btn:hover {
+            background-color: transparent;
+            color: var(--gold);
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            padding: 20px 50px;
+            background-color: transparent;
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 10px;
+            border: 2px solid var(--dark);
+            transition: all 0.3s;
+        }
+
+        .secondary-btn:hover {
+            background-color: var(--dark);
+            color: white;
+        }
+
+        .playbook-preview {
+            background: var(--light-bg);
+            padding: 40px;
+            margin: 40px 0;
+            border: 1px solid #ddd;
+        }
+
+        .playbook-preview h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .playbook-preview ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .playbook-preview li {
+            padding: 8px 0;
+            color: var(--text-gray);
+            font-size: 1.05rem;
+        }
+
+        .playbook-preview li:before {
+            content: "→ ";
+            color: var(--gold);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .email-reminder {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .results-container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .category-name {
+                font-size: 1.3rem;
+            }
+
+            .download-btn, .secondary-btn {
+                display: block;
+                margin: 15px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="results-container">
+    <div class="header">
+        <h1>Your Matriarch Audit Results</h1>
+        <p style="font-style: italic; color: var(--text-gray); font-size: 1.1rem;">
+            Thank you for taking the first step toward total life alignment
+        </p>
+    </div>
+
+    <div class="score-display">
+        <div class="score-circle">
+            <span class="score-number" id="displayScore">--</span>
+        </div>
+        <div class="category-name" id="displayCategory">Your Category</div>
+        <div class="category-description" id="displayDescription">
+            Your personalized insights based on your assessment
+        </div>
+    </div>
+
+    <div class="email-reminder">
+        <strong>Check Your Email:</strong> Your complete results have been sent to <span id="userEmail"></span>. 
+        The email includes detailed insights specific to your score and category.
+    </div>
+
+    <div class="video-section">
+        <h2>Watch: Dr. TMac's 5-Minute Matriarch Breakdown</h2>
+        <p>Understand what your score means and the path forward from The Sleeping Matriarch to The Modern Day Matriarch.</p>
+        
+        <!-- Replace this div with your actual video embed -->
+        <div class="video-placeholder">
+            [Your Video Will Be Embedded Here]<br>
+            <small style="font-size: 0.8rem; margin-top: 10px; display: block;">Upload your video and replace this placeholder</small>
+        </div>
+        
+        <!-- Example YouTube embed (replace with your video):
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+            <iframe 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        -->
+    </div>
+
+    <div class="playbook-preview">
+        <h3>The Matriarch's Playbook</h3>
+        <p style="color: var(--text-gray); font-size: 1.05rem; margin-bottom: 20px;">
+            Your free guide to the 8 Pillars of Power that Modern Day Matriarchs embody:
+        </p>
+        <ul>
+            <li>Permission to Want What You Want</li>
+            <li>Permission to Redesign Your Identity</li>
+            <li>Permission to Be Seen</li>
+            <li>Permission to Charge What You're Worth</li>
+            <li>Permission to Rest Without Guilt</li>
+            <li>Permission to Stop Explaining Yourself</li>
+            <li>Permission to Start Before You're Ready</li>
+            <li>Permission to Align Over Grind</li>
+        </ul>
+    </div>
+
+    <div class="cta-section">
+        <a href="https://designrr.page/?id=479912&token=1069805892&type=FP&h=9563" target="_blank" class="download-btn">Read The Flipbook</a>
+        <a href="/matriarchs_playbook.pdf" class="secondary-btn" download>Download PDF</a>
+    </div>
+
+    <div style="margin: 60px 0; padding: 40px; background: var(--dark); color: white; text-align: center;">
+        <p style="font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 15px;">
+            Ready for the Room Where Your Ambition is the Standard?
+        </p>
+        <h3 style="font-size: 1.6rem; margin-bottom: 20px;">The Tee Elite Circle</h3>
+        <p style="font-size: 1.05rem; line-height: 1.8; max-width: 700px; margin: 0 auto 30px; color: rgba(255,255,255,0.9);">
+            An exclusive $25,000 mastermind for accomplished women entrepreneurs who use golf as a vehicle 
+            for business networking, wealth building, and legacy creation.
+        </p>
+        <a href="/tee-room.html" class="download-btn">Learn About The Circle</a>
+    </div>
+
+</div>
+
+<script>
+    // Get data from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const score = urlParams.get('score');
+    const category = urlParams.get('category');
+    const email = urlParams.get('email');
+    const description = urlParams.get('description');
+
+    // Display the data
+    if (score) {
+        document.getElementById('displayScore').textContent = score;
+    }
+    if (category) {
+        document.getElementById('displayCategory').textContent = category;
+    }
+    if (description) {
+        document.getElementById('displayDescription').textContent = decodeURIComponent(description);
+    }
+    if (email) {
+        document.getElementById('userEmail').textContent = email;
+    }
+</script>
+
+</body>
+</html>
