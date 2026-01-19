@@ -7,7 +7,7 @@
     <style>
         :root {
             --gold: #b59a5d;
-            --dark: #1a1a1a;
+            --dark: #1a2f23;
             --light-bg: #fdfdfd;
             --text-gray: #4a4a4a;
         }
@@ -509,10 +509,14 @@
                 throw new Error('Failed to send email');
             }
 
-            // Show confirmation
-            document.getElementById('emailCapture').style.display = 'none';
-            document.getElementById('confirmedEmail').innerText = email;
-            document.getElementById('confirmation').style.display = 'block';
+            // Redirect to results page with score data
+            const resultParams = new URLSearchParams({
+                score: calculatedScore,
+                category: category,
+                email: email,
+                description: description
+            });
+            window.location.href = `/audit-results.html?${resultParams.toString()}`;
 
         } catch (error) {
             console.error('Error:', error);
