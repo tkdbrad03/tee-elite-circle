@@ -993,6 +993,29 @@
         grid-template-columns: 1fr;
       }
     }
+    .stat-sublabel {
+  font-size: 11px;
+  color: var(--tmac-bronze);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.funnel-step {
+  margin-bottom: 12px;
+}
+
+.funnel-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.funnel-bar {
+  transition: width 0.3s ease;
+  min-width: 60px;
+}
   </style>
 </head>
 <body>
@@ -1027,6 +1050,7 @@
       <button class="main-tab" data-tab="content">Content</button>
       <button class="main-tab" data-tab="retreats">Retreats</button>
       <button class="main-tab" data-tab="live">🔴 Live</button>
+      <button class="main-tab" data-tab="analytics">Analytics</button>
     </div>
 
     <main class="admin-main">
@@ -1306,6 +1330,109 @@
           </div>
         </div>
       </div>
+    <!-- ADD THIS TAB CONTENT AFTER THE LIVE TAB (around line 1280) -->
+<div class="tab-content" id="analytics-tab">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-number" id="total-audits">0</div>
+      <div class="stat-label">Total Audits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="pdf-downloads">0</div>
+      <div class="stat-label">PDF Downloads</div>
+      <div class="stat-sublabel" id="pdf-rate">0%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="flipbook-opens">0</div>
+      <div class="stat-label">Flipbook Opens</div>
+      <div class="stat-sublabel" id="flipbook-rate">0%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="video-viewers">0</div>
+      <div class="stat-label">Video Viewers</div>
+      <div class="stat-sublabel" id="video-rate">0%</div>
+    </div>
+  </div>
+
+  <!-- Category Breakdown -->
+  <div class="content-section" style="margin-top: 24px;">
+    <h2>Category Breakdown</h2>
+    <div id="category-breakdown">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--tmac-blush);">
+            <th style="padding: 12px; text-align: left;">Category</th>
+            <th style="padding: 12px; text-align: center;">Count</th>
+            <th style="padding: 12px; text-align: center;">Avg Score</th>
+          </tr>
+        </thead>
+        <tbody id="category-tbody">
+          <tr>
+            <td colspan="3" style="padding: 24px; text-align: center; color: #888;">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Video Engagement -->
+  <div class="content-section" style="margin-top: 24px;">
+    <h2>Video Engagement</h2>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number" id="avg-watch-time">0</div>
+        <div class="stat-label">Avg Watch Time (seconds)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="avg-percent-watched">0%</div>
+        <div class="stat-label">Avg % Watched</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="completed-views">0</div>
+        <div class="stat-label">Completed Views (90%+)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Chart -->
+  <div class="content-section" style="margin-top: 24px;">
+    <h2>Last 30 Days Activity</h2>
+    <div id="activity-chart" style="padding: 24px; background: white; border-radius: 4px;">
+      <canvas id="audit-chart" width="400" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- Engagement Funnel -->
+  <div class="content-section" style="margin-top: 24px;">
+    <h2>Engagement Funnel</h2>
+    <div style="padding: 24px; background: white; border-radius: 4px;">
+      <div class="funnel-step">
+        <div class="funnel-label">Completed Audit</div>
+        <div class="funnel-bar" id="funnel-audit" style="width: 100%; background: var(--deep-forest); height: 40px; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 8px; border-radius: 4px;">
+          <span id="funnel-audit-count">0</span>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Viewed Results Page</div>
+        <div class="funnel-bar" id="funnel-results" style="height: 40px; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 8px; border-radius: 4px; background: var(--tmac-bronze);">
+          <span id="funnel-results-count">0</span>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Downloaded Playbook</div>
+        <div class="funnel-bar" id="funnel-pdf" style="height: 40px; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 8px; border-radius: 4px; background: var(--tmac-blush);">
+          <span id="funnel-pdf-count">0</span>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Watched Video</div>
+        <div class="funnel-bar" id="funnel-video" style="height: 40px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 4px; background: #ccc;">
+          <span id="funnel-video-count">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
     </main>
   </div>
@@ -2365,6 +2492,70 @@
       });
     }
   </script>
+  <!-- ADD THIS JAVASCRIPT FUNCTION TO THE EXISTING SCRIPT SECTION -->
+<script>
+async function loadAnalytics() {
+  try {
+    const response = await fetch('/api/audit-analytics');
+    const data = await response.json();
+    
+    // Overview stats
+    document.getElementById('total-audits').textContent = data.overview.totalAudits;
+    document.getElementById('pdf-downloads').textContent = data.overview.pdfDownloads;
+    document.getElementById('pdf-rate').textContent = data.overview.pdfDownloadRate + '%';
+    document.getElementById('flipbook-opens').textContent = data.overview.flipbookOpens;
+    document.getElementById('flipbook-rate').textContent = data.overview.flipbookOpenRate + '%';
+    document.getElementById('video-viewers').textContent = data.overview.videoViewers;
+    document.getElementById('video-rate').textContent = data.overview.videoViewRate + '%';
+    
+    // Category breakdown
+    const tbody = document.getElementById('category-tbody');
+    tbody.innerHTML = '';
+    data.categories.forEach(cat => {
+      const row = document.createElement('tr');
+      row.style.borderBottom = '1px solid #f0f0f0';
+      row.innerHTML = `
+        <td style="padding: 12px;">${cat.category}</td>
+        <td style="padding: 12px; text-align: center;">${cat.count}</td>
+        <td style="padding: 12px; text-align: center;">${cat.avg_score}</td>
+      `;
+      tbody.appendChild(row);
+    });
+    
+    // Video engagement
+    document.getElementById('avg-watch-time').textContent = data.videoEngagement.avgWatchTime;
+    document.getElementById('avg-percent-watched').textContent = data.videoEngagement.avgPercentWatched + '%';
+    document.getElementById('completed-views').textContent = data.videoEngagement.completedViews;
+    
+    // Funnel
+    const totalAudits = data.overview.totalAudits;
+    document.getElementById('funnel-audit-count').textContent = totalAudits;
+    document.getElementById('funnel-results-count').textContent = totalAudits; // All who complete see results
+    document.getElementById('funnel-pdf-count').textContent = `${data.overview.pdfDownloads} (${data.overview.pdfDownloadRate}%)`;
+    document.getElementById('funnel-video-count').textContent = `${data.overview.videoViewers} (${data.overview.videoViewRate}%)`;
+    
+    // Adjust funnel bar widths
+    if (totalAudits > 0) {
+      document.getElementById('funnel-results').style.width = '100%';
+      document.getElementById('funnel-pdf').style.width = data.overview.pdfDownloadRate + '%';
+      document.getElementById('funnel-video').style.width = data.overview.videoViewRate + '%';
+    }
+    
+  } catch (error) {
+    console.error('Failed to load analytics:', error);
+  }
+}
+
+// Add to tab switching logic
+document.querySelectorAll('.main-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    const tabName = this.dataset.tab;
+    if (tabName === 'analytics') {
+      loadAnalytics();
+    }
+  });
+});
+</script>
   <script src="/pwa-nav.js"></script>
 </body>
 </html>
