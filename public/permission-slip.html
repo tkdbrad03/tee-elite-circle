@@ -48,6 +48,25 @@
             margin: 0 auto;
         }
 
+        .audio-player {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .listen-label {
+            font-family: 'Crimson Text', serif;
+            font-size: 18px;
+            color: #2d4a3a;
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+
         .pdf-viewer {
             background: white;
             border-radius: 8px;
@@ -140,6 +159,14 @@
         <div class="header">
             <h1>THE PERMISSION SLIP</h1>
             <p>You don't need permission. You just needed to hear it out loud.</p>
+        </div>
+
+        <div class="audio-player">
+            <p class="listen-label">Listen to the episode</p>
+            <audio controls preload="metadata">
+                <source src="https://episodes.captivate.fm/episode/452103d8-0a8e-4298-9ec1-63e4805d83b6.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         </div>
 
         <div class="pdf-viewer">
