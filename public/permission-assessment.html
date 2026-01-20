@@ -804,7 +804,6 @@
         }
 
         function saveToDatabase(scores) {
-            // This would connect to your actual backend
             const data = {
                 email: userEmail,
                 timestamp: new Date().toISOString(),
@@ -813,14 +812,19 @@
                 zone: calculatedZone
             };
 
-            console.log('Save to database:', data);
-
-            // TODO: Actual API call to your backend
-            // fetch('/api/save-assessment', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(data)
-            // });
+            // Save to backend
+            fetch('/api/save-assessment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Assessment saved:', result);
+            })
+            .catch(error => {
+                console.error('Error saving assessment:', error);
+            });
         }
 
         function saveRetreatInterest(retreatType) {
@@ -831,9 +835,18 @@
                 timestamp: new Date().toISOString()
             };
 
-            console.log('Save retreat interest:', data);
-
-            // TODO: Actual API call
+            fetch('/api/retreat-interest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Retreat interest saved:', result);
+            })
+            .catch(error => {
+                console.error('Error saving retreat interest:', error);
+            });
         }
     </script>
 </body>
