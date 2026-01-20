@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Place | The Permission Ecosystem</title>
+    <link rel="icon" type="image/png" href="/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: #f5f2ed;
+            color: #2d4a3a;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+        }
+
+        .header .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 600;
+            color: #2d4a3a;
+            margin-bottom: 16px;
+        }
+
+        .header p {
+            font-size: 20px;
+            font-style: italic;
+            opacity: 0.75;
+        }
+
+        /* Pre-assessment check */
+        .pre-assessment {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(45, 74, 58, 0.1);
+            text-align: center;
+        }
+
+        .pre-assessment h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .pre-assessment .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            font-family: 'Crimson Text', serif;
+            font-size: 18px;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #2d4a3a;
+            color: #faf8f5;
+        }
+
+        .btn-primary:hover {
+            background: #1a2f23;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2d4a3a;
+            border: 2px solid #2d4a3a;
+        }
+
+        .btn-secondary:hover {
+            background: #2d4a3a;
+            color: #faf8f5;
+        }
+
+        .audio-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(45, 74, 58, 0.2);
+        }
+
+        .audio-section audio {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Assessment questions */
+        .assessment {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(45, 74, 58, 0.1);
+            border-radius: 4px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2d4a3a;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(45, 74, 58, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d4a3a;
+            opacity: 0.5;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .scale-option {
+            flex: 1;
+            text-align: center;
+        }
+
+        .scale-option input[type="radio"] {
+            display: none;
+        }
+
+        .scale-option label {
+            display: block;
+            padding: 20px 10px;
+            border: 2px solid rgba(45, 74, 58, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .scale-option input[type="radio"]:checked + label {
+            background: #2d4a3a;
+            color: #faf8f5;
+            border-color: #2d4a3a;
+        }
+
+        .scale-option label:hover {
+            border-color: #2d4a3a;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        /* Email capture */
+        .email-capture {
+            display: none;
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(45, 74, 58, 0.1);
+            text-align: center;
+        }
+
+        .email-capture h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .email-capture p {
+            font-size: 18px;
+            opacity: 0.75;
+            margin-bottom: 30px;
+        }
+
+        .email-capture input[type="email"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 16px 20px;
+            font-family: 'Crimson Text', serif;
+            font-size: 18px;
+            border: 2px solid rgba(45, 74, 58, 0.3);
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .email-capture input[type="email"]:focus {
+            outline: none;
+            border-color: #2d4a3a;
+        }
+
+        /* Results */
+        .results {
+            display: none;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .results-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .zone-badge {
+            display: inline-block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 56px;
+            font-weight: 600;
+            color: #2d4a3a;
+            padding: 20px 40px;
+            border: 3px solid #2d4a3a;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .insight-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(45, 74, 58, 0.1);
+            margin: 40px 0;
+            font-size: 19px;
+            line-height: 1.8;
+        }
+
+        .map-visual {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .map-visual h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 30px;
+            opacity: 0.7;
+        }
+
+        .zones-display {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .zone-indicator {
+            flex: 1;
+            max-width: 200px;
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0.3;
+        }
+
+        .zone-indicator.active {
+            opacity: 1;
+            background: rgba(45, 74, 58, 0.1);
+            border: 3px solid #2d4a3a;
+            transform: scale(1.05);
+        }
+
+        .zone-indicator h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .zone-indicator .score {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2d4a3a;
+        }
+
+        .cta-section {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(45, 74, 58, 0.1);
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .cta-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            opacity: 0.75;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-section {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .share-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .share-graphic {
+            margin: 30px 0;
+            border: 2px solid rgba(45, 74, 58, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .question-card {
+                padding: 30px 20px;
+            }
+
+            .question-text {
+                font-size: 24px;
+            }
+
+            .scale-container {
+                flex-direction: column;
+            }
+
+            .zones-display {
+                flex-direction: column;
+            }
+
+            .zone-indicator {
+                max-width: 100%;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="/apple-touch-icon.png" alt="The Tee Elite Circle">
+            </div>
+            <h1>Find Your Place</h1>
+            <p>in the Permission Ecosystem</p>
+        </div>
+
+        <!-- Pre-assessment check -->
+        <div class="pre-assessment" id="preAssessment">
+            <h2>Have you listened to The Permission Slip episode?</h2>
+            <p style="font-size: 18px; opacity: 0.75; margin: 20px 0;">This assessment is designed to help you understand where you are in your journey. For the best experience, we recommend listening to the episode first.</p>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="startAssessment()">Yes, I've listened</button>
+                <button class="btn btn-secondary" onclick="showAudio()">No, let me listen first</button>
+            </div>
+
+            <div class="audio-section hidden" id="audioSection">
+                <p style="font-size: 18px; margin-bottom: 10px;">Listen to The Permission Slip:</p>
+                <audio controls preload="metadata">
+                    <source src="https://episodes.captivate.fm/episode/452103d8-0a8e-4298-9ec1-63e4805d83b6.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <button class="btn btn-primary" onclick="startAssessment()" style="margin-top: 30px;">Continue to Assessment</button>
+            </div>
+        </div>
+
+        <!-- Assessment -->
+        <div class="assessment" id="assessment">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Email capture -->
+        <div class="email-capture" id="emailCapture">
+            <h2>Enter your email to see your results</h2>
+            <p>We'll also send you a copy of your results and personalized next steps.</p>
+            <input type="email" id="emailInput" placeholder="your@email.com" required>
+            <br>
+            <button class="btn btn-primary" onclick="submitEmail()">See My Results</button>
+        </div>
+
+        <!-- Results -->
+        <div class="results" id="results">
+            <div class="results-header">
+                <h2>You are in the</h2>
+                <div class="zone-badge" id="zoneBadge"></div>
+                <p style="font-size: 20px; font-style: italic; opacity: 0.75; margin-top: 20px;">stage of the Permission Ecosystem</p>
+            </div>
+
+            <div class="map-visual">
+                <h3>Your Position in the Ecosystem</h3>
+                <div class="zones-display">
+                    <div class="zone-indicator" id="permissionZone">
+                        <h4>Permission</h4>
+                        <div class="score" id="permissionScore"></div>
+                    </div>
+                    <div class="zone-indicator" id="intimacyZone">
+                        <h4>Intimacy</h4>
+                        <div class="score" id="intimacyScore"></div>
+                    </div>
+                    <div class="zone-indicator" id="powerZone">
+                        <h4>Power</h4>
+                        <div class="score" id="powerScore"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-box" id="insightText"></div>
+
+            <div class="cta-section" id="ctaSection"></div>
+
+            <div class="share-section">
+                <h3>Share Your Results</h3>
+                <p style="font-size: 16px; opacity: 0.75; margin-bottom: 20px;">Download and share your result on social media</p>
+                <canvas id="shareCanvas" width="1080" height="1080" style="display: none;"></canvas>
+                <div class="share-graphic">
+                    <img id="shareImage" alt="Your result graphic" style="max-width: 100%; height: auto;">
+                </div>
+                <button class="btn btn-primary" onclick="downloadGraphic()" style="margin-top: 20px;">Download Graphic</button>
+                <div style="margin-top: 30px; padding: 20px; background: rgba(45, 74, 58, 0.05); border-radius: 4px;">
+                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">Copy this caption for your post:</p>
+                    <p id="socialCaption" style="font-size: 16px; font-style: italic; line-height: 1.6;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Permission zone
+            { text: "I want more but feel like I need permission to pursue it", zone: "permission" },
+            { text: "Rest feels uncomfortable or makes me feel guilty", zone: "permission" },
+            { text: "I find myself editing my desires before speaking them out loud", zone: "permission" },
+            // Intimacy zone
+            { text: "I struggle to trust my own decisions", zone: "intimacy" },
+            { text: "I notice patterns in my life that I keep repeating", zone: "intimacy" },
+            { text: "I have difficulty receiving help or support from others", zone: "intimacy" },
+            // Power zone
+            { text: "I hesitate to take up space or be visible", zone: "power" },
+            { text: "I wait to be invited rather than choosing my own seat", zone: "power" },
+            { text: "I apologize for receiving or having success", zone: "power" }
+        ];
+
+        const insights = {
+            permission: "You're in the Permission stage. Right now, you're working through the question: <em>Am I allowed?</em> You're recognizing desires you've been editing, noticing where rest feels uncomfortable, and beginning to name truths you've kept quiet. This isn't about becoming someone new. It's about acknowledging what's already been true. Your work right now is clarity. Not justification, not explanation. Just honest recognition of what you actually want.",
+            intimacy: "You're in the Intimacy stage. The question you're sitting with is: <em>Can I trust myself?</em> You've given yourself permission to want more, and now you're learning to trust your own voice without needing external validation. You're identifying patterns you've outgrown, practicing receiving without guilt, and choosing from wholeness rather than scarcity. This stage asks you to build self-loyalty: to stop betraying yourself in small ways that once felt like accommodation.",
+            power: "You're in the Power stage. Your question is: <em>Will I take my seat?</em> You trust yourself. You know what you want. Now the work is visibility, presence, and unapologetic receiving. This isn't about proving you deserve to be here. It's about choosing to be here anyway. You're done waiting for invitations. You're learning that hesitation isn't humility, and that taking your seat creates permission for others to do the same. This is where authority replaces apology."
+        };
+
+        const ctas = {
+            permission: {
+                title: "Ready to get clarity?",
+                description: "Let's talk about what you actually want and how to move forward.",
+                primary: { text: "Schedule a Discovery Call", url: "https://complitrst-booking.web.app/?type=tee-elite-circle" },
+                secondary: { text: "Interested in a Permission Retreat?", retreat: "permission" }
+            },
+            intimacy: {
+                title: "Ready to build self-trust with other women?",
+                description: "The Tee Elite Circle is where women doing this work come together.",
+                primary: { text: "Explore The Tee Elite Circle", url: "https://complitrst-booking.web.app/?type=tee-elite-circle" },
+                secondary: { text: "Interested in an Intimacy Retreat?", retreat: "intimacy" }
+            },
+            power: {
+                title: "You're ready to take your seat",
+                description: "The Tee Elite Circle is waiting for you.",
+                primary: { text: "Apply for The Tee Elite Circle", url: "https://complitrst-booking.web.app/?type=tee-elite-circle" },
+                secondary: { text: "Interested in a Power Retreat?", retreat: "power" }
+            }
+        };
+
+        const socialCaptions = {
+            permission: "I just found my place in the Permission Ecosystem. I'm in PERMISSION.\n\nI'm working through the question: Am I allowed? Recognizing what I've been editing, where rest feels uncomfortable, and beginning to name truths I've kept quiet.\n\nWhere are you? Take the assessment: tmacmastermind.com/permission-assessment\n\n#ThePermissionSlip #DrTMac",
+            intimacy: "I just found my place in the Permission Ecosystem. I'm in INTIMACY.\n\nMy question right now: Can I trust myself? I'm learning to trust my own voice, identifying patterns I've outgrown, and building self-loyalty.\n\nWhere are you? Take the assessment: tmacmastermind.com/permission-assessment\n\n#ThePermissionSlip #DrTMac",
+            power: "I just found my place in the Permission Ecosystem. I'm in POWER.\n\nMy question: Will I take my seat? I'm done waiting for invitations. Learning that hesitation isn't humility and that authority replaces apology.\n\nWhere are you? Take the assessment: tmacmastermind.com/permission-assessment\n\n#ThePermissionSlip #DrTMac"
+        };
+
+        let currentQuestion = 0;
+        let responses = [];
+        let userEmail = '';
+        let calculatedZone = '';
+
+        function showAudio() {
+            document.getElementById('audioSection').classList.remove('hidden');
+        }
+
+        function startAssessment() {
+            document.getElementById('preAssessment').style.display = 'none';
+            document.getElementById('assessment').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('questionsContainer');
+            const question = questions[currentQuestion];
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${questions.length}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="scale-container">
+                        ${[1, 2, 3, 4, 5].map(value => `
+                            <div class="scale-option">
+                                <input type="radio" name="q${currentQuestion}" id="q${currentQuestion}_${value}" value="${value}" onchange="enableNext()">
+                                <label for="q${currentQuestion}_${value}">${value}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="scale-labels">
+                        <span>Strongly Disagree</span>
+                        <span>Strongly Agree</span>
+                    </div>
+                </div>
+            `;
+
+            updateProgress();
+        }
+
+        function enableNext() {
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+            if (!selected) return;
+
+            responses.push({
+                question: currentQuestion,
+                zone: questions[currentQuestion].zone,
+                value: parseInt(selected.value)
+            });
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                renderQuestion();
+                document.getElementById('nextBtn').disabled = true;
+            } else {
+                showEmailCapture();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showEmailCapture() {
+            document.getElementById('assessment').style.display = 'none';
+            document.getElementById('emailCapture').style.display = 'block';
+        }
+
+        function submitEmail() {
+            const email = document.getElementById('emailInput').value;
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            userEmail = email;
+            calculateResults();
+            showResults();
+        }
+
+        function calculateResults() {
+            const zoneScores = {
+                permission: 0,
+                intimacy: 0,
+                power: 0
+            };
+
+            responses.forEach(r => {
+                zoneScores[r.zone] += r.value;
+            });
+
+            // Average scores (3 questions per zone)
+            zoneScores.permission = Math.round((zoneScores.permission / 3) * 10) / 10;
+            zoneScores.intimacy = Math.round((zoneScores.intimacy / 3) * 10) / 10;
+            zoneScores.power = Math.round((zoneScores.power / 3) * 10) / 10;
+
+            // Determine primary zone
+            calculatedZone = Object.keys(zoneScores).reduce((a, b) => 
+                zoneScores[a] > zoneScores[b] ? a : b
+            );
+
+            // Store for backend
+            saveToDatabase(zoneScores);
+
+            return zoneScores;
+        }
+
+        function showResults() {
+            const scores = calculateResults();
+
+            document.getElementById('emailCapture').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+
+            // Update zone badge
+            document.getElementById('zoneBadge').textContent = calculatedZone.toUpperCase();
+
+            // Update scores
+            document.getElementById('permissionScore').textContent = scores.permission;
+            document.getElementById('intimacyScore').textContent = scores.intimacy;
+            document.getElementById('powerScore').textContent = scores.power;
+
+            // Highlight active zone
+            document.getElementById('permissionZone').classList.toggle('active', calculatedZone === 'permission');
+            document.getElementById('intimacyZone').classList.toggle('active', calculatedZone === 'intimacy');
+            document.getElementById('powerZone').classList.toggle('active', calculatedZone === 'power');
+
+            // Show insight
+            document.getElementById('insightText').innerHTML = insights[calculatedZone];
+
+            // Show CTAs
+            renderCTA();
+
+            // Generate shareable graphic
+            generateShareGraphic();
+
+            // Show social caption
+            document.getElementById('socialCaption').textContent = socialCaptions[calculatedZone];
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function renderCTA() {
+            const cta = ctas[calculatedZone];
+            const ctaSection = document.getElementById('ctaSection');
+
+            ctaSection.innerHTML = `
+                <h3>${cta.title}</h3>
+                <p>${cta.description}</p>
+                <div class="cta-buttons">
+                    <a href="${cta.primary.url}" target="_blank" class="btn btn-primary">${cta.primary.text}</a>
+                    <button class="btn btn-secondary" onclick="registerRetreatInterest('${cta.secondary.retreat}')">${cta.secondary.text}</button>
+                </div>
+            `;
+        }
+
+        function registerRetreatInterest(retreatType) {
+            alert(`Thank you for your interest in the ${retreatType} retreat! We'll notify you when we have enough interest to launch.`);
+            // Save to database
+            saveRetreatInterest(retreatType);
+        }
+
+        function generateShareGraphic() {
+            const canvas = document.getElementById('shareCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = '#f5f2ed';
+            ctx.fillRect(0, 0, 1080, 1080);
+
+            // Title
+            ctx.fillStyle = '#2d4a3a';
+            ctx.font = '600 72px "Cormorant Garamond"';
+            ctx.textAlign = 'center';
+            ctx.fillText("I'm in the", 540, 200);
+
+            // Zone name
+            ctx.font = '600 96px "Cormorant Garamond"';
+            ctx.fillText(calculatedZone.toUpperCase(), 540, 320);
+            ctx.fillText("stage", 540, 420);
+
+            // Subtitle
+            ctx.font = 'italic 48px "Crimson Text"';
+            ctx.fillText("of the Permission Ecosystem", 540, 520);
+
+            // Mini map zones (simplified circles)
+            const zoneY = 700;
+            const zoneSize = 120;
+            const spacing = 200;
+
+            ['permission', 'intimacy', 'power'].forEach((zone, i) => {
+                const x = 270 + (i * spacing);
+                const isActive = zone === calculatedZone;
+
+                ctx.beginPath();
+                ctx.arc(x, zoneY, zoneSize / 2, 0, Math.PI * 2);
+                ctx.fillStyle = isActive ? 'rgba(45, 74, 58, 0.2)' : 'rgba(45, 74, 58, 0.05)';
+                ctx.fill();
+                ctx.strokeStyle = isActive ? '#2d4a3a' : 'rgba(45, 74, 58, 0.2)';
+                ctx.lineWidth = isActive ? 4 : 2;
+                ctx.stroke();
+
+                // Zone label
+                ctx.fillStyle = '#2d4a3a';
+                ctx.font = '500 28px "Cormorant Garamond"';
+                ctx.fillText(zone.charAt(0).toUpperCase() + zone.slice(1), x, zoneY + zoneSize + 20);
+            });
+
+            // Footer
+            ctx.font = '400 32px "Crimson Text"';
+            ctx.fillText("tmacmastermind.com/permission-assessment", 540, 980);
+
+            // Convert to image
+            const img = document.getElementById('shareImage');
+            img.src = canvas.toDataURL('image/png');
+        }
+
+        function downloadGraphic() {
+            const canvas = document.getElementById('shareCanvas');
+            const link = document.createElement('a');
+            link.download = `permission-ecosystem-${calculatedZone}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function saveToDatabase(scores) {
+            // This would connect to your actual backend
+            const data = {
+                email: userEmail,
+                timestamp: new Date().toISOString(),
+                responses: responses,
+                scores: scores,
+                zone: calculatedZone
+            };
+
+            console.log('Save to database:', data);
+
+            // TODO: Actual API call to your backend
+            // fetch('/api/save-assessment', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(data)
+            // });
+        }
+
+        function saveRetreatInterest(retreatType) {
+            const data = {
+                email: userEmail,
+                zone: calculatedZone,
+                retreatType: retreatType,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('Save retreat interest:', data);
+
+            // TODO: Actual API call
+        }
+    </script>
+</body>
+</html>
