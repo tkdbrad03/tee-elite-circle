@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Permission Slip | Dr. TMac</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: #f5f2ed;
+            color: #2d4a3a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 64px;
+            font-weight: 600;
+            color: #2d4a3a;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            font-family: 'Crimson Text', serif;
+            font-size: 22px;
+            font-style: italic;
+            color: #2d4a3a;
+            opacity: 0.75;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .pdf-viewer {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(45, 74, 58, 0.1);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .pdf-viewer iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+        }
+
+        .download-section {
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #2d4a3a;
+            color: #faf8f5;
+            font-family: 'Crimson Text', serif;
+            font-size: 20px;
+            padding: 18px 50px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(45, 74, 58, 0.2);
+        }
+
+        .download-btn:hover {
+            background: #1a2f23;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 74, 58, 0.3);
+        }
+
+        .episode-link {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(45, 74, 58, 0.15);
+        }
+
+        .episode-link p {
+            font-family: 'Crimson Text', serif;
+            font-size: 18px;
+            color: #2d4a3a;
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+
+        .episode-link a {
+            color: #2d4a3a;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .episode-link a:hover {
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .header h1 {
+                font-size: 42px;
+            }
+
+            .header p {
+                font-size: 19px;
+            }
+
+            .pdf-viewer iframe {
+                height: 600px;
+            }
+
+            .download-btn {
+                font-size: 18px;
+                padding: 16px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>THE PERMISSION SLIP</h1>
+            <p>You don't need permission. You just needed to hear it out loud.</p>
+        </div>
+
+        <div class="pdf-viewer">
+            <iframe src="/permission-slip.pdf" title="The Permission Slip PDF"></iframe>
+        </div>
+
+        <div class="download-section">
+            <a href="/permission-slip.pdf" download="The-Permission-Slip.pdf" class="download-btn">
+                Download PDF
+            </a>
+        </div>
+
+        <div class="episode-link">
+            <p>Listen to the full episode on The Rich Friends Show</p>
+            <a href="https://therichfriendsshow.captivate.fm" target="_blank">Season 4, Episode 2: The Permission Slip</a>
+        </div>
+    </div>
+</body>
+</html>
