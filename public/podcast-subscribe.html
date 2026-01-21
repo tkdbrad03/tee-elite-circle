@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe to The Rich Friends Show</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: #f5f2ed;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(45, 74, 58, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 600;
+            color: #2d4a3a;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d4a3a;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(45, 74, 58, 0.2);
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: 'Crimson Text', serif;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #2d4a3a;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #2d4a3a;
+            color: #faf8f5;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Crimson Text', serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #1a2f23;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 4px;
+            font-size: 16px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .privacy-note {
+            font-size: 13px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Never Miss An Episode</h1>
+        <p>Sign up for our free newsletter, so you get each new show as soon as it's live! Plus, get exclusive content and updates just for subscribers.</p>
+
+        <form id="subscribeForm">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="first_name" required placeholder="Your first name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Subscribe Now</button>
+
+            <div class="message" id="message"></div>
+
+            <p class="privacy-note">
+                We respect your privacy. Unsubscribe at any time.
+            </p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('subscribeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const message = document.getElementById('message');
+            const firstName = document.getElementById('firstName').value;
+            const email = document.getElementById('email').value;
+
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Subscribing...';
+            message.style.display = 'none';
+
+            try {
+                // Send to your backend API
+                const response = await fetch('/api/podcast-subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        email: email
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    message.className = 'message success';
+                    message.textContent = '✓ Success! Check your email to confirm your subscription.';
+                    message.style.display = 'block';
+                    
+                    // Clear form
+                    document.getElementById('subscribeForm').reset();
+                } else {
+                    throw new Error(result.error || 'Subscription failed');
+                }
+
+            } catch (error) {
+                message.className = 'message error';
+                message.textContent = '✗ ' + error.message;
+                message.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Subscribe Now';
+            }
+        });
+    </script>
+</body>
+</html>
