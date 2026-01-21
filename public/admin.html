@@ -2628,8 +2628,8 @@ document.querySelectorAll('.main-tab').forEach(tab => {
           <tbody>
             ${retreatInterest.map(r => `
               <tr>
-                <td style="text-transform: capitalize;">${r.retreat_interest}</td>
-                <td>${r.count}</td>
+                <td style="text-transform: capitalize;">${r.retreat_type}</td>
+                <td>${r.total_interest}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -2644,12 +2644,12 @@ document.querySelectorAll('.main-tab').forEach(tab => {
             </tr>
           </thead>
           <tbody>
-            ${Object.entries(distribution).map(([zone, count]) => `
-              <tr>
-                <td style="text-transform: capitalize;">${zone}</td>
-                <td>${count}</td>
-              </tr>
-            `).join('')}
+            ${distribution.map(d => `
+  <tr>
+    <td style="text-transform: capitalize;">${d.zone}</td>
+    <td>${d.total_count}</td>
+  </tr>
+`).join('')}
           </tbody>
         </table>
 
