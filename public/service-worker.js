@@ -1,34 +1,47 @@
-const CACHE_NAME = 'tee-elite-v3';
+// Cache name
+const CACHE_NAME = 'tee-elite-v4';
+
+// Files to cache
 const urlsToCache = [
   '/',
+  '/index.html',
   '/home.html',
   '/members.html',
-  '/profile.html',
-  '/resources.html',
-  '/retreats.html',
+  '/tee-room.html',
   '/between-the-tees.html',
-  '/member-login.html',
+  '/live.html',
   '/admin.html',
   '/styles.css',
-  '/pwa-nav.css',
   '/pwa-nav.js',
-  '/images/tee-elite-favicon.png',
+  '/pwa-nav.css',
+  '/manifest.json',
   '/images/tee-elite-logo.png',
-  '/images/tmac-logo.png'
+  '/images/tee-elite-favicon.png',
+  '/images/tmac-logo.png',
+  '/resources.html'
 ];
 
-// Install - cache files
+// Install - cache app shell (tolerate individual failures so one 404 doesn't break install)
 self.addEventListener('install', event => {
-  // Force the new service worker to activate immediately
   self.skipWaiting();
-  
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Caching app files');
-        return cache.addAll(urlsToCache);
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+
+    // Cache each URL individually so a single failed request doesn't abort the entire install.
+    await Promise.allSettled(
+      urlsToCache.map(async (url) => {
+        try {
+          const req = new Request(url, { cache: 'reload' });
+          const res = await fetch(req);
+          if (!res || !res.ok) throw new Error(`HTTP ${res ? res.status : 'NO_RESPONSE'}`);
+          await cache.put(req, res);
+        } catch (err) {
+          // Keep SW install healthy even if a file is missing (ex: /resources.html 404)
+          console.warn('[SW] Skipping cache for', url, err);
+        }
       })
-  );
+    );
+  })());
 });
 
 // Activate - clean up old caches
@@ -38,13 +51,11 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     }).then(() => {
-      // Take control of all pages immediately
       return self.clients.claim();
     })
   );
@@ -52,6 +63,22 @@ self.addEventListener('activate', event => {
 
 // Fetch - network first, then cache (so you always get fresh content)
 self.addEventListener('fetch', event => {
+  // Only handle GET requests; let POST/PUT/etc go straight to network.
+  if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+
+  // Only handle same-origin requests.
+  if (url.origin !== self.location.origin) return;
+
+  // Never cache API responses; always hit the server.
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then(response => {
@@ -61,7 +88,8 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME)
             .then(cache => {
               cache.put(event.request, responseToCache);
-            });
+            })
+            .catch(() => {});
         }
         return response;
       })
@@ -92,52 +120,27 @@ self.addEventListener('push', event => {
     }
   }
 
-  const options = {
-    body: data.body,
-    icon: data.icon,
-    badge: data.badge,
-    vibrate: [200, 100, 200],
-    data: {
-      url: data.url
-    },
-    actions: [
-      { action: 'join', title: 'Join Now' },
-      { action: 'dismiss', title: 'Later' }
-    ],
-    requireInteraction: true
-  };
-
   event.waitUntil(
-    self.registration.showNotification(data.title, options)
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: data.icon,
+      badge: data.badge,
+      data: { url: data.url }
+    })
   );
 });
 
-// Notification clicked
+// Notification click handler
 self.addEventListener('notificationclick', event => {
-  console.log('Notification clicked:', event);
-
   event.notification.close();
-
-  if (event.action === 'dismiss') {
-    return;
-  }
-
-  const url = event.notification.data?.url || '/live.html';
+  const urlToOpen = event.notification.data && event.notification.data.url ? event.notification.data.url : '/live.html';
 
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true })
-      .then(clientList => {
-        // Check if there's already a window open
-        for (const client of clientList) {
-          if (client.url.includes('tmacmastermind.com') && 'focus' in client) {
-            client.navigate(url);
-            return client.focus();
-          }
-        }
-        // Open new window
-        if (clients.openWindow) {
-          return clients.openWindow(url);
-        }
-      })
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      for (let client of windowClients) {
+        if (client.url.includes(urlToOpen) && 'focus' in client) return client.focus();
+      }
+      if (clients.openWindow) return clients.openWindow(urlToOpen);
+    })
   );
 });
