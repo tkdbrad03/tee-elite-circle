@@ -686,7 +686,13 @@
         }
 
         function showResults() {
-            const scores = calculateResults();
+            // Note: calculateResults() was already called in submitEmail()
+            // scores and calculatedZone are already set globally
+            const scores = {
+                permission: Math.round((responses.filter(r => r.zone === 'permission').reduce((sum, r) => sum + r.value, 0) / 3) * 10) / 10,
+                intimacy: Math.round((responses.filter(r => r.zone === 'intimacy').reduce((sum, r) => sum + r.value, 0) / 3) * 10) / 10,
+                power: Math.round((responses.filter(r => r.zone === 'power').reduce((sum, r) => sum + r.value, 0) / 3) * 10) / 10
+            };
 
             document.getElementById('emailCapture').style.display = 'none';
             document.getElementById('results').style.display = 'block';
