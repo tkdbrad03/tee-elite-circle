@@ -88,7 +88,7 @@ async function sendAssessmentEmail(email, zone, scores) {
       </div>
       
       <p style="font-size: 15px; line-height: 1.8; color: #555555; margin-top: 24px;">
-        View your full results and next steps: <a href="https://tmacmastermind.com/permission-assessment.html" style="color: #2d4a3a;">tmacmastermind.com/permission-assessment</a>
+        Keep this email for your reference. Your results are a starting point, not a destination.
       </p>
       
       <p style="margin-top: 32px; font-size: 15px; color: #555555;">
