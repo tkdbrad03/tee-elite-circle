@@ -2624,13 +2624,22 @@ document.querySelectorAll('.main-tab').forEach(tab => {
             <tr>
               <th>Interest Level</th>
               <th>Count</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             ${retreatInterest.map(r => `
               <tr>
-                <td style="text-transform: capitalize;">${r.retreat_interest}</td>
-                <td>${r.count}</td>
+                <td style="text-transform: capitalize;">${r.retreat_type}</td>
+                <td>${r.total_interest}</td>
+                <td>
+                  <button 
+                    onclick="openRetreatCampaignModal('${r.retreat_type}', ${r.total_interest})"
+                    style="padding: 8px 16px; background: #2d4a3a; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px;"
+                  >
+                    Send Campaign
+                  </button>
+                </td>
               </tr>
             `).join('')}
           </tbody>
@@ -2684,6 +2693,128 @@ document.querySelectorAll('.main-tab').forEach(tab => {
         <p style="color:#b00;">Unable to load assessments.</p>
       </div>
     `;
+  }
+}
+
+// Retreat Campaign Functions
+function openRetreatCampaignModal(retreatType, count) {
+  const modal = document.createElement('div');
+  modal.id = 'retreatCampaignModal';
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+  
+  modal.innerHTML = `
+    <div style="background: white; padding: 40px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 28px; color: #2d4a3a;">Send ${retreatType.charAt(0).toUpperCase() + retreatType.slice(1)} Retreat Campaign</h2>
+        <button onclick="closeRetreatCampaignModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #666;">&times;</button>
+      </div>
+      
+      <p style="color: #555; margin-bottom: 24px;">This will send an email to <strong>${count} people</strong> who registered interest in the ${retreatType} retreat.</p>
+      
+      <form id="retreatCampaignForm" onsubmit="sendRetreatCampaign(event, '${retreatType}')">
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #2d4a3a;">Subject Line</label>
+          <input 
+            type="text" 
+            id="campaignSubject" 
+            required
+            placeholder="e.g., The Permission Retreat is Live"
+            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 4px; font-size: 15px;"
+          />
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #2d4a3a;">Message</label>
+          <textarea 
+            id="campaignMessage" 
+            required
+            rows="10"
+            placeholder="Write your email message here. You can use HTML formatting."
+            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 4px; font-size: 15px; font-family: inherit; resize: vertical;"
+          ></textarea>
+          <small style="color: #666;">Tip: Keep it personal and include a clear call to action.</small>
+        </div>
+        
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button 
+            type="button" 
+            onclick="closeRetreatCampaignModal()"
+            style="padding: 12px 24px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-size: 15px;"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit"
+            style="padding: 12px 24px; background: #2d4a3a; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 15px; font-weight: 600;"
+          >
+            Send to ${count} Recipients
+          </button>
+        </div>
+      </form>
+      
+      <div id="campaignStatus" style="margin-top: 20px;"></div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
+
+function closeRetreatCampaignModal() {
+  const modal = document.getElementById('retreatCampaignModal');
+  if (modal) {
+    modal.remove();
+  }
+}
+
+async function sendRetreatCampaign(event, retreatType) {
+  event.preventDefault();
+  
+  const subject = document.getElementById('campaignSubject').value;
+  const message = document.getElementById('campaignMessage').value;
+  const statusDiv = document.getElementById('campaignStatus');
+  const submitButton = event.target.querySelector('button[type="submit"]');
+  
+  // Disable form
+  submitButton.disabled = true;
+  submitButton.textContent = 'Sending...';
+  
+  try {
+    statusDiv.innerHTML = '<p style="color: #2d4a3a;">Sending emails... This may take a few moments.</p>';
+    
+    const response = await fetch('/api/admin/send-retreat-campaign', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ retreatType, subject, message })
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok && result.success) {
+      statusDiv.innerHTML = `
+        <div style="padding: 16px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; color: #155724;">
+          <strong>✓ Campaign sent successfully!</strong><br>
+          Sent to ${result.sent} recipients${result.failed > 0 ? `, ${result.failed} failed` : ''}
+        </div>
+      `;
+      
+      // Close modal after 2 seconds
+      setTimeout(() => {
+        closeRetreatCampaignModal();
+        loadAssessments(); // Refresh the page
+      }, 2000);
+    } else {
+      throw new Error(result.error || 'Failed to send campaign');
+    }
+  } catch (error) {
+    console.error('Campaign error:', error);
+    statusDiv.innerHTML = `
+      <div style="padding: 16px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; color: #721c24;">
+        <strong>✗ Failed to send campaign</strong><br>
+        ${error.message}
+      </div>
+    `;
+    submitButton.disabled = false;
+    submitButton.textContent = 'Try Again';
   }
 }
 </script>
