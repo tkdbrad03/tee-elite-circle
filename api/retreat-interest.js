@@ -32,6 +32,26 @@ module.exports = async (req, res) => {
       )
     `);
 
+    // Check if this email already registered interest for this retreat type
+    const existingInterest = await client.query(
+      `SELECT id FROM retreat_interest WHERE email = $1 AND retreat_type = $2 LIMIT 1`,
+      [email, retreatType]
+    );
+
+    if (existingInterest.rows.length > 0) {
+      // Already registered - just return success without inserting again
+      const countResult = await client.query(
+        `SELECT COUNT(*) as count FROM retreat_interest WHERE retreat_type = $1`,
+        [retreatType]
+      );
+      
+      return res.status(200).json({
+        success: true,
+        message: 'Already registered',
+        interestCount: parseInt(countResult.rows[0].count)
+      });
+    }
+
     // Insert retreat interest
     const result = await client.query(
       `INSERT INTO retreat_interest (email, zone, retreat_type, created_at)
