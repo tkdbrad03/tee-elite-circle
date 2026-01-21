@@ -1,110 +1,81 @@
-import pkg from 'pg';
-const { Client } = pkg;
+// /api/admin/assessment-dashboard.js
+// CommonJS (works with default Vercel Node runtime when package.json does NOT set "type": "module")
 
-function getConnectionString() {
-  return (
-    process.env.POSTGRES_URL ||
-    process.env.POSTGRES_URL_NON_POOLING ||
-    process.env.DATABASE_URL ||
-    process.env.POSTGRES_PRISMA_URL ||
-    process.env.POSTGRES_URL_NO_SSL ||
-    ''
-  );
-}
+const { Pool } = require('pg');
 
-export default async function handler(req, res) {
+// Prefer whatever your environment provides (Vercel Postgres commonly uses POSTGRES_URL)
+const connectionString =
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_PRISMA_URL ||
+  process.env.PG_URL ||
+  '';
+
+const pool = connectionString
+  ? new Pool({ connectionString, ssl: { rejectUnauthorized: false } })
+  : null;
+
+module.exports = async function handler(req, res) {
+  // Basic CORS preflight support (safe for same-origin too)
+  if (req.method === 'OPTIONS') {
+    res.status(204);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.end();
+  }
+
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  const base = {
-    summary: { totalAssessments: 0, last7Days: 0, avgScore: 0 },
-    distribution: [],
-    retreatInterest: [],
-    retreatByZone: [],
-    recentAssessments: [],
-    warnings: []
-  };
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'no-store');
 
-  const connectionString = getConnectionString();
-  if (!connectionString) {
-    base.warnings.push('DB_NOT_CONFIGURED');
-    return res.status(200).json(base);
+  // If DB is not configured, return a graceful payload (so the dashboard can still render)
+  if (!pool) {
+    return res.status(200).json({
+      ok: true,
+      totals: { totalAssessments: 0, last7Days: 0, avgScore7Days: null },
+      recent: [],
+      warnings: ['Database connection string not configured (DATABASE_URL/POSTGRES_URL).']
+    });
   }
-
-  const needsSSL = !/localhost|127\.0\.0\.1/i.test(connectionString);
-
-  const client = new Client({
-    connectionString,
-    ssl: needsSSL ? { rejectUnauthorized: false } : undefined
-  });
 
   try {
-    await client.connect();
+    const totalsQ = await pool.query(`
+      SELECT
+        COUNT(*)::int AS "totalAssessments",
+        COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days')::int AS "last7Days",
+        ROUND(AVG(total_score) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days'), 1) AS "avgScore7Days"
+      FROM assessments
+    `);
 
-    // Check if expected tables exist; if not, return empty data instead of 500.
-    const t = await client.query(
-      "SELECT to_regclass('public.permission_assessments') AS permission_assessments, to_regclass('public.retreat_interest') AS retreat_interest"
-    );
-    const hasAssessments = Boolean(t.rows?.[0]?.permission_assessments);
-    const hasRetreat = Boolean(t.rows?.[0]?.retreat_interest);
+    const recentQ = await pool.query(`
+      SELECT
+        id,
+        created_at AS "createdAt",
+        email,
+        full_name AS "fullName",
+        result_type AS "resultType",
+        total_score AS "totalScore"
+      FROM assessments
+      ORDER BY created_at DESC
+      LIMIT 50
+    `);
 
-    if (!hasAssessments) base.warnings.push('MISSING_TABLE_permission_assessments');
-    if (!hasRetreat) base.warnings.push('MISSING_TABLE_retreat_interest');
-
-    // --- Assessments ---
-    if (hasAssessments) {
-      const totalRes = await client.query(
-        'SELECT COUNT(*) AS count, AVG(score)::numeric(10,2) AS avg_score FROM permission_assessments'
-      );
-      const last7Res = await client.query(
-        "SELECT COUNT(*) AS count FROM permission_assessments WHERE created_at >= NOW() - INTERVAL '7 days'"
-      );
-
-      const totalAssessments = parseInt(totalRes.rows[0]?.count || '0', 10);
-      const last7Days = parseInt(last7Res.rows[0]?.count || '0', 10);
-      const avgScore = parseFloat(totalRes.rows[0]?.avg_score || '0');
-
-      base.summary = {
-        totalAssessments,
-        last7Days,
-        avgScore
-      };
-
-      const distRes = await client.query(
-        'SELECT result_type, COUNT(*) AS count FROM permission_assessments GROUP BY result_type ORDER BY count DESC'
-      );
-      base.distribution = distRes.rows;
-
-      const recentRes = await client.query(
-        'SELECT id, name, email, result_type, score, created_at FROM permission_assessments ORDER BY created_at DESC LIMIT 25'
-      );
-      base.recentAssessments = recentRes.rows;
-    }
-
-    // --- Retreat interest ---
-    if (hasRetreat) {
-      const retreatRes = await client.query(
-        'SELECT interest_level, COUNT(*) AS count FROM retreat_interest GROUP BY interest_level ORDER BY count DESC'
-      );
-      base.retreatInterest = retreatRes.rows;
-
-      const zoneRes = await client.query(
-        "SELECT timezone, COUNT(*) AS count FROM retreat_interest WHERE timezone IS NOT NULL AND timezone <> '' GROUP BY timezone ORDER BY count DESC"
-      );
-      base.retreatByZone = zoneRes.rows;
-    }
-
-    return res.status(200).json(base);
-  } catch (error) {
-    // Fallback: don't break the dashboard UI on server errors.
-    base.warnings.push('DB_QUERY_FAILED');
-    const debug = process.env.NODE_ENV !== 'production';
-    if (debug) base.warnings.push(String(error?.message || error));
-    return res.status(200).json(base);
-  } finally {
-    try {
-      await client.end();
-    } catch (_) {}
+    return res.status(200).json({
+      ok: true,
+      totals: totalsQ.rows[0] || { totalAssessments: 0, last7Days: 0, avgScore7Days: null },
+      recent: recentQ.rows || []
+    });
+  } catch (err) {
+    console.error('assessment-dashboard error:', err);
+    return res.status(200).json({
+      ok: true,
+      totals: { totalAssessments: 0, last7Days: 0, avgScore7Days: null },
+      recent: [],
+      warnings: ['Database query failed. Check Vercel logs and DB schema.']
+    });
   }
-}
+};
