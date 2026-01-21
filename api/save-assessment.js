@@ -33,6 +33,14 @@ module.exports = async (req, res) => {
       )
     `);
 
+    // Check if this email already has an assessment
+    const existingAssessment = await client.query(
+      `SELECT id FROM permission_assessments WHERE email = $1 LIMIT 1`,
+      [email]
+    );
+
+    const isFirstTime = existingAssessment.rows.length === 0;
+
     // Insert assessment
     const result = await client.query(
       `INSERT INTO permission_assessments (email, responses, scores, zone, created_at)
@@ -41,17 +49,20 @@ module.exports = async (req, res) => {
       [email, JSON.stringify(responses), JSON.stringify(scores), zone]
     );
 
-    // Send results email
-    try {
-      await sendAssessmentEmail(email, zone, scores);
-    } catch (emailErr) {
-      console.error('Failed to send email:', emailErr);
+    // Only send email if this is their first assessment
+    if (isFirstTime) {
+      try {
+        await sendAssessmentEmail(email, zone, scores);
+      } catch (emailErr) {
+        console.error('Failed to send email:', emailErr);
+      }
     }
 
     return res.status(200).json({
       success: true,
       id: result.rows[0].id,
-      timestamp: result.rows[0].created_at
+      timestamp: result.rows[0].created_at,
+      emailSent: isFirstTime
     });
 
   } catch (error) {
