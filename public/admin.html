@@ -2591,11 +2591,12 @@ document.querySelectorAll('.main-tab').forEach(tab => {
 
     const summary = (data && data.summary) ? data.summary : {};
     const totalAssessments = Number(summary.totalAssessments ?? 0);
-    const completedAssessments = Number(summary.completedAssessments ?? 0);
-    const completionRate = summary.completionRate ?? (totalAssessments ? Math.round((completedAssessments / totalAssessments) * 100) : 0);
+    const uniqueUsers = Number(summary.totalUniqueUsers ?? 0);
 
     const retreatInterest = Array.isArray(data?.retreatInterest) ? data.retreatInterest : [];
-    const distribution = (data && data.distribution && typeof data.distribution === 'object') ? data.distribution : {};
+    const totalRetreatInterest = retreatInterest.reduce((sum, r) => sum + (Number(r.total_interest) || 0), 0);
+    
+    const distribution = Array.isArray(data?.distribution) ? data.distribution : [];
     const recentAssessments = Array.isArray(data?.recentAssessments) ? data.recentAssessments : [];
 
     container.innerHTML = `
@@ -2608,12 +2609,12 @@ document.querySelectorAll('.main-tab').forEach(tab => {
             <div style="font-size: 12px; color: #555;">Total Assessments</div>
           </div>
           <div style="background: #f3f0ea; padding: 15px; border-radius: 10px; text-align: center;">
-            <div style="font-size: 28px; font-weight: bold; color: #7c5c2e;">${completedAssessments}</div>
-            <div style="font-size: 12px; color: #555;">Completed</div>
+            <div style="font-size: 28px; font-weight: bold; color: #7c5c2e;">${uniqueUsers}</div>
+            <div style="font-size: 12px; color: #555;">Unique Users</div>
           </div>
           <div style="background: #f3f0ea; padding: 15px; border-radius: 10px; text-align: center;">
-            <div style="font-size: 28px; font-weight: bold; color: #7c5c2e;">${completionRate}%</div>
-            <div style="font-size: 12px; color: #555;">Completion Rate</div>
+            <div style="font-size: 28px; font-weight: bold; color: #7c5c2e;">${totalRetreatInterest}</div>
+            <div style="font-size: 12px; color: #555;">Retreat Interest</div>
           </div>
         </div>
 
@@ -2628,8 +2629,8 @@ document.querySelectorAll('.main-tab').forEach(tab => {
           <tbody>
             ${retreatInterest.map(r => `
               <tr>
-                <td style="text-transform: capitalize;">${r.retreat_type}</td>
-                <td>${r.total_interest}</td>
+                <td style="text-transform: capitalize;">${r.retreat_interest}</td>
+                <td>${r.count}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -2644,12 +2645,12 @@ document.querySelectorAll('.main-tab').forEach(tab => {
             </tr>
           </thead>
           <tbody>
-            ${distribution.map(d => `
-  <tr>
-    <td style="text-transform: capitalize;">${d.zone}</td>
-    <td>${d.total_count}</td>
-  </tr>
-`).join('')}
+            ${Object.entries(distribution).map(([zone, count]) => `
+              <tr>
+                <td style="text-transform: capitalize;">${zone}</td>
+                <td>${count}</td>
+              </tr>
+            `).join('')}
           </tbody>
         </table>
 
