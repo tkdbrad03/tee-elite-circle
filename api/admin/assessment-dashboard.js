@@ -1,88 +1,84 @@
-// api/admin/assessment-dashboard.js
-const { Client } = require('pg');
+// /api/admin/assessment-dashboard.js
+// CommonJS (works with default Vercel Node runtime when package.json does NOT set "type": "module")
 
-module.exports = async (req, res) => {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+const { Pool } = require('pg');
+
+// Prefer whatever your environment provides (Vercel Postgres commonly uses POSTGRES_URL)
+const connectionString =
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_PRISMA_URL ||
+  process.env.PG_URL ||
+  '';
+
+const pool = connectionString
+  ? new Pool({ connectionString, ssl: { rejectUnauthorized: false } })
+  : null;
+
+module.exports = async function handler(req, res) {
+  // Basic CORS preflight support (safe for same-origin too)
+  if (req.method === 'OPTIONS') {
+    res.status(204);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.end();
   }
 
-  const client = new Client({
-    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
-  });
+  if (req.method !== 'GET') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  }
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'no-store');
+
+  // If DB is not configured, return a graceful payload (so the dashboard can still render)
+  if (!pool) {
+    return res.status(200).json({
+      ok: true,
+      totals: { totalAssessments: 0, last7Days: 0, avgScore7Days: null },
+      recent: [],
+      warnings: ['Database connection string not configured (DATABASE_URL/POSTGRES_URL).']
+    });
+  }
 
   try {
-    await client.connect();
-
-    // Get total counts
-    const totals = await client.query(`
-      SELECT 
-        COUNT(DISTINCT email) as total_unique_users,
-        COUNT(*) as total_assessments
-      FROM permission_assessments
+    // Totals
+    const totalsQ = await pool.query(`
+      SELECT
+        COUNT(*)::int AS "totalAssessments",
+        COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days')::int AS "last7Days",
+        ROUND(AVG(total_score) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days'), 1) AS "avgScore7Days"
+      FROM assessments
     `);
 
-    // Get distribution by zone
-    const distribution = await client.query(`
-      SELECT 
-        zone,
-        COUNT(*) as total_count,
-        COUNT(DISTINCT email) as unique_users,
-        ROUND(AVG((scores->>'permission')::numeric), 2) as avg_permission_score,
-        ROUND(AVG((scores->>'intimacy')::numeric), 2) as avg_intimacy_score,
-        ROUND(AVG((scores->>'power')::numeric), 2) as avg_power_score
-      FROM permission_assessments
-      GROUP BY zone
-    `);
-
-    // Get retreat interest summary
-    const retreatInterest = await client.query(`
-      SELECT 
-        retreat_type,
-        COUNT(*) as total_interest,
-        COUNT(DISTINCT email) as unique_people
-      FROM retreat_interest
-      GROUP BY retreat_type
-      ORDER BY total_interest DESC
-    `);
-
-    // Get retreat interest by zone
-    const retreatByZone = await client.query(`
-      SELECT 
-        zone,
-        COUNT(*) as count
-      FROM retreat_interest
-      GROUP BY zone
-      ORDER BY count DESC
-    `);
-
-    // Get recent assessments
-    const recentAssessments = await client.query(`
-      SELECT 
+    // Recent rows for table/list
+    const recentQ = await pool.query(`
+      SELECT
+        id,
+        created_at AS "createdAt",
         email,
-        zone,
-        scores,
-        created_at
-      FROM permission_assessments
+        full_name AS "fullName",
+        result_type AS "resultType",
+        total_score AS "totalScore"
+      FROM assessments
       ORDER BY created_at DESC
       LIMIT 50
     `);
 
     return res.status(200).json({
-      summary: {
-        totalUniqueUsers: totals.rows[0].total_unique_users || 0,
-        totalAssessments: totals.rows[0].total_assessments || 0
-      },
-      distribution: distribution.rows,
-      retreatInterest: retreatInterest.rows,
-      retreatByZone: retreatByZone.rows,
-      recentAssessments: recentAssessments.rows
+      ok: true,
+      totals: totalsQ.rows[0] || { totalAssessments: 0, last7Days: 0, avgScore7Days: null },
+      recent: recentQ.rows || []
     });
-
-  } catch (error) {
-    console.error('Error fetching dashboard data:', error);
-    return res.status(500).json({ error: 'Failed to fetch data' });
-  } finally {
-    await client.end();
+  } catch (err) {
+    // Return a usable payload (not a hard 500) so the UI can show the warning and keep working.
+    console.error('assessment-dashboard error:', err);
+    return res.status(200).json({
+      ok: true,
+      totals: { totalAssessments: 0, last7Days: 0, avgScore7Days: null },
+      recent: [],
+      warnings: ['Database query failed. Check Vercel logs and DB schema.']
+    });
   }
 };
