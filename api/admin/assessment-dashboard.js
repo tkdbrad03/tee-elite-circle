@@ -1,88 +1,110 @@
-// api/admin/assessment-dashboard.js
-const { Client } = require('pg');
+import pkg from 'pg';
+const { Client } = pkg;
 
-module.exports = async (req, res) => {
+function getConnectionString() {
+  return (
+    process.env.POSTGRES_URL ||
+    process.env.POSTGRES_URL_NON_POOLING ||
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL_NO_SSL ||
+    ''
+  );
+}
+
+export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const base = {
+    summary: { totalAssessments: 0, last7Days: 0, avgScore: 0 },
+    distribution: [],
+    retreatInterest: [],
+    retreatByZone: [],
+    recentAssessments: [],
+    warnings: []
+  };
+
+  const connectionString = getConnectionString();
+  if (!connectionString) {
+    base.warnings.push('DB_NOT_CONFIGURED');
+    return res.status(200).json(base);
+  }
+
+  const needsSSL = !/localhost|127\.0\.0\.1/i.test(connectionString);
+
   const client = new Client({
-    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    connectionString,
+    ssl: needsSSL ? { rejectUnauthorized: false } : undefined
   });
 
   try {
     await client.connect();
 
-    // Get total counts
-    const totals = await client.query(`
-      SELECT 
-        COUNT(DISTINCT email) as total_unique_users,
-        COUNT(*) as total_assessments
-      FROM permission_assessments
-    `);
+    // Check if expected tables exist; if not, return empty data instead of 500.
+    const t = await client.query(
+      "SELECT to_regclass('public.permission_assessments') AS permission_assessments, to_regclass('public.retreat_interest') AS retreat_interest"
+    );
+    const hasAssessments = Boolean(t.rows?.[0]?.permission_assessments);
+    const hasRetreat = Boolean(t.rows?.[0]?.retreat_interest);
 
-    // Get distribution by zone
-    const distribution = await client.query(`
-      SELECT 
-        zone,
-        COUNT(*) as total_count,
-        COUNT(DISTINCT email) as unique_users,
-        ROUND(AVG((scores->>'permission')::numeric), 2) as avg_permission_score,
-        ROUND(AVG((scores->>'intimacy')::numeric), 2) as avg_intimacy_score,
-        ROUND(AVG((scores->>'power')::numeric), 2) as avg_power_score
-      FROM permission_assessments
-      GROUP BY zone
-    `);
+    if (!hasAssessments) base.warnings.push('MISSING_TABLE_permission_assessments');
+    if (!hasRetreat) base.warnings.push('MISSING_TABLE_retreat_interest');
 
-    // Get retreat interest summary
-    const retreatInterest = await client.query(`
-      SELECT 
-        retreat_type,
-        COUNT(*) as total_interest,
-        COUNT(DISTINCT email) as unique_people
-      FROM retreat_interest
-      GROUP BY retreat_type
-      ORDER BY total_interest DESC
-    `);
+    // --- Assessments ---
+    if (hasAssessments) {
+      const totalRes = await client.query(
+        'SELECT COUNT(*) AS count, AVG(score)::numeric(10,2) AS avg_score FROM permission_assessments'
+      );
+      const last7Res = await client.query(
+        "SELECT COUNT(*) AS count FROM permission_assessments WHERE created_at >= NOW() - INTERVAL '7 days'"
+      );
 
-    // Get retreat interest by zone
-    const retreatByZone = await client.query(`
-      SELECT 
-        zone,
-        COUNT(*) as count
-      FROM retreat_interest
-      GROUP BY zone
-      ORDER BY count DESC
-    `);
+      const totalAssessments = parseInt(totalRes.rows[0]?.count || '0', 10);
+      const last7Days = parseInt(last7Res.rows[0]?.count || '0', 10);
+      const avgScore = parseFloat(totalRes.rows[0]?.avg_score || '0');
 
-    // Get recent assessments
-    const recentAssessments = await client.query(`
-      SELECT 
-        email,
-        zone,
-        scores,
-        created_at
-      FROM permission_assessments
-      ORDER BY created_at DESC
-      LIMIT 50
-    `);
+      base.summary = {
+        totalAssessments,
+        last7Days,
+        avgScore
+      };
 
-    return res.status(200).json({
-      summary: {
-        totalUniqueUsers: totals.rows[0].total_unique_users || 0,
-        totalAssessments: totals.rows[0].total_assessments || 0
-      },
-      distribution: distribution.rows,
-      retreatInterest: retreatInterest.rows,
-      retreatByZone: retreatByZone.rows,
-      recentAssessments: recentAssessments.rows
-    });
+      const distRes = await client.query(
+        'SELECT result_type, COUNT(*) AS count FROM permission_assessments GROUP BY result_type ORDER BY count DESC'
+      );
+      base.distribution = distRes.rows;
 
+      const recentRes = await client.query(
+        'SELECT id, name, email, result_type, score, created_at FROM permission_assessments ORDER BY created_at DESC LIMIT 25'
+      );
+      base.recentAssessments = recentRes.rows;
+    }
+
+    // --- Retreat interest ---
+    if (hasRetreat) {
+      const retreatRes = await client.query(
+        'SELECT interest_level, COUNT(*) AS count FROM retreat_interest GROUP BY interest_level ORDER BY count DESC'
+      );
+      base.retreatInterest = retreatRes.rows;
+
+      const zoneRes = await client.query(
+        "SELECT timezone, COUNT(*) AS count FROM retreat_interest WHERE timezone IS NOT NULL AND timezone <> '' GROUP BY timezone ORDER BY count DESC"
+      );
+      base.retreatByZone = zoneRes.rows;
+    }
+
+    return res.status(200).json(base);
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
-    return res.status(500).json({ error: 'Failed to fetch data' });
+    // Fallback: don't break the dashboard UI on server errors.
+    base.warnings.push('DB_QUERY_FAILED');
+    const debug = process.env.NODE_ENV !== 'production';
+    if (debug) base.warnings.push(String(error?.message || error));
+    return res.status(200).json(base);
   } finally {
-    await client.end();
+    try {
+      await client.end();
+    } catch (_) {}
   }
-};
+}
