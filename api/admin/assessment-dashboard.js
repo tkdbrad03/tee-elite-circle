@@ -48,7 +48,7 @@ module.exports = async function handler(req, res) {
         COUNT(*)::int AS "totalAssessments",
         COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days')::int AS "last7Days",
         ROUND(AVG(total_score) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days'), 1) AS "avgScore7Days"
-      FROM assessments
+      FROM permission_assessments
     `);
 
     const recentQ = await pool.query(`
@@ -59,7 +59,7 @@ module.exports = async function handler(req, res) {
         full_name AS "fullName",
         result_type AS "resultType",
         total_score AS "totalScore"
-      FROM assessments
+      FROM permission_assessments
       ORDER BY created_at DESC
       LIMIT 50
     `);
