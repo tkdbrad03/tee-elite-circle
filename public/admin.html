@@ -2654,10 +2654,10 @@ document.querySelectorAll('.main-tab').forEach(tab => {
             </tr>
           </thead>
           <tbody>
-            ${Object.entries(distribution).map(([zone, count]) => `
+            ${distribution.map(d => `
               <tr>
-                <td style="text-transform: capitalize;">${zone}</td>
-                <td>${count}</td>
+                <td style="text-transform: capitalize;">${d.zone}</td>
+                <td>${d.total_count}</td>
               </tr>
             `).join('')}
           </tbody>
