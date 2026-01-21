@@ -2567,71 +2567,92 @@ document.querySelectorAll('.main-tab').forEach(tab => {
   });
 });
   async function loadAssessments() {
+  const container = document.getElementById('assessments-content');
+  if (!container) return;
+
   try {
     const response = await fetch('/api/admin/assessment-dashboard');
-    const data = await response.json();
-    
-    // Display the data
-    const container = document.getElementById('assessments-content');
+    let data = null;
+    try {
+      data = await response.json();
+    } catch (_) {
+      data = null;
+    }
 
-    
+    if (!response.ok) {
+      container.innerHTML = `
+        <div class="admin-card">
+          <h2>Permission Assessment Dashboard</h2>
+          <p style="color:#b00;">Unable to load assessments. (Error ${response.status})</p>
+        </div>
+      `;
+      return;
+    }
+
+    const summary = (data && data.summary) ? data.summary : {};
+    const totalAssessments = Number(summary.totalAssessments ?? 0);
+    const completedAssessments = Number(summary.completedAssessments ?? 0);
+    const completionRate = summary.completionRate ?? (totalAssessments ? Math.round((completedAssessments / totalAssessments) * 100) : 0);
+
+    const retreatInterest = Array.isArray(data?.retreatInterest) ? data.retreatInterest : [];
+    const distribution = (data && data.distribution && typeof data.distribution === 'object') ? data.distribution : {};
+    const recentAssessments = Array.isArray(data?.recentAssessments) ? data.recentAssessments : [];
+
     container.innerHTML = `
-      <div style="padding: 20px;">
+      <div class="admin-card">
         <h2>Permission Assessment Dashboard</h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
-          <div style="padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h3>Total Assessments</h3>
-            <p style="font-size: 36px; font-weight: bold;">${data.summary.totalAssessments}</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">
+          <div style="background: #f3f0ea; padding: 15px; border-radius: 10px; text-align: center;">
+            <div style="font-size: 28px; font-weight: bold; color: #7c5c2e;">${totalAssessments}</div>
+            <div style="font-size: 12px; color: #555;">Total Assessments</div>
           </div>
-          <div style="padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h3>Unique Users</h3>
-            <p style="font-size: 36px; font-weight: bold;">${data.summary.totalUniqueUsers}</p>
+          <div style="background: #f3f0ea; padding: 15px; border-radius: 10px; text-align: center;">
+            <div style="font-size: 28px; font-weight: bold; color: #7c5c2e;">${completedAssessments}</div>
+            <div style="font-size: 12px; color: #555;">Completed</div>
+          </div>
+          <div style="background: #f3f0ea; padding: 15px; border-radius: 10px; text-align: center;">
+            <div style="font-size: 28px; font-weight: bold; color: #7c5c2e;">${completionRate}%</div>
+            <div style="font-size: 12px; color: #555;">Completion Rate</div>
           </div>
         </div>
-        
-        <h3>Distribution by Zone</h3>
-        <table style="width: 100%; margin: 20px 0; background: white;">
+
+        <h3>Retreat Interest Breakdown</h3>
+        <table style="width: 100%; background: white;">
+          <thead>
+            <tr>
+              <th>Interest Level</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${retreatInterest.map(r => `
+              <tr>
+                <td style="text-transform: capitalize;">${r.retreat_interest}</td>
+                <td>${r.count}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <h3>Zone Distribution</h3>
+        <table style="width: 100%; background: white;">
           <thead>
             <tr>
               <th>Zone</th>
               <th>Count</th>
-              <th>Unique Users</th>
-              <th>Avg Scores (P/I/P)</th>
             </tr>
           </thead>
           <tbody>
-            ${data.distribution.map(d => `
+            ${Object.entries(distribution).map(([zone, count]) => `
               <tr>
-                <td style="text-transform: capitalize; font-weight: bold;">${d.zone}</td>
-                <td>${d.total_count}</td>
-                <td>${d.unique_users}</td>
-                <td>${d.avg_permission_score} / ${d.avg_intimacy_score} / ${d.avg_power_score}</td>
+                <td style="text-transform: capitalize;">${zone}</td>
+                <td>${count}</td>
               </tr>
             `).join('')}
           </tbody>
         </table>
-        
-        <h3>Retreat Interest</h3>
-        <table style="width: 100%; margin: 20px 0; background: white;">
-          <thead>
-            <tr>
-              <th>Retreat Type</th>
-              <th>Total Interest</th>
-              <th>Unique People</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${data.retreatInterest.map(r => `
-              <tr>
-                <td style="text-transform: capitalize;">${r.retreat_type}</td>
-                <td>${r.total_interest}</td>
-                <td>${r.unique_people}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        
+
         <h3>Recent Assessments</h3>
         <table style="width: 100%; background: white;">
           <thead>
@@ -2642,7 +2663,7 @@ document.querySelectorAll('.main-tab').forEach(tab => {
             </tr>
           </thead>
           <tbody>
-            ${data.recentAssessments.slice(0, 10).map(a => `
+            ${recentAssessments.slice(0, 10).map(a => `
               <tr>
                 <td>${a.email}</td>
                 <td style="text-transform: capitalize;">${a.zone}</td>
@@ -2653,9 +2674,15 @@ document.querySelectorAll('.main-tab').forEach(tab => {
         </table>
       </div>
     `;
-    
+
   } catch (error) {
     console.error('Failed to load assessments:', error);
+    container.innerHTML = `
+      <div class="admin-card">
+        <h2>Permission Assessment Dashboard</h2>
+        <p style="color:#b00;">Unable to load assessments.</p>
+      </div>
+    `;
   }
 }
 </script>
