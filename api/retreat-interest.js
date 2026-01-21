@@ -1,40 +1,59 @@
 // api/retreat-interest.js
-// Vercel serverless function to save retreat interest
+const { Client } = require('pg');
+const { sendEmail } = require('./lib/email');
 
-import { sql } from '@vercel/postgres';
-
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const client = new Client({
+    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+
   try {
+    await client.connect();
+
     const { email, zone, retreatType } = req.body;
 
     if (!email || !zone || !retreatType) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Insert retreat interest
-    const result = await sql`
-      INSERT INTO retreat_interest 
-        (email, zone, retreat_type, created_at)
-      VALUES 
-        (${email}, ${zone}, ${retreatType}, NOW())
-      RETURNING id, created_at
-    `;
+    // Create table if it doesn't exist
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS retreat_interest (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) NOT NULL,
+        zone VARCHAR(50) NOT NULL,
+        retreat_type VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
 
-    // Get count of interested people for this retreat type
-    const countResult = await sql`
-      SELECT COUNT(*) as count 
-      FROM retreat_interest 
-      WHERE retreat_type = ${retreatType}
-    `;
+    // Insert retreat interest
+    const result = await client.query(
+      `INSERT INTO retreat_interest (email, zone, retreat_type, created_at)
+       VALUES ($1, $2, $3, NOW())
+       RETURNING id, created_at`,
+      [email, zone, retreatType]
+    );
+
+    // Get count of interested people
+    const countResult = await client.query(
+      `SELECT COUNT(*) as count FROM retreat_interest WHERE retreat_type = $1`,
+      [retreatType]
+    );
 
     const interestCount = parseInt(countResult.rows[0].count);
 
     // Send confirmation email
-    await sendRetreatConfirmation(email, retreatType, interestCount);
+    try {
+      await sendRetreatConfirmation(email, retreatType, interestCount);
+    } catch (emailErr) {
+      console.error('Failed to send email:', emailErr);
+    }
 
     return res.status(200).json({
       success: true,
@@ -45,27 +64,42 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Error saving retreat interest:', error);
-    return res.status(500).json({ 
-      error: 'Failed to save retreat interest',
-      details: error.message 
-    });
+    return res.status(500).json({ error: 'Failed to save retreat interest' });
+  } finally {
+    await client.end();
   }
-}
+};
 
 async function sendRetreatConfirmation(email, retreatType, count) {
-  console.log(`Send retreat confirmation to ${email} - Type: ${retreatType}, Count: ${count}`);
-  
-  // TODO: Integrate with your email service
   const emailContent = {
-    to: email,
     subject: `You're on the list for the ${retreatType.toUpperCase()} Retreat`,
-    html: `
-      <h2>Thank you for your interest!</h2>
-      <p>You're now on the waitlist for the ${retreatType.toUpperCase()} Retreat.</p>
-      <p>We currently have ${count} ${count === 1 ? 'person' : 'people'} interested. We'll notify you when we're ready to launch.</p>
-      <p>In the meantime, continue your journey at <a href="https://tmacmastermind.com">tmacmastermind.com</a></p>
+    content: `
+      <div style="text-align: center; margin-bottom: 32px;">
+        <h2 style="font-size: 28px; font-weight: 400; color: #2d4a3a; margin-bottom: 20px;">Thank you for your interest!</h2>
+      </div>
+      
+      <p style="font-size: 15px; line-height: 1.8; color: #555555; margin-bottom: 24px;">
+        You're now on the waitlist for the ${retreatType.toUpperCase()} Retreat.
+      </p>
+      
+      <p style="font-size: 15px; line-height: 1.8; color: #555555; margin-bottom: 24px;">
+        We currently have ${count} ${count === 1 ? 'person' : 'people'} interested. We'll notify you when we're ready to launch.
+      </p>
+      
+      <p style="font-size: 15px; line-height: 1.8; color: #555555; margin-top: 32px;">
+        In the meantime, continue your journey at <a href="https://tmacmastermind.com" style="color: #2d4a3a;">tmacmastermind.com</a>
+      </p>
+      
+      <p style="margin-top: 32px; font-size: 15px; color: #555555;">
+        See you on the course,<br>
+        <strong style="color: #2d4a3a;">Dr. TMac</strong>
+      </p>
     `
   };
 
-  // await emailService.send(emailContent);
+  await sendEmail({
+    to: email,
+    subject: emailContent.subject,
+    content: emailContent.content
+  });
 }
