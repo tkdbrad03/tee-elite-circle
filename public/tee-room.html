@@ -990,6 +990,235 @@
     .mobile-nav.open {
       display: flex !important;
     }
+
+    /* COMMENT SYSTEM STYLES - TEE ELITE CIRCLE BRAND */
+    .comments-section {
+      margin-top: 64px;
+      padding-top: 48px;
+      border-top: 1px solid #eee;
+    }
+
+    .comments-header {
+      margin-bottom: 32px;
+    }
+
+    .comments-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--deep-forest);
+      font-weight: 500;
+      margin: 0 0 8px 0;
+    }
+
+    .comments-count {
+      font-size: 11px;
+      color: #b76e79;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    /* Comment Form */
+    .comment-form {
+      background: #fcfbf9;
+      padding: 24px;
+      margin-bottom: 40px;
+      border-left: 3px solid #b76e79;
+    }
+
+    .comment-form h4 {
+      font-size: 12px;
+      color: var(--deep-forest);
+      margin: 0 0 20px 0;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 10px;
+      color: #666;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 400;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      color: var(--charcoal);
+      transition: border-color 0.3s;
+      background: #fff;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #b76e79;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.6;
+    }
+
+    .submit-btn {
+      background: var(--deep-forest);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-weight: 400;
+    }
+
+    .submit-btn:hover {
+      background: #2d4d3e;
+    }
+
+    .submit-btn:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .cancel-reply-btn {
+      background: transparent;
+      color: #666;
+      border: 1px solid #ddd;
+      padding: 12px 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      margin-left: 12px;
+      transition: all 0.3s;
+    }
+
+    .cancel-reply-btn:hover {
+      background: #f5f5f5;
+      border-color: #999;
+    }
+
+    /* Comments List */
+    .comments-list {
+      margin-top: 40px;
+    }
+
+    .comment {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .comment-author {
+      font-size: 13px;
+      color: var(--deep-forest);
+      font-weight: 500;
+    }
+
+    .comment-date {
+      font-size: 11px;
+      color: #999;
+    }
+
+    .comment-body {
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .comment-reply-btn {
+      background: transparent;
+      border: none;
+      color: #b76e79;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+    }
+
+    .comment-reply-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Threaded Replies */
+    .comment-replies {
+      margin-left: 32px;
+      margin-top: 20px;
+      border-left: 2px solid #f5f5f5;
+      padding-left: 24px;
+    }
+
+    .comment-replies .comment {
+      border-bottom: 1px solid #f8f8f8;
+    }
+
+    /* Messages */
+    .loading-message,
+    .success-message,
+    .error-message {
+      padding: 12px;
+      margin: 12px 0;
+      text-align: center;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .loading-message {
+      background: #f9f9f9;
+      color: #666;
+    }
+
+    .success-message {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .error-message {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .no-comments {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 48px 0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .comment-replies {
+        margin-left: 16px;
+        padding-left: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1126,6 +1355,9 @@
           </p>
           <a href="system-builder.html" class="blog-modal-cta-btn">Start the System Builder →</a>
         </div>
+
+        <!-- COMMENT SECTION -->
+        <div id="comments-section-container"></div>
       </div>
     </div>
   </div>
@@ -1484,6 +1716,9 @@
       
       document.getElementById('blog-modal').classList.add('open');
       document.body.style.overflow = 'hidden';
+      
+      // Initialize comment system for this post
+      initializeComments(post.id, post.title);
     }
     
     function closeBlogModal() {
@@ -1491,6 +1726,8 @@
       document.body.style.overflow = '';
       // Stop video when closing modal
       document.getElementById('blog-modal-video').innerHTML = '';
+      // Clear comments when closing modal
+      document.getElementById('comments-section-container').innerHTML = '';
     }
     
     // Close modal on backdrop click
@@ -1516,6 +1753,233 @@
     loadBlogPosts().then(() => {
       checkUrlForPost();
     });
+
+    // ===== COMMENT SYSTEM =====
+    // ⚠️ UPDATE THIS WITH YOUR APPS SCRIPT URL
+    const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    
+    let currentPostId = null;
+    let currentPostTitle = null;
+    let allComments = [];
+    let replyingTo = null;
+
+    function initializeComments(postId, postTitle) {
+      currentPostId = postId;
+      currentPostTitle = postTitle;
+      
+      const container = document.getElementById('comments-section-container');
+      container.innerHTML = `
+        <section class="comments-section">
+          <div class="comments-header">
+            <h3>Join the Conversation</h3>
+            <div class="comments-count" id="commentsCount">Loading comments...</div>
+          </div>
+          
+          <div class="comment-form">
+            <h4 id="formTitle">Leave a Comment</h4>
+            <form id="commentForm">
+              <div class="form-group">
+                <label for="commentName">Name *</label>
+                <input type="text" id="commentName" name="name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="commentEmail">Email * (will not be published)</label>
+                <input type="email" id="commentEmail" name="email" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="commentText">Comment *</label>
+                <textarea id="commentText" name="comment" required></textarea>
+              </div>
+              
+              <input type="hidden" id="parentId" name="parentId" value="">
+              
+              <button type="submit" class="submit-btn" id="submitBtn">Submit Comment</button>
+              <button type="button" class="cancel-reply-btn" id="cancelReplyBtn" style="display:none;">Cancel Reply</button>
+            </form>
+            
+            <div id="formMessage"></div>
+          </div>
+          
+          <div class="comments-list" id="commentsList">
+            <div class="loading-message">Loading comments...</div>
+          </div>
+        </section>
+      `;
+
+      setupCommentHandlers();
+      loadComments();
+    }
+
+    function setupCommentHandlers() {
+      document.getElementById('commentForm').addEventListener('submit', submitComment);
+      document.getElementById('cancelReplyBtn').addEventListener('click', cancelReply);
+    }
+
+    async function loadComments() {
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?post=${currentPostId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          allComments = data.comments;
+          renderComments();
+        } else {
+          showError('Unable to load comments');
+        }
+      } catch (error) {
+        console.error('Error loading comments:', error);
+        showError('Unable to load comments');
+      }
+    }
+
+    function renderComments() {
+      const container = document.getElementById('commentsList');
+      const countEl = document.getElementById('commentsCount');
+      
+      countEl.textContent = allComments.length === 0 
+        ? 'No comments yet. Be the first!' 
+        : `${allComments.length} ${allComments.length === 1 ? 'Comment' : 'Comments'}`;
+      
+      if (allComments.length === 0) {
+        container.innerHTML = '<div class="no-comments">No comments yet. Start the conversation!</div>';
+        return;
+      }
+      
+      const topLevel = allComments.filter(c => !c.parentId);
+      const replies = allComments.filter(c => c.parentId);
+      
+      let html = '';
+      topLevel.forEach(comment => {
+        html += renderComment(comment, replies);
+      });
+      
+      container.innerHTML = html;
+      
+      document.querySelectorAll('.comment-reply-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const commentId = this.getAttribute('data-comment-id');
+          const authorName = this.getAttribute('data-author-name');
+          startReply(commentId, authorName);
+        });
+      });
+    }
+
+    function renderComment(comment, allReplies) {
+      const date = new Date(comment.timestamp);
+      const dateStr = date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+      
+      const replies = allReplies.filter(r => r.parentId === comment.id);
+      
+      let html = `
+        <div class="comment" id="${comment.id}">
+          <div class="comment-header">
+            <span class="comment-author">${escapeHtml(comment.name)}</span>
+            <span class="comment-date">${dateStr}</span>
+          </div>
+          <div class="comment-body">${escapeHtml(comment.comment)}</div>
+          <button class="comment-reply-btn" data-comment-id="${comment.id}" data-author-name="${escapeHtml(comment.name)}">
+            Reply
+          </button>
+      `;
+      
+      if (replies.length > 0) {
+        html += '<div class="comment-replies">';
+        replies.forEach(reply => {
+          html += renderComment(reply, allReplies);
+        });
+        html += '</div>';
+      }
+      
+      html += '</div>';
+      return html;
+    }
+
+    async function submitComment(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      const messageEl = document.getElementById('formMessage');
+      
+      const formData = {
+        postSlug: String(currentPostId),
+        postTitle: currentPostTitle,
+        name: document.getElementById('commentName').value.trim(),
+        email: document.getElementById('commentEmail').value.trim(),
+        comment: document.getElementById('commentText').value.trim(),
+        parentId: document.getElementById('parentId').value || null
+      };
+      
+      if (!formData.name || !formData.email || !formData.comment) {
+        showMessage('Please fill in all fields', 'error');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        showMessage('Comment posted successfully!', 'success');
+        document.getElementById('commentForm').reset();
+        document.getElementById('parentId').value = '';
+        cancelReply();
+        
+        setTimeout(() => {
+          loadComments();
+          messageEl.innerHTML = '';
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Error submitting comment:', error);
+        showMessage('Error posting comment. Please try again.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Comment';
+      }
+    }
+
+    function startReply(commentId, authorName) {
+      replyingTo = commentId;
+      document.getElementById('formTitle').textContent = `Replying to ${authorName}`;
+      document.getElementById('parentId').value = commentId;
+      document.getElementById('cancelReplyBtn').style.display = 'inline-block';
+      document.getElementById('commentForm').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('commentText').focus();
+    }
+
+    function cancelReply() {
+      replyingTo = null;
+      document.getElementById('formTitle').textContent = 'Leave a Comment';
+      document.getElementById('parentId').value = '';
+      document.getElementById('cancelReplyBtn').style.display = 'none';
+    }
+
+    function showMessage(message, type) {
+      const messageEl = document.getElementById('formMessage');
+      messageEl.innerHTML = `<div class="${type}-message">${message}</div>`;
+    }
+
+    function showError(message) {
+      const container = document.getElementById('commentsList');
+      container.innerHTML = `<div class="error-message">${message}</div>`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
   </script>
 </body>
 </html>
