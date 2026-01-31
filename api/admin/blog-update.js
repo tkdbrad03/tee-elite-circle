@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
     const result = await client.query(
       `UPDATE blog_posts 
        SET title = $1, excerpt = $2, content = $3, image_url = $4, video_url = $5, published = $6, 
-           scheduled_for = COALESCE($7, scheduled_for, CASE WHEN $6 = true THEN NOW() ELSE NULL END),
+           scheduled_for = COALESCE($7, scheduled_for),
            updated_at = NOW()
        WHERE id = $8
        RETURNING id, title, published, scheduled_for, updated_at`,
