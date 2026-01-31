@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
     await client.connect();
 
     // If publishing and scheduled_for is null, set it to NOW
-    const finalScheduledFor = scheduled_for || (published ? 'NOW()' : null);
 
     const result = await client.query(
       `UPDATE blog_posts 
