@@ -228,6 +228,66 @@
       margin-top: 16px;
       font-style: italic;
     }
+  
+    /* Forgot Password Modal */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.55);
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 24px;
+      z-index: 9999;
+    }
+    .modal-backdrop.open{ display:flex; }
+    .modal{
+      width: 100%;
+      max-width: 420px;
+      background: rgba(26,47,35,0.98);
+      border: 1px solid rgba(232, 204, 200, 0.25);
+      padding: 28px 22px;
+    }
+    .modal h3{
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      color: #fff;
+      font-size: 22px;
+      text-align:center;
+      margin-bottom: 12px;
+    }
+    .modal p{
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.8;
+      text-align:center;
+      margin-bottom: 16px;
+    }
+    .modal-actions{
+      display:flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .modal-actions .login-btn{
+      margin-top: 0;
+    }
+    .btn-secondary{
+      width: 100%;
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--tmac-blush);
+      background: transparent;
+      border: 1px solid rgba(232, 204, 200, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover{
+      border-color: var(--tmac-blush);
+      transform: translateY(-2px);
+    }
+
   </style>
 </head>
 <body>
@@ -257,7 +317,7 @@
         <div id="error-message" class="error-message"></div>
       </form>
 
-      <a href="#" class="forgot-link">Forgot your password?</a>
+      <a href="#" class="forgot-link" id="forgot-link">Forgot your password?</a>
     </div>
 
     <a href="/" class="back-link">Back to Home</a>
@@ -277,6 +337,86 @@
     const form = document.getElementById('login-form');
     const loginBtn = document.getElementById('login-btn');
     const errorMessage = document.getElementById('error-message');
+
+
+
+    const forgotLink = document.getElementById('forgot-link');
+    const forgotStatus = document.getElementById('forgot-status');
+
+    const forgotModal = document.getElementById('forgot-modal');
+    const forgotEmail = document.getElementById('forgot-email');
+    const forgotModalStatus = document.getElementById('forgot-modal-status');
+    const forgotCancel = document.getElementById('forgot-cancel');
+    const forgotSubmit = document.getElementById('forgot-submit');
+
+    function openForgotModal(){
+      forgotModal.classList.add('open');
+      forgotModal.setAttribute('aria-hidden', 'false');
+      forgotModalStatus.classList.remove('visible');
+      forgotModalStatus.textContent = '';
+      forgotEmail.value = (new FormData(form)).get('email') || '';
+      setTimeout(() => forgotEmail.focus(), 50);
+    }
+
+    function closeForgotModal(){
+      forgotModal.classList.remove('open');
+      forgotModal.setAttribute('aria-hidden', 'true');
+    }
+
+    forgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openForgotModal();
+    });
+
+    forgotCancel.addEventListener('click', () => closeForgotModal());
+
+    forgotModal.addEventListener('click', (e) => {
+      if (e.target === forgotModal) closeForgotModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && forgotModal.classList.contains('open')) closeForgotModal();
+    });
+
+    forgotSubmit.addEventListener('click', async () => {
+      const email = (forgotEmail.value || '').trim().toLowerCase();
+      forgotModalStatus.classList.remove('visible');
+      forgotModalStatus.textContent = '';
+
+      if (!email) {
+        forgotModalStatus.textContent = 'Please enter your email.';
+        forgotModalStatus.classList.add('visible');
+        return;
+      }
+
+      forgotSubmit.disabled = true;
+      forgotSubmit.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Could not send reset email.');
+        }
+
+        // Show a generic success message
+        closeForgotModal();
+        forgotStatus.textContent = 'If that email is in our system, you will receive a temporary password shortly.';
+        forgotStatus.classList.add('visible');
+      } catch (err) {
+        forgotModalStatus.textContent = err.message;
+        forgotModalStatus.classList.add('visible');
+      } finally {
+        forgotSubmit.disabled = false;
+        forgotSubmit.textContent = 'Send reset email';
+      }
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
