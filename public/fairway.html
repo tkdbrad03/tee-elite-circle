@@ -808,14 +808,14 @@
           });
       });
     }
-    // Show admin link for pin #01 only
+
     async function checkAdminAccess() {
       try {
         const res = await fetch('/api/members/me');
         if (res.ok) {
           const member = await res.json();
             const adminLink = document.getElementById('admin-nav-link');
-            if (adminLink) adminLink.style.display = 'flex';
+            if (adminLink && member.email === 'info@tmacmastermind.com') adminLink.style.display = 'flex';
           }
         }
       } catch (err) {}
