@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
     }
 
     let redirectUrl;
-    if (interest_level === 'Ready to secure my founding seat') {
+    if (interest_level === 'Ready to join') {
       redirectUrl = '/payment.html?email=' + encodeURIComponent(email);
     } else if (interest_level === 'Likely to join if dates and location align') {
       redirectUrl = '/thank-you-warm.html';
