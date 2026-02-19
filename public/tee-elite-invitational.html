@@ -80,8 +80,8 @@
     .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(168,124,40,.42); }
     .btn-outline-green {
       background: transparent;
-      border: 1.5px solid var(--green);
-      color: var(--green);
+      border: 1.5px solid rgba(255,255,255,.80);
+      color: var(--white);
     }
     .btn-outline-green:hover {
       background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
@@ -100,42 +100,11 @@
     .nav-inner {
       max-width: var(--max); margin: 0 auto; padding: 0 20px;
       height: 66px;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
-    .brand-logo {
-      height: 40px; width: 40px; border-radius: 50%;
-      background: var(--green); flex: 0 0 40px;
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--serif); font-size: 15px; font-weight: 500;
-      color: var(--gold2); letter-spacing: .02em;
     }
     .brand-name {
-      font-family: var(--serif); font-size: 17px; font-weight: 400;
-      color: var(--green); letter-spacing: .03em;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .nav-right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
-    .nav-text-link {
-      font-size: 11px; letter-spacing: .13em; text-transform: uppercase;
-      color: var(--muted); font-weight: 500; display: none;
-    }
-    .nav-pill {
-      padding: 10px 18px; border-radius: 999px;
-      border: 1.5px solid var(--line);
-      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--muted); font-weight: 500; white-space: nowrap;
-      display: none;
-    }
-    .nav-reserve {
-      padding: 11px 20px;
-      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
-      color: var(--green); border-radius: 999px;
-      font-family: var(--sans);
-      font-size: 11px; letter-spacing: .13em; text-transform: uppercase;
-      font-weight: 700; white-space: nowrap;
-      box-shadow: 0 4px 16px rgba(168,124,40,.24);
+      font-family: var(--serif); font-size: 22px; font-weight: 400;
+      color: var(--green); letter-spacing: .06em;
     }
 
     /* ── HERO ── */
@@ -191,24 +160,51 @@
       font-weight: 300; margin-bottom: 32px;
     }
     .detail-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 32px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px;
+      margin-bottom: 32px; max-width: 560px;
     }
     .detail-pill {
-      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.20);
-      border-radius: 16px; padding: 18px 20px;
-      backdrop-filter: blur(6px);
+      background: transparent; border: none; padding: 0;
     }
     .detail-pill .k {
-      font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
-      color: var(--gold2); font-weight: 600; margin-bottom: 6px;
+      font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold2); font-weight: 700; margin-bottom: 5px;
     }
     .detail-pill .v {
-      font-family: var(--serif); font-size: 18px; font-weight: 500;
+      font-family: var(--serif); font-size: 20px; font-weight: 500;
       color: var(--white); line-height: 1.25;
+      text-shadow: 0 1px 6px rgba(0,0,0,.35);
     }
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
-    /* ── SECTIONS ── */
+    /* ── INFO BAR ── */
+    .info-bar {
+      background: var(--green);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .info-bar-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .info-bar-item {
+      padding: 24px 20px;
+      border-right: 1px solid rgba(255,255,255,.10);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .info-bar-item:nth-child(even) { border-right: none; }
+    .info-bar-item:nth-child(3),
+    .info-bar-item:nth-child(4) { border-bottom: none; }
+    .info-bar-item .k {
+      font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold2); font-weight: 700; margin-bottom: 6px;
+    }
+    .info-bar-item .v {
+      font-family: var(--serif); font-size: 20px; font-weight: 500;
+      color: rgba(255,255,255,.95); line-height: 1.2;
+    }
     .section {
       max-width: var(--max); margin: 0 auto; padding: 60px 20px;
     }
@@ -441,6 +437,10 @@
     @media (min-width: 640px) {
       .hero { min-height: 600px; }
       .hero h1 { font-size: 66px; }
+      .info-bar-inner { grid-template-columns: repeat(4, 1fr); }
+      .info-bar-item { border-bottom: none; }
+      .info-bar-item:nth-child(even) { border-right: 1px solid rgba(255,255,255,.10); }
+      .info-bar-item:last-child { border-right: none; }
       .section-title { font-size: 48px; }
       .includes-grid { grid-template-columns: 1fr 1fr; }
       .schedule-grid { grid-template-columns: 1fr 1fr; }
@@ -468,16 +468,7 @@
   <!-- NAV -->
   <header class="nav">
     <div class="nav-inner">
-      <div class="brand">
-        <div class="brand-logo">TM</div>
-        <div class="brand-name">The Tee Elite Circle</div>
-      </div>
-      <div class="nav-right">
-        <a class="nav-text-link" href="#about">About</a>
-        <a class="nav-text-link" href="#reserve">Register</a>
-        <span class="nav-pill">Member Login</span>
-        <a class="nav-reserve" href="#reserve">Reserve</a>
-      </div>
+      <div class="brand-name">The Tee Elite Circle</div>
     </div>
   </header>
 
@@ -492,30 +483,34 @@
         A curated women-only golf experience at Summerfield Crossing Golf Club.
         Scramble format for mixed skill levels.
       </p>
-      <div class="detail-grid">
-        <div class="detail-pill">
-          <div class="k">Date</div>
-          <div class="v">Saturday, April 18</div>
-        </div>
-        <div class="detail-pill">
-          <div class="k">Course</div>
-          <div class="v">Summerfield Crossing</div>
-        </div>
-        <div class="detail-pill">
-          <div class="k">Format</div>
-          <div class="v">Scramble &middot; All Levels</div>
-        </div>
-        <div class="detail-pill">
-          <div class="k">Investment</div>
-          <div class="v">$250 per player</div>
-        </div>
-      </div>
       <div class="hero-actions">
         <a class="btn btn-gold" href="#reserve">Reserve Your Seat</a>
         <a class="btn btn-outline-green" href="#sponsors">Sponsor Inquiry</a>
       </div>
     </div>
   </section>
+
+  <!-- INFO BAR -->
+  <div class="info-bar">
+    <div class="info-bar-inner">
+      <div class="info-bar-item">
+        <div class="k">Date</div>
+        <div class="v">Saturday, April 18, 2026</div>
+      </div>
+      <div class="info-bar-item">
+        <div class="k">Course</div>
+        <div class="v">Summerfield Crossing</div>
+      </div>
+      <div class="info-bar-item">
+        <div class="k">Format</div>
+        <div class="v">Scramble &middot; All Levels</div>
+      </div>
+      <div class="info-bar-item">
+        <div class="k">Investment</div>
+        <div class="v">$250 per player</div>
+      </div>
+    </div>
+  </div>
 
   <!-- WHAT'S INCLUDED -->
   <div class="rule"></div>
