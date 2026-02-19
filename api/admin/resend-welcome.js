@@ -22,7 +22,6 @@ module.exports = async (req, res) => {
 
     // Get member details
     const result = await client.query(
-      'SELECT id, email, name, pin_number FROM members WHERE id = $1',
       [member_id]
     );
 
@@ -41,12 +40,9 @@ module.exports = async (req, res) => {
       content: `
         <div style="text-align: center; margin-bottom: 32px;">
           <div style="display: inline-block; width: 80px; height: 80px; border: 2px solid #e8ccc8; border-radius: 50%; line-height: 76px; text-align: center;">
-            <span style="color: #a67c52; font-size: 32px; font-family: Georgia, serif;">#${String(member.pin_number).padStart(2, '0')}</span>
           </div>
         </div>
         
-        <h2 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 400; color: #2C2C2C; text-align: center;">Welcome, Founding Member</h2>
-        <p style="margin: 0 0 32px 0; font-size: 14px; color: #a67c52; text-align: center; letter-spacing: 0.1em;">PIN #${String(member.pin_number).padStart(2, '0')}</p>
         
         <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555;">
           ${member.name}, here's your updated portal access link.
