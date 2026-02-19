@@ -334,124 +334,56 @@
   </div>
 
   <script>
-    const form = document.getElementById('login-form');
-    const loginBtn = document.getElementById('login-btn');
-    const errorMessage = document.getElementById('error-message');
+document.addEventListener('DOMContentLoaded', function () {
 
+  const form = document.getElementById('login-form');
+  const errorMessage = document.getElementById('error-message');
 
-
-    const forgotLink = document.getElementById('forgot-link');
-    const forgotStatus = document.getElementById('forgot-status');
-
-    const forgotModal = document.getElementById('forgot-modal');
-    const forgotEmail = document.getElementById('forgot-email');
-    const forgotModalStatus = document.getElementById('forgot-modal-status');
-    const forgotCancel = document.getElementById('forgot-cancel');
-    const forgotSubmit = document.getElementById('forgot-submit');
-
-    function openForgotModal(){
-      forgotModal.classList.add('open');
-      forgotModal.setAttribute('aria-hidden', 'false');
-      forgotModalStatus.classList.remove('visible');
-      forgotModalStatus.textContent = '';
-      forgotEmail.value = (new FormData(form)).get('email') || '';
-      setTimeout(() => forgotEmail.focus(), 50);
-    }
-
-    function closeForgotModal(){
-      forgotModal.classList.remove('open');
-      forgotModal.setAttribute('aria-hidden', 'true');
-    }
-
-    forgotLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      openForgotModal();
-    });
-
-    forgotCancel.addEventListener('click', () => closeForgotModal());
-
-    forgotModal.addEventListener('click', (e) => {
-      if (e.target === forgotModal) closeForgotModal();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && forgotModal.classList.contains('open')) closeForgotModal();
-    });
-
-    forgotSubmit.addEventListener('click', async () => {
-      const email = (forgotEmail.value || '').trim().toLowerCase();
-      forgotModalStatus.classList.remove('visible');
-      forgotModalStatus.textContent = '';
-
-      if (!email) {
-        forgotModalStatus.textContent = 'Please enter your email.';
-        forgotModalStatus.classList.add('visible');
-        return;
-      }
-
-      forgotSubmit.disabled = true;
-      forgotSubmit.textContent = 'Sending...';
-
-      try {
-        const res = await fetch('/api/auth/forgot-password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok) {
-          throw new Error(data.error || 'Could not send reset email.');
-        }
-
-        // Show a generic success message
-        closeForgotModal();
-        forgotStatus.textContent = 'If that email is in our system, you will receive a temporary password shortly.';
-        forgotStatus.classList.add('visible');
-      } catch (err) {
-        forgotModalStatus.textContent = err.message;
-        forgotModalStatus.classList.add('visible');
-      } finally {
-        forgotSubmit.disabled = false;
-        forgotSubmit.textContent = 'Send reset email';
-      }
-    });
-
+  if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      errorMessage.classList.remove('visible');
-      loginBtn.disabled = true;
-      loginBtn.textContent = 'Entering...';
 
       const formData = new FormData(form);
       const email = formData.get('email');
       const password = formData.get('password');
 
+      errorMessage.classList.remove('visible');
+      errorMessage.textContent = '';
+
       try {
-        const res = await fetch('/api/auth/login', {
+        const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
 
-        const data = await res.json();
+        const data = await response.json();
 
-        if (!res.ok) {
+        if (!response.ok) {
           throw new Error(data.error || 'Login failed');
         }
 
-        // Redirect to member dashboard
-        window.location.href = '/home.html';
+        window.location.href = '/hub.html';
       } catch (err) {
         errorMessage.textContent = err.message;
         errorMessage.classList.add('visible');
-        loginBtn.disabled = false;
-        loginBtn.textContent = 'Enter The Circle';
       }
     });
-  </script>
+  }
+
+  // Forgot Password
+  const forgotLink = document.querySelector('.forgot-link');
+
+  if (forgotLink) {
+    forgotLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      alert('Password reset system coming next. For now, contact support.');
+    });
+  }
+
+});
+</script>
+
   <!-- PWA Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
