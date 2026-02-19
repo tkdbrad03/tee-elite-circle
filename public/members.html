@@ -46,14 +46,14 @@
       max-width: 500px;
     }
 
-    .members-grid {
+    .players-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
 
     /* CHANGE: Added rounded corners */
-    .member-card {
+    .player-card {
       background: #fff;
       border: 1px solid rgba(0,0,0,0.06);
       border-radius: 12px;
@@ -63,12 +63,12 @@
       padding: 32px 24px;
     }
 
-    .member-card:hover {
+    .player-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 16px 32px rgba(0,0,0,0.08);
     }
 
-    .member-photo {
+    .player-photo {
       width: 120px;
       height: 120px;
       border-radius: 50%;
@@ -80,21 +80,19 @@
       margin: 0 auto 20px;
     }
 
-    .member-photo img {
+    .player-photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .member-photo .initials {
+    .player-photo .initials {
       font-family: 'Cormorant Garamond', serif;
       font-size: 40px;
       color: var(--tmac-bronze);
       opacity: 0.5;
     }
 
-    /* CHANGE: Gold badge */
-    .member-pin {
       display: inline-block;
       background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
       padding: 6px 14px;
@@ -107,7 +105,7 @@
       margin-bottom: 12px;
     }
 
-    .member-name {
+    .player-name {
       font-family: 'Cormorant Garamond', serif;
       font-size: 22px;
       font-weight: 500;
@@ -115,7 +113,7 @@
       margin-bottom: 8px;
     }
 
-    .member-bio {
+    .player-bio {
       font-size: 13px;
       color: #666;
       line-height: 1.7;
@@ -126,7 +124,7 @@
       overflow: hidden;
     }
 
-    .member-tags {
+    .player-tags {
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -135,12 +133,12 @@
       text-align: left;
     }
 
-    .member-tag {
+    .player-tag {
       font-size: 11px;
       color: #888;
     }
 
-    .member-tag strong {
+    .player-tag strong {
       color: var(--charcoal);
       font-weight: 500;
     }
@@ -175,13 +173,13 @@
     }
 
     @media (max-width: 900px) {
-      .members-grid {
+      .players-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
     @media (max-width: 600px) {
-      .members-grid {
+      .players-grid {
         grid-template-columns: 1fr;
       }
 
@@ -234,12 +232,12 @@
   <!-- MAIN CONTENT -->
   <main class="member-main">
     <div class="page-header">
-      <p class="page-label">12 Founding Members</p>
+      <p class="page-label">Players</p>
       <h1 class="page-title">The Circle</h1>
       <p class="page-subtitle">The women who said yes.</p>
     </div>
 
-    <div class="members-grid" id="members-grid">
+    <div class="players-grid" id="players-grid">
       <div class="loading-state">Loading members...</div>
     </div>
   </main>
@@ -271,7 +269,7 @@
     });
 
     // Load members
-    async function loadMembers() {
+    async function loadPlayers() {
       try {
         const res = await fetch('/api/members/get');
         if (!res.ok) {
@@ -282,35 +280,34 @@
           throw new Error('Failed to load members');
         }
         
-        const members = await res.json();
-        const grid = document.getElementById('members-grid');
+        const players = await res.json();
+        const grid = document.getElementById('players-grid');
         
-        if (members.length === 0) {
+        if (players.length === 0) {
           grid.innerHTML = '<div class="loading-state">No members yet.</div>';
           return;
         }
 
-        grid.innerHTML = members.map(member => `
-          <div class="member-card">
-            <div class="member-photo">
-              ${member.photo_url 
-                ? `<img src="${member.photo_url}" alt="${member.name}">`
-                : `<span class="initials">${getInitials(member.name)}</span>`
+        grid.innerHTML = players.map(member => `
+          <div class="player-card">
+            <div class="player-photo">
+              ${player.photo_url 
+                ? `<img src="${player.photo_url}" alt="${player.name}">`
+                : `<span class="initials">${getInitials(player.name)}</span>`
               }
             </div>
-            <span class="member-pin">Founding Member #${String(member.pin_number).padStart(2, '0')}</span>
-            <h3 class="member-name">${member.name}</h3>
-            ${member.bio ? `<p class="member-bio">${member.bio}</p>` : ''}
-            <div class="member-tags">
-              ${member.offering ? `<p class="member-tag"><strong>I offer:</strong> ${member.offering}</p>` : ''}
-              ${member.looking_for ? `<p class="member-tag"><strong>Looking for:</strong> ${member.looking_for}</p>` : ''}
+            <h3 class="player-name">${player.name}</h3>
+            ${member.bio ? `<p class="player-bio">${member.bio}</p>` : ''}
+            <div class="player-tags">
+              ${member.offering ? `<p class="player-tag"><strong>I offer:</strong> ${member.offering}</p>` : ''}
+              ${member.looking_for ? `<p class="player-tag"><strong>Looking for:</strong> ${member.looking_for}</p>` : ''}
             </div>
             <a href="/profile.html?id=${member.id}" class="view-profile-btn">View Profile</a>
           </div>
         `).join('');
       } catch (err) {
         console.error('Error loading members:', err);
-        document.getElementById('members-grid').innerHTML = 
+        document.getElementById('players-grid').innerHTML = 
           '<div class="loading-state">Error loading members. Please refresh.</div>';
       }
     }
@@ -321,7 +318,7 @@
     }
 
     // Initialize
-    loadMembers();
+    loadPlayers();
   </script>
   <script src="/member-common.js"></script>
   <!-- PWA BOTTOM NAV -->
@@ -358,19 +355,6 @@
             console.log('ServiceWorker registration failed:', error);
           });
       });
-    }
-    // Show admin link for pin #01 only
-    async function checkAdminAccess() {
-      try {
-        const res = await fetch('/api/members/me');
-        if (res.ok) {
-          const member = await res.json();
-          if (member.pin_number === 1) {
-            const adminLink = document.getElementById('admin-nav-link');
-            if (adminLink) adminLink.style.display = 'flex';
-          }
-        }
-      } catch (err) {}
     }
     checkAdminAccess();
   </script>
