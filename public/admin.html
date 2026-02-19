@@ -1831,35 +1831,6 @@
       }
     }
 
-      
-      if (!newPin || newPin === String(currentPin)) return;
-      
-      
-        alert('Please enter a valid pin number between 1 and 12');
-        return;
-      }
-      
-      try {
-        const res = await fetch('/api/admin/update-pin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            member_id: memberId, 
-          })
-        });
-        
-        if (res.ok) {
-          loadApplications();
-          closeModal();
-        } else {
-          const err = await res.json();
-          alert('Error: ' + err.error);
-        }
-      } catch (err) {
-        console.error('Update pin error:', err);
-        alert('Error updating pin. Please try again.');
-      }
-    }
 
     document.getElementById('detail-modal').addEventListener('click', (e) => {
       if (e.target.id === 'detail-modal') closeModal();
