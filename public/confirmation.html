@@ -251,31 +251,46 @@
     }
   </style>
 </head>
-  <script>
-async function autoLogin() {
-  const params = new URLSearchParams(window.location.search);
-  const email = params.get("email");
-  const name = params.get("name");
+ <div class="card">
+  <h3>Enter the community</h3>
+  <p>Use the email you used at PayPal checkout.</p>
 
-  if (!email) return;
+  <input id="payEmail" type="email" placeholder="you@email.com" style="width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;margin:12px 0;">
+  <button id="enterNow" class="btn-primary">Enter Community Now</button>
 
-  try {
-    await fetch('/api/invitational-auto-login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name })
-    });
+  <p id="enterMsg" style="margin-top:10px;"></p>
+</div>
 
-    setTimeout(() => {
-      window.location.href = "/home.html";
-    }, 4000);
+<script>
+  document.getElementById('enterNow').addEventListener('click', async () => {
+    const email = document.getElementById('payEmail').value.trim();
+    const msg = document.getElementById('enterMsg');
+    msg.textContent = '';
 
-  } catch (err) {
-    console.error("Auto login failed", err);
-  }
-}
+    if (!email) {
+      msg.textContent = 'Please enter your email.';
+      return;
+    }
 
-autoLogin();
+    try {
+      const r = await fetch('/api/invitational-auto-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code: 'TEE418' })
+      });
+
+      const data = await r.json().catch(() => ({}));
+
+      if (!r.ok) {
+        msg.textContent = data.error || 'Not ready yet. If you just paid, wait 30 seconds and try again.';
+        return;
+      }
+
+      window.location.href = '/home.html';
+    } catch (e) {
+      msg.textContent = 'Connection issue. Please try again.';
+    }
+  });
 </script>
 
 <body>
