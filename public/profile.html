@@ -96,8 +96,6 @@
       fill: none;
     }
 
-    /* Gold badge - small pill style */
-    .profile-pin {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -107,7 +105,6 @@
       margin-bottom: 24px;
     }
 
-    .profile-pin-label {
       font-size: 9px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -115,7 +112,6 @@
       margin: 0;
     }
 
-    .profile-pin-number {
       font-family: 'Montserrat', sans-serif;
       font-size: 11px;
       font-weight: 600;
@@ -420,7 +416,7 @@
 
   <!-- MAIN CONTENT -->
   <main class="member-main">
-    <!-- Back link (only shown when viewing another member) -->
+    <!-- Back link (only shown when viewing another player) -->
     <a href="/members.html" class="back-link view-only">← Back to The Circle</a>
 
     <div class="profile-layout">
@@ -439,12 +435,9 @@
           <input type="file" id="photo-input" accept="image/*" style="display: none;">
         </div>
 
-        <div class="profile-pin">
-          <span class="profile-pin-label">Founding Member</span>
-          <span class="profile-pin-number" id="profile-pin">#01</span>
         </div>
 
-        <!-- Name shown when viewing another member -->
+        <!-- Name shown when viewing another player -->
         <h2 class="profile-name view-only" id="view-profile-name"></h2>
 
         <nav class="profile-nav edit-only">
@@ -483,7 +476,7 @@
             <div class="form-group">
               <label class="form-label">Bio</label>
               <textarea class="form-textarea" id="bio" name="bio" placeholder="Tell the circle about yourself..."></textarea>
-              <p class="form-help">This will appear on your member profile.</p>
+              <p class="form-help">This will appear on your player profile.</p>
             </div>
 
             <div class="form-group">
@@ -544,7 +537,7 @@
         </section>
       </div>
 
-      <!-- VIEW-ONLY CONTENT (viewing another member) -->
+      <!-- VIEW-ONLY CONTENT (viewing another player) -->
       <div class="profile-main view-only">
         <section class="profile-section">
           <h2 class="profile-section-title">About</h2>
@@ -570,7 +563,7 @@
           <div class="scorecard-preview">
             <p class="scorecard-preview-label">Their Vision</p>
             <p class="scorecard-preview-text" id="view-scorecard">
-              <span class="scorecard-empty">This member hasn't set their vision yet.</span>
+              <span class="scorecard-empty">This player hasn't set their vision yet.</span>
             </p>
           </div>
         </section>
@@ -584,12 +577,12 @@
   </footer>
 
 <script>
-    let currentMember = null;
-    let viewingMemberId = null;
+    let currentPlayer = null;
+    let viewingPlayerId = null;
 
-    // Check if viewing another member's profile
+    // Check if viewing another player's profile
     const urlParams = new URLSearchParams(window.location.search);
-    viewingMemberId = urlParams.get('id');
+    viewingPlayerId = urlParams.get('id');
 
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -614,7 +607,7 @@
     });
 
     // Load member data
-    async function loadMember() {
+    async function loadPlayer() {
       try {
         // First, get current logged-in user for header initials
         const meRes = await fetch('/api/members/me');
@@ -625,46 +618,45 @@
         const me = await meRes.json();
         document.getElementById('user-initials').textContent = getInitials(me.name);
 
-        // If viewing another member
-        if (viewingMemberId && viewingMemberId != me.id) {
+        // If viewing another player
+        if (viewingPlayerId && viewingPlayerId != me.id) {
           document.body.classList.add('viewing-other');
-          document.title = 'Member Profile — The Tee Elite Circle';
-          await loadOtherMember(viewingMemberId);
+          document.title = 'Player Profile — The Tee Elite Circle';
+          await loadOtherPlayer(viewingPlayerId);
         } else {
           // Viewing own profile
-          currentMember = me;
-          populateForm(currentMember);
+          currentPlayer = me;
+          populateForm(currentPlayer);
         }
       } catch (err) {
         console.error('Error loading member:', err);
       }
     }
 
-    async function loadOtherMember(memberId) {
+    async function loadOtherPlayer(memberId) {
       try {
         const res = await fetch(`/api/members/get?id=${memberId}`);
         if (!res.ok) {
           window.location.href = '/members.html';
           return;
         }
-        const members = await res.json();
-        const member = Array.isArray(members) ? members.find(m => m.id == memberId) : members;
+        const players = await res.json();
+        const player = Array.isArray(members) ? players.find(m => m.id == memberId) : members;
         
-        if (!member) {
+        if (!player) {
           window.location.href = '/members.html';
           return;
         }
 
-        populateViewOnly(member);
+        populateViewOnly(player);
       } catch (err) {
         console.error('Error loading member:', err);
         window.location.href = '/members.html';
       }
     }
 
-    function populateViewOnly(member) {
+    function populateViewOnly(player) {
       document.getElementById('view-profile-name').textContent = member.name || 'Member';
-      document.getElementById('profile-pin').textContent = `#${String(member.pin_number || 1).padStart(2, '0')}`;
       document.getElementById('photo-initials').textContent = getInitials(member.name);
 
       if (member.photo_url) {
@@ -691,7 +683,6 @@
       const initials = getInitials(member.name);
       document.getElementById('user-initials').textContent = initials;
       document.getElementById('photo-initials').textContent = initials;
-      document.getElementById('profile-pin').textContent = `#${String(member.pin_number || 1).padStart(2, '0')}`;
 
       if (member.photo_url) {
         document.getElementById('profile-photo').innerHTML = `<img src="${member.photo_url}" alt="${member.name}">`;
@@ -815,7 +806,7 @@
     }
 
     // Initialize
-    loadMember();
+    loadPlayer();
   </script>
   <script src="/member-common.js"></script>
   <!-- PWA BOTTOM NAV -->
@@ -852,19 +843,6 @@
             console.log('ServiceWorker registration failed:', error);
           });
       });
-    }
-    // Show admin link for pin #01 only
-    async function checkAdminAccess() {
-      try {
-        const res = await fetch('/api/members/me');
-        if (res.ok) {
-          const member = await res.json();
-          if (member.pin_number === 1) {
-            const adminLink = document.getElementById('admin-nav-link');
-            if (adminLink) adminLink.style.display = 'flex';
-          }
-        }
-      } catch (err) {}
     }
     checkAdminAccess();
   </script>
