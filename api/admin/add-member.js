@@ -20,32 +20,20 @@ module.exports = async (req, res) => {
       email, 
       phone, 
       location, 
-      pin_number
     } = req.body;
 
     // Validate required fields
-    if (!full_name || !email || !location || !pin_number) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
     // Check if pin number is already taken in applications
-    const existingAppPin = await client.query(
-      'SELECT id FROM applications WHERE pin_number = $1',
-      [pin_number]
     );
     
-    if (existingAppPin.rows.length > 0) {
-      return res.status(400).json({ error: `Pin #${String(pin_number).padStart(2, '0')} is already assigned` });
     }
 
     // Check if pin number is already taken in members
-    const existingMemberPin = await client.query(
-      'SELECT id FROM members WHERE pin_number = $1',
-      [pin_number]
     );
     
-    if (existingMemberPin.rows.length > 0) {
-      return res.status(400).json({ error: `Pin #${String(pin_number).padStart(2, '0')} is already assigned` });
     }
 
     // Check if email already exists in applications
@@ -75,7 +63,6 @@ module.exports = async (req, res) => {
         email,
         phone,
         location,
-        pin_number,
         paid_in_full,
         deposit_paid,
         interest_level,
@@ -92,15 +79,14 @@ module.exports = async (req, res) => {
         email,
         phone || null,
         location,
-        pin_number,
         true,
         true,
-        'Ready to secure my founding seat',
+        Ready to join,
         'member',
-        'Founding Member - Direct Add',
-        'Founding Member',
-        'Founding Member - Direct Add',
-        'Founding Member - Direct Add'
+        'Direct Add',
+        'Player',
+        'Direct Add',
+        'Direct Add'
       ]
     );
 
@@ -110,14 +96,11 @@ module.exports = async (req, res) => {
 
     // Create member account
     await client.query(
-      `INSERT INTO members (email, password_hash, name, pin_number, bio, created_at, updated_at)
        VALUES ($1, $2, $3, $4, $5, NOW(), NOW())`,
-      [email, passwordHash, full_name, pin_number, '']
     );
 
     // Send welcome email with login credentials
     try {
-      const emailContent = welcomeEmail(full_name, email, tempPassword, pin_number);
       await sendEmail({
         to: email,
         subject: emailContent.subject,
@@ -133,7 +116,6 @@ module.exports = async (req, res) => {
       id: appResult.rows[0].id,
       email: email,
       temp_password: tempPassword,
-      pin_number: pin_number,
       message: 'Member added and account created successfully'
     });
 
