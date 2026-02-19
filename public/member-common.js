@@ -21,9 +21,9 @@ async function loadMemberHeader() {
       initialsEl.textContent = getInitials(member.name);
     }
     
-    // Show admin link if pin #01 (Dr. TMac)
-      addAdminLink();
-    }
+    if (member.email === 'info@tmacinspired.com') {
+  addAdminLink();
+}
     
     return member;
   } catch (err) {
