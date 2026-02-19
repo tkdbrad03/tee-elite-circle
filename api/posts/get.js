@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
       result = await client.query(
         `SELECT 
           p.id, p.title, p.content, p.category, p.image_url, p.post_type, p.created_at, p.member_id,
-          m.name as author_name, m.pin_number as author_pin, m.photo_url as author_photo,
+          m.name as author_name, m.photo_url as author_photo,
           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) as comment_count
         FROM posts p
         JOIN members m ON p.member_id = m.id
@@ -60,7 +60,7 @@ module.exports = async (req, res) => {
       result = await client.query(
         `SELECT 
           p.id, p.title, p.content, p.category, p.image_url, p.created_at, p.member_id,
-          m.name as author_name, m.pin_number as author_pin, m.photo_url as author_photo,
+          m.name as author_name, m.photo_url as author_photo,
           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) as comment_count
         FROM posts p
         JOIN members m ON p.member_id = m.id
@@ -73,7 +73,7 @@ module.exports = async (req, res) => {
       result = await client.query(
         `SELECT 
           p.id, p.content, p.image_url, p.post_type, p.created_at, p.member_id,
-          m.name as author_name, m.pin_number as author_pin, m.photo_url as author_photo,
+          m.name as author_name, m.photo_url as author_photo,
           (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) as like_count,
           (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) as comment_count,
           EXISTS(SELECT 1 FROM likes l WHERE l.post_id = p.id AND l.member_id = $1) as liked
