@@ -299,7 +299,6 @@
       color: #888;
     }
 
-    .pin-number {
       font-family: 'Cormorant Garamond', serif;
       font-size: 16px;
       font-weight: 600;
@@ -1039,7 +1038,7 @@
       <h1>The Tee Elite Circle — Admin</h1>
       <div class="admin-header-btns">
         <button onclick="window.location.href='/email-campaign.html'">📧 Email Campaign</button>
-        <button class="add-member-btn" onclick="openAddMemberModal()">+ Add Member</button>
+        <button class="add-member-btn" onclick="openAddMemberModal()">+ Add Player</button>
         <button onclick="logout()">Log Out</button>
       </div>
     </header>
@@ -1459,7 +1458,7 @@
   <div class="modal-overlay" id="add-member-modal">
     <div class="modal" style="position: relative;">
       <button class="close-modal" onclick="closeAddMemberModal()">&times;</button>
-      <h2>Add Founding Member</h2>
+      <h2>Add Player</h2>
       <form id="add-member-form">
         <div class="modal-field">
           <label>Full Name *</label>
@@ -1478,8 +1477,7 @@
           <input type="text" id="new-member-location" required placeholder="e.g. Atlanta, GA">
         </div>
         <div class="modal-field">
-          <label>Founding Pin Number *</label>
-          <select id="new-member-pin" required>
+          <label>Member Number (optional)</label>
             <option value="">Select pin number...</option>
             <option value="1">#01</option>
             <option value="2">#02</option>
@@ -1497,7 +1495,7 @@
         </div>
         <div class="modal-actions">
           <button type="button" class="form-btn secondary" onclick="closeAddMemberModal()">Cancel</button>
-          <button type="submit" class="form-btn primary">Add Member</button>
+          <button type="submit" class="form-btn primary">Add Player</button>
         </div>
       </form>
     </div>
@@ -1632,7 +1630,7 @@
     function updateStats() {
       document.getElementById('stat-total').textContent = applications.length;
       document.getElementById('stat-ready').textContent = 
-        applications.filter(a => a.interest_level === 'Ready to secure my founding seat').length;
+        applications.filter(a => a.interest_level === 'Ready to join').length;
       document.getElementById('stat-deposit').textContent = 
         applications.filter(a => a.deposit_paid).length;
       document.getElementById('stat-members').textContent = 
@@ -1643,7 +1641,7 @@
       let filtered = applications;
       
       if (currentFilter === 'new') filtered = applications.filter(a => a.status === 'new');
-      else if (currentFilter === 'ready') filtered = applications.filter(a => a.interest_level === 'Ready to secure my founding seat');
+      else if (currentFilter === 'ready') filtered = applications.filter(a => a.interest_level === 'Ready to join');
       else if (currentFilter === 'deposit') filtered = applications.filter(a => a.deposit_paid && !a.paid_in_full);
       else if (currentFilter === 'paid') filtered = applications.filter(a => a.paid_in_full);
 
@@ -1656,7 +1654,6 @@
 
       tbody.innerHTML = filtered.map(app => `
         <tr>
-          <td>${app.pin_number ? `<span class="pin-number">#${String(app.pin_number).padStart(2, '0')}</span>` : '—'}</td>
           <td>
             <div class="applicant-name">${app.full_name}</div>
             <div class="applicant-email">${app.email}</div>
@@ -1712,7 +1709,6 @@
       if (!app) return;
 
       document.getElementById('modal-content').innerHTML = `
-        ${app.pin_number ? `<div class="modal-field"><label>Founding Pin</label><p style="font-size: 24px; font-family: 'Cormorant Garamond', serif; color: var(--deep-forest);">#${String(app.pin_number).padStart(2, '0')}</p></div>` : ''}
         <div class="modal-field"><label>Name</label><p>${app.full_name}</p></div>
         <div class="modal-field"><label>Email</label><p>${app.email}</p></div>
         <div class="modal-field"><label>Phone</label><p>${app.phone || 'Not provided'}</p></div>
@@ -1726,7 +1722,6 @@
       `;
 
       document.getElementById('modal-actions').innerHTML = `
-        ${app.pin_number ? `<button class="action-btn secondary" onclick="editPin(${app.id}, ${app.pin_number})">Edit Pin</button>` : ''}
         ${!app.deposit_paid ? `<button class="action-btn secondary" onclick="markDepositPaid(${app.id})">Mark Deposit Paid</button>` : ''}
         ${!app.paid_in_full ? `<button class="action-btn primary" onclick="markPaidInFull(${app.id})">Mark Paid in Full</button>` : `<span style="color: #27ae60; font-weight: 500;">✓ Active Member</span>`}
       `;
@@ -1755,10 +1750,9 @@
         email: document.getElementById('new-member-email').value,
         phone: document.getElementById('new-member-phone').value || null,
         location: document.getElementById('new-member-location').value,
-        pin_number: parseInt(document.getElementById('new-member-pin').value),
         paid_in_full: true,
         deposit_paid: true,
-        interest_level: 'Ready to secure my founding seat',
+        interest_level: 'Ready to join',
         status: 'approved'
       };
 
@@ -1771,7 +1765,6 @@
 
         if (res.ok) {
           const data = await res.json();
-          alert(`✓ Founding Member Added!\n\nName: ${memberData.full_name}\nPin: #${String(memberData.pin_number).padStart(2, '0')}\nEmail: ${memberData.email}\nTemp Password: ${data.temp_password}`);
           closeAddMemberModal();
           loadApplications();
         } else {
@@ -1806,7 +1799,6 @@
         });
         if (res.ok) {
           const data = await res.json();
-          alert(`Member account created!\n\nEmail: ${data.email}\nTemp Password: ${data.temp_password}\nPin: #${String(data.pin_number).padStart(2, '0')}`);
           loadApplications();
           closeModal();
         } else {
@@ -1839,14 +1831,10 @@
       }
     }
 
-    async function editPin(memberId, currentPin) {
-      const newPin = prompt(`Change Pin Number\n\nCurrent Pin: #${String(currentPin).padStart(2, '0')}\n\nEnter new pin number (1-12):`, currentPin);
       
       if (!newPin || newPin === String(currentPin)) return;
       
-      const pinNumber = parseInt(newPin);
       
-      if (isNaN(pinNumber) || pinNumber < 1 || pinNumber > 12) {
         alert('Please enter a valid pin number between 1 and 12');
         return;
       }
@@ -1857,12 +1845,10 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             member_id: memberId, 
-            new_pin: pinNumber 
           })
         });
         
         if (res.ok) {
-          alert(`✓ Pin updated to #${String(pinNumber).padStart(2, '0')}`);
           loadApplications();
           closeModal();
         } else {
