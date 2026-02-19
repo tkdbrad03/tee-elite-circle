@@ -82,8 +82,6 @@
   }
 }
 
-/* Gold Founding Member Badge - Small pill style */
-.founding-badge {
   display: inline-block;
   background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
   padding: 6px 16px;
