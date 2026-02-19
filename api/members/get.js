@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 
     // Get all members
     const result = await client.query(
-      'SELECT id, name, pin_number, bio, photo_url, looking_for, offering FROM members ORDER BY pin_number ASC'
+      'SELECT id, name, bio, photo_url, looking_for, offering FROM members ORDER BY name ASC'
     );
 
     return res.status(200).json(result.rows);
