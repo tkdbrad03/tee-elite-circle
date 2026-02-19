@@ -288,7 +288,7 @@
           return;
         }
 
-        grid.innerHTML = players.map(member => `
+        grid.innerHTML = players.map(player => `
           <div class="player-card">
             <div class="player-photo">
               ${player.photo_url 
@@ -297,10 +297,10 @@
               }
             </div>
             <h3 class="player-name">${player.name}</h3>
-            ${member.bio ? `<p class="player-bio">${member.bio}</p>` : ''}
+            ${player.bio ? `<p class="player-bio">${player.bio}</p>` : ''}
             <div class="player-tags">
-              ${member.offering ? `<p class="player-tag"><strong>I offer:</strong> ${member.offering}</p>` : ''}
-              ${member.looking_for ? `<p class="player-tag"><strong>Looking for:</strong> ${member.looking_for}</p>` : ''}
+              ${player.offering ? `<p class="player-tag"><strong>I offer:</strong> ${player.offering}</p>` : ''}
+              ${player.looking_for ? `<p class="player-tag"><strong>Looking for:</strong> ${player.looking_for}</p>` : ''}
             </div>
             <a href="/profile.html?id=${member.id}" class="view-profile-btn">View Profile</a>
           </div>
