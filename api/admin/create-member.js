@@ -45,9 +45,7 @@ module.exports = async (req, res) => {
 
     // Get next pin number
     const pinResult = await client.query(
-      'SELECT COALESCE(MAX(pin_number), 0) + 1 as next_pin FROM members'
     );
-    const nextPin = pinResult.rows[0].next_pin;
 
     // Generate temporary password
     const tempPassword = 'TeeElite' + Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -55,9 +53,7 @@ module.exports = async (req, res) => {
 
     // Create member account
     await client.query(
-      `INSERT INTO members (email, password_hash, name, pin_number, bio, created_at, updated_at)
        VALUES ($1, $2, $3, $4, $5, NOW(), NOW())`,
-      [application.email, passwordHash, application.full_name, nextPin, '']
     );
 
     // Update application status
@@ -68,7 +64,6 @@ module.exports = async (req, res) => {
 
     // Send welcome email with login credentials
     try {
-      const emailContent = welcomeEmail(application.full_name, application.email, tempPassword, nextPin);
       await sendEmail({
         to: application.email,
         subject: emailContent.subject,
@@ -83,7 +78,6 @@ module.exports = async (req, res) => {
       success: true,
       email: application.email,
       temp_password: tempPassword,
-      pin_number: nextPin
     });
 
   } catch (error) {
