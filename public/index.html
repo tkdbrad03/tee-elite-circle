@@ -74,21 +74,7 @@
       z-index: 0;
     }
 
-    /* Lighter overlay (still provides contrast for white outline button) */
-    .hero-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 18% 20%, rgba(255,255,255,.55) 0%, rgba(255,255,255,.10) 55%, rgba(255,255,255,0) 75%),
-        linear-gradient(to right,
-          rgba(22,51,38,.55) 0%,
-          rgba(22,51,38,.28) 40%,
-          rgba(22,51,38,.10) 62%,
-          rgba(255,255,255,0) 100%
-        );
-    }
-
+    
     .hero-inner {
       width: 100%;
       max-width: var(--max);
