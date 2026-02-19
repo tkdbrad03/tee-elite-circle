@@ -47,8 +47,6 @@
       margin-bottom: 12px;
     }
 
-    /* CHANGE: Gold badge */
-    .welcome-pin {
       display: inline-block;
       background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
       padding: 6px 16px;
@@ -373,7 +371,7 @@
     <section class="welcome-section">
       <p class="welcome-greeting">Welcome back</p>
       <h1 class="welcome-name" id="member-name">Dr. TMac</h1>
-      <p class="welcome-pin">Founding Member <span id="member-pin">#01</span></p>
+      <p </p>
     </section>
 
     <!-- RETREAT COUNTDOWN -->
@@ -402,7 +400,7 @@
     <nav class="nav-grid">
       <a href="/members.html" class="nav-item">
         <h3 class="nav-item-title">The Circle</h3>
-        <p class="nav-item-desc">Your 12 founding members</p>
+        <p class="nav-item-desc">Players</p>
       </a>
       <a href="/between-the-tees.html" class="nav-item">
         <h3 class="nav-item-title">Between the Tees</h3>
@@ -441,21 +439,20 @@
     });
 
     // Load member
-    async function loadMember() {
+    async function loadPlayer() {
       try {
         const res = await fetch('/api/members/me');
         if (!res.ok) {
           window.location.href = '/member-login.html';
           return;
         }
-        const member = await res.json();
+        const player = await res.json();
         
-        document.getElementById('member-name').textContent = member.name || 'Member';
-        document.getElementById('member-pin').textContent = `#${String(member.pin_number || 1).padStart(2, '0')}`;
-        document.getElementById('user-initials').textContent = getInitials(member.name);
+        document.getElementById('member-name').textContent = player.name || 'Player';
+        document.getElementById('user-initials').textContent = getInitials(player.name);
         
-        if (member.finished_scorecard) {
-          document.getElementById('scorecard-content').innerHTML = `"${member.finished_scorecard}"`;
+        if (player.finished_scorecard) {
+          document.getElementById('scorecard-content').innerHTML = `"${player.finished_scorecard}"`;
         }
       } catch (err) {
         console.error(err);
@@ -480,7 +477,7 @@
       }
     }
 
-    loadMember();
+    loadPlayer();
     updateCountdown();
     setInterval(updateCountdown, 60000);
 
@@ -542,19 +539,6 @@
             console.log('ServiceWorker registration failed:', error);
           });
       });
-    }
-    // Show admin link for pin #01 only
-    async function checkAdminAccess() {
-      try {
-        const res = await fetch('/api/members/me');
-        if (res.ok) {
-          const member = await res.json();
-          if (member.pin_number === 1) {
-            const adminLink = document.getElementById('admin-nav-link');
-            if (adminLink) adminLink.style.display = 'flex';
-          }
-        }
-      } catch (err) {}
     }
     checkAdminAccess();
   </script>
