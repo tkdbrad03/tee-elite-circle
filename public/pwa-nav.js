@@ -51,18 +51,19 @@
     // Insert the nav
     document.body.insertAdjacentHTML('beforeend', navHTML);
     
-    // Check if user is pin #01 for admin access
-    checkAdminAccess();
+    if (member.email === 'info@tmacmastermind.com') {
+  addAdminLink();
+}
   });
 
-  // Show admin link for pin #01 only
+  // Show admin link for admin only
   async function checkAdminAccess() {
     try {
       const res = await fetch('/api/members/me');
       if (res.ok) {
         const member = await res.json();
           const adminLink = document.getElementById('admin-nav-link');
-          if (adminLink) adminLink.style.display = 'flex';
+          if (adminLink && member.email === 'info@tmacmastermind.com') adminLink.style.display = 'flex';
         }
       }
     } catch (err) {
