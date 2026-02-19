@@ -814,7 +814,6 @@
         const res = await fetch('/api/members/me');
         if (res.ok) {
           const member = await res.json();
-          if (member.pin_number === 1) {
             const adminLink = document.getElementById('admin-nav-link');
             if (adminLink) adminLink.style.display = 'flex';
           }
