@@ -127,7 +127,7 @@ const adminDepositPaidEmail = (name, email) => ({
     </div>
     
     <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555; text-align: center;">
-      This applicant has completed their founding member deposit. Remaining balance: $13,000.
+      This applicant has completed their invitational registration.
     </p>
     
     <div style="text-align: center; margin-top: 32px;">
@@ -142,7 +142,7 @@ const applicationReceivedEmail = (name) => ({
     <h2 style="margin: 0 0 24px 0; font-size: 24px; font-weight: 400; color: #2C2C2C;">Thank You, ${name}</h2>
     
     <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555;">
-      We've received your application to join The Tee Elite Circle as a Founding Member.
+      We've received your application to join The Tee Elite Circle to The Tee Elite Circle.
     </p>
     
     <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555;">
@@ -168,7 +168,7 @@ const applicationReceivedEmail = (name) => ({
 });
 
 const depositConfirmedEmail = (name) => ({
-  subject: "You're In — Founding Member Deposit Confirmed",
+  subject: "You're In — Registration Confirmed",
   content: `
     <div style="text-align: center; margin-bottom: 32px;">
       <div style="display: inline-block; width: 64px; height: 64px; background-color: #1a2f23; border-radius: 50%; line-height: 64px; text-align: center;">
@@ -179,7 +179,7 @@ const depositConfirmedEmail = (name) => ({
     <h2 style="margin: 0 0 24px 0; font-size: 28px; font-weight: 400; color: #2C2C2C; text-align: center;">Welcome, ${name}</h2>
     
     <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555; text-align: center;">
-      Your $2,000 deposit has been received. You've officially secured your seat as a Founding Member of The Tee Elite Circle.
+      Your $2,000 deposit has been received. You've officially secured your seat to The Tee Elite Circle.of The Tee Elite Circle.
     </p>
     
     <div style="margin: 32px 0; padding: 32px; background-color: #1a2f23; text-align: center;">
@@ -221,24 +221,21 @@ const depositConfirmedEmail = (name) => ({
   `
 });
 
-const welcomeEmail = (name, email, tempPassword, pinNumber) => ({
-  subject: "Your Founding Member Access — The Tee Elite Circle",
+const welcomeEmail = (name, email, tempPassword) => ({
+  subject: "Your Access — The Tee Elite Circle",
   content: `
     <div style="text-align: center; margin-bottom: 32px;">
       <div style="display: inline-block; width: 80px; height: 80px; border: 2px solid #e8ccc8; border-radius: 50%; line-height: 76px; text-align: center;">
-        <span style="color: #a67c52; font-size: 32px; font-family: Georgia, serif;">#${String(pinNumber).padStart(2, '0')}</span>
       </div>
     </div>
     
-    <h2 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 400; color: #2C2C2C; text-align: center;">Welcome, Founding Member</h2>
-    <p style="margin: 0 0 32px 0; font-size: 14px; color: #a67c52; text-align: center; letter-spacing: 0.1em;">PIN #${String(pinNumber).padStart(2, '0')}</p>
+    <h2 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 400; color: #2C2C2C; text-align: center;">Welcome to The Circle</h2>
     
     <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555;">
       ${name}, you're officially one of us.
     </p>
     
     <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.8; color: #555555;">
-      Your investment is complete, and your place in The Tee Elite Circle is secured. As Founding Member #${String(pinNumber).padStart(2, '0')}, you'll receive your custom pin at the First Tee ceremony — a symbol of your commitment to playing life at the highest level.
     </p>
     
     <div style="margin: 32px 0; padding: 32px; background-color: #1a2f23; text-align: center;">
@@ -258,7 +255,7 @@ const welcomeEmail = (name, email, tempPassword, pinNumber) => ({
     </p>
     
     <ul style="margin: 0 0 24px 0; padding-left: 20px; font-size: 15px; line-height: 2; color: #555555;">
-      <li>Member directory — connect with your fellow Founding Members</li>
+      <li>Player directory — connect with your fellow players</li>
       <li>Wins feed — celebrate and share victories</li>
       <li>Between the Tees — our private discussion space</li>
       <li>The Vault — exclusive resources and materials</li>
