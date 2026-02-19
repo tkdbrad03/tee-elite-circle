@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
           throw new Error(data.error || 'Login failed');
         }
 
-        window.location.href = '/hub.html';
+        window.location.href = '/home.html';
       } catch (err) {
         errorMessage.textContent = err.message;
         errorMessage.classList.add('visible');
