@@ -120,7 +120,7 @@ const auditResultsEmail = (firstName, score, category, description) => ({
     </div>
     
     <div style="margin: 32px 0; padding: 24px; border: 2px solid #e8ccc8; text-align: center;">
-      <p style="margin: 0 0 8px 0; font-size: 13px; color: #b59a5d; letter-spacing: 0.1em; text-transform: uppercase;">Limited to 12 Founding Members</p>
+      <p style="margin: 0 0 8px 0; font-size: 13px; color: #b59a5d; letter-spacing: 0.1em; text-transform: uppercase;">An Exclusive Experience</p>
       <p style="margin: 0; font-size: 14px; line-height: 1.8; color: #4a4a4a;">
         Selection based on alignment, ambition, and readiness to play at the highest level.
       </p>
