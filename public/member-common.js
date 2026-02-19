@@ -21,7 +21,7 @@ async function loadMemberHeader() {
       initialsEl.textContent = getInitials(member.name);
     }
     
-    if (member.email === 'info@tmacinspired.com') {
+    if (member.email === 'info@tmacmastermind.com') {
   addAdminLink();
 }
     
