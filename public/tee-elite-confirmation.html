@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registration Confirmed | Tee Elite Invitational</title>
+  <meta name="description" content="Tee Elite Invitational registration confirmed. Watch the welcome video and access the Invitational Hub." />
+
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#163326">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tee Elite">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green:    #163326;
+      --green2:   #1E3A2B;
+      --gold:     #A87C28;
+      --gold2:    #C9A24A;
+      --gold-lt:  #EDD9A3;
+      --white:    #FFFFFF;
+      --off:      #F8F7F4;
+      --ink:      #163326;
+      --body:     #2C2C2C;
+      --muted:    #555555;
+      --line:     rgba(0,0,0,.12);
+
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans:  "Jost", ui-sans-serif, system-ui, sans-serif;
+      --max: 980px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--body);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255,255,255,.97);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo { height: 46px; width: auto; }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--green);
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(168,124,40,.18);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 48px;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    h1 em { font-style: italic; color: var(--gold); }
+
+    .sub {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 62ch;
+      margin-bottom: 26px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--white);
+      padding: 26px 22px;
+    }
+    .card h2 {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .video {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.08);
+      background: var(--off);
+      aspect-ratio: 16 / 9;
+      width: 100%;
+    }
+    .video iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 30px;
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s ease;
+      border: none;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      color: var(--green);
+      box-shadow: 0 8px 24px rgba(168,124,40,.26);
+      font-weight: 700;
+    }
+    .btn-gold:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(168,124,40,.34);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid rgba(22,51,38,.22);
+      color: var(--green);
+    }
+    .btn-outline:hover {
+      border-color: rgba(22,51,38,.38);
+      transform: translateY(-1px);
+    }
+
+    .fine {
+      font-size: 13px;
+      color: rgba(44,44,44,.64);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-top: 10px;
+    }
+
+    .donation {
+      margin-top: 8px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0,0,0,.08);
+    }
+
+    @media (min-width: 820px) {
+      .grid {
+        grid-template-columns: 1.2fr .8fr;
+        align-items: start;
+      }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .wrap > * { animation: fadeUp .65s ease both; }
+    .wrap > *:nth-child(1) { animation-delay: .04s; }
+    .wrap > *:nth-child(2) { animation-delay: .10s; }
+    .wrap > *:nth-child(3) { animation-delay: .16s; }
+    .wrap > *:nth-child(4) { animation-delay: .22s; }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" aria-label="Back to home">
+        <img class="nav-logo" src="/images/tmac-logo.png" alt="TMac Inspired">
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="kicker">Registration confirmed</div>
+
+    <h1>You are in.<br><em>Welcome to Tee Elite Invitational.</em></h1>
+    <p class="sub">
+      Next step, watch the quick welcome video, then log in to the Invitational Hub.
+    </p>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Welcome video</h2>
+        <p>
+          Watch this first so you know what to expect, what to bring, and how the Invitational Hub works.
+        </p>
+
+        <div style="height:14px"></div>
+
+        <div class="video" aria-label="Welcome video">
+          <!-- Replace bJTXnKnPtbY with your unlisted YouTube video ID -->
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/bJTXnKnPtbY?rel=0&modestbranding=1&playsinline=1"
+            title="Tee Elite Invitational Welcome"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <p class="fine" style="margin-top:10px">
+          If the video does not load, <a href="https://www.youtube.com/watch?v=bJTXnKnPtbY" target="_blank" rel="noopener" style="text-decoration:underline">watch on YouTube</a>.
+        </p>
+
+        <p class="fine donation">
+          A portion of each registration will go toward Abundant Life Pregnancy Resource Center (Single Mama Support Group) in Apollo Beach.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Get into the hub</h2>
+        <p>
+          Use the email you used at checkout. If you used a different email, use the password reset link on the login page.
+        </p>
+
+        <div class="actions">
+          <a class="btn btn-gold" href="/member-login.html">Invitational Hub Login</a>
+          <a class="btn btn-outline" href="/tee-elite-invitational.html">View the Invitational Page</a>
+        </div>
+
+        <p class="fine">
+          If you have questions, reply to your confirmation email.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => console.log('ServiceWorker registered:', registration.scope))
+          .catch(error => console.log('ServiceWorker registration failed:', error));
+      });
+    }
+  </script>
+</body>
+</html>
