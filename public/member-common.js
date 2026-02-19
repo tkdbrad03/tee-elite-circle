@@ -22,7 +22,6 @@ async function loadMemberHeader() {
     }
     
     // Show admin link if pin #01 (Dr. TMac)
-    if (member.pin_number === 1) {
       addAdminLink();
     }
     
