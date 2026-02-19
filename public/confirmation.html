@@ -251,6 +251,33 @@
     }
   </style>
 </head>
+  <script>
+async function autoLogin() {
+  const params = new URLSearchParams(window.location.search);
+  const email = params.get("email");
+  const name = params.get("name");
+
+  if (!email) return;
+
+  try {
+    await fetch('/api/invitational-auto-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name })
+    });
+
+    setTimeout(() => {
+      window.location.href = "/home.html";
+    }, 4000);
+
+  } catch (err) {
+    console.error("Auto login failed", err);
+  }
+}
+
+autoLogin();
+</script>
+
 <body>
 
   <div class="page-container">
