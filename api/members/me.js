@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
 
     // Get member data
     const memberResult = await client.query(
-      'SELECT id, email, name, pin_number, bio, photo_url, looking_for, offering, finished_scorecard FROM members WHERE id = $1',
+      'SELECT id, email, name, bio, photo_url, looking_for, offering, finished_scorecard FROM members WHERE id = $1',
       [memberId]
     );
 
