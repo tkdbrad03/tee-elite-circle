@@ -302,7 +302,7 @@
               ${player.offering ? `<p class="player-tag"><strong>I offer:</strong> ${player.offering}</p>` : ''}
               ${player.looking_for ? `<p class="player-tag"><strong>Looking for:</strong> ${player.looking_for}</p>` : ''}
             </div>
-            <a href="/profile.html?id=${member.id}" class="view-profile-btn">View Profile</a>
+            <a href="/profile.html?id=${player.id}" class="view-profile-btn">View Profile</a>
           </div>
         `).join('');
       } catch (err) {
