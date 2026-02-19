@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tee Elite Circle Invitational | April 18 | Summerfield Crossing</title>
+  <meta name="description" content="Tee Elite Circle Invitational. Designed for women in their next chapter. Confidence. Connection. Community." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green:    #163326;
+      --green2:   #1E3A2B;
+      --gold:     #A87C28;
+      --gold2:    #C9A24A;
+      --gold-lt:  #EDD9A3;
+      --blush:    #D9A89F;
+      --blush2:   #F2E4E1;
+      --blush3:   #FBF5F4;
+      --white:    #FFFFFF;
+      --off:      #F8F7F4;
+      --ink:      #163326;
+      --body:     #2C2C2C;
+      --muted:    #555555;
+      --line:     rgba(0,0,0,.12);
+
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans:  "Jost", ui-sans-serif, system-ui, sans-serif;
+      --max: 1080px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--body);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── UTILITIES ── */
+    .rule { height: 1px; background: var(--line); }
+
+    .section-label {
+      font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold); font-weight: 600; margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: 42px; font-weight: 400;
+      color: var(--ink); line-height: 1.08;
+      margin-bottom: 20px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-body {
+      font-size: 17px; line-height: 1.8; color: var(--body); font-weight: 300;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 16px 30px;
+      font-family: var(--sans); font-size: 12px; letter-spacing: .14em;
+      text-transform: uppercase; font-weight: 600;
+      border-radius: 999px; cursor: pointer;
+      transition: all .2s ease; border: none; white-space: nowrap;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      color: var(--green);
+      box-shadow: 0 8px 24px rgba(168,124,40,.32);
+      font-weight: 700;
+    }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(168,124,40,.42); }
+    .btn-outline-green {
+      background: transparent;
+      border: 1.5px solid var(--green);
+      color: var(--green);
+    }
+    .btn-outline-green:hover {
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      border-color: transparent;
+      color: var(--green);
+      box-shadow: 0 8px 24px rgba(168,124,40,.32);
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 30;
+      background: rgba(255,255,255,.97);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    .nav-inner {
+      max-width: var(--max); margin: 0 auto; padding: 0 20px;
+      height: 66px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-logo {
+      height: 40px; width: 40px; border-radius: 50%;
+      background: var(--green); flex: 0 0 40px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 15px; font-weight: 500;
+      color: var(--gold2); letter-spacing: .02em;
+    }
+    .brand-name {
+      font-family: var(--serif); font-size: 17px; font-weight: 400;
+      color: var(--green); letter-spacing: .03em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .nav-right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+    .nav-text-link {
+      font-size: 11px; letter-spacing: .13em; text-transform: uppercase;
+      color: var(--muted); font-weight: 500; display: none;
+    }
+    .nav-pill {
+      padding: 10px 18px; border-radius: 999px;
+      border: 1.5px solid var(--line);
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); font-weight: 500; white-space: nowrap;
+      display: none;
+    }
+    .nav-reserve {
+      padding: 11px 20px;
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      color: var(--green); border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 11px; letter-spacing: .13em; text-transform: uppercase;
+      font-weight: 700; white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(168,124,40,.24);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 0;
+      min-height: 520px;
+      display: flex; align-items: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('Tee-Elite-Invitational.png');
+      background-size: cover;
+      background-position: center top;
+      z-index: 0;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(10,28,18,.58) 0%,
+        rgba(10,28,18,.35) 40%,
+        rgba(10,28,18,.05) 65%,
+        transparent 100%
+      );
+    }
+    .hero-inner {
+      max-width: var(--max); margin: 0 auto; position: relative;
+      z-index: 1; padding: 64px 20px 64px;
+      width: 100%;
+    }
+    .label-tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--green); font-weight: 700; margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(168,124,40,.24);
+    }
+    .hero h1 {
+      font-family: var(--serif); font-weight: 300; font-size: 54px;
+      line-height: 1.0; color: var(--white); letter-spacing: -.01em; margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold2); }
+    .hero-tagline {
+      font-family: var(--serif); font-size: 23px; font-weight: 400; font-style: italic;
+      color: rgba(255,255,255,.85); line-height: 1.4; margin-bottom: 20px;
+    }
+    .hero-sub {
+      font-size: 17px; line-height: 1.8; color: rgba(255,255,255,.80);
+      font-weight: 300; margin-bottom: 32px;
+    }
+    .detail-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 32px;
+    }
+    .detail-pill {
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.20);
+      border-radius: 16px; padding: 18px 20px;
+      backdrop-filter: blur(6px);
+    }
+    .detail-pill .k {
+      font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--gold2); font-weight: 600; margin-bottom: 6px;
+    }
+    .detail-pill .v {
+      font-family: var(--serif); font-size: 18px; font-weight: 500;
+      color: var(--white); line-height: 1.25;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── SECTIONS ── */
+    .section {
+      max-width: var(--max); margin: 0 auto; padding: 60px 20px;
+    }
+
+    /* ── INCLUDES ── */
+    .includes-grid {
+      display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 40px;
+    }
+    .include-card {
+      border: 1px solid var(--line); border-radius: 20px;
+      padding: 28px 24px; background: var(--white);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .include-card:hover {
+      border-color: var(--gold-lt);
+      box-shadow: 0 8px 32px rgba(168,124,40,.08);
+    }
+    .include-tag {
+      display: inline-block; margin-bottom: 14px;
+      font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--gold); font-weight: 600;
+      border-bottom: 1px solid var(--gold-lt); padding-bottom: 4px;
+    }
+    .include-card h3 {
+      font-family: var(--serif); font-size: 23px; font-weight: 500;
+      color: var(--ink); margin-bottom: 10px;
+    }
+    .include-card p { font-size: 16px; line-height: 1.75; color: var(--muted); font-weight: 300; }
+
+    /* ── SCHEDULE ── */
+    .schedule-section {
+      background: var(--off);
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    }
+    .schedule-grid {
+      display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 40px;
+    }
+    .schedule-item {
+      display: flex; gap: 20px; padding: 24px 22px;
+      background: var(--white); border: 1px solid var(--line); border-radius: 18px;
+      align-items: flex-start;
+    }
+    .schedule-num {
+      font-family: var(--serif); font-size: 44px; font-weight: 300;
+      color: var(--gold-lt); line-height: 1; flex: 0 0 auto;
+    }
+    .schedule-content h4 {
+      font-family: var(--serif); font-size: 22px; font-weight: 500;
+      color: var(--ink); margin-bottom: 8px; line-height: 1.2;
+    }
+    .schedule-content p { font-size: 16px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    /* ── REGISTER ── */
+    .two-col { display: grid; grid-template-columns: 1fr; gap: 40px; }
+    .reg-left { display: grid; gap: 28px; }
+    .info-block { border-left: 2px solid var(--gold-lt); padding-left: 20px; }
+    .info-block h4 {
+      font-family: var(--serif); font-size: 21px; font-weight: 500;
+      color: var(--ink); margin-bottom: 8px;
+    }
+    .info-block p { font-size: 16px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    .register-card {
+      background: var(--green); border-radius: 24px; padding: 36px 28px;
+      box-shadow: 0 24px 64px rgba(22,51,38,.18); position: relative; overflow: hidden;
+    }
+    .register-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 110% -10%, rgba(237,217,163,.12), transparent);
+      pointer-events: none;
+    }
+    .rc-inner { position: relative; }
+    .register-card h3 {
+      font-family: var(--serif); font-size: 36px; font-weight: 400; font-style: italic;
+      color: rgba(255,255,255,.96); margin-bottom: 8px; line-height: 1.1;
+    }
+    .register-card .sub {
+      font-size: 16px; color: rgba(255,255,255,.68); line-height: 1.65;
+      margin-bottom: 28px; font-weight: 300;
+    }
+    .price-pill {
+      display: inline-flex; align-items: baseline; gap: 8px;
+      padding: 10px 20px; border: 1px solid rgba(237,217,163,.28);
+      border-radius: 999px; background: rgba(237,217,163,.10); margin-bottom: 28px;
+    }
+    .price-pill .amount {
+      font-family: var(--serif); font-size: 32px; font-weight: 500; color: var(--gold2);
+    }
+    .price-pill .per { font-size: 14px; color: rgba(255,255,255,.60); letter-spacing: .06em; }
+    form { display: grid; gap: 14px; }
+    .field { display: grid; gap: 7px; }
+    .field label {
+      font-size: 11px; letter-spacing: .13em; text-transform: uppercase;
+      color: rgba(255,255,255,.64); font-weight: 600;
+    }
+    .field input, .field select {
+      width: 100%; padding: 15px 18px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.92); font-family: var(--sans); font-size: 16px;
+      font-weight: 300; outline: none;
+      transition: border-color .2s, box-shadow .2s; -webkit-appearance: none;
+    }
+    .field input::placeholder { color: rgba(255,255,255,.38); }
+    .field select option { background: var(--green2); color: #fff; }
+    .field input:focus, .field select:focus {
+      border-color: rgba(201,162,74,.50);
+      box-shadow: 0 0 0 4px rgba(201,162,74,.14);
+    }
+    .form-btn {
+      width: 100%; padding: 17px;
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      color: var(--green); border: none; border-radius: 12px;
+      font-family: var(--sans); font-size: 12px; letter-spacing: .14em;
+      text-transform: uppercase; font-weight: 700; cursor: pointer;
+      transition: all .2s ease; margin-top: 4px;
+      box-shadow: 0 8px 24px rgba(168,124,40,.30);
+    }
+    .form-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(168,124,40,.40); }
+    .form-note { font-size: 14px; color: rgba(255,255,255,.50); text-align: center; margin-top: 10px; font-weight: 300; }
+    .form-alt {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px;
+      padding-top: 18px; border-top: 1px solid rgba(255,255,255,.10);
+    }
+    .btn-ghost-sm {
+      flex: 1; padding: 14px 16px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.82);
+      font-family: var(--sans); font-size: 11px; letter-spacing: .10em;
+      text-transform: uppercase; font-weight: 500; text-align: center; cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost-sm:hover { border-color: rgba(201,162,74,.45); color: var(--gold2); }
+
+    /* ── GIVEBACK ── */
+    .giveback {
+      margin: 0 20px; border-radius: 24px;
+      background: var(--white);
+      border: 1px solid var(--line); padding: 48px 28px; text-align: center;
+    }
+    .giveback h2 {
+      font-family: var(--serif); font-size: 38px; font-weight: 400;
+      color: var(--ink); margin-bottom: 18px; line-height: 1.2;
+    }
+    .giveback h2 em { font-style: italic; color: var(--gold); }
+    .giveback p { font-size: 17px; color: var(--body); max-width: 50ch; margin: 0 auto; line-height: 1.8; font-weight: 300; }
+
+    /* ── SPONSORS ── */
+    .sponsors-grid {
+      display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 40px;
+    }
+    .sponsor-card {
+      border: 1px solid var(--line); border-radius: 20px; padding: 32px 24px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .sponsor-card:hover { border-color: var(--gold-lt); box-shadow: 0 8px 32px rgba(168,124,40,.08); }
+    .sponsor-tier {
+      font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold); font-weight: 600; margin-bottom: 12px;
+    }
+    .sponsor-card h3 {
+      font-family: var(--serif); font-size: 24px; font-weight: 400;
+      color: var(--ink); margin-bottom: 12px;
+    }
+    .sponsor-card p { font-size: 16px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+    .sponsor-email {
+      margin-top: 32px; padding: 26px 24px;
+      border: 1px solid var(--line); border-radius: 16px; background: var(--off);
+    }
+    .sponsor-email p { font-size: 16px; color: var(--muted); line-height: 1.75; font-weight: 300; }
+    .sponsor-email a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 40px; display: grid; gap: 8px; }
+    .faq-item {
+      border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .faq-item:hover { border-color: var(--gold-lt); }
+    .faq-q {
+      padding: 22px 24px; display: flex; align-items: center; justify-content: space-between;
+      font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--ink);
+      background: var(--white); gap: 16px;
+    }
+    .faq-q::after {
+      content: '+'; font-family: var(--sans); font-size: 22px; font-weight: 300;
+      color: var(--gold); flex: 0 0 auto;
+    }
+    .faq-a {
+      padding: 0 24px; font-size: 16px; color: var(--muted);
+      line-height: 1.75; font-weight: 300; background: var(--white);
+      max-height: 0; overflow: hidden;
+      transition: max-height .3s ease, padding .3s ease;
+    }
+    .faq-item.open .faq-a {
+      max-height: 200px;
+      padding: 4px 24px 22px;
+    }
+    .faq-q { cursor: pointer; }
+    .faq-item.open .faq-q::after { content: '−'; }
+
+    /* ── FOOTER ── */
+    .footer-bar { background: var(--green); margin-top: 72px; }
+    .footer-inner {
+      max-width: var(--max); margin: 0 auto; padding: 48px 20px;
+      display: grid; gap: 10px; text-align: center;
+    }
+    .footer-brand {
+      font-family: var(--serif); font-size: 24px; font-weight: 400; font-style: italic;
+      color: rgba(255,255,255,.88);
+    }
+    .footer-tagline {
+      font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--gold2); font-weight: 500;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.45); margin-top: 4px; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-inner > * { animation: fadeUp .65s ease both; }
+    .hero-inner > *:nth-child(1) { animation-delay: .04s; }
+    .hero-inner > *:nth-child(2) { animation-delay: .10s; }
+    .hero-inner > *:nth-child(3) { animation-delay: .16s; }
+    .hero-inner > *:nth-child(4) { animation-delay: .22s; }
+    .hero-inner > *:nth-child(5) { animation-delay: .28s; }
+    .hero-inner > *:nth-child(6) { animation-delay: .34s; }
+
+    /* ── TABLET 640px+ ── */
+    @media (min-width: 640px) {
+      .hero { min-height: 600px; }
+      .hero h1 { font-size: 66px; }
+      .section-title { font-size: 48px; }
+      .includes-grid { grid-template-columns: 1fr 1fr; }
+      .schedule-grid { grid-template-columns: 1fr 1fr; }
+      .sponsors-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .giveback { padding: 64px 56px; margin: 0 28px; }
+      .giveback h2 { font-size: 46px; }
+      .nav-pill { display: inline-flex; }
+    }
+
+    /* ── DESKTOP 960px+ ── */
+    @media (min-width: 960px) {
+      .hero { min-height: 680px; padding: 0; }
+      .hero-inner { padding: 88px 20px 88px; }
+      .hero h1 { font-size: 76px; }
+      .section { padding: 80px 20px; }
+      .section-title { font-size: 52px; }
+      .two-col { grid-template-columns: 1.1fr .9fr; gap: 64px; }
+      .register-card { position: sticky; top: 82px; }
+      .nav-text-link { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-logo">TM</div>
+        <div class="brand-name">The Tee Elite Circle</div>
+      </div>
+      <div class="nav-right">
+        <a class="nav-text-link" href="#about">About</a>
+        <a class="nav-text-link" href="#reserve">Register</a>
+        <span class="nav-pill">Member Login</span>
+        <a class="nav-reserve" href="#reserve">Reserve</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div class="label-tag">TMac Inspired presents &middot; April 18</div>
+      <h1>Tee Elite Circle<br><em>Invitational</em></h1>
+      <p class="hero-tagline">Designed for women in their next chapter.</p>
+      <p class="hero-sub">
+        A curated women-only golf experience at Summerfield Crossing Golf Club.
+        Scramble format for mixed skill levels.
+      </p>
+      <div class="detail-grid">
+        <div class="detail-pill">
+          <div class="k">Date</div>
+          <div class="v">Saturday, April 18</div>
+        </div>
+        <div class="detail-pill">
+          <div class="k">Course</div>
+          <div class="v">Summerfield Crossing</div>
+        </div>
+        <div class="detail-pill">
+          <div class="k">Format</div>
+          <div class="v">Scramble &middot; All Levels</div>
+        </div>
+        <div class="detail-pill">
+          <div class="k">Investment</div>
+          <div class="v">$250 per player</div>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#reserve">Reserve Your Seat</a>
+        <a class="btn btn-outline-green" href="#sponsors">Sponsor Inquiry</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S INCLUDED -->
+  <div class="rule"></div>
+  <div class="section" id="about">
+    <div class="section-label">What's Included</div>
+    <h2 class="section-title">Confidence.<br><em>Connection.</em> Community.</h2>
+    <p class="section-body">
+      Not a league. A lifestyle. This invitational is a refined, women-only experience curated for
+      both seasoned players and women stepping onto the course with fresh confidence.
+    </p>
+    <div class="includes-grid">
+      <div class="include-card">
+        <div class="include-tag">Round</div>
+        <h3>Green Fees &amp; Round</h3>
+        <p>Full 18-hole scramble round at Summerfield Crossing in a supportive, women-only environment built for mixed skill levels.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-tag">Apparel</div>
+        <h3>Signature Polo</h3>
+        <p>White embroidered women's-cut performance polo. Neutral bottoms recommended &mdash; black, navy, beige, or white.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-tag">On Course</div>
+        <h3>Champagne Moments</h3>
+        <p>Curated champagne welcome and on-course celebrations, followed by a full awards ceremony to close the day in style.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-tag">Media</div>
+        <h3>Professional Capture</h3>
+        <p>Professional photo and video throughout the event so you can relive and share every elevated moment.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-tag">Gift</div>
+        <h3>Tee Elite Player Collection</h3>
+        <p>A curated welcome set featuring select partner gifts and intentional details.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-tag">Giveback</div>
+        <h3>Community Impact</h3>
+        <p>$25 from every registration is donated to Single Mama Support Groups in Apollo Beach. Play with purpose.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <section class="schedule-section">
+    <div class="section">
+      <div class="section-label">Day of Event</div>
+      <h2 class="section-title">The <em>Schedule</em></h2>
+      <p class="section-body">Final times confirmed after the course confirms the shotgun start. You will receive a full itinerary before event day.</p>
+      <div class="schedule-grid">
+        <div class="schedule-item">
+          <div class="schedule-num">01</div>
+          <div class="schedule-content">
+            <h4>Check-In &amp; Welcome</h4>
+            <p>Polo pickup, champagne welcome, and group introductions before we tee off.</p>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-num">02</div>
+          <div class="schedule-content">
+            <h4>Opening Remarks</h4>
+            <p>Brief remarks from Dr. TMac to center the group in intention before play begins.</p>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-num">03</div>
+          <div class="schedule-content">
+            <h4>Shotgun Start</h4>
+            <p>Scramble format for all levels, with champagne moments throughout the round.</p>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-num">04</div>
+          <div class="schedule-content">
+            <h4>Awards &amp; Giveback</h4>
+            <p>Check presentation, awards ceremony, and group photos. A close worthy of the day.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <div class="rule"></div>
+  <div class="section" id="reserve">
+    <div class="two-col">
+      <div class="reg-left">
+        <div>
+          <div class="section-label">Registration</div>
+          <h2 class="section-title">Reserve Your<br><em>Seat</em></h2>
+          <p class="section-body">Limited to 24 women. Complete the short form, then proceed to Stripe payment. Your seat is confirmed once payment is received.</p>
+        </div>
+        <div class="info-block">
+          <h4>Women Only</h4>
+          <p>Women-only from check-in through the awards ceremony. A space built entirely for us.</p>
+        </div>
+        <div class="info-block">
+          <h4>Skill Level</h4>
+          <p>Scramble format supports all skill levels, beginners fully included. All that's required is the desire to show up.</p>
+        </div>
+        <div class="info-block">
+          <h4>Style Standard</h4>
+          <p>White polo provided. Neutral bottoms &mdash; black, navy, beige, or white &mdash; keep the group aesthetic clean and cohesive.</p>
+        </div>
+        <div class="info-block">
+          <h4>Refund Policy</h4>
+          <p>All registrations are final. Transfer requests can be accommodated with written notice, based on remaining capacity.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="register-card">
+          <div class="rc-inner">
+            <h3>Secure your seat.</h3>
+            <p class="sub">Limited to 24 women. Complete the form below to reserve your spot.</p>
+            <div class="price-pill">
+              <span class="amount">$250</span>
+              <span class="per">per player</span>
+            </div>
+            <form id="shortReg" action="YOUR_SHORT_REG_ENDPOINT" method="post">
+              <div class="field">
+                <label for="fullName">Full Name</label>
+                <input id="fullName" name="name" type="text" placeholder="First and last name" required>
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@email.com" required>
+              </div>
+              <div class="field">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="tel" placeholder="(###) ###-####" required>
+              </div>
+              <div class="field">
+                <label for="level">Golf Experience (optional)</label>
+                <select id="level" name="experience_level">
+                  <option value="">Select one</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Recreational">Recreational</option>
+                  <option value="Confident Player">Confident Player</option>
+                </select>
+              </div>
+              <button class="form-btn" type="submit">Reserve My Seat &rarr;</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GIVEBACK BANNER -->
+  <div class="giveback">
+    <div class="section-label" style="margin-bottom:16px;">Community Giveback</div>
+    <h2>Playing with <em>Purpose</em></h2>
+    <p>$25 from every registration is donated to Single Mama Support Groups in Apollo Beach. When women rise together, the whole community is lifted.</p>
+  </div>
+
+  <!-- SPONSORS -->
+  <div class="rule" style="margin-top:72px;"></div>
+  <div class="section" id="sponsors">
+    <div class="section-label">Partners</div>
+    <h2 class="section-title">Sponsors &amp;<br><em>Partners</em></h2>
+    <p class="section-body">Partners receive recognition and curated inclusion in The Tee Elite Player Collection.</p>
+    <div class="sponsors-grid">
+      <div class="sponsor-card">
+        <div class="sponsor-tier">Title Partner &middot; 1 Available</div>
+        <h3>Title Partner</h3>
+        <p>Premium visibility and recognition during opening remarks and the awards ceremony. Your brand at the forefront.</p>
+      </div>
+      <div class="sponsor-card">
+        <div class="sponsor-tier">Supporting &middot; Limited</div>
+        <h3>Supporting Partners</h3>
+        <p>Brand recognition and curated inclusion in The Tee Elite Player Collection delivered to all 24 players.</p>
+      </div>
+      <div class="sponsor-card">
+        <div class="sponsor-tier">Community &middot; Product-Based</div>
+        <h3>Community Partners</h3>
+        <p>Contribute a product item that aligns with an elevated women's golf audience and the Tee Elite brand.</p>
+      </div>
+    </div>
+    <div class="sponsor-email">
+      <p>
+        Sponsorship inquiries: <a href="/cdn-cgi/l/email-protection#234b464f4f4c63574e42404a4d50534a5146470d404c4e"><span class="__cf_email__" data-cfemail="167e737a7a7956627b77757f7865667f6473723875797b">[email&#160;protected]</span></a><br>
+        <span style="font-size:14px;">Subject line: <strong style="color:var(--body); font-weight:500;">Tee Elite Circle Invitational Sponsor</strong></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="rule"></div>
+  <div class="section" id="faq">
+    <div class="section-label">Questions</div>
+    <h2 class="section-title">Frequently<br><em>Asked</em></h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Is this event women-only?</div>
+        <div class="faq-a">Yes &mdash; women-only from check-in through the awards ceremony. This space is built entirely for us.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What skill level is required?</div>
+        <div class="faq-a">None. The scramble format is designed for mixed levels, beginners fully included. All that's required is willingness to show up.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What do I need to bring?</div>
+        <div class="faq-a">Your clubs, neutral bottoms, golf shoes or sneakers, and your energy. The white polo is provided to all players.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is the refund policy?</div>
+        <div class="faq-a">All registrations are final. Transfer requests can be accommodated with written notice, based on remaining capacity.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">When will shotgun times be confirmed?</div>
+        <div class="faq-a">Final times are confirmed after the course confirms the shotgun start. A full itinerary will be sent ahead of event day.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATION -->
+  <div class="rule"></div>
+  <div class="section" id="location">
+    <div class="section-label">Venue</div>
+    <h2 class="section-title">Summerfield<br><em>Crossing Golf Club</em></h2>
+    <p class="section-body">13050 Summerfield Blvd, Riverview, FL 33579</p>
+    <div style="margin-top:32px;">
+      <a class="btn btn-gold" href="https://maps.google.com/?q=13050+Summerfield+Blvd+Riverview+FL+33579" target="_blank" rel="noopener">Open in Maps</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-bar">
+    <div class="footer-inner">
+      <div class="footer-brand">The Tee Elite Circle</div>
+      <div class="footer-tagline">Confidence &middot; Connection &middot; Community</div>
+      <
+  <script>
+    document.querySelectorAll('.faq-q').forEach(function(q) {
+      q.addEventListener('click', function() {
+        var item = this.closest('.faq-item');
+        var isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
