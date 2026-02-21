@@ -1048,7 +1048,8 @@
       <button class="main-tab active" data-tab="members">Members</button>
       <button class="main-tab" data-tab="content">Content</button>
       <button class="main-tab" data-tab="retreats">Retreats</button>
-      <button class="main-tab" data-tab="live">🔴 Live</button>
+      <button class="main-tab" data-tab="invitational">Invitational</button>
+      <button class="main-tab" data-tab="live">Live</button>
       <button class="main-tab" data-tab="analytics">Analytics</button>
       <button class="main-tab" data-tab="assessments">Assessments</button>
     </div>
@@ -1441,6 +1442,54 @@
     <div id="assessments-content">Loading...</div>
   </div>
 </div>
+
+<!-- INVITATIONAL TAB -->
+<div class="tab-content" id="invitational-tab">
+  <div class="content-section">
+    <h2>Invitational — Day-of Management</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:24px;">Log mulligans and drink ticket redemptions for each player. Updates appear in their hub instantly.</p>
+
+    <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+      <div style="background:#f9f9f9;border:1px solid #eee;padding:16px 24px;flex:1;min-width:140px;">
+        <div style="font-size:28px;font-weight:600;color:#1a2f23;" id="inv-stat-players">—</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">Registered Players</div>
+      </div>
+      <div style="background:#f9f9f9;border:1px solid #eee;padding:16px 24px;flex:1;min-width:140px;">
+        <div style="font-size:28px;font-weight:600;color:#1a2f23;" id="inv-stat-mulligans">—</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">Mulligans Sold</div>
+      </div>
+      <div style="background:#f9f9f9;border:1px solid #eee;padding:16px 24px;flex:1;min-width:140px;">
+        <div style="font-size:28px;font-weight:600;color:#1a2f23;" id="inv-stat-drinks">—</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">Drinks Redeemed</div>
+      </div>
+      <div style="background:#f9f9f9;border:1px solid #eee;padding:16px 24px;flex:1;min-width:140px;">
+        <div style="font-size:28px;font-weight:600;color:#c9a86c;" id="inv-stat-revenue">—</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">Mulligan Revenue</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <input type="text" id="inv-search" placeholder="Search by name or email..." onkeyup="filterInvPlayers()" style="width:100%;max-width:360px;padding:10px 14px;border:1px solid #ddd;font-size:14px;font-family:inherit;outline:none;">
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#f5f5f5;">
+            <th style="text-align:left;padding:12px 14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Player</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">GHIN</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Front 9 Mulligan</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Back 9 Mulligan</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Drink Ticket</th>
+          </tr>
+        </thead>
+        <tbody id="inv-players-tbody">
+          <tr><td colspan="5" style="text-align:center;padding:32px;color:#888;">Loading players...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
     </main>
   </div>
 
@@ -1596,6 +1645,7 @@
         if (tab.dataset.tab === 'retreats') loadRetreatRSVPs();
         if (tab.dataset.tab === 'content') loadEssentials();
         if (tab.dataset.tab === 'live') loadLiveStatus();
+        if (tab.dataset.tab === 'invitational') loadInvPlayers();
       });
     });
 
@@ -2326,6 +2376,93 @@
     }
 
     // ==================== RETREATS ====================
+    // ===== INVITATIONAL TAB =====
+    let invPlayers = [];
+
+    async function loadInvPlayers() {
+      const tbody = document.getElementById('inv-players-tbody');
+      try {
+        const res = await fetch('/api/admin/invitational');
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+        invPlayers = data.players || [];
+        renderInvPlayers(invPlayers);
+        document.getElementById('inv-stat-players').textContent = invPlayers.length;
+        const totalMulligans = invPlayers.reduce((a, p) => a + (p.mulligan_front ? 1 : 0) + (p.mulligan_back ? 1 : 0), 0);
+        document.getElementById('inv-stat-mulligans').textContent = totalMulligans;
+        document.getElementById('inv-stat-revenue').textContent = '$' + (totalMulligans * 5);
+        const drinksRedeemed = invPlayers.filter(p => p.drink_redeemed).length;
+        document.getElementById('inv-stat-drinks').textContent = drinksRedeemed;
+      } catch(e) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#c0392b;">Error loading players</td></tr>';
+      }
+    }
+
+    function renderInvPlayers(players) {
+      const tbody = document.getElementById('inv-players-tbody');
+      if (!players.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#888;">No registered players yet</td></tr>';
+        return;
+      }
+      tbody.innerHTML = players.map(p => `
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:14px;">
+            <div style="font-size:14px;font-weight:500;color:#1a2f23;">${p.name}</div>
+            <div style="font-size:12px;color:#aaa;">${p.email}</div>
+          </td>
+          <td style="padding:14px;text-align:center;font-size:13px;color:#666;">${p.ghin || '<span style="color:#ccc;">—</span>'}</td>
+          <td style="padding:14px;text-align:center;">
+            ${p.mulligan_front
+              ? `<span style="color:#2e7d32;font-size:13px;font-weight:500;">Sold</span>
+                 <button onclick="logMulligan(${p.id},'front',false)" style="margin-left:8px;font-size:10px;color:#c62828;background:none;border:none;cursor:pointer;text-decoration:underline;">Undo</button>`
+              : `<button onclick="logMulligan(${p.id},'front',true)" style="background:#1a2f23;color:#e8ccc8;border:none;padding:6px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Sell</button>`}
+          </td>
+          <td style="padding:14px;text-align:center;">
+            ${p.mulligan_back
+              ? `<span style="color:#2e7d32;font-size:13px;font-weight:500;">Sold</span>
+                 <button onclick="logMulligan(${p.id},'back',false)" style="margin-left:8px;font-size:10px;color:#c62828;background:none;border:none;cursor:pointer;text-decoration:underline;">Undo</button>`
+              : `<button onclick="logMulligan(${p.id},'back',true)" style="background:#1a2f23;color:#e8ccc8;border:none;padding:6px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Sell</button>`}
+          </td>
+          <td style="padding:14px;text-align:center;">
+            ${p.drink_redeemed
+              ? `<span style="color:#2e7d32;font-size:13px;font-weight:500;">Redeemed</span>
+                 <button onclick="logDrink(${p.id},false)" style="margin-left:8px;font-size:10px;color:#c62828;background:none;border:none;cursor:pointer;text-decoration:underline;">Undo</button>`
+              : `<button onclick="logDrink(${p.id},true)" style="background:#1a2f23;color:#e8ccc8;border:none;padding:6px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Redeem</button>`}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterInvPlayers() {
+      const q = document.getElementById('inv-search').value.toLowerCase();
+      const filtered = invPlayers.filter(p =>
+        p.name.toLowerCase().includes(q) || p.email.toLowerCase().includes(q)
+      );
+      renderInvPlayers(filtered);
+    }
+
+    async function logMulligan(memberId, half, sold) {
+      try {
+        const res = await fetch('/api/admin/invitational', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'mulligan', member_id: memberId, half, sold })
+        });
+        if (res.ok) loadInvPlayers();
+      } catch(e) { console.error(e); }
+    }
+
+    async function logDrink(memberId, redeemed) {
+      try {
+        const res = await fetch('/api/admin/invitational', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'drink', member_id: memberId, redeemed })
+        });
+        if (res.ok) loadInvPlayers();
+      } catch(e) { console.error(e); }
+    }
+
     async function loadRetreatRSVPs() {
       try {
         const res = await fetch('/api/admin/retreat-rsvps?retreat_id=spring-2026');
