@@ -22,7 +22,7 @@
     .welcome-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:4px}
     .welcome-name{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,34px);font-weight:400;color:var(--charcoal);line-height:1.1}
     .member-badge{background:var(--deep-forest);color:var(--tmac-blush);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:6px 14px;display:inline-flex;align-items:center;gap:6px}
-    .member-badge::before{content:'⛳';font-size:12px}
+    .member-badge::before{content:''}
     .countdown-banner{background:var(--deep-forest);padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden}
     .countdown-banner::before{content:'';position:absolute;top:0;right:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--tmac-gold),var(--tmac-blush))}
     .countdown-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
@@ -96,7 +96,7 @@
     .vote-submit-btn:disabled{opacity:.4;cursor:default}
     .vote-thanks{text-align:center;padding:20px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--tmac-bronze);display:none}
     .swag-card{background:var(--deep-forest);padding:28px;margin-bottom:28px;position:relative;overflow:hidden}
-    .swag-card::after{content:'🏌🏾‍♀️';position:absolute;right:24px;bottom:16px;font-size:64px;opacity:.15;line-height:1}
+    .swag-card::after{content:'';position:absolute;right:24px;bottom:16px;font-size:64px;opacity:.15;line-height:1}
     .swag-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:8px}
     .swag-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:#fff;margin-bottom:6px}
     .swag-subtitle{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:24px}
@@ -204,7 +204,7 @@
     <a href="/live.html" class="live-banner" id="live-banner">
       <div style="display:flex;align-items:center;">
         <div class="live-dot"></div>
-        <span class="live-label">🔴 Dr. TMac is LIVE</span>
+        <span class="live-label">Dr. TMac is LIVE</span>
       </div>
       <span class="live-join">Join Now →</span>
     </a>
@@ -235,16 +235,16 @@
     <div class="section-head"><span class="section-label">Quick Access</span></div>
     <div class="quick-actions">
       <button class="qa-item" onclick="openModal('swag-modal')">
-        <div class="qa-icon">🎒</div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
+        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
       </button>
       <button class="qa-item" onclick="openModal('drink-modal')">
-        <div class="qa-icon">🍹</div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">3 remaining</div>
+        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><path d="M8 22h8M12 11v11M5 2h14l-2 9a5 5 0 01-10 0L5 2z"/></svg></div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">3 remaining</div>
       </button>
       <button class="qa-item highlight" onclick="openModal('mulligan-modal')">
-        <div class="qa-icon">⛳</div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
+        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
       </button>
       <a class="qa-item" href="/members.html">
-        <div class="qa-icon">🤝</div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
+        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
       </a>
     </div>
 
@@ -284,72 +284,63 @@
 
     <div class="section-head"><span class="section-label">Community Vote</span></div>
     <div class="vote-card">
-      <div class="vote-question">What's your post-round dinner preference?</div>
-      <div class="vote-subtext">Your vote helps us plan the perfect celebration dinner. Results revealed at check-in.</div>
+      <div class="vote-question">Should we host a Pairing Party before the Invitational?</div>
+      <div class="vote-subtext">A pre-event mixer to meet your team, share a drink, and shake off the nerves. Cast your vote — results are live.</div>
       <div class="vote-options" id="vote-options">
         <div class="vote-option" data-option="A" onclick="selectVote(this)">
           <div class="vote-bar-fill" style="width:0%"></div>
-          <span class="vote-option-label">🥩 Upscale steakhouse dinner</span>
+          <span class="vote-option-label">Yes — let's party before we play</span>
           <span class="vote-option-pct">—</span>
         </div>
         <div class="vote-option" data-option="B" onclick="selectVote(this)">
           <div class="vote-bar-fill" style="width:0%"></div>
-          <span class="vote-option-label">🌊 Fresh seafood and rooftop vibes</span>
-          <span class="vote-option-pct">—</span>
-        </div>
-        <div class="vote-option" data-option="C" onclick="selectVote(this)">
-          <div class="vote-bar-fill" style="width:0%"></div>
-          <span class="vote-option-label">🍾 Private chef experience</span>
-          <span class="vote-option-pct">—</span>
-        </div>
-        <div class="vote-option" data-option="D" onclick="selectVote(this)">
-          <div class="vote-bar-fill" style="width:0%"></div>
-          <span class="vote-option-label">🌿 Farm-to-table garden dinner</span>
+          <span class="vote-option-label">No — I'll save my energy for the course</span>
           <span class="vote-option-pct">—</span>
         </div>
       </div>
+      <div style="font-size:11px;color:#bbb;margin-top:10px;text-align:right;" id="vote-total-label"></div>
       <button class="vote-submit-btn" id="vote-btn" onclick="submitVote()" disabled>Cast My Vote</button>
-      <div class="vote-thanks" id="vote-thanks">✓ Vote recorded. See you on the green! 🌿</div>
+      <div class="vote-thanks" id="vote-thanks">✓ Vote recorded. Results update in real time.</div>
     </div>
 
     <div class="section-head"><span class="section-label">Your Digital Swag Bag</span></div>
     <div class="swag-card">
       <div class="swag-eyebrow">Tee Elite Invitational 2026</div>
-      <div class="swag-title">You're stacked, sis.</div>
+      <div class="swag-title">Everything you need for the day.</div>
       <div class="swag-subtitle">Tap any item to view or redeem</div>
       <div class="swag-items">
         <div class="swag-item" onclick="openModal('drink-modal')">
-          <div class="swag-item-icon">🍹</div>
+          <div class="swag-item-icon" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-top:4px;">Drinks</div>
           <div class="swag-item-name">Drink Tickets</div>
           <div class="swag-item-count" id="drink-badge">3</div>
           <div class="swag-item-qty">included</div>
         </div>
         <div class="swag-item" onclick="openModal('mulligan-modal')">
-          <div class="swag-item-icon">⛳</div>
+          <div class="swag-item-icon" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-top:4px;">Golf</div>
           <div class="swag-item-name">Mulligans</div>
           <div class="swag-item-count" id="mulligan-badge">0</div>
           <div class="swag-item-qty">purchased</div>
         </div>
         <div class="swag-item" onclick="openModal('contest-modal')">
-          <div class="swag-item-icon">🏆</div>
+          <div class="swag-item-icon" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-top:4px;">Win</div>
           <div class="swag-item-name">Contests</div>
           <div class="swag-item-count">4</div>
           <div class="swag-item-qty">on course</div>
         </div>
         <div class="swag-item" onclick="openModal('rules-modal')">
-          <div class="swag-item-icon">📋</div>
+          <div class="swag-item-icon" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-top:4px;">Rules</div>
           <div class="swag-item-name">Rules</div>
           <div class="swag-item-count">Scramble</div>
           <div class="swag-item-qty">tap to review</div>
         </div>
         <div class="swag-item" onclick="openModal('playbook-modal')">
-          <div class="swag-item-icon">📖</div>
+          <div class="swag-item-icon" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-top:4px;">PDF</div>
           <div class="swag-item-name">Playbook</div>
           <div class="swag-item-count">PDF</div>
           <div class="swag-item-qty">download</div>
         </div>
         <div class="swag-item" onclick="openModal('dress-modal')">
-          <div class="swag-item-icon">👗</div>
+          <div class="swag-item-icon" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-top:4px;">Attire</div>
           <div class="swag-item-name">Dress Code</div>
           <div class="swag-item-count">White</div>
           <div class="swag-item-qty">+ gold accent</div>
@@ -363,7 +354,7 @@
         <div class="announce-dot new"></div>
         <div class="announce-content">
           <div class="announce-title">Welcome to the Invitational Hub!</div>
-          <div class="announce-text">Your registration is confirmed. Explore your swag bag, link your GHIN handicap, and get ready for an unforgettable day on the green.</div>
+          <div class="announce-text">Your registration is confirmed. Explore your swag bag, link your GHIN handicap, and get ready for an exceptional day on the green.</div>
           <div class="announce-date">Just posted</div>
         </div>
       </div>
@@ -402,12 +393,12 @@
       <div class="modal-eyebrow">Your Digital Swag Bag</div>
       <div class="modal-title">Everything you've got.</div>
       <div class="modal-body" style="line-height:2.2;">
-        🍹 <strong>3 Drink Tickets</strong> — show QR code at the bar<br>
-        ⛳ <strong>Mulligans</strong> — purchased amount shown in your bag<br>
-        📋 <strong>Scramble Rules Sheet</strong> — digital, no paper needed<br>
-        🏆 <strong>4 On-Course Contests</strong> — Closest to Pin (×2), Longest Drive (×2)<br>
-        📖 <strong>Event Playbook PDF</strong> — full agenda and course map<br>
-        👗 <strong>Dress Code</strong> — White attire + gold or green accent
+        <strong>3 Drink Tickets</strong> — show QR code at the bar<br>
+        <strong>Mulligans</strong> — purchased amount shown in your bag<br>
+        <strong>Scramble Rules Sheet</strong> — digital, no paper needed<br>
+        <strong>4 On-Course Contests</strong> — Closest to Pin (×2), Longest Drive (×2)<br>
+        <strong>Event Playbook PDF</strong> — full agenda and course map<br>
+        <strong>Dress Code</strong> — White attire + gold or green accent
       </div>
     </div>
   </div>
@@ -416,7 +407,7 @@
     <div class="modal-box" style="text-align:center;">
       <button class="modal-close" onclick="closeModal('drink-modal')">✕</button>
       <div class="modal-eyebrow">Digital Drink Ticket</div>
-      <div class="modal-title">Show this at the bar 🍹</div>
+      <div class="modal-title">Show this at the bar</div>
       <div class="qr-display">
         <div class="qr-canvas-wrap"><canvas id="drink-qr" width="160" height="160"></canvas></div>
         <div class="qr-token" id="drink-token">—</div>
@@ -432,7 +423,7 @@
     <div class="modal-box">
       <button class="modal-close" onclick="closeModal('mulligan-modal')">✕</button>
       <div class="modal-eyebrow">Mulligan Packages</div>
-      <div class="modal-title">Take the shot again. ⛳</div>
+      <div class="modal-title">Take the shot again.</div>
       <div class="modal-body">Buy mulligans before the event and save. On-course price is $20 each.</div>
       <div class="mulligan-packages">
         <div class="mulligan-pkg" onclick="selectMulligan(this,2,30)">
@@ -463,12 +454,12 @@
     <div class="modal-box">
       <button class="modal-close" onclick="closeModal('contest-modal')">✕</button>
       <div class="modal-eyebrow">On-Course Contests</div>
-      <div class="modal-title">Four ways to shine. 🏆</div>
+      <div class="modal-title">Four ways to shine.</div>
       <div class="modal-body" style="line-height:2.4;">
-        <strong>🎯 Closest to the Pin — Hole 7</strong><br>One shot to the flag. Whoever is closest wins.<br><br>
-        <strong>🎯 Closest to the Pin — Hole 14</strong><br>Par 3. Laser focus. Glory.<br><br>
-        <strong>💨 Longest Drive — Hole 3</strong><br>Ladies tees. Grip it and rip it.<br><br>
-        <strong>💨 Longest Drive — Hole 11</strong><br>Drive must stay in the fairway to count.
+        <strong>Closest to the Pin — Hole 7</strong><br>One shot to the flag. Whoever is closest wins.<br><br>
+        <strong>Closest to the Pin — Hole 14</strong><br>Par 3. Laser focus. Glory.<br><br>
+        <strong>Longest Drive — Hole 3</strong><br>Ladies tees. Grip it and rip it.<br><br>
+        <strong>Longest Drive — Hole 11</strong><br>Drive must stay in the fairway to count.
       </div>
       <div style="font-size:12px;color:#aaa;">Winners announced at the awards dinner. Dr. TMac always delivers.</div>
     </div>
@@ -517,7 +508,7 @@
     <div class="modal-box" style="text-align:center;">
       <button class="modal-close" onclick="closeModal('playbook-modal')">✕</button>
       <div class="modal-eyebrow">Event Playbook</div>
-      <div class="modal-title">Your full day guide 📖</div>
+      <div class="modal-title">Your full day guide</div>
       <div class="modal-body">The Invitational Playbook includes the full agenda, course map, hole assignments, and Dr. TMac's welcome letter.</div>
       <a href="/matriarchs_playbook.pdf" target="_blank" style="display:inline-block;background:var(--deep-forest);color:var(--tmac-blush);padding:14px 32px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:8px;">
         Download Playbook PDF
@@ -529,7 +520,7 @@
     <div class="modal-box" style="text-align:center;">
       <button class="modal-close" onclick="closeModal('dress-modal')">✕</button>
       <div class="modal-eyebrow">Dress Code</div>
-      <div class="modal-title">Dress like you belong. 👗</div>
+      <div class="modal-title">Dress like you belong.</div>
       <div class="modal-body" style="text-align:left;line-height:2.2;">
         <strong>Base color:</strong> White (required)<br>
         <strong>Accent:</strong> Gold or green (encouraged)<br>
@@ -687,42 +678,86 @@
       const doneCount = CHECKLIST.filter(i => s[i.id]).length;
       const pct = Math.round(doneCount / CHECKLIST.length * 100);
       document.getElementById('checklist-bar').style.width = pct + '%';
-      document.getElementById('checklist-pct').textContent = pct === 100 ? '100% ready — see you on the green! ⛳' : pct + '% ready — keep going!';
+      document.getElementById('checklist-pct').textContent = pct === 100 ? '100% ready — see you on the green.' : pct + '% ready — keep going!';
       document.getElementById('checklist-progress-text').textContent = doneCount + ' of ' + CHECKLIST.length + ' done';
     }
 
     function handleCL(id) { const item = CHECKLIST.find(i => i.id === id); if (item?.action) item.action(); }
     function toggleCL(id) { const s = getChecklistState(); s[id] = !s[id]; setChecklistState(s); renderChecklist(); }
 
+    const POLL_ID = 'pairing-party-2026';
     let selectedVote = null;
-    const VOTE_KEY = 'tee_vote_2026';
-    function selectVote(el) {
-      if (localStorage.getItem(VOTE_KEY)) return;
-      document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected'); selectedVote = el.dataset.option;
-      document.getElementById('vote-btn').disabled = false;
-    }
-    function submitVote() {
-      if (!selectedVote) return;
-      localStorage.setItem(VOTE_KEY, selectedVote);
-      const fake = { A: 28, B: 19, C: 38, D: 15 };
-      fake[selectedVote]++;
-      const total = Object.values(fake).reduce((a,b) => a+b, 0);
+    let hasVoted = false;
+
+    function renderVoteTallies(counts, total, myVote) {
       document.querySelectorAll('.vote-option').forEach(opt => {
-        const pct = Math.round(fake[opt.dataset.option] / total * 100);
-        opt.classList.add('voted'); opt.onclick = null;
+        const key = opt.dataset.option;
+        const count = counts[key] || 0;
+        const pct = total > 0 ? Math.round(count / total * 100) : 0;
         opt.querySelector('.vote-bar-fill').style.width = pct + '%';
         opt.querySelector('.vote-option-pct').textContent = pct + '%';
+        opt.classList.add('voted');
+        opt.onclick = null;
+        if (key === myVote) opt.classList.add('selected');
       });
-      document.getElementById('vote-btn').style.display = 'none';
-      document.getElementById('vote-thanks').style.display = 'block';
+      const label = document.getElementById('vote-total-label');
+      if (label) label.textContent = total + (total === 1 ? ' vote' : ' votes');
     }
 
-    if (localStorage.getItem(VOTE_KEY)) {
-      setTimeout(() => {
-        document.getElementById('vote-btn').style.display = 'none';
+    async function loadVote() {
+      try {
+        const res = await fetch('/api/vote?poll_id=' + POLL_ID);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.myVote) {
+          hasVoted = true;
+          renderVoteTallies(data.counts, data.total, data.myVote);
+          document.getElementById('vote-btn').style.display = 'none';
+          document.getElementById('vote-thanks').style.display = 'block';
+        } else if (data.total > 0) {
+          // Show live tallies even before voting so it feels alive
+          renderVoteTallies(data.counts, data.total, null);
+          // But re-enable clicking so they can still vote
+          document.querySelectorAll('.vote-option').forEach(opt => {
+            opt.classList.remove('voted');
+            opt.onclick = () => selectVote(opt);
+          });
+          const label = document.getElementById('vote-total-label');
+          if (label) label.textContent = data.total + (data.total === 1 ? ' vote so far' : ' votes so far');
+        }
+      } catch(e) { console.error('Vote load error', e); }
+    }
+
+    function selectVote(el) {
+      if (hasVoted) return;
+      document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedVote = el.dataset.option;
+      document.getElementById('vote-btn').disabled = false;
+    }
+
+    async function submitVote() {
+      if (!selectedVote || hasVoted) return;
+      const btn = document.getElementById('vote-btn');
+      btn.disabled = true;
+      btn.textContent = 'Submitting…';
+      try {
+        const res = await fetch('/api/vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ poll_id: POLL_ID, option: selectedVote })
+        });
+        if (!res.ok) throw new Error('Vote failed');
+        const data = await res.json();
+        hasVoted = true;
+        renderVoteTallies(data.counts, data.total, data.myVote);
+        btn.style.display = 'none';
         document.getElementById('vote-thanks').style.display = 'block';
-      }, 100);
+      } catch(e) {
+        btn.disabled = false;
+        btn.textContent = 'Cast My Vote';
+        console.error('Vote submit error', e);
+      }
     }
 
     function buildDrinkQR() {
@@ -812,6 +847,7 @@
     renderChecklist();
     loadMember();
     checkLive();
+    loadVote();
   </script>
 </body>
 </html>
