@@ -222,7 +222,7 @@
         <div>
           <div class="countdown-eyebrow">T-minus</div>
           <div class="countdown-title">Tee Elite Circle Invitational</div>
-          <div class="countdown-date-str">Saturday, April 18, 2026 · Heritage Isles Golf Club</div>
+          <div class="countdown-date-str">Saturday, April 18, 2026 · Summerfield Crossing Golf Club</div>
         </div>
         <div class="countdown-digits">
           <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><div class="cd-label">Days</div></div>
@@ -362,7 +362,7 @@
         <div class="announce-dot"></div>
         <div class="announce-content">
           <div class="announce-title">Mulligan packages now available</div>
-          <div class="announce-text">Purchase 2, 4, or 6 mulligans before the event for the best rate. On-course pricing will be higher!</div>
+          <div class="announce-text">Purchase mulligans in advance for $5 each. Max 2 per player. Available at registration and on-course via CashApp.</div>
           <div class="announce-date">Today</div>
         </div>
       </div>
@@ -543,7 +543,7 @@
       <button class="modal-close" onclick="closeModal('ghin-modal')">✕</button>
       <div class="modal-eyebrow">Link Your Handicap</div>
       <div class="modal-title">Connect your GHIN</div>
-      <div class="modal-body">Your GHIN number lets us calculate your official handicap for scramble scoring. Enter it below.</div>
+      <div class="modal-body">Your GHIN number is used for pairing purposes. Enter it below.</div>
       <form onsubmit="submitGHIN(event)" id="ghin-form">
         <div style="margin-bottom:16px;">
           <label style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#888;display:block;margin-bottom:6px;">Your GHIN Number</label>
@@ -572,7 +572,7 @@
         const mulligans = memberData.mulligans_purchased || 0;
         document.getElementById('mulligan-badge').textContent = mulligans;
         document.getElementById('mulligan-count-display').textContent = mulligans ? mulligans + ' owned' : 'Add more';
-        const tickets = memberData.drink_tickets ?? 3;
+        const tickets = memberData.drink_tickets ?? 1;
         document.getElementById('drink-badge').textContent = tickets;
         document.getElementById('drink-count-display').textContent = tickets + ' remaining';
         document.getElementById('drink-remaining').textContent = tickets;
@@ -649,7 +649,7 @@
       { id: 'team', label: 'Meet your team', sub: 'Assignments coming soon', action: () => location.href='/members.html' },
       { id: 'rules', label: 'Review scramble rules', sub: '5 min read — know before you go', action: () => openModal('rules-modal') },
       { id: 'dress', label: 'Pack your outfit', sub: 'White + gold or green accent', action: () => openModal('dress-modal') },
-      { id: 'mulligans', label: 'Consider mulligan package', sub: 'Best rates before the event', action: () => openModal('mulligan-modal') },
+      { id: 'mulligans', label: 'Consider mulligan package', sub: 'Purchase in advance or at registration', action: () => openModal('mulligan-modal') },
     ];
 
     function getChecklistState() {
