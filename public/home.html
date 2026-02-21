@@ -235,16 +235,16 @@
     <div class="section-head"><span class="section-label">Quick Access</span></div>
     <div class="quick-actions">
       <button class="qa-item" onclick="openModal('swag-modal')">
-        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
+        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">S</div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
       </button>
       <button class="qa-item" onclick="openModal('drink-modal')">
-        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><path d="M8 22h8M12 11v11M5 2h14l-2 9a5 5 0 01-10 0L5 2z"/></svg></div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">3 remaining</div>
+        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">D</div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">3 remaining</div>
       </button>
       <button class="qa-item highlight" onclick="openModal('mulligan-modal')">
-        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
+        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">M</div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
       </button>
       <a class="qa-item" href="/members.html">
-        <div class="qa-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
+        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">C</div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
       </a>
     </div>
 
@@ -424,29 +424,31 @@
       <button class="modal-close" onclick="closeModal('mulligan-modal')">✕</button>
       <div class="modal-eyebrow">Mulligan Packages</div>
       <div class="modal-title">Take the shot again.</div>
-      <div class="modal-body">Buy mulligans before the event and save. On-course price is $20 each.</div>
+      <div class="modal-body">$5 each. Max 1 on the front 9, max 1 on the back 9. Not valid on contest holes. Non-transferable.</div>
+
       <div class="mulligan-packages">
-        <div class="mulligan-pkg" onclick="selectMulligan(this,2,30)">
+        <div class="mulligan-pkg" onclick="selectMulligan(this,1,5)">
+          <div class="mulligan-count">1</div>
+          <div class="mulligan-word">Mulligan</div>
+          <div class="mulligan-price">$5</div>
+        </div>
+        <div class="mulligan-pkg popular" onclick="selectMulligan(this,2,10)">
+          <div class="mulligan-popular-tag">Max per player</div>
           <div class="mulligan-count">2</div>
           <div class="mulligan-word">Mulligans</div>
-          <div class="mulligan-price">$30</div>
-          <div class="mulligan-price-sub">$15 each</div>
-        </div>
-        <div class="mulligan-pkg popular" onclick="selectMulligan(this,4,50)">
-          <div class="mulligan-popular-tag">Best Value</div>
-          <div class="mulligan-count">4</div>
-          <div class="mulligan-word">Mulligans</div>
-          <div class="mulligan-price">$50</div>
-          <div class="mulligan-price-sub">$12.50 each</div>
-        </div>
-        <div class="mulligan-pkg" onclick="selectMulligan(this,6,66)">
-          <div class="mulligan-count">6</div>
-          <div class="mulligan-word">Mulligans</div>
-          <div class="mulligan-price">$66</div>
-          <div class="mulligan-price-sub">$11 each</div>
+          <div class="mulligan-price">$10</div>
+          <div class="mulligan-price-sub">1 front · 1 back</div>
         </div>
       </div>
-      <button class="mulligan-buy-btn" id="mulligan-buy-btn" disabled onclick="buyMulligans()">Select a Package</button>
+
+      <div id="cashapp-pay" style="display:none;margin-top:24px;text-align:center;">
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:12px;">Pay via CashApp</div>
+        <img src="/images/CashApp.jpg" alt="CashApp QR Code" style="width:180px;height:180px;object-fit:cover;display:block;margin:0 auto 12px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--charcoal);margin-bottom:6px;">$TMacinspired</div>
+        <div style="font-size:12px;color:#888;line-height:1.7;">Scan the QR code or search <strong>$TMacinspired</strong> in CashApp.<br>Show your receipt to a volunteer or at the registration desk.</div>
+      </div>
+
+      <button class="mulligan-buy-btn" id="mulligan-buy-btn" disabled onclick="showCashApp()">Select a Package</button>
     </div>
   </div>
 
@@ -456,12 +458,13 @@
       <div class="modal-eyebrow">On-Course Contests</div>
       <div class="modal-title">Four ways to shine.</div>
       <div class="modal-body" style="line-height:2.4;">
-        <strong>Closest to the Pin — Hole 7</strong><br>One shot to the flag. Whoever is closest wins.<br><br>
-        <strong>Closest to the Pin — Hole 14</strong><br>Par 3. Laser focus. Glory.<br><br>
-        <strong>Longest Drive — Hole 3</strong><br>Ladies tees. Grip it and rip it.<br><br>
-        <strong>Longest Drive — Hole 11</strong><br>Drive must stay in the fairway to count.
+        <strong>Closest to the Pin — Hole 2</strong><br>Par 3. One shot to the flag.<br><br>
+        <strong>Closest to the Pin — Hole 8</strong><br>Par 3. Precision counts.<br><br>
+        <strong>Closest to the Pin — Hole 12</strong><br>Par 3. Stay locked in.<br><br>
+        <strong>Closest to the Pin — Hole 15</strong><br>Par 3. Final chance to shine.<br><br>
+        <strong>Longest Drive — Hole 9</strong><br>Drive must stay in the fairway to count.
       </div>
-      <div style="font-size:12px;color:#aaa;">Winners announced at the awards dinner. Dr. TMac always delivers.</div>
+      <div style="font-size:12px;color:#aaa;">Mulligans are not permitted on contest holes. Winners announced at the awards ceremony.</div>
     </div>
   </div>
 
@@ -481,7 +484,7 @@
         </div>
         <div class="rules-accordion-item">
           <div class="rules-question" onclick="toggleAccordion(this)">Scoring and handicaps<div class="rules-chevron"></div></div>
-          <div class="rules-answer">Score is recorded as the team score. Handicaps apply to net score. GHIN handicaps preferred — please link yours in the app before the event.</div>
+          <div class="rules-answer">Score is recorded as the team score. Handicaps are used for pairing purposes only. Please link your GHIN in the app before the event.</div>
         </div>
         <div class="rules-accordion-item">
           <div class="rules-question" onclick="toggleAccordion(this)">Mulligan rules<div class="rules-chevron"></div></div>
@@ -509,9 +512,9 @@
       <button class="modal-close" onclick="closeModal('playbook-modal')">✕</button>
       <div class="modal-eyebrow">Event Playbook</div>
       <div class="modal-title">Your full day guide</div>
-      <div class="modal-body">The Invitational Playbook includes the full agenda, course map, hole assignments, and Dr. TMac's welcome letter.</div>
-      <a href="/matriarchs_playbook.pdf" target="_blank" style="display:inline-block;background:var(--deep-forest);color:var(--tmac-blush);padding:14px 32px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:8px;">
-        Download Playbook PDF
+      <div class="modal-body">Everything you need for April 18 — schedule, rules, contest holes, attire, and Dr. TMac's welcome letter.</div>
+      <a href="/playbook.html" style="display:inline-block;background:var(--deep-forest);color:var(--tmac-blush);padding:14px 32px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:8px;">
+        Open Playbook
       </a>
     </div>
   </div>
@@ -787,14 +790,16 @@
       el.style.boxShadow = '0 0 0 2px var(--tmac-bronze)';
       mulliganSelected = { count, price };
       const btn = document.getElementById('mulligan-buy-btn');
-      btn.textContent = 'Buy ' + count + ' Mulligans — $' + price;
+      btn.textContent = 'Pay $' + price + ' via CashApp';
       btn.disabled = false;
+      document.getElementById('cashapp-pay').style.display = 'none';
     }
 
-    function buyMulligans() {
+    function showCashApp() {
       if (!mulliganSelected) return;
-      // Update PayPal URLs when you have the product IDs
-      alert('Redirecting to PayPal for ' + mulliganSelected.count + ' mulligans ($' + mulliganSelected.price + ').\n\nUpdate the PayPal URLs in home.html buyMulligans() when ready.');
+      document.getElementById('cashapp-pay').style.display = 'block';
+      const btn = document.getElementById('mulligan-buy-btn');
+      btn.style.display = 'none';
     }
 
     async function submitGHIN(e) {
@@ -817,8 +822,23 @@
       } catch(e) { console.error(e); }
     }
 
-    function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+      if (id === 'mulligan-modal') {
+        document.getElementById('cashapp-pay').style.display = 'none';
+        const btn = document.getElementById('mulligan-buy-btn');
+        btn.style.display = 'block';
+        btn.disabled = true;
+        btn.textContent = 'Select a Package';
+        mulliganSelected = null;
+        document.querySelectorAll('.mulligan-pkg').forEach(p => p.style.boxShadow = '');
+      }
+    }
     function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
     function toggleAccordion(trigger) {
       const item = trigger.closest('.rules-accordion-item');
