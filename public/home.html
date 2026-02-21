@@ -3,546 +3,815 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
-  <title>Home — The Tee Elite Circle</title>
+  <title>Invitational Hub — Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- PWA Meta Tags -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#1a2e1a">
+  <meta name="theme-color" content="#1a2f23">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tee Elite">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <meta name="msapplication-TileColor" content="#1a2e1a">
-  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pwa-nav.css">
   <style>
-    .home-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 60px 24px 80px;
-    }
-
-    .welcome-section {
-      text-align: center;
-      margin-bottom: 80px;
-    }
-
-    .welcome-greeting {
-      font-size: 14px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 16px;
-    }
-
-    .welcome-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(36px, 6vw, 56px);
-      font-weight: 400;
-      color: var(--charcoal);
-      margin-bottom: 12px;
-    }
-
-      display: inline-block;
-      background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #fff;
-      font-weight: 500;
-    }
-
-    /* Retreat Card */
-    .retreat-card {
-      background: var(--deep-forest);
-      border-radius: 12px;
-      padding: 48px;
-      text-align: center;
-      margin-bottom: 80px;
-    }
-
-    .retreat-label {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-      margin-bottom: 16px;
-    }
-
-    .retreat-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(28px, 4vw, 36px);
-      font-weight: 400;
-      color: var(--tmac-blush);
-      margin-bottom: 8px;
-    }
-
-    .retreat-location {
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 32px;
-    }
-
-    .countdown {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-bottom: 32px;
-    }
-
-    .countdown-item {
-      text-align: center;
-    }
-
-    .countdown-number {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 48px;
-      font-weight: 400;
-      color: #fff;
-      line-height: 1;
-    }
-
-    .countdown-label {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-      margin-top: 8px;
-    }
-
-    .retreat-link {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--tmac-blush);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.3s ease;
-    }
-
-    .retreat-link:hover {
-      border-color: var(--tmac-blush);
-    }
-
-    /* CHANGE: Navigation Links - added rounded corners and gap */
-    .nav-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-bottom: 80px;
-    }
-
-    .nav-item {
-      background: #fff;
-      border-radius: 12px;
-      padding: 40px 32px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-
-    .nav-item:hover {
-      background: var(--tmac-blush-light);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    .nav-item-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      color: var(--charcoal);
-      margin-bottom: 8px;
-    }
-
-    .nav-item-desc {
-      font-size: 13px;
-      color: #888;
-    }
-
-    /* Scorecard Section */
-    .scorecard-section {
-      text-align: center;
-    }
-
-    .scorecard-label {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 24px;
-    }
-
-    .scorecard-content {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-style: italic;
-      color: var(--charcoal);
-      line-height: 1.7;
-      max-width: 600px;
-      margin: 0 auto 24px;
-    }
-
-    .scorecard-empty {
-      font-size: 15px;
-      color: #999;
-      font-style: italic;
-    }
-
-    .scorecard-link {
-      font-size: 12px;
-      color: var(--tmac-bronze);
-      text-decoration: none;
-    }
-
-    .scorecard-link:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-      .home-container {
-        padding: 40px 20px 120px;
-      }
-
-      .welcome-section {
-        margin-bottom: 60px;
-      }
-
-      .retreat-card {
-        padding: 32px 24px;
-        margin-bottom: 60px;
-      }
-
-      .countdown {
-        gap: 24px;
-      }
-
-      .countdown-number {
-        font-size: 36px;
-      }
-
-      .nav-grid {
-        grid-template-columns: 1fr;
-        margin-bottom: 60px;
-        gap: 12px;
-      }
-
-      .nav-item {
-        padding: 32px 24px;
-      }
-    }
-
-    /* Live Banner */
-    .live-banner {
-      display: none;
-      background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
-      padding: 16px 24px;
-      margin-bottom: 32px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      animation: livePulse 2s infinite;
-    }
-
-    .live-banner:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(192, 57, 43, 0.3);
-    }
-
-    .live-banner.visible {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    @keyframes livePulse {
-      0%, 100% { box-shadow: 0 4px 12px rgba(192, 57, 43, 0.2); }
-      50% { box-shadow: 0 4px 20px rgba(192, 57, 43, 0.4); }
-    }
-
-    .live-banner-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .live-dot {
-      width: 12px;
-      height: 12px;
-      background: #fff;
-      border-radius: 50%;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .live-banner-text {
-      color: #fff;
-    }
-
-    .live-banner-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .live-banner-topic {
-      font-size: 12px;
-      opacity: 0.9;
-    }
-
-    .live-banner-join {
-      background: #fff;
-      color: #c0392b;
-      padding: 10px 20px;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 600;
-      border-radius: 4px;
+    .hub-container{max-width:860px;margin:0 auto;padding:32px 24px 100px}
+    .welcome-strip{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+    .welcome-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:4px}
+    .welcome-name{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,34px);font-weight:400;color:var(--charcoal);line-height:1.1}
+    .member-badge{background:var(--deep-forest);color:var(--tmac-blush);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:6px 14px;display:inline-flex;align-items:center;gap:6px}
+    .member-badge::before{content:'⛳';font-size:12px}
+    .countdown-banner{background:var(--deep-forest);padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden}
+    .countdown-banner::before{content:'';position:absolute;top:0;right:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--tmac-gold),var(--tmac-blush))}
+    .countdown-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .countdown-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:6px}
+    .countdown-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;margin-bottom:2px}
+    .countdown-date-str{font-size:12px;color:rgba(255,255,255,.5)}
+    .countdown-digits{display:flex;gap:20px;flex-shrink:0}
+    .cd-unit{text-align:center;min-width:44px}
+    .cd-num{font-family:'Cormorant Garamond',serif;font-size:42px;color:var(--tmac-blush);line-height:1;display:block}
+    .cd-label{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px}
+    .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+    .section-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-bronze)}
+    .section-link{font-size:11px;color:var(--tmac-bronze);text-decoration:none;letter-spacing:.05em}
+    .section-link:hover{text-decoration:underline}
+    .team-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
+    .team-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .team-tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:4px}
+    .team-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--charcoal)}
+    .team-ready-pill{font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:20px;font-weight:500}
+    .pill-good{background:#edf7ed;color:#2e7d32}.pill-warn{background:#fff8e1;color:#a67c00}.pill-alert{background:#fdecea;color:#c62828}
+    .team-members-list{display:flex;flex-direction:column;gap:12px}
+    .team-member-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+    .team-member-row:last-child{border-bottom:none}
+    .tm-avatar{width:40px;height:40px;border-radius:50%;background:var(--tmac-blush);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--deep-forest);flex-shrink:0;overflow:hidden}
+    .tm-info{flex:1}
+    .tm-name{font-size:14px;font-weight:500;color:var(--charcoal)}
+    .tm-hcp{font-size:12px;color:#888;margin-top:1px}
+    .tm-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+    .status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+    .dot-green{background:#4caf50}.dot-yellow{background:#ffc107}.dot-red{background:#f44336}
+    .status-text{font-size:11px;color:#888;display:flex;align-items:center}
+    .link-ghin-btn{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--tmac-bronze);text-decoration:none;border:1px solid var(--tmac-bronze);padding:3px 9px;cursor:pointer;background:none;transition:all .2s}
+    .link-ghin-btn:hover{background:var(--tmac-bronze);color:#fff}
+    .checklist-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
+    .checklist-progress{margin-bottom:20px}
+    .checklist-progress-bar-bg{background:var(--tmac-blush-light);height:6px;border-radius:3px;margin-bottom:8px}
+    .checklist-progress-bar{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--tmac-gold),var(--tmac-bronze));transition:width .5s ease}
+    .checklist-progress-label{font-size:11px;color:#888}
+    .checklist-items{display:flex;flex-direction:column}
+    .checklist-item{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid rgba(0,0,0,.05);cursor:pointer}
+    .checklist-item:last-child{border-bottom:none}
+    .checklist-check{width:22px;height:22px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+    .checklist-check.done{border-color:var(--tmac-bronze);background:var(--tmac-bronze)}
+    .checklist-check.done::after{content:'';width:6px;height:10px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px)}
+    .checklist-text{flex:1}
+    .checklist-text-main{font-size:14px;color:var(--charcoal)}
+    .checklist-text-main.done{text-decoration:line-through;color:#aaa}
+    .checklist-text-sub{font-size:11px;color:#aaa;margin-top:2px}
+    .checklist-action{font-size:11px;color:var(--tmac-bronze);text-decoration:none}
+    .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+    .qa-item{background:#fff;padding:20px 12px;text-align:center;text-decoration:none;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;border:none;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .qa-item:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+    .qa-icon{font-size:28px;line-height:1}
+    .qa-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--charcoal);font-weight:500}
+    .qa-sub{font-size:10px;color:#aaa}
+    .qa-item.highlight{background:var(--deep-forest)}
+    .qa-item.highlight .qa-label,.qa-item.highlight .qa-sub{color:rgba(255,255,255,.8)}
+    .vote-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
+    .vote-question{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--charcoal);margin-bottom:8px}
+    .vote-subtext{font-size:12px;color:#888;margin-bottom:20px}
+    .vote-options{display:flex;flex-direction:column;gap:10px}
+    .vote-option{position:relative;border:2px solid rgba(0,0,0,.08);padding:14px 16px;cursor:pointer;transition:all .2s;overflow:hidden;display:flex;align-items:center;justify-content:space-between}
+    .vote-option:hover{border-color:var(--tmac-bronze)}
+    .vote-option.selected{border-color:var(--tmac-bronze);background:rgba(166,124,82,.04)}
+    .vote-bar-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(201,168,108,.12);transition:width .6s ease;pointer-events:none}
+    .vote-option-label{font-size:14px;color:var(--charcoal);position:relative;z-index:1;font-weight:500}
+    .vote-option-pct{font-size:13px;color:var(--tmac-bronze);position:relative;z-index:1;font-weight:500;display:none}
+    .voted .vote-option-pct{display:block}
+    .vote-submit-btn{margin-top:16px;background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:14px 28px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;width:100%;transition:opacity .2s;font-family:'Montserrat',sans-serif}
+    .vote-submit-btn:hover{opacity:.88}
+    .vote-submit-btn:disabled{opacity:.4;cursor:default}
+    .vote-thanks{text-align:center;padding:20px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--tmac-bronze);display:none}
+    .swag-card{background:var(--deep-forest);padding:28px;margin-bottom:28px;position:relative;overflow:hidden}
+    .swag-card::after{content:'🏌🏾‍♀️';position:absolute;right:24px;bottom:16px;font-size:64px;opacity:.15;line-height:1}
+    .swag-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:8px}
+    .swag-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:#fff;margin-bottom:6px}
+    .swag-subtitle{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:24px}
+    .swag-items{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .swag-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:16px 14px;text-align:center;cursor:pointer;transition:all .25s;text-decoration:none}
+    .swag-item:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+    .swag-item-icon{font-size:26px;margin-bottom:8px}
+    .swag-item-name{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:4px}
+    .swag-item-count{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--tmac-blush)}
+    .swag-item-qty{font-size:10px;color:rgba(255,255,255,.4)}
+    .rules-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
+    .rules-accordion-item{border-bottom:1px solid rgba(0,0,0,.06)}
+    .rules-accordion-item:last-child{border-bottom:none}
+    .rules-question{display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;font-size:14px;font-weight:500;color:var(--charcoal);user-select:none}
+    .rules-question:hover{color:var(--tmac-bronze)}
+    .rules-chevron{width:16px;height:16px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .25s;flex-shrink:0;margin-left:12px}
+    .rules-accordion-item.open .rules-chevron{transform:rotate(225deg)}
+    .rules-answer{font-size:13px;color:#555;line-height:1.8;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .2s;padding:0}
+    .rules-accordion-item.open .rules-answer{max-height:300px;padding-bottom:16px}
+    .mulligan-card{background:linear-gradient(135deg,#faf6f0 0%,#fff 100%);border:1px solid rgba(201,168,108,.25);padding:28px;margin-bottom:28px}
+    .mulligan-packages{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+    .mulligan-pkg{border:2px solid rgba(0,0,0,.08);padding:20px 16px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+    .mulligan-pkg:hover{border-color:var(--tmac-gold)}
+    .mulligan-pkg.popular{border-color:var(--tmac-bronze)}
+    .mulligan-popular-tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--tmac-bronze);color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;white-space:nowrap}
+    .mulligan-count{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--charcoal);line-height:1;margin-bottom:4px}
+    .mulligan-word{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:12px}
+    .mulligan-price{font-size:18px;font-weight:500;color:var(--charcoal)}
+    .mulligan-price-sub{font-size:11px;color:#aaa}
+    .mulligan-buy-btn{margin-top:20px;width:100%;background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif;transition:opacity .2s}
+    .mulligan-buy-btn:hover{opacity:.88}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;padding:24px}
+    .modal-overlay.open{display:flex}
+    .modal-box{background:#fff;max-width:420px;width:100%;padding:36px;position:relative;animation:modalIn .25s ease;max-height:90vh;overflow-y:auto}
+    @keyframes modalIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;line-height:1}
+    .modal-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:8px}
+    .modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--charcoal);margin-bottom:8px}
+    .modal-body{font-size:13px;color:#555;line-height:1.8;margin-bottom:20px}
+    .qr-display{text-align:center;padding:20px 0}
+    .qr-canvas-wrap{background:var(--tmac-blush-light);padding:20px;display:inline-block;margin-bottom:12px}
+    .qr-token{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--charcoal);letter-spacing:.1em;margin-bottom:4px}
+    .qr-note{font-size:12px;color:#888}
+    .announce-card{background:#fff;border:1px solid rgba(0,0,0,.06);margin-bottom:28px}
+    .announce-item{padding:18px 24px;border-bottom:1px solid rgba(0,0,0,.05);display:flex;gap:14px}
+    .announce-item:last-child{border-bottom:none}
+    .announce-dot{width:8px;height:8px;border-radius:50%;background:var(--tmac-bronze);flex-shrink:0;margin-top:6px}
+    .announce-dot.new{background:#4caf50}
+    .announce-title{font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:3px}
+    .announce-text{font-size:13px;color:#666;line-height:1.6}
+    .announce-date{font-size:11px;color:#bbb;margin-top:5px}
+    .live-banner{display:none;background:linear-gradient(135deg,#c0392b,#a93226);padding:16px 24px;margin-bottom:24px;cursor:pointer;transition:all .3s;animation:livePulse 2s infinite;text-decoration:none}
+    .live-banner.visible{display:flex;align-items:center;justify-content:space-between}
+    @keyframes livePulse{0%,100%{box-shadow:0 4px 12px rgba(192,57,43,.2)}50%{box-shadow:0 4px 20px rgba(192,57,43,.4)}}
+    .live-dot{width:10px;height:10px;border-radius:50%;background:#fff;animation:blink 1s infinite;margin-right:12px}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+    .live-label{font-size:13px;color:#fff;font-weight:500}
+    .live-join{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+    @media(max-width:640px){
+      .hub-container{padding:24px 16px 120px}
+      .countdown-inner{flex-direction:column;align-items:flex-start;gap:20px}
+      .cd-num{font-size:34px}
+      .quick-actions{grid-template-columns:repeat(2,1fr)}
+      .swag-items{grid-template-columns:repeat(2,1fr)}
+      .mulligan-packages{grid-template-columns:1fr;gap:20px}
+      .welcome-strip{flex-direction:column;align-items:flex-start;gap:12px}
+      .modal-box{padding:24px}
     }
   </style>
 </head>
 
 <body class="member-body">
-  
-  <!-- HEADER -->
   <header class="member-header">
     <div class="header-inner">
       <a href="/home.html" class="header-logo">
         <img src="images/tmac-logo.png" alt="TMac Inspired">
-        <span>The Tee Elite Circle</span>
       </a>
       <nav class="header-nav">
-        <a href="/home.html" class="nav-link active">Home</a>
-        <a href="/members.html" class="nav-link">The Circle</a>
-        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/home.html" class="nav-link active">Hub</a>
         <a href="/tee-room.html" class="nav-link">Tee Room</a>
-        <a href="/fairway.html" class="nav-link">Fairway</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/tee-elite-invitational.html" class="nav-link">The Invitational</a>
       </nav>
       <div class="header-user">
         <a href="/profile.html" class="user-avatar" id="user-avatar">
-          <span id="user-initials">FM</span>
+          <span id="user-initials">TM</span>
         </a>
       </div>
       <button class="mobile-menu-btn" id="mobile-menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
-  <!-- MOBILE NAV (hidden by pwa-nav.css on mobile) -->
   <div class="mobile-nav" id="mobile-nav">
-    <a href="/home.html" class="mobile-nav-link active">Home</a>
-    <a href="/members.html" class="mobile-nav-link">The Circle</a>
-    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/home.html" class="mobile-nav-link active">Hub</a>
     <a href="/tee-room.html" class="mobile-nav-link">Tee Room</a>
-    <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/tee-elite-invitational.html" class="mobile-nav-link">The Invitational</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
     <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
   </div>
 
-  <!-- MAIN -->
-  <main class="home-container">
-    
-    <!-- LIVE BANNER -->
+  <main class="hub-container">
     <a href="/live.html" class="live-banner" id="live-banner">
-      <div class="live-banner-left">
+      <div style="display:flex;align-items:center;">
         <div class="live-dot"></div>
-        <div class="live-banner-text">
-          <div class="live-banner-title">🔴 Dr. TMac is LIVE</div>
-          <div class="live-banner-topic" id="live-banner-topic">Live with Dr. TMac</div>
-        </div>
+        <span class="live-label">🔴 Dr. TMac is LIVE</span>
       </div>
-      <div class="live-banner-join">Join Now</div>
+      <span class="live-join">Join Now →</span>
     </a>
-    
-    <!-- WELCOME -->
-    <section class="welcome-section">
-      <p class="welcome-greeting">Welcome back</p>
-      <h1 class="welcome-name" id="member-name">Dr. TMac</h1>
-      <p </p>
-    </section>
 
-    <!-- RETREAT COUNTDOWN -->
-    <section class="retreat-card">
-      <p class="retreat-label">Next Retreat</p>
-      <h2 class="retreat-name">Spring Retreat 2026</h2>
-      <p class="retreat-location">Location TBA</p>
-      <div class="countdown">
-        <div class="countdown-item">
-          <div class="countdown-number" id="days">--</div>
-          <div class="countdown-label">Days</div>
+    <div class="welcome-strip">
+      <div>
+        <div class="welcome-label">Welcome back</div>
+        <div class="welcome-name" id="member-name">Player</div>
+      </div>
+      <div class="member-badge" id="member-badge">Invitational Member</div>
+    </div>
+
+    <div class="countdown-banner">
+      <div class="countdown-inner">
+        <div>
+          <div class="countdown-eyebrow">T-minus</div>
+          <div class="countdown-title">Tee Elite Circle Invitational</div>
+          <div class="countdown-date-str">Saturday, April 18, 2026 · Heritage Isles Golf Club</div>
         </div>
-        <div class="countdown-item">
-          <div class="countdown-number" id="hours">--</div>
-          <div class="countdown-label">Hours</div>
-        </div>
-        <div class="countdown-item">
-          <div class="countdown-number" id="mins">--</div>
-          <div class="countdown-label">Mins</div>
+        <div class="countdown-digits">
+          <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><div class="cd-label">Days</div></div>
+          <div class="cd-unit"><span class="cd-num" id="cd-hrs">--</span><div class="cd-label">Hrs</div></div>
+          <div class="cd-unit"><span class="cd-num" id="cd-min">--</span><div class="cd-label">Min</div></div>
         </div>
       </div>
-      <a href="/retreats.html" class="retreat-link">View Details</a>
-    </section>
+    </div>
 
-    <!-- NAV GRID -->
-    <nav class="nav-grid">
-      <a href="/members.html" class="nav-item">
-        <h3 class="nav-item-title">The Circle</h3>
-        <p class="nav-item-desc">Players</p>
+    <div class="section-head"><span class="section-label">Quick Access</span></div>
+    <div class="quick-actions">
+      <button class="qa-item" onclick="openModal('swag-modal')">
+        <div class="qa-icon">🎒</div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
+      </button>
+      <button class="qa-item" onclick="openModal('drink-modal')">
+        <div class="qa-icon">🍹</div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">3 remaining</div>
+      </button>
+      <button class="qa-item highlight" onclick="openModal('mulligan-modal')">
+        <div class="qa-icon">⛳</div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
+      </button>
+      <a class="qa-item" href="/members.html">
+        <div class="qa-icon">🤝</div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
       </a>
-      <a href="/between-the-tees.html" class="nav-item">
-        <h3 class="nav-item-title">Between the Tees</h3>
-        <p class="nav-item-desc">Real talk, real wisdom</p>
-      </a>
-    </nav>
+    </div>
 
-    <!-- SCORECARD -->
-    <section class="scorecard-section">
-      <p class="scorecard-label">The Finished Scorecard</p>
-      <p class="scorecard-content" id="scorecard-content">
-        <span class="scorecard-empty">Your vision goes here. What does winning look like?</span>
-      </p>
-      <a href="/profile.html#scorecard" class="scorecard-link">Edit your vision →</a>
-    </section>
+    <div class="section-head">
+      <span class="section-label">Your Team</span>
+      <a class="section-link" href="/members.html">View all →</a>
+    </div>
+    <div class="team-card">
+      <div class="team-header">
+        <div>
+          <div class="team-tag">Scramble Team</div>
+          <div class="team-name" id="team-name">Loading…</div>
+        </div>
+        <div class="team-ready-pill" id="team-pill">—</div>
+      </div>
+      <div class="team-members-list" id="team-members-list">
+        <div style="text-align:center;padding:32px 16px;">
+          <p style="font-size:14px;color:#888;margin-bottom:8px;">Team assignments are being finalized.</p>
+          <small style="font-size:12px;color:#aaa;">You'll be notified once your team is set. Check back soon!</small>
+        </div>
+      </div>
+    </div>
 
+    <div class="section-head">
+      <span class="section-label">Preparation Checklist</span>
+      <span class="section-link" id="checklist-progress-text">0 of 6 done</span>
+    </div>
+    <div class="checklist-card">
+      <div class="checklist-progress">
+        <div class="checklist-progress-bar-bg">
+          <div class="checklist-progress-bar" id="checklist-bar" style="width:0%"></div>
+        </div>
+        <div class="checklist-progress-label" id="checklist-pct">0% ready — let's get you set!</div>
+      </div>
+      <div class="checklist-items" id="checklist-items"></div>
+    </div>
+
+    <div class="section-head"><span class="section-label">Community Vote</span></div>
+    <div class="vote-card">
+      <div class="vote-question">What's your post-round dinner preference?</div>
+      <div class="vote-subtext">Your vote helps us plan the perfect celebration dinner. Results revealed at check-in.</div>
+      <div class="vote-options" id="vote-options">
+        <div class="vote-option" data-option="A" onclick="selectVote(this)">
+          <div class="vote-bar-fill" style="width:0%"></div>
+          <span class="vote-option-label">🥩 Upscale steakhouse dinner</span>
+          <span class="vote-option-pct">—</span>
+        </div>
+        <div class="vote-option" data-option="B" onclick="selectVote(this)">
+          <div class="vote-bar-fill" style="width:0%"></div>
+          <span class="vote-option-label">🌊 Fresh seafood and rooftop vibes</span>
+          <span class="vote-option-pct">—</span>
+        </div>
+        <div class="vote-option" data-option="C" onclick="selectVote(this)">
+          <div class="vote-bar-fill" style="width:0%"></div>
+          <span class="vote-option-label">🍾 Private chef experience</span>
+          <span class="vote-option-pct">—</span>
+        </div>
+        <div class="vote-option" data-option="D" onclick="selectVote(this)">
+          <div class="vote-bar-fill" style="width:0%"></div>
+          <span class="vote-option-label">🌿 Farm-to-table garden dinner</span>
+          <span class="vote-option-pct">—</span>
+        </div>
+      </div>
+      <button class="vote-submit-btn" id="vote-btn" onclick="submitVote()" disabled>Cast My Vote</button>
+      <div class="vote-thanks" id="vote-thanks">✓ Vote recorded. See you on the green! 🌿</div>
+    </div>
+
+    <div class="section-head"><span class="section-label">Your Digital Swag Bag</span></div>
+    <div class="swag-card">
+      <div class="swag-eyebrow">Tee Elite Invitational 2026</div>
+      <div class="swag-title">You're stacked, sis.</div>
+      <div class="swag-subtitle">Tap any item to view or redeem</div>
+      <div class="swag-items">
+        <div class="swag-item" onclick="openModal('drink-modal')">
+          <div class="swag-item-icon">🍹</div>
+          <div class="swag-item-name">Drink Tickets</div>
+          <div class="swag-item-count" id="drink-badge">3</div>
+          <div class="swag-item-qty">included</div>
+        </div>
+        <div class="swag-item" onclick="openModal('mulligan-modal')">
+          <div class="swag-item-icon">⛳</div>
+          <div class="swag-item-name">Mulligans</div>
+          <div class="swag-item-count" id="mulligan-badge">0</div>
+          <div class="swag-item-qty">purchased</div>
+        </div>
+        <div class="swag-item" onclick="openModal('contest-modal')">
+          <div class="swag-item-icon">🏆</div>
+          <div class="swag-item-name">Contests</div>
+          <div class="swag-item-count">4</div>
+          <div class="swag-item-qty">on course</div>
+        </div>
+        <div class="swag-item" onclick="openModal('rules-modal')">
+          <div class="swag-item-icon">📋</div>
+          <div class="swag-item-name">Rules</div>
+          <div class="swag-item-count">Scramble</div>
+          <div class="swag-item-qty">tap to review</div>
+        </div>
+        <div class="swag-item" onclick="openModal('playbook-modal')">
+          <div class="swag-item-icon">📖</div>
+          <div class="swag-item-name">Playbook</div>
+          <div class="swag-item-count">PDF</div>
+          <div class="swag-item-qty">download</div>
+        </div>
+        <div class="swag-item" onclick="openModal('dress-modal')">
+          <div class="swag-item-icon">👗</div>
+          <div class="swag-item-name">Dress Code</div>
+          <div class="swag-item-count">White</div>
+          <div class="swag-item-qty">+ gold accent</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head"><span class="section-label">Announcements</span></div>
+    <div class="announce-card" id="announce-list">
+      <div class="announce-item">
+        <div class="announce-dot new"></div>
+        <div class="announce-content">
+          <div class="announce-title">Welcome to the Invitational Hub!</div>
+          <div class="announce-text">Your registration is confirmed. Explore your swag bag, link your GHIN handicap, and get ready for an unforgettable day on the green.</div>
+          <div class="announce-date">Just posted</div>
+        </div>
+      </div>
+      <div class="announce-item">
+        <div class="announce-dot"></div>
+        <div class="announce-content">
+          <div class="announce-title">Mulligan packages now available</div>
+          <div class="announce-text">Purchase 2, 4, or 6 mulligans before the event for the best rate. On-course pricing will be higher!</div>
+          <div class="announce-date">Today</div>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="member-footer">
-    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
-  </footer>
+  <nav class="pwa-bottom-nav">
+    <div class="pwa-bottom-nav-inner">
+      <a href="/home.html" class="pwa-nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Hub
+      </a>
+      <a href="/tee-room.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tee Room
+      </a>
+      <a href="/members.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Circle
+      </a>
+      <a href="/profile.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+      </a>
+    </div>
+  </nav>
 
-<script>
-    // Mobile menu (for tablet/desktop)
+  <!-- MODALS -->
+  <div class="modal-overlay" id="swag-modal" onclick="closeModalOnBg(event,'swag-modal')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('swag-modal')">✕</button>
+      <div class="modal-eyebrow">Your Digital Swag Bag</div>
+      <div class="modal-title">Everything you've got.</div>
+      <div class="modal-body" style="line-height:2.2;">
+        🍹 <strong>3 Drink Tickets</strong> — show QR code at the bar<br>
+        ⛳ <strong>Mulligans</strong> — purchased amount shown in your bag<br>
+        📋 <strong>Scramble Rules Sheet</strong> — digital, no paper needed<br>
+        🏆 <strong>4 On-Course Contests</strong> — Closest to Pin (×2), Longest Drive (×2)<br>
+        📖 <strong>Event Playbook PDF</strong> — full agenda and course map<br>
+        👗 <strong>Dress Code</strong> — White attire + gold or green accent
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="drink-modal" onclick="closeModalOnBg(event,'drink-modal')">
+    <div class="modal-box" style="text-align:center;">
+      <button class="modal-close" onclick="closeModal('drink-modal')">✕</button>
+      <div class="modal-eyebrow">Digital Drink Ticket</div>
+      <div class="modal-title">Show this at the bar 🍹</div>
+      <div class="qr-display">
+        <div class="qr-canvas-wrap"><canvas id="drink-qr" width="160" height="160"></canvas></div>
+        <div class="qr-token" id="drink-token">—</div>
+        <div class="qr-note">Staff will scan or enter your code.<br>Each scan redeems 1 ticket.</div>
+      </div>
+      <div class="modal-body" style="margin-top:16px;">
+        You have <strong id="drink-remaining">3</strong> drink ticket(s) remaining.
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="mulligan-modal" onclick="closeModalOnBg(event,'mulligan-modal')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('mulligan-modal')">✕</button>
+      <div class="modal-eyebrow">Mulligan Packages</div>
+      <div class="modal-title">Take the shot again. ⛳</div>
+      <div class="modal-body">Buy mulligans before the event and save. On-course price is $20 each.</div>
+      <div class="mulligan-packages">
+        <div class="mulligan-pkg" onclick="selectMulligan(this,2,30)">
+          <div class="mulligan-count">2</div>
+          <div class="mulligan-word">Mulligans</div>
+          <div class="mulligan-price">$30</div>
+          <div class="mulligan-price-sub">$15 each</div>
+        </div>
+        <div class="mulligan-pkg popular" onclick="selectMulligan(this,4,50)">
+          <div class="mulligan-popular-tag">Best Value</div>
+          <div class="mulligan-count">4</div>
+          <div class="mulligan-word">Mulligans</div>
+          <div class="mulligan-price">$50</div>
+          <div class="mulligan-price-sub">$12.50 each</div>
+        </div>
+        <div class="mulligan-pkg" onclick="selectMulligan(this,6,66)">
+          <div class="mulligan-count">6</div>
+          <div class="mulligan-word">Mulligans</div>
+          <div class="mulligan-price">$66</div>
+          <div class="mulligan-price-sub">$11 each</div>
+        </div>
+      </div>
+      <button class="mulligan-buy-btn" id="mulligan-buy-btn" disabled onclick="buyMulligans()">Select a Package</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="contest-modal" onclick="closeModalOnBg(event,'contest-modal')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('contest-modal')">✕</button>
+      <div class="modal-eyebrow">On-Course Contests</div>
+      <div class="modal-title">Four ways to shine. 🏆</div>
+      <div class="modal-body" style="line-height:2.4;">
+        <strong>🎯 Closest to the Pin — Hole 7</strong><br>One shot to the flag. Whoever is closest wins.<br><br>
+        <strong>🎯 Closest to the Pin — Hole 14</strong><br>Par 3. Laser focus. Glory.<br><br>
+        <strong>💨 Longest Drive — Hole 3</strong><br>Ladies tees. Grip it and rip it.<br><br>
+        <strong>💨 Longest Drive — Hole 11</strong><br>Drive must stay in the fairway to count.
+      </div>
+      <div style="font-size:12px;color:#aaa;">Winners announced at the awards dinner. Dr. TMac always delivers.</div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="rules-modal" onclick="closeModalOnBg(event,'rules-modal')">
+    <div class="modal-box" style="max-width:520px;">
+      <button class="modal-close" onclick="closeModal('rules-modal')">✕</button>
+      <div class="modal-eyebrow">Format and Rules</div>
+      <div class="modal-title">Scramble — How It Works</div>
+      <div style="margin-top:16px;">
+        <div class="rules-accordion-item">
+          <div class="rules-question" onclick="toggleAccordion(this)">What is a scramble?<div class="rules-chevron"></div></div>
+          <div class="rules-answer">All 4 players tee off. The team selects the best shot and everyone plays their next shot from that spot. Repeat until holed. Fast, fun, and open to all skill levels!</div>
+        </div>
+        <div class="rules-accordion-item">
+          <div class="rules-question" onclick="toggleAccordion(this)">Tee box rules<div class="rules-chevron"></div></div>
+          <div class="rules-answer">All players use the ladies tees. Each player must contribute a minimum of 2 tee shots per 9 holes — everyone's drive counts.</div>
+        </div>
+        <div class="rules-accordion-item">
+          <div class="rules-question" onclick="toggleAccordion(this)">Scoring and handicaps<div class="rules-chevron"></div></div>
+          <div class="rules-answer">Score is recorded as the team score. Handicaps apply to net score. GHIN handicaps preferred — please link yours in the app before the event.</div>
+        </div>
+        <div class="rules-accordion-item">
+          <div class="rules-question" onclick="toggleAccordion(this)">Mulligan rules<div class="rules-chevron"></div></div>
+          <div class="rules-answer">One mulligan = one do-over shot for any player. The team then selects from all available shots including the mulligan. Maximum 6 mulligans per team.</div>
+        </div>
+        <div class="rules-accordion-item">
+          <div class="rules-question" onclick="toggleAccordion(this)">Pace of play<div class="rules-chevron"></div></div>
+          <div class="rules-answer">We are playing ready golf. If your team falls more than one hole behind, a ranger may ask you to skip ahead. Everyone finishes in time for dinner!</div>
+        </div>
+        <div class="rules-accordion-item">
+          <div class="rules-question" onclick="toggleAccordion(this)">Dress code<div class="rules-chevron"></div></div>
+          <div class="rules-answer">White is the base. Gold or green accent. Collared shirts required. Soft spikes or spikeless shoes. Look like you're ready to win.</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <button onclick="updateChecklistItem('rules',true);closeModal('rules-modal')" style="background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:12px 24px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;width:100%;">
+          Mark as Reviewed ✓
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="playbook-modal" onclick="closeModalOnBg(event,'playbook-modal')">
+    <div class="modal-box" style="text-align:center;">
+      <button class="modal-close" onclick="closeModal('playbook-modal')">✕</button>
+      <div class="modal-eyebrow">Event Playbook</div>
+      <div class="modal-title">Your full day guide 📖</div>
+      <div class="modal-body">The Invitational Playbook includes the full agenda, course map, hole assignments, and Dr. TMac's welcome letter.</div>
+      <a href="/matriarchs_playbook.pdf" target="_blank" style="display:inline-block;background:var(--deep-forest);color:var(--tmac-blush);padding:14px 32px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:8px;">
+        Download Playbook PDF
+      </a>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="dress-modal" onclick="closeModalOnBg(event,'dress-modal')">
+    <div class="modal-box" style="text-align:center;">
+      <button class="modal-close" onclick="closeModal('dress-modal')">✕</button>
+      <div class="modal-eyebrow">Dress Code</div>
+      <div class="modal-title">Dress like you belong. 👗</div>
+      <div class="modal-body" style="text-align:left;line-height:2.2;">
+        <strong>Base color:</strong> White (required)<br>
+        <strong>Accent:</strong> Gold or green (encouraged)<br>
+        <strong>Tops:</strong> Collared polo or golf-appropriate blouse<br>
+        <strong>Bottoms:</strong> Golf skirt, shorts, or pants<br>
+        <strong>Shoes:</strong> Soft spikes or spikeless golf shoes<br>
+        <strong>Accessories:</strong> The goldie-er the better!
+      </div>
+      <button onclick="updateChecklistItem('dress',true);closeModal('dress-modal')" style="background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:12px 24px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;width:100%;">
+        Got It — Outfit Packed ✓
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="ghin-modal" onclick="closeModalOnBg(event,'ghin-modal')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('ghin-modal')">✕</button>
+      <div class="modal-eyebrow">Link Your Handicap</div>
+      <div class="modal-title">Connect your GHIN</div>
+      <div class="modal-body">Your GHIN number lets us calculate your official handicap for scramble scoring. Enter it below.</div>
+      <form onsubmit="submitGHIN(event)" id="ghin-form">
+        <div style="margin-bottom:16px;">
+          <label style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#888;display:block;margin-bottom:6px;">Your GHIN Number</label>
+          <input type="text" id="ghin-input" placeholder="e.g. 1234567" style="width:100%;padding:12px 14px;border:1px solid #ddd;font-size:15px;font-family:inherit;outline:none;">
+        </div>
+        <button type="submit" style="width:100%;background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Link My GHIN</button>
+        <div style="text-align:center;margin-top:12px;font-size:12px;color:#aaa;">
+          No GHIN? <a href="https://www.ghin.com" target="_blank" style="color:var(--tmac-bronze);">Register at ghin.com</a>
+        </div>
+      </form>
+      <div id="ghin-success" style="display:none;text-align:center;padding:16px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--tmac-bronze);">✓ GHIN linked successfully!</div>
+    </div>
+  </div>
+
+  <script>
+    let memberData = null;
+    let mulliganSelected = null;
+
+    async function loadMember() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (!res.ok) { window.location.href = '/member-login.html'; return; }
+        memberData = await res.json();
+        document.getElementById('member-name').textContent = memberData.name || 'Player';
+        document.getElementById('user-initials').textContent = getInitials(memberData.name);
+        const mulligans = memberData.mulligans_purchased || 0;
+        document.getElementById('mulligan-badge').textContent = mulligans;
+        document.getElementById('mulligan-count-display').textContent = mulligans ? mulligans + ' owned' : 'Add more';
+        const tickets = memberData.drink_tickets ?? 3;
+        document.getElementById('drink-badge').textContent = tickets;
+        document.getElementById('drink-count-display').textContent = tickets + ' remaining';
+        document.getElementById('drink-remaining').textContent = tickets;
+        if (memberData.ghin) updateChecklistItem('ghin', true);
+        if (mulligans > 0) updateChecklistItem('mulligans', true);
+        buildDrinkQR();
+        loadTeam();
+      } catch (e) {
+        window.location.href = '/member-login.html';
+      }
+    }
+
+    function getInitials(name) {
+      if (!name) return 'TM';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function tick() {
+      const target = new Date('2026-04-18T08:00:00-04:00');
+      const diff = target - new Date();
+      if (diff <= 0) return;
+      document.getElementById('cd-days').textContent = Math.floor(diff / 86400000);
+      document.getElementById('cd-hrs').textContent = Math.floor((diff % 86400000) / 3600000);
+      document.getElementById('cd-min').textContent = Math.floor((diff % 3600000) / 60000);
+    }
+    tick(); setInterval(tick, 60000);
+
+    async function loadTeam() {
+      const listEl = document.getElementById('team-members-list');
+      const nameEl = document.getElementById('team-name');
+      const pillEl = document.getElementById('team-pill');
+      if (memberData?.team_name) {
+        nameEl.textContent = memberData.team_name;
+        try {
+          const res = await fetch('/api/members/team');
+          if (res.ok) { renderTeamMembers(await res.json(), listEl, pillEl); return; }
+        } catch(e) {}
+      }
+      nameEl.textContent = 'Team TBD';
+      pillEl.textContent = 'Pending'; pillEl.className = 'team-ready-pill pill-warn';
+      listEl.innerHTML = `
+        <div class="team-member-row">
+          <div class="tm-avatar">${getInitials(memberData?.name)}</div>
+          <div class="tm-info">
+            <div class="tm-name">${memberData?.name || 'You'} <span style="font-size:11px;color:#aaa;">(you)</span></div>
+            <div class="tm-hcp">${memberData?.ghin ? 'GHIN: ' + memberData.ghin : 'GHIN not linked'}</div>
+          </div>
+          <div class="tm-status">${memberData?.ghin
+            ? '<span class="status-text"><span class="status-dot dot-green"></span>Ready</span>'
+            : '<button class="link-ghin-btn" onclick="openModal(\'ghin-modal\')">Link GHIN</button>'}</div>
+        </div>
+        ${[2,3,4].map(n => `<div class="team-member-row" style="opacity:.35;">
+          <div class="tm-avatar" style="background:#eee;">?</div>
+          <div class="tm-info"><div class="tm-name">Teammate ${n}</div><div class="tm-hcp">Awaiting assignment</div></div>
+        </div>`).join('')}`;
+    }
+
+    function renderTeamMembers(team, listEl, pillEl) {
+      const allReady = team.every(m => m.ghin);
+      const someReady = team.some(m => m.ghin);
+      pillEl.textContent = allReady ? 'All Ready' : someReady ? 'In Progress' : 'Action Needed';
+      pillEl.className = 'team-ready-pill ' + (allReady ? 'pill-good' : someReady ? 'pill-warn' : 'pill-alert');
+      listEl.innerHTML = team.map(m => `
+        <div class="team-member-row">
+          <div class="tm-avatar">${getInitials(m.name)}</div>
+          <div class="tm-info"><div class="tm-name">${m.name}</div><div class="tm-hcp">${m.ghin ? 'GHIN: ' + m.ghin : 'GHIN not linked'}</div></div>
+          <div class="tm-status"><span class="status-text"><span class="status-dot ${m.ghin ? 'dot-green' : 'dot-yellow'}"></span>${m.ghin ? 'Ready' : 'Needs GHIN'}</span></div>
+        </div>`).join('');
+    }
+
+    const CHECKLIST = [
+      { id: 'registration', label: 'Registration complete', sub: "You're confirmed!", locked: true },
+      { id: 'ghin', label: 'Link your GHIN handicap', sub: 'Required for scramble scoring', action: () => openModal('ghin-modal') },
+      { id: 'team', label: 'Meet your team', sub: 'Assignments coming soon', action: () => location.href='/members.html' },
+      { id: 'rules', label: 'Review scramble rules', sub: '5 min read — know before you go', action: () => openModal('rules-modal') },
+      { id: 'dress', label: 'Pack your outfit', sub: 'White + gold or green accent', action: () => openModal('dress-modal') },
+      { id: 'mulligans', label: 'Consider mulligan package', sub: 'Best rates before the event', action: () => openModal('mulligan-modal') },
+    ];
+
+    function getChecklistState() {
+      try { return JSON.parse(localStorage.getItem('tee_checklist') || '{}'); } catch(e) { return {}; }
+    }
+    function setChecklistState(s) { localStorage.setItem('tee_checklist', JSON.stringify(s)); }
+
+    function updateChecklistItem(id, done) {
+      const s = getChecklistState(); s[id] = done; setChecklistState(s); renderChecklist();
+    }
+
+    function renderChecklist() {
+      const s = getChecklistState();
+      s.registration = true;
+      if (memberData?.ghin) s.ghin = true;
+      if (memberData?.mulligans_purchased > 0) s.mulligans = true;
+      const container = document.getElementById('checklist-items');
+      container.innerHTML = CHECKLIST.map(item => {
+        const done = s[item.id] ?? false;
+        return `<div class="checklist-item" onclick="${item.locked ? '' : item.action ? 'handleCL("'+item.id+'")' : 'toggleCL("'+item.id+'")'}">
+          <div class="checklist-check ${done ? 'done' : ''}"></div>
+          <div class="checklist-text">
+            <div class="checklist-text-main ${done ? 'done' : ''}">${item.label}</div>
+            <div class="checklist-text-sub">${item.sub}</div>
+          </div>
+          ${item.action && !done ? '<span class="checklist-action">→</span>' : ''}
+        </div>`;
+      }).join('');
+      const doneCount = CHECKLIST.filter(i => s[i.id]).length;
+      const pct = Math.round(doneCount / CHECKLIST.length * 100);
+      document.getElementById('checklist-bar').style.width = pct + '%';
+      document.getElementById('checklist-pct').textContent = pct === 100 ? '100% ready — see you on the green! ⛳' : pct + '% ready — keep going!';
+      document.getElementById('checklist-progress-text').textContent = doneCount + ' of ' + CHECKLIST.length + ' done';
+    }
+
+    function handleCL(id) { const item = CHECKLIST.find(i => i.id === id); if (item?.action) item.action(); }
+    function toggleCL(id) { const s = getChecklistState(); s[id] = !s[id]; setChecklistState(s); renderChecklist(); }
+
+    let selectedVote = null;
+    const VOTE_KEY = 'tee_vote_2026';
+    function selectVote(el) {
+      if (localStorage.getItem(VOTE_KEY)) return;
+      document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected'); selectedVote = el.dataset.option;
+      document.getElementById('vote-btn').disabled = false;
+    }
+    function submitVote() {
+      if (!selectedVote) return;
+      localStorage.setItem(VOTE_KEY, selectedVote);
+      const fake = { A: 28, B: 19, C: 38, D: 15 };
+      fake[selectedVote]++;
+      const total = Object.values(fake).reduce((a,b) => a+b, 0);
+      document.querySelectorAll('.vote-option').forEach(opt => {
+        const pct = Math.round(fake[opt.dataset.option] / total * 100);
+        opt.classList.add('voted'); opt.onclick = null;
+        opt.querySelector('.vote-bar-fill').style.width = pct + '%';
+        opt.querySelector('.vote-option-pct').textContent = pct + '%';
+      });
+      document.getElementById('vote-btn').style.display = 'none';
+      document.getElementById('vote-thanks').style.display = 'block';
+    }
+
+    if (localStorage.getItem(VOTE_KEY)) {
+      setTimeout(() => {
+        document.getElementById('vote-btn').style.display = 'none';
+        document.getElementById('vote-thanks').style.display = 'block';
+      }, 100);
+    }
+
+    function buildDrinkQR() {
+      const canvas = document.getElementById('drink-qr');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const token = memberData?.id ? 'TEI-' + String(memberData.id).padStart(4, '0') : 'TEI-XXXX';
+      document.getElementById('drink-token').textContent = token;
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 160, 160);
+      let seed = token.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+      function rng() { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; }
+      const s = 10;
+      ctx.fillStyle = '#1a2f23';
+      // Corner markers
+      [[0,0],[13,0],[0,13]].forEach(([cx,cy]) => {
+        ctx.fillRect(cx*s, cy*s, 3*s, 3*s);
+        ctx.fillStyle = '#fff'; ctx.fillRect((cx+1)*s, (cy+1)*s, s, s);
+        ctx.fillStyle = '#1a2f23';
+      });
+      for (let r = 3; r < 13; r++) for (let c = 3; c < 16; c++) {
+        if (rng() > 0.5) ctx.fillRect(c*s, r*s, s, s);
+      }
+    }
+
+    function selectMulligan(el, count, price) {
+      document.querySelectorAll('.mulligan-pkg').forEach(p => p.style.boxShadow = '');
+      el.style.boxShadow = '0 0 0 2px var(--tmac-bronze)';
+      mulliganSelected = { count, price };
+      const btn = document.getElementById('mulligan-buy-btn');
+      btn.textContent = 'Buy ' + count + ' Mulligans — $' + price;
+      btn.disabled = false;
+    }
+
+    function buyMulligans() {
+      if (!mulliganSelected) return;
+      // Update PayPal URLs when you have the product IDs
+      alert('Redirecting to PayPal for ' + mulliganSelected.count + ' mulligans ($' + mulliganSelected.price + ').\n\nUpdate the PayPal URLs in home.html buyMulligans() when ready.');
+    }
+
+    async function submitGHIN(e) {
+      e.preventDefault();
+      const ghin = document.getElementById('ghin-input').value.trim();
+      if (!ghin) return;
+      try {
+        const res = await fetch('/api/members/update-ghin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ghin })
+        });
+        if (res.ok) {
+          document.getElementById('ghin-success').style.display = 'block';
+          document.getElementById('ghin-form').style.display = 'none';
+          if (memberData) memberData.ghin = ghin;
+          updateChecklistItem('ghin', true);
+          setTimeout(() => closeModal('ghin-modal'), 1800);
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+    function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+    function toggleAccordion(trigger) {
+      const item = trigger.closest('.rules-accordion-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.rules-accordion-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
       this.classList.toggle('active');
       document.getElementById('mobile-nav').classList.toggle('open');
     });
-
-    // Logout
     document.getElementById('logout-link').addEventListener('click', async (e) => {
       e.preventDefault();
       await fetch('/api/auth/logout', { method: 'POST' });
       window.location.href = '/member-login.html';
     });
 
-    // Load member
-    async function loadPlayer() {
-      try {
-        const res = await fetch('/api/members/me');
-        if (!res.ok) {
-          window.location.href = '/member-login.html';
-          return;
-        }
-        const player = await res.json();
-        
-        document.getElementById('member-name').textContent = player.name || 'Player';
-        document.getElementById('user-initials').textContent = getInitials(player.name);
-        
-        if (player.finished_scorecard) {
-          document.getElementById('scorecard-content').innerHTML = `"${player.finished_scorecard}"`;
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    function getInitials(name) {
-      if (!name) return 'FM';
-      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    }
-
-    // Countdown
-    function updateCountdown() {
-      const retreat = new Date('2026-04-15T14:00:00');
-      const now = new Date();
-      const diff = retreat - now;
-
-      if (diff > 0) {
-        document.getElementById('days').textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
-        document.getElementById('hours').textContent = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        document.getElementById('mins').textContent = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      }
-    }
-
-    loadPlayer();
-    updateCountdown();
-    setInterval(updateCountdown, 60000);
-
-    // Check live status
-    async function checkLiveStatus() {
+    async function checkLive() {
       try {
         const res = await fetch('/api/live/status');
-        if (res.ok) {
-          const status = await res.json();
-          const banner = document.getElementById('live-banner');
-          
-          if (status.is_live) {
-            document.getElementById('live-banner-topic').textContent = status.topic || 'Live with Dr. TMac';
-            banner.classList.add('visible');
-          } else {
-            banner.classList.remove('visible');
-          }
-        }
-      } catch (err) {
-        console.error('Error checking live status:', err);
-      }
+        if (res.ok) { const s = await res.json(); if (s.is_live) document.getElementById('live-banner').classList.add('visible'); }
+      } catch(e) {}
     }
 
-    checkLiveStatus();
-    // Check every 30 seconds for live status
-    setInterval(checkLiveStatus, 30000);
+    renderChecklist();
+    loadMember();
+    checkLive();
   </script>
-  <!-- PWA BOTTOM NAV -->
-  <nav class="pwa-bottom-nav">
-    <div class="pwa-bottom-nav-inner">
-      <a href="/home.html" class="pwa-nav-item active">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        <span>Home</span>
-      </a>
-      <a href="/resources.html" class="pwa-nav-item">
-        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-        <span>Tee Room</span>
-      </a>
-      <a href="/profile.html" class="pwa-nav-item">
-        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span>Profile</span>
-      </a>
-      <a href="/admin.html" class="pwa-nav-item" id="admin-nav-link" style="display: none;">
-        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        <span>Admin</span>
-      </a>
-    </div>
-  </nav>
-
-  <!-- PWA Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('ServiceWorker registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-          });
-      });
-    }
-    checkAdminAccess();
-  </script>
-  <script src="/pwa-nav.js"></script>
-  <script src="/push-notifications.js"></script>
 </body>
 </html>
