@@ -235,16 +235,16 @@
     <div class="section-head"><span class="section-label">Quick Access</span></div>
     <div class="quick-actions">
       <button class="qa-item" onclick="openModal('swag-modal')">
-        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">S</div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
+        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
       </button>
       <button class="qa-item" onclick="openModal('drink-modal')">
-        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">D</div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">3 remaining</div>
+        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8M12 11v11M5 2h14l-2 9a5 5 0 01-10 0L5 2z"/></svg></div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">3 remaining</div>
       </button>
       <button class="qa-item highlight" onclick="openModal('mulligan-modal')">
-        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">M</div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
+        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
       </button>
       <a class="qa-item" href="/members.html">
-        <div class="qa-icon" style="font-size:22px;color:var(--tmac-bronze);">C</div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
+        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
       </a>
     </div>
 
@@ -669,7 +669,7 @@
       const container = document.getElementById('checklist-items');
       container.innerHTML = CHECKLIST.map(item => {
         const done = s[item.id] ?? false;
-        return `<div class="checklist-item" onclick="${item.locked ? '' : item.action ? 'handleCL("'+item.id+'")' : 'toggleCL("'+item.id+'")'}">
+        return `<div class="checklist-item" onclick="${item.locked ? '' : item.action ? `handleCL('${item.id}')` : `toggleCL('${item.id}')`}">`
           <div class="checklist-check ${done ? 'done' : ''}"></div>
           <div class="checklist-text">
             <div class="checklist-text-main ${done ? 'done' : ''}">${item.label}</div>
