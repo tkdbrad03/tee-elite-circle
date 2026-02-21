@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Scorecard — Tee Elite Invitational</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .sc-wrap { max-width: 480px; margin: 0 auto; padding: 24px 20px 100px; }
+
+    /* PRACTICE BANNER */
+    .practice-banner {
+      background: #f39c12;
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+    .practice-banner.hidden { display: none; }
+
+    /* TEAM PICKER */
+    .team-picker {
+      background: var(--deep-forest);
+      padding: 32px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .team-picker-label {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--tmac-gold);
+      margin-bottom: 16px;
+    }
+    .team-picker-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .team-btn {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      color: #fff;
+      padding: 16px 8px;
+      font-size: 13px;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+      letter-spacing: .05em;
+    }
+    .team-btn:hover, .team-btn.selected {
+      background: var(--tmac-gold);
+      border-color: var(--tmac-gold);
+      color: #fff;
+    }
+    .team-confirm-btn {
+      width: 100%;
+      margin-top: 16px;
+      background: var(--tmac-blush);
+      color: var(--deep-forest);
+      border: none;
+      padding: 14px;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      transition: opacity .2s;
+    }
+    .team-confirm-btn:disabled { opacity: .35; cursor: default; }
+
+    /* SCORECARD HEADER */
+    .sc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .sc-team-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      color: var(--charcoal);
+    }
+    .sc-change-team {
+      font-size: 11px;
+      color: var(--tmac-bronze);
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      letter-spacing: .05em;
+    }
+    .sc-change-team:hover { text-decoration: underline; }
+
+    /* RUNNING TOTAL BAR */
+    .running-bar {
+      background: var(--deep-forest);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .running-bar-item { text-align: center; }
+    .running-bar-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: #fff;
+      line-height: 1;
+    }
+    .running-bar-num.under { color: #81c784; }
+    .running-bar-num.over { color: #e57373; }
+    .running-bar-label {
+      font-size: 9px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      margin-top: 4px;
+    }
+
+    /* NINE LABEL */
+    .nine-label {
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(166,124,82,.2);
+    }
+
+    /* HOLE ROW */
+    .hole-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,.05);
+    }
+    .hole-row:last-child { border-bottom: none; }
+    .hole-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--tmac-blush-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--deep-forest);
+      flex-shrink: 0;
+    }
+    .hole-num.contest { background: var(--deep-forest); color: var(--tmac-gold); }
+    .hole-info { flex: 1; }
+    .hole-par { font-size: 12px; color: #aaa; }
+    .hole-contest-tag {
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-top: 2px;
+    }
+    .hole-score-area { display: flex; align-items: center; gap: 8px; }
+    .score-stepper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .stepper-btn {
+      width: 34px;
+      height: 34px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--charcoal);
+      transition: background .15s;
+      line-height: 1;
+      font-family: inherit;
+    }
+    .stepper-btn:hover { background: var(--tmac-blush-light); }
+    .stepper-btn:active { background: var(--tmac-blush); }
+    .stepper-val {
+      width: 40px;
+      height: 34px;
+      border: 1px solid #ddd;
+      border-left: none;
+      border-right: none;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stepper-val.under { color: #2e7d32; }
+    .stepper-val.over { color: #c62828; }
+    .stepper-val.par { color: var(--charcoal); }
+    .stepper-val.empty { color: #ccc; }
+
+    /* SCORE BADGE */
+    .score-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .badge-eagle { background: #ffd700; color: #333; }
+    .badge-birdie { background: #81c784; color: #fff; }
+    .badge-par { background: #f5f5f5; color: #666; }
+    .badge-bogey { background: #ef9a9a; color: #fff; }
+    .badge-double { background: #e57373; color: #fff; }
+    .badge-worse { background: #c62828; color: #fff; }
+
+    /* CONTEST INPUT */
+    .contest-input-wrap {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px 12px;
+      background: rgba(201,168,108,.06);
+      border: 1px solid rgba(201,168,108,.2);
+    }
+    .contest-input-label {
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 6px;
+    }
+    .contest-input {
+      width: 100%;
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      background: #fff;
+    }
+    .contest-input:focus { border-color: var(--tmac-bronze); }
+
+    /* SUBMIT HOLE BTN */
+    .submit-hole-btn {
+      width: 100%;
+      background: var(--deep-forest);
+      color: var(--tmac-blush);
+      border: none;
+      padding: 14px;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      margin-top: 8px;
+      transition: opacity .2s;
+    }
+    .submit-hole-btn:hover { opacity: .88; }
+    .submit-hole-btn:disabled { opacity: .35; cursor: default; }
+
+    /* CURRENT HOLE CARD */
+    .current-hole-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .current-hole-eyebrow {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--tmac-bronze);
+      margin-bottom: 8px;
+    }
+    .current-hole-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .current-hole-par {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+    .current-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 16px;
+    }
+    .current-stepper .stepper-btn {
+      width: 52px;
+      height: 52px;
+      font-size: 24px;
+    }
+    .current-stepper .stepper-val {
+      width: 72px;
+      height: 52px;
+      font-size: 28px;
+    }
+
+    /* SCORECARD TABLE */
+    .sc-table-wrap { margin-bottom: 24px; }
+    .sc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .sc-table th {
+      background: var(--deep-forest);
+      color: rgba(255,255,255,.6);
+      padding: 8px 6px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: .1em;
+      font-weight: 400;
+    }
+    .sc-table td {
+      padding: 8px 6px;
+      text-align: center;
+      border-bottom: 1px solid #f0f0f0;
+      color: var(--charcoal);
+    }
+    .sc-table td.hole-cell { font-weight: 600; color: var(--deep-forest); }
+    .sc-table td.par-cell { color: #888; }
+    .sc-table td.score-cell.under { color: #2e7d32; font-weight: 600; }
+    .sc-table td.score-cell.over { color: #c62828; font-weight: 600; }
+    .sc-table td.score-cell.empty { color: #ccc; }
+    .sc-table tr.total-row td { background: #f9f9f9; font-weight: 600; border-top: 2px solid #ddd; }
+    .sc-table td.contest-cell { font-size: 10px; color: var(--tmac-bronze); }
+
+    /* SAVE INDICATOR */
+    .save-indicator {
+      text-align: center;
+      font-size: 12px;
+      color: #4caf50;
+      padding: 8px;
+      display: none;
+    }
+    .save-indicator.visible { display: block; }
+
+    /* NAV TABS */
+    .sc-nav {
+      display: flex;
+      border-bottom: 2px solid #eee;
+      margin-bottom: 24px;
+    }
+    .sc-nav-btn {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      border: none;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #888;
+      cursor: pointer;
+      font-family: inherit;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s;
+    }
+    .sc-nav-btn.active {
+      color: var(--tmac-bronze);
+      border-bottom-color: var(--tmac-bronze);
+    }
+
+    @media (max-width: 400px) {
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body class="member-body">
+
+  <header class="member-header">
+    <div class="header-inner">
+      <a href="/home.html" class="header-logo">
+        <img src="images/tmac-logo.png" alt="TMac Inspired">
+      </a>
+      <div style="font-size:13px;color:rgba(255,255,255,.7);font-family:'Cormorant Garamond',serif;font-size:16px;">Scorecard</div>
+      <a href="/leaderboard.html" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tmac-blush);text-decoration:none;">Leaderboard</a>
+    </div>
+  </header>
+
+  <!-- PRACTICE BANNER -->
+  <div class="practice-banner" id="practice-banner">Practice Mode — Scores do not count</div>
+
+  <div class="sc-wrap">
+
+    <!-- TEAM PICKER (shown first) -->
+    <div id="team-picker-section">
+      <div class="team-picker">
+        <div class="team-picker-label">Tee Elite Invitational 2026</div>
+        <div class="team-picker-title">Select your team</div>
+        <div class="team-grid" id="team-grid">
+          <button class="team-btn" data-team="1" onclick="selectTeam(1)">Team 1</button>
+          <button class="team-btn" data-team="2" onclick="selectTeam(2)">Team 2</button>
+          <button class="team-btn" data-team="3" onclick="selectTeam(3)">Team 3</button>
+          <button class="team-btn" data-team="4" onclick="selectTeam(4)">Team 4</button>
+          <button class="team-btn" data-team="5" onclick="selectTeam(5)">Team 5</button>
+          <button class="team-btn" data-team="6" onclick="selectTeam(6)">Team 6</button>
+        </div>
+        <button class="team-confirm-btn" id="team-confirm-btn" disabled onclick="confirmTeam()">Enter Scores</button>
+      </div>
+    </div>
+
+    <!-- SCORING SECTION (shown after team picked) -->
+    <div id="scoring-section" style="display:none;">
+
+      <div class="sc-header">
+        <div class="sc-team-name" id="sc-team-name">Team 1</div>
+        <button class="sc-change-team" onclick="resetTeam()">Change team</button>
+      </div>
+
+      <!-- RUNNING TOTAL -->
+      <div class="running-bar">
+        <div class="running-bar-item">
+          <div class="running-bar-num" id="bar-score">—</div>
+          <div class="running-bar-label">Score</div>
+        </div>
+        <div class="running-bar-item">
+          <div class="running-bar-num" id="bar-topar">—</div>
+          <div class="running-bar-label">To Par</div>
+        </div>
+        <div class="running-bar-item">
+          <div class="running-bar-num" id="bar-thru">0</div>
+          <div class="running-bar-label">Thru</div>
+        </div>
+        <div class="running-bar-item">
+          <div class="running-bar-num" id="bar-remaining">18</div>
+          <div class="running-bar-label">Left</div>
+        </div>
+      </div>
+
+      <!-- NAV TABS -->
+      <div class="sc-nav">
+        <button class="sc-nav-btn active" data-view="entry" onclick="switchView('entry')">Enter Score</button>
+        <button class="sc-nav-btn" data-view="card" onclick="switchView('card')">Full Card</button>
+      </div>
+
+      <!-- ENTRY VIEW -->
+      <div id="view-entry">
+        <div class="current-hole-card" id="current-hole-card">
+          <div class="current-hole-eyebrow" id="current-eyebrow">Current Hole</div>
+          <div class="current-hole-title" id="current-hole-title">Hole 1</div>
+          <div class="current-hole-par" id="current-hole-par">Par 4 · 243 yards (Silver)</div>
+          <div class="current-stepper">
+            <button class="stepper-btn" onclick="adjustCurrent(-1)">-</button>
+            <div class="stepper-val" id="current-score-val">4</div>
+            <button class="stepper-btn" onclick="adjustCurrent(1)">+</button>
+          </div>
+          <div id="contest-fields"></div>
+          <div class="save-indicator" id="save-indicator">Saved</div>
+          <button class="submit-hole-btn" id="submit-hole-btn" onclick="submitCurrentHole()">Save Hole</button>
+        </div>
+
+        <!-- HOLE NAV -->
+        <div style="display:flex;gap:8px;margin-bottom:24px;">
+          <button onclick="prevHole()" style="flex:1;padding:12px;background:#f5f5f5;border:1px solid #ddd;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;color:#666;">Previous</button>
+          <button onclick="nextHole()" style="flex:1;padding:12px;background:var(--deep-forest);color:var(--tmac-blush);border:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Next Hole</button>
+        </div>
+
+        <!-- MINI GRID OF ALL HOLES -->
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:12px;">All Holes</div>
+        <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-bottom:8px;" id="hole-mini-grid"></div>
+      </div>
+
+      <!-- FULL CARD VIEW -->
+      <div id="view-card" style="display:none;">
+        <div class="sc-table-wrap">
+          <table class="sc-table" id="sc-table-front"></table>
+        </div>
+        <div class="sc-table-wrap">
+          <table class="sc-table" id="sc-table-back"></table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const PARS = [4,3,5,4,4,4,4,3,5,4,4,3,4,4,3,4,4,5];
+    const YARDS = [243,123,484,292,247,238,319,96,468,317,327,121,335,300,81,313,368,467];
+    const CTP_HOLES = [2,8,12,15];
+    const LD_HOLES = [9];
+
+    let selectedTeam = null;
+    let currentHole = 1;
+    let scores = {}; // hole -> { strokes, ctp_winner, ld_winner }
+    let mode = 'practice';
+
+    // Load mode on start
+    async function init() {
+      try {
+        const res = await fetch('/api/scores/submit?team=1'); // just to get mode
+        // We get mode from leaderboard instead
+        const lb = await fetch('/api/scores/leaderboard');
+        if (lb.ok) {
+          const data = await lb.json();
+          mode = data.mode;
+          updatePracticeBanner();
+        }
+      } catch(e) {}
+
+      // Restore team from sessionStorage
+      const saved = sessionStorage.getItem('sc_team');
+      if (saved) {
+        selectedTeam = parseInt(saved);
+        await loadTeamScores();
+        showScoring();
+      }
+    }
+
+    function updatePracticeBanner() {
+      const banner = document.getElementById('practice-banner');
+      if (mode === 'live') {
+        banner.classList.add('hidden');
+      } else {
+        banner.classList.remove('hidden');
+      }
+    }
+
+    function selectTeam(num) {
+      selectedTeam = num;
+      document.querySelectorAll('.team-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelector(`[data-team="${num}"]`).classList.add('selected');
+      document.getElementById('team-confirm-btn').disabled = false;
+    }
+
+    async function confirmTeam() {
+      if (!selectedTeam) return;
+      sessionStorage.setItem('sc_team', selectedTeam);
+      await loadTeamScores();
+      showScoring();
+    }
+
+    function resetTeam() {
+      sessionStorage.removeItem('sc_team');
+      selectedTeam = null;
+      scores = {};
+      currentHole = 1;
+      document.getElementById('team-picker-section').style.display = 'block';
+      document.getElementById('scoring-section').style.display = 'none';
+      document.querySelectorAll('.team-btn').forEach(b => b.classList.remove('selected'));
+      document.getElementById('team-confirm-btn').disabled = true;
+    }
+
+    async function loadTeamScores() {
+      try {
+        const res = await fetch(`/api/scores/submit?team=${selectedTeam}`);
+        if (res.ok) {
+          const data = await res.json();
+          mode = data.mode;
+          updatePracticeBanner();
+          scores = {};
+          data.scores.forEach(s => {
+            scores[s.hole_number] = {
+              strokes: s.strokes,
+              ctp_winner: s.ctp_winner || '',
+              ld_winner: s.ld_winner || ''
+            };
+          });
+          // Set current hole to first unscored hole
+          for (let h = 1; h <= 18; h++) {
+            if (!scores[h]) { currentHole = h; break; }
+            if (h === 18) currentHole = 18;
+          }
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    function showScoring() {
+      document.getElementById('team-picker-section').style.display = 'none';
+      document.getElementById('scoring-section').style.display = 'block';
+      document.getElementById('sc-team-name').textContent = `Team ${selectedTeam}`;
+      renderCurrentHole();
+      renderRunningBar();
+      renderMiniGrid();
+      renderFullCard();
+    }
+
+    function renderCurrentHole() {
+      const par = PARS[currentHole - 1];
+      const yards = YARDS[currentHole - 1];
+      const saved = scores[currentHole];
+      const isCTP = CTP_HOLES.includes(currentHole);
+      const isLD = LD_HOLES.includes(currentHole);
+      const contestTag = isCTP ? 'Closest to the Pin' : isLD ? 'Longest Drive' : '';
+
+      document.getElementById('current-eyebrow').textContent = contestTag ? `Hole ${currentHole} — ${contestTag}` : `Hole ${currentHole} of 18`;
+      document.getElementById('current-hole-title').textContent = `Hole ${currentHole}`;
+      document.getElementById('current-hole-par').textContent = `Par ${par} · ${yards} yards (Silver tees)`;
+
+      const val = saved ? saved.strokes : par;
+      renderStepperVal('current-score-val', val, par);
+
+      // Contest fields
+      const cf = document.getElementById('contest-fields');
+      if (isCTP || isLD) {
+        const label = isCTP ? 'Closest to the Pin winner (last name entered wins)' : 'Longest Drive winner (last name entered wins)';
+        const field = isCTP ? 'ctp_winner' : 'ld_winner';
+        const current = saved ? (saved[field] || '') : '';
+        cf.innerHTML = `
+          <div class="contest-input-wrap">
+            <div class="contest-input-label">${label}</div>
+            <input type="text" class="contest-input" id="contest-name-input" placeholder="Enter player name" value="${current}">
+          </div>`;
+      } else {
+        cf.innerHTML = '';
+      }
+    }
+
+    function renderStepperVal(elId, val, par) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.textContent = val;
+      el.className = 'stepper-val';
+      if (val < par) el.classList.add('under');
+      else if (val > par) el.classList.add('over');
+      else el.classList.add('par');
+    }
+
+    function adjustCurrent(delta) {
+      const par = PARS[currentHole - 1];
+      const saved = scores[currentHole];
+      let val = saved ? saved.strokes : par;
+      val = Math.max(1, Math.min(15, val + delta));
+      if (!scores[currentHole]) scores[currentHole] = { strokes: val, ctp_winner: '', ld_winner: '' };
+      else scores[currentHole].strokes = val;
+      renderStepperVal('current-score-val', val, par);
+      renderRunningBar();
+      renderMiniGrid();
+    }
+
+    async function submitCurrentHole() {
+      const par = PARS[currentHole - 1];
+      const saved = scores[currentHole];
+      const strokes = saved ? saved.strokes : par;
+      const isCTP = CTP_HOLES.includes(currentHole);
+      const isLD = LD_HOLES.includes(currentHole);
+
+      const body = {
+        team_number: selectedTeam,
+        hole_number: currentHole,
+        strokes,
+        entered_by: `Team ${selectedTeam}`
+      };
+
+      const nameInput = document.getElementById('contest-name-input');
+      if (isCTP && nameInput) body.ctp_winner = nameInput.value.trim();
+      if (isLD && nameInput) body.ld_winner = nameInput.value.trim();
+
+      // Update local state
+      scores[currentHole] = {
+        strokes,
+        ctp_winner: body.ctp_winner || '',
+        ld_winner: body.ld_winner || ''
+      };
+
+      const btn = document.getElementById('submit-hole-btn');
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/scores/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          const ind = document.getElementById('save-indicator');
+          ind.classList.add('visible');
+          setTimeout(() => ind.classList.remove('visible'), 2000);
+          renderRunningBar();
+          renderMiniGrid();
+          renderFullCard();
+          // Auto-advance to next unscored hole
+          if (currentHole < 18) {
+            setTimeout(() => { nextHole(); }, 600);
+          }
+        }
+      } catch(e) { console.error(e); }
+
+      btn.textContent = 'Save Hole';
+      btn.disabled = false;
+    }
+
+    function prevHole() {
+      if (currentHole > 1) { currentHole--; renderCurrentHole(); }
+    }
+
+    function nextHole() {
+      if (currentHole < 18) { currentHole++; renderCurrentHole(); }
+    }
+
+    function renderRunningBar() {
+      const scored = Object.entries(scores).filter(([h, s]) => s.strokes);
+      const thru = scored.length;
+      const totalStrokes = scored.reduce((sum, [h, s]) => sum + s.strokes, 0);
+      const parThru = scored.reduce((sum, [h]) => sum + PARS[parseInt(h) - 1], 0);
+      const toPar = thru > 0 ? totalStrokes - parThru : null;
+
+      document.getElementById('bar-score').textContent = thru > 0 ? totalStrokes : '—';
+      const toParEl = document.getElementById('bar-topar');
+      if (toPar === null) {
+        toParEl.textContent = '—';
+        toParEl.className = 'running-bar-num';
+      } else {
+        toParEl.textContent = toPar === 0 ? 'E' : (toPar > 0 ? '+' + toPar : toPar);
+        toParEl.className = 'running-bar-num ' + (toPar < 0 ? 'under' : toPar > 0 ? 'over' : '');
+      }
+      document.getElementById('bar-thru').textContent = thru;
+      document.getElementById('bar-remaining').textContent = 18 - thru;
+    }
+
+    function renderMiniGrid() {
+      const grid = document.getElementById('hole-mini-grid');
+      grid.innerHTML = Array.from({ length: 18 }, (_, i) => {
+        const h = i + 1;
+        const par = PARS[i];
+        const s = scores[h];
+        const isActive = h === currentHole;
+        let bg = '#f5f5f5', color = '#888', border = 'transparent';
+        if (isActive) border = 'var(--tmac-bronze)';
+        if (s) {
+          if (s.strokes < par) { bg = '#e8f5e9'; color = '#2e7d32'; }
+          else if (s.strokes > par) { bg = '#fdecea'; color = '#c62828'; }
+          else { bg = '#f5f5f5'; color = '#666'; }
+        }
+        return `<div onclick="currentHole=${h};renderCurrentHole();" style="aspect-ratio:1;background:${bg};border:2px solid ${border};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:${color};cursor:pointer;">${s ? s.strokes : h}</div>`;
+      }).join('');
+    }
+
+    function renderFullCard() {
+      buildNineTable('sc-table-front', 1, 9);
+      buildNineTable('sc-table-back', 10, 18);
+    }
+
+    function buildNineTable(elId, start, end) {
+      const el = document.getElementById(elId);
+      const label = start === 1 ? 'Front 9' : 'Back 9';
+      let totalPar = 0, totalStrokes = 0, allScored = true;
+
+      let holesHtml = '', parsHtml = '', scoresHtml = '', toParHtml = '';
+      for (let h = start; h <= end; h++) {
+        const par = PARS[h - 1];
+        const s = scores[h];
+        const toPar = s ? s.strokes - par : null;
+        totalPar += par;
+        if (s) totalStrokes += s.strokes;
+        else allScored = false;
+
+        const isContest = CTP_HOLES.includes(h) || LD_HOLES.includes(h);
+        holesHtml += `<td class="hole-cell" style="${isContest ? 'color:var(--tmac-bronze)' : ''}">${h}</td>`;
+        parsHtml += `<td class="par-cell">${par}</td>`;
+
+        if (s) {
+          const cls = toPar < 0 ? 'under' : toPar > 0 ? 'over' : 'par';
+          scoresHtml += `<td class="score-cell ${cls}">${s.strokes}</td>`;
+          toParHtml += `<td class="score-cell ${cls}">${toPar === 0 ? 'E' : toPar > 0 ? '+' + toPar : toPar}</td>`;
+        } else {
+          scoresHtml += `<td class="score-cell empty">—</td>`;
+          toParHtml += `<td class="score-cell empty">—</td>`;
+        }
+      }
+
+      const netToPar = allScored ? totalStrokes - totalPar : null;
+      el.innerHTML = `
+        <thead>
+          <tr><th colspan="${end - start + 2}">${label}</th></tr>
+          <tr><th>Hole</th>${Array.from({length: end - start + 1}, (_,i) => `<th>${start + i}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-size:11px;color:#888;text-align:left;padding-left:8px;">Par</td>${parsHtml}</tr>
+          <tr><td style="font-size:11px;color:#888;text-align:left;padding-left:8px;">Score</td>${scoresHtml}</tr>
+          <tr class="total-row">
+            <td style="text-align:left;padding-left:8px;">${label === 'Front 9' ? 'OUT' : 'IN'}</td>
+            <td colspan="${end - start}" style="font-size:11px;color:#888;">Par ${totalPar}</td>
+            <td class="${netToPar !== null ? (netToPar < 0 ? 'score-cell under' : netToPar > 0 ? 'score-cell over' : '') : ''}">${netToPar !== null ? (netToPar === 0 ? 'E' : netToPar > 0 ? '+' + netToPar : netToPar) : '—'}</td>
+          </tr>
+        </tbody>`;
+    }
+
+    function switchView(view) {
+      document.querySelectorAll('.sc-nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`[data-view="${view}"]`).classList.add('active');
+      document.getElementById('view-entry').style.display = view === 'entry' ? 'block' : 'none';
+      document.getElementById('view-card').style.display = view === 'card' ? 'block' : 'none';
+      if (view === 'card') renderFullCard();
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
