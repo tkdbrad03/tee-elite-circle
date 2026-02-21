@@ -669,14 +669,7 @@
       const container = document.getElementById('checklist-items');
       container.innerHTML = CHECKLIST.map(item => {
         const done = s[item.id] ?? false;
-        return `<div class="checklist-item" onclick="${item.locked ? '' : item.action ? `handleCL('${item.id}')` : `toggleCL('${item.id}')`}">`
-          <div class="checklist-check ${done ? 'done' : ''}"></div>
-          <div class="checklist-text">
-            <div class="checklist-text-main ${done ? 'done' : ''}">${item.label}</div>
-            <div class="checklist-text-sub">${item.sub}</div>
-          </div>
-          ${item.action && !done ? '<span class="checklist-action">→</span>' : ''}
-        </div>`;
+        return `<div class="checklist-item" onclick="${item.locked ? '' : item.action ? `handleCL('${item.id}')` : `toggleCL('${item.id}')`}"><div class="checklist-check ${done ? 'done' : ''}"></div><div class="checklist-text"><div class="checklist-text-main ${done ? 'done' : ''}">${item.label}</div><div class="checklist-text-sub">${item.sub}</div></div>${item.action && !done ? '<span class="checklist-action">→</span>' : ''}</div>`;
       }).join('');
       const doneCount = CHECKLIST.filter(i => s[i.id]).length;
       const pct = Math.round(doneCount / CHECKLIST.length * 100);
