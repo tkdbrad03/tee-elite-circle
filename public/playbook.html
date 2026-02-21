@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Event Playbook — Tee Elite Circle Invitational</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --deep-forest: #1a2f23;
+      --gold: #c9a86c;
+      --bronze: #a67c52;
+      --blush: #e8ccc8;
+      --cream: #FAF8F5;
+      --charcoal: #2C2C2C;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .pb-header {
+      background: var(--deep-forest);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pb-header-logo { height: 36px; width: auto; }
+    .pb-back {
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.6);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .pb-back:hover { color: var(--blush); }
+
+    /* HERO */
+    .pb-hero {
+      background: var(--deep-forest);
+      padding: 56px 32px 48px;
+      text-align: center;
+      border-bottom: 3px solid var(--gold);
+    }
+    .pb-hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .pb-hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 400;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .pb-hero-title em { color: var(--blush); font-style: italic; }
+    .pb-hero-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,.55);
+      letter-spacing: .05em;
+    }
+
+    /* BODY */
+    .pb-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+    }
+
+    /* SECTION */
+    .pb-section { margin-bottom: 56px; }
+    .pb-section-label {
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(166,124,82,.2);
+    }
+
+    /* WELCOME LETTER */
+    .welcome-letter {
+      background: #fff;
+      border-left: 3px solid var(--gold);
+      padding: 32px;
+    }
+    .welcome-letter p {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+    .welcome-letter p:last-child { margin-bottom: 0; }
+    .welcome-sig {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      margin-top: 24px;
+    }
+    .welcome-sig-title {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-top: 4px;
+    }
+
+    /* SCHEDULE */
+    .schedule-list { display: flex; flex-direction: column; gap: 0; }
+    .schedule-item {
+      display: flex;
+      gap: 24px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .schedule-item:last-child { border-bottom: none; }
+    .schedule-time {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--bronze);
+      min-width: 80px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+    .schedule-desc { font-size: 14px; color: var(--charcoal); }
+    .schedule-desc-sub { font-size: 12px; color: #999; margin-top: 3px; }
+
+    /* INFO GRID */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .info-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
+      padding: 20px 24px;
+    }
+    .info-card-label {
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 8px;
+    }
+    .info-card-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--charcoal);
+      line-height: 1.4;
+    }
+    .info-card-sub { font-size: 12px; color: #888; margin-top: 4px; }
+
+    /* RULES */
+    .rules-list { display: flex; flex-direction: column; gap: 0; }
+    .rule-item {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      display: flex;
+      gap: 16px;
+    }
+    .rule-item:last-child { border-bottom: none; }
+    .rule-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--gold);
+      line-height: 1;
+      flex-shrink: 0;
+      min-width: 28px;
+    }
+    .rule-text { font-size: 14px; color: var(--charcoal); line-height: 1.7; }
+    .rule-text strong { color: var(--deep-forest); }
+
+    /* HOLES TABLE */
+    .holes-table { width: 100%; border-collapse: collapse; }
+    .holes-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #888;
+      font-weight: 500;
+      background: #f7f7f7;
+      border-bottom: 1px solid #eee;
+    }
+    .holes-table td {
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--charcoal);
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .holes-table tr:last-child td { border-bottom: none; }
+    .hole-badge {
+      display: inline-block;
+      background: var(--deep-forest);
+      color: var(--blush);
+      font-size: 11px;
+      padding: 3px 10px;
+      letter-spacing: .08em;
+    }
+    .hole-badge.gold { background: var(--gold); color: #fff; }
+
+    /* ATTIRE */
+    .attire-card {
+      background: var(--deep-forest);
+      padding: 32px;
+      color: #fff;
+    }
+    .attire-provided {
+      display: inline-block;
+      background: var(--gold);
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      margin-bottom: 16px;
+    }
+    .attire-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .attire-list { display: flex; flex-direction: column; gap: 10px; }
+    .attire-item { font-size: 14px; color: rgba(255,255,255,.8); display: flex; gap: 12px; align-items: baseline; }
+    .attire-item-label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); min-width: 80px; flex-shrink: 0; }
+
+    /* CONTACT */
+    .contact-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .contact-label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--bronze); margin-bottom: 6px; }
+    .contact-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--charcoal); margin-bottom: 4px; }
+    .contact-sub { font-size: 13px; color: #888; }
+    .contact-btn {
+      background: var(--deep-forest);
+      color: var(--blush);
+      text-decoration: none;
+      padding: 14px 28px;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: opacity .2s;
+    }
+    .contact-btn:hover { opacity: .85; }
+
+    /* PRINT BUTTON */
+    .print-bar {
+      background: var(--deep-forest);
+      padding: 16px 32px;
+      text-align: center;
+    }
+    .print-btn {
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--blush);
+      background: none;
+      border: 1px solid var(--blush);
+      padding: 10px 28px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .print-btn:hover { background: var(--blush); color: var(--deep-forest); }
+
+    @media (max-width: 600px) {
+      .pb-body { padding: 40px 20px 80px; }
+      .info-grid { grid-template-columns: 1fr; }
+      .contact-card { flex-direction: column; align-items: flex-start; }
+      .contact-btn { width: 100%; text-align: center; }
+      .pb-header { padding: 16px 20px; }
+      .pb-hero { padding: 40px 20px 36px; }
+    }
+
+    @media print {
+      .pb-back, .print-bar { display: none; }
+      .pb-hero { padding: 32px; }
+      .pb-body { padding: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="pb-header">
+    <img src="/images/tmac-logo.png" alt="TMac Inspired" class="pb-header-logo">
+    <a href="/home.html" class="pb-back">Back to Hub</a>
+  </header>
+
+  <div class="pb-hero">
+    <div class="pb-hero-eyebrow">Official Event Playbook</div>
+    <div class="pb-hero-title">Tee Elite Circle<br><em>Invitational</em></div>
+    <div class="pb-hero-sub">Saturday, April 18, 2026 &nbsp;·&nbsp; Summerfield Crossing Golf Club &nbsp;·&nbsp; Tampa, FL</div>
+  </div>
+
+  <div class="pb-body">
+
+    <!-- WELCOME LETTER -->
+    <div class="pb-section">
+      <div class="pb-section-label">Welcome Letter</div>
+      <div class="welcome-letter">
+        <p>Ladies,</p>
+        <p>Welcome to the green. This is not just a golf tournament; it is a room full of women who decided to show up, stand out, and do it in style.</p>
+        <p>It doesn't matter if you have been playing for years or you are still finding your swing, you belong here. Today is about community, competition, and a whole lot of fun.</p>
+        <p>Take in every moment. Cheer for your team. And when you step up to that tee box, remember: you were made for this.</p>
+        <p>See you on the course.</p>
+        <div class="welcome-sig">Dr. TMac</div>
+        <div class="welcome-sig-title">Founder, Tee Elite Circle</div>
+      </div>
+    </div>
+
+    <!-- EVENT DAY SCHEDULE -->
+    <div class="pb-section">
+      <div class="pb-section-label">Event Day Schedule</div>
+      <div class="schedule-list">
+        <div class="schedule-item">
+          <div class="schedule-time">9:00 AM</div>
+          <div>
+            <div class="schedule-desc">Player Arrival &amp; Check-In</div>
+            <div class="schedule-desc-sub">Registration desk opens. Pick up your shirt, drink ticket, and confirm team assignment.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">9:00 AM</div>
+          <div>
+            <div class="schedule-desc">Mulligan Sales Open</div>
+            <div class="schedule-desc-sub">Purchase at the registration desk. $5 each, max 2 per player.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">9:45 AM</div>
+          <div>
+            <div class="schedule-desc">Player Meeting &amp; Welcome</div>
+            <div class="schedule-desc-sub">Brief rules overview and announcements from Dr. TMac. Do not miss this.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">10:00 AM</div>
+          <div>
+            <div class="schedule-desc">Shotgun Start</div>
+            <div class="schedule-desc-sub">We are running a Single-Tee Shotgun. All teams will begin their round on the first hole, one after another, in their assigned order.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">On-Course</div>
+          <div>
+            <div class="schedule-desc">Mulligan Sales Continue</div>
+            <div class="schedule-desc-sub">Volunteers will be circulating on course. Pay via CashApp ($TMacinspired).</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">TBD</div>
+          <div>
+            <div class="schedule-desc">Round Concludes</div>
+            <div class="schedule-desc-sub">Digital scorecards will be verified at the clubhouse.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">TBD</div>
+          <div>
+            <div class="schedule-desc">Awards Ceremony &amp; Clubhouse Reception</div>
+            <div class="schedule-desc-sub">Winners announced. Food and drinks in the clubhouse. Stay and celebrate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VENUE INFO -->
+    <div class="pb-section">
+      <div class="pb-section-label">Venue &amp; Details</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">Course</div>
+          <div class="info-card-value">Summerfield Crossing Golf Club</div>
+          <div class="info-card-sub">Tampa, FL</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Format</div>
+          <div class="info-card-value">4-Person Scramble</div>
+          <div class="info-card-sub">Ladies tees &nbsp;·&nbsp; Shotgun start</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Tee Time</div>
+          <div class="info-card-value">10:00 AM EST</div>
+          <div class="info-card-sub">Arrive by 9:00 AM for check-in</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Date</div>
+          <div class="info-card-value">Saturday, April 18, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRAMBLE RULES -->
+    <div class="pb-section">
+      <div class="pb-section-label">Scramble Rules</div>
+      <div class="rules-list">
+        <div class="rule-item">
+          <div class="rule-num">1</div>
+          <div class="rule-text"><strong>How a scramble works:</strong> All 4 players tee off. The team selects the best shot and everyone plays their next shot from that spot. Repeat until the ball is holed.</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">2</div>
+          <div class="rule-text"><strong>Tee box:</strong> All players use the ladies tees. Each player must contribute a minimum of 2 tee shots per 9 holes.</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">3</div>
+          <div class="rule-text"><strong>Handicaps:</strong> Used for pairing purposes only. Link your GHIN in the app before the event.</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">4</div>
+          <div class="rule-text"><strong>Mulligans:</strong> $5 each. Max 1 per player on the front 9, max 1 per player on the back 9. Team cap of 8 total. Non-transferable between teammates. Not valid on contest holes.</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">5</div>
+          <div class="rule-text"><strong>Pace of play:</strong> We are playing ready golf. If your team falls more than one hole behind the group ahead, a ranger may ask you to skip a hole. Everyone finishes in time for the awards ceremony.</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">6</div>
+          <div class="rule-text"><strong>Scorecards:</strong> One player per team records the score each hole. Digital scorecards will be verified at the clubhouse immediately after your round.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTEST HOLES -->
+    <div class="pb-section">
+      <div class="pb-section-label">On-Course Contests</div>
+      <p style="font-size:13px;color:#888;margin-bottom:20px;">Mulligans are not permitted on contest holes. One shot, best effort.</p>
+      <table class="holes-table">
+        <thead>
+          <tr>
+            <th>Hole</th>
+            <th>Contest</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="hole-badge">Hole 2</span></td>
+            <td>Closest to the Pin</td>
+            <td style="color:#888;font-size:13px;">Par 3</td>
+          </tr>
+          <tr>
+            <td><span class="hole-badge">Hole 8</span></td>
+            <td>Closest to the Pin</td>
+            <td style="color:#888;font-size:13px;">Par 3</td>
+          </tr>
+          <tr>
+            <td><span class="hole-badge">Hole 9</span></td>
+            <td>Longest Drive</td>
+            <td style="color:#888;font-size:13px;">Drive must stay in the fairway</td>
+          </tr>
+          <tr>
+            <td><span class="hole-badge">Hole 12</span></td>
+            <td>Closest to the Pin</td>
+            <td style="color:#888;font-size:13px;">Par 3</td>
+          </tr>
+          <tr>
+            <td><span class="hole-badge">Hole 15</span></td>
+            <td>Closest to the Pin</td>
+            <td style="color:#888;font-size:13px;">Par 3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ATTIRE -->
+    <div class="pb-section">
+      <div class="pb-section-label">Attire</div>
+      <div class="attire-card">
+        <div class="attire-provided">Polo shirt provided by Dr. TMac</div>
+        <div class="attire-title">What to wear</div>
+        <div class="attire-list">
+          <div class="attire-item">
+            <span class="attire-item-label">Top</span>
+            White polo shirt — provided at check-in
+          </div>
+          <div class="attire-item">
+            <span class="attire-item-label">Bottoms</span>
+            Black, white, or khaki golf skirt, shorts, or pants
+          </div>
+          <div class="attire-item">
+            <span class="attire-item-label">Shoes</span>
+            Soft spikes or spikeless golf shoes required
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY-OF CONTACT -->
+    <div class="pb-section">
+      <div class="pb-section-label">Day-of Contact</div>
+      <div class="contact-card">
+        <div>
+          <div class="contact-label">Questions on the day of the event</div>
+          <div class="contact-name">Dr. TMac</div>
+          <div class="contact-sub">Text only as she may be on the course</div>
+        </div>
+        <a href="sms:+15613203585" class="contact-btn">Text Dr. TMac</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="print-bar">
+    <button class="print-btn" onclick="window.print()">Print Playbook</button>
+  </div>
+
+</body>
+</html>
