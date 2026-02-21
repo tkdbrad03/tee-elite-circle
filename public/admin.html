@@ -1447,7 +1447,48 @@
 <div class="tab-content" id="invitational-tab">
   <div class="content-section">
     <h2>Invitational — Day-of Management</h2>
-    <p style="font-size:13px;color:#888;margin-bottom:24px;">Log mulligans and drink ticket redemptions for each player. Updates appear in their hub instantly.</p>
+    <div style="font-size:13px;color:#888;margin-bottom:24px;">Log mulligans and drink ticket redemptions for each player. Updates appear in their hub instantly.</div>
+
+    <!-- MODE TOGGLE -->
+    <div style="background:#f9f9f9;border:1px solid #eee;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:#1a2f23;margin-bottom:4px;">Scorecard Mode</div>
+        <div style="font-size:12px;color:#888;" id="inv-mode-desc">Loading...</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="setScoreMode('practice')" id="btn-practice" style="padding:10px 20px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;background:#fff;border:1px solid #ddd;color:#666;transition:all .2s;">Practice</button>
+        <button onclick="setScoreMode('live')" id="btn-live" style="padding:10px 20px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;background:#1a2f23;border:1px solid #1a2f23;color:#e8ccc8;transition:all .2s;">Go Live</button>
+      </div>
+    </div>
+
+    <!-- SCORE OVERRIDE -->
+    <div style="background:#fff;border:1px solid #eee;padding:20px 24px;margin-bottom:24px;">
+      <div style="font-size:12px;font-weight:600;color:#1a2f23;margin-bottom:16px;">Score Override</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+        <div>
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;">Team</label>
+          <select id="override-team" style="padding:8px 10px;border:1px solid #ddd;font-family:inherit;font-size:13px;outline:none;">
+            <option value="">Select</option>
+            <option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;">Hole</label>
+          <select id="override-hole" style="padding:8px 10px;border:1px solid #ddd;font-family:inherit;font-size:13px;outline:none;">
+            <option value="">Select</option>
+            ${Array.from({length:18},(_,i)=>`<option>${i+1}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;">Strokes</label>
+          <input type="number" id="override-strokes" min="1" max="15" placeholder="e.g. 4" style="padding:8px 10px;border:1px solid #ddd;font-family:inherit;font-size:13px;width:80px;outline:none;">
+        </div>
+        <button onclick="submitOverride()" style="background:#1a2f23;color:#e8ccc8;border:none;padding:10px 20px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Save Override</button>
+        <button onclick="deleteScore()" style="background:#fff;color:#c62828;border:1px solid #c62828;padding:10px 16px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Clear Hole</button>
+      </div>
+      <div id="override-msg" style="font-size:12px;color:#4caf50;margin-top:10px;display:none;"></div>
+    </div>
 
     <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
       <div style="background:#f9f9f9;border:1px solid #eee;padding:16px 24px;flex:1;min-width:140px;">
@@ -1645,7 +1686,7 @@
         if (tab.dataset.tab === 'retreats') loadRetreatRSVPs();
         if (tab.dataset.tab === 'content') loadEssentials();
         if (tab.dataset.tab === 'live') loadLiveStatus();
-        if (tab.dataset.tab === 'invitational') loadInvPlayers();
+        if (tab.dataset.tab === 'invitational') { loadInvPlayers(); loadScoreMode(); }
       });
     });
 
@@ -2460,6 +2501,106 @@
           body: JSON.stringify({ action: 'drink', member_id: memberId, redeemed })
         });
         if (res.ok) loadInvPlayers();
+      } catch(e) { console.error(e); }
+    }
+
+    async function setScoreMode(newMode) {
+      if (newMode === 'live') {
+        if (!confirm('Going Live will DELETE all practice scores and cannot be undone. Are you sure?')) return;
+      }
+      try {
+        const res = await fetch('/api/admin/scores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'set_mode', mode: newMode })
+        });
+        if (res.ok) updateModeDisplay(newMode);
+      } catch(e) { console.error(e); }
+    }
+
+    function updateModeDisplay(mode) {
+      const desc = document.getElementById('inv-mode-desc');
+      const btnPractice = document.getElementById('btn-practice');
+      const btnLive = document.getElementById('btn-live');
+      if (mode === 'live') {
+        desc.innerHTML = '<span style="color:#2e7d32;font-weight:600;">Live — scores are counting</span>';
+        btnLive.style.background = '#2e7d32';
+        btnLive.style.borderColor = '#2e7d32';
+        btnPractice.style.background = '#fff';
+        btnPractice.style.color = '#666';
+      } else {
+        desc.innerHTML = '<span style="color:#f39c12;font-weight:600;">Practice Mode — scores do not count</span>';
+        btnPractice.style.background = '#f39c12';
+        btnPractice.style.borderColor = '#f39c12';
+        btnPractice.style.color = '#fff';
+        btnLive.style.background = '#1a2f23';
+        btnLive.style.borderColor = '#1a2f23';
+      }
+    }
+
+    async function loadScoreMode() {
+      try {
+        const res = await fetch('/api/admin/scores');
+        if (res.ok) {
+          const data = await res.json();
+          updateModeDisplay(data.mode);
+        }
+      } catch(e) {}
+    }
+
+    async function submitOverride() {
+      const team = document.getElementById('override-team').value;
+      const hole = document.getElementById('override-hole').value;
+      const strokes = document.getElementById('override-strokes').value;
+      const msg = document.getElementById('override-msg');
+
+      if (!team || !hole || !strokes) {
+        msg.style.color = '#c62828';
+        msg.textContent = 'Please fill in all three fields.';
+        msg.style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/scores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'override', team_number: parseInt(team), hole_number: parseInt(hole), strokes: parseInt(strokes) })
+        });
+        if (res.ok) {
+          msg.style.color = '#4caf50';
+          msg.textContent = `Team ${team}, Hole ${hole} updated to ${strokes} strokes.`;
+          msg.style.display = 'block';
+          setTimeout(() => { msg.style.display = 'none'; }, 3000);
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    async function deleteScore() {
+      const team = document.getElementById('override-team').value;
+      const hole = document.getElementById('override-hole').value;
+      const msg = document.getElementById('override-msg');
+
+      if (!team || !hole) {
+        msg.style.color = '#c62828';
+        msg.textContent = 'Select a team and hole to clear.';
+        msg.style.display = 'block';
+        return;
+      }
+      if (!confirm(`Clear Team ${team}, Hole ${hole}?`)) return;
+
+      try {
+        const res = await fetch('/api/admin/scores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete', team_number: parseInt(team), hole_number: parseInt(hole) })
+        });
+        if (res.ok) {
+          msg.style.color = '#888';
+          msg.textContent = `Team ${team}, Hole ${hole} cleared.`;
+          msg.style.display = 'block';
+          setTimeout(() => { msg.style.display = 'none'; }, 3000);
+        }
       } catch(e) { console.error(e); }
     }
 
