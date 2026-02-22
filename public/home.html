@@ -155,6 +155,11 @@
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
     .live-label{font-size:13px;color:#fff;font-weight:500}
     .live-join{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+    /* ── WALLET STYLES ── */
+    .wallet-item{background:#fff;border:1px solid rgba(0,0,0,.06);padding:20px 24px;display:flex;align-items:flex-start;gap:16px;transition:box-shadow .2s;margin-bottom:0}
+    .wallet-item:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+    .wallet-item.redeemed{border-color:rgba(76,175,80,.3)}
+    .wallet-item.soldout{opacity:.6}
     @media(max-width:640px){
       .hub-container{padding:24px 16px 120px}
       .countdown-inner{flex-direction:column;align-items:flex-start;gap:20px}
@@ -209,167 +214,163 @@
       <span class="live-join">Join Now →</span>
     </a>
 
-    <div class="welcome-strip">
-      <div>
-        <div class="welcome-label">Welcome back</div>
-        <div class="welcome-name" id="member-name">Player</div>
-      </div>
-      <div class="member-badge" id="member-badge">Invitational Member</div>
-    </div>
+```
+<div class="welcome-strip">
+  <div>
+    <div class="welcome-label">Welcome back</div>
+    <div class="welcome-name" id="member-name">Player</div>
+  </div>
+  <div class="member-badge" id="member-badge">Invitational Member</div>
+</div>
 
-    <div class="countdown-banner">
-      <div class="countdown-inner">
-        <div>
-          <div class="countdown-eyebrow">T-minus</div>
-          <div class="countdown-title">Tee Elite Circle Invitational</div>
-          <div class="countdown-date-str">Saturday, April 18, 2026 · Summerfield Crossing Golf Club</div>
-        </div>
-        <div class="countdown-digits">
-          <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><div class="cd-label">Days</div></div>
-          <div class="cd-unit"><span class="cd-num" id="cd-hrs">--</span><div class="cd-label">Hrs</div></div>
-          <div class="cd-unit"><span class="cd-num" id="cd-min">--</span><div class="cd-label">Min</div></div>
-        </div>
-      </div>
+<div class="countdown-banner">
+  <div class="countdown-inner">
+    <div>
+      <div class="countdown-eyebrow">T-minus</div>
+      <div class="countdown-title">Tee Elite Circle Invitational</div>
+      <div class="countdown-date-str">Saturday, April 18, 2026 · Summerfield Crossing Golf Club</div>
     </div>
+    <div class="countdown-digits">
+      <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><div class="cd-label">Days</div></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-hrs">--</span><div class="cd-label">Hrs</div></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-min">--</span><div class="cd-label">Min</div></div>
+    </div>
+  </div>
+</div>
 
-    <div class="section-head"><span class="section-label">Quick Access</span></div>
-    <div class="quick-actions">
-      <button class="qa-item" onclick="openModal('swag-modal')">
-        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
-      </button>
-      <button class="qa-item" onclick="openModal('drink-modal')">
-        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8M12 11v11M5 2h14l-2 9a5 5 0 01-10 0L5 2z"/></svg></div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">1 remaining</div>
-      </button>
-      <button class="qa-item highlight" onclick="openModal('mulligan-modal')">
-        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-blush)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
-      </button>
-      <a class="qa-item" href="/members.html">
-        <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
-      </a>
-    </div>
+<div class="section-head"><span class="section-label">Quick Access</span></div>
+<div class="quick-actions">
+  <button class="qa-item" onclick="openModal('swag-modal')">
+    <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><div class="qa-label">Swag Bag</div><div class="qa-sub">Your perks</div>
+  </button>
+  <button class="qa-item" onclick="openModal('drink-modal')">
+    <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8M12 11v11M5 2h14l-2 9a5 5 0 01-10 0L5 2z"/></svg></div><div class="qa-label">Drink Tickets</div><div class="qa-sub" id="drink-count-display">1 remaining</div>
+  </button>
+  <button class="qa-item highlight" onclick="openModal('mulligan-modal')">
+    <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div><div class="qa-label">Mulligans</div><div class="qa-sub" id="mulligan-count-display">Add more</div>
+  </button>
+  <a class="qa-item" href="/members.html">
+    <div class="qa-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="qa-label">The Circle</div><div class="qa-sub">Meet your crew</div>
+  </a>
+</div>
 
-    <div class="section-head">
-      <span class="section-label">Your Team</span>
-      <a class="section-link" href="/members.html">View all →</a>
+<div class="section-head">
+  <span class="section-label">Your Team</span>
+  <a class="section-link" href="/members.html">View all →</a>
+</div>
+<div class="team-card">
+  <div class="team-header">
+    <div>
+      <div class="team-tag">Scramble Team</div>
+      <div class="team-name" id="team-name">Loading…</div>
     </div>
-    <div class="team-card">
-      <div class="team-header">
-        <div>
-          <div class="team-tag">Scramble Team</div>
-          <div class="team-name" id="team-name">Loading…</div>
-        </div>
-        <div class="team-ready-pill" id="team-pill">—</div>
-      </div>
-      <div class="team-members-list" id="team-members-list">
-        <div style="text-align:center;padding:32px 16px;">
-          <p style="font-size:14px;color:#888;margin-bottom:8px;">Team assignments are being finalized.</p>
-          <small style="font-size:12px;color:#aaa;">You'll be notified once your team is set. Check back soon!</small>
-        </div>
-      </div>
+    <div class="team-ready-pill" id="team-pill">—</div>
+  </div>
+  <div class="team-members-list" id="team-members-list">
+    <div style="text-align:center;padding:32px 16px;">
+      <p style="font-size:14px;color:#888;margin-bottom:8px;">Team assignments are being finalized.</p>
+      <small style="font-size:12px;color:#aaa;">You'll be notified once your team is set. Check back soon!</small>
     </div>
+  </div>
+</div>
 
-    <div class="section-head">
-      <span class="section-label">Preparation Checklist</span>
-      <span class="section-link" id="checklist-progress-text">0 of 6 done</span>
+<div class="section-head">
+  <span class="section-label">Preparation Checklist</span>
+  <span class="section-link" id="checklist-progress-text">0 of 6 done</span>
+</div>
+<div class="checklist-card">
+  <div class="checklist-progress">
+    <div class="checklist-progress-bar-bg">
+      <div class="checklist-progress-bar" id="checklist-bar" style="width:0%"></div>
     </div>
-    <div class="checklist-card">
-      <div class="checklist-progress">
-        <div class="checklist-progress-bar-bg">
-          <div class="checklist-progress-bar" id="checklist-bar" style="width:0%"></div>
-        </div>
-        <div class="checklist-progress-label" id="checklist-pct">0% ready — let's get you set!</div>
-      </div>
-      <div class="checklist-items" id="checklist-items"></div>
-    </div>
+    <div class="checklist-progress-label" id="checklist-pct">0% ready — let's get you set!</div>
+  </div>
+  <div class="checklist-items" id="checklist-items"></div>
+</div>
 
-    <div class="section-head"><span class="section-label">Community Vote</span></div>
-    <div class="vote-card">
-      <div class="vote-question">Should we host a Pairing Party before the Invitational?</div>
-      <div class="vote-subtext">A pre-event mixer to meet your team, share a drink, and shake off the nerves. Cast your vote — results are live.</div>
-      <div class="vote-options" id="vote-options">
-        <div class="vote-option" data-option="A" onclick="selectVote(this)">
-          <div class="vote-bar-fill" style="width:0%"></div>
-          <span class="vote-option-label">Yes — let's party before we play</span>
-          <span class="vote-option-pct">—</span>
-        </div>
-        <div class="vote-option" data-option="B" onclick="selectVote(this)">
-          <div class="vote-bar-fill" style="width:0%"></div>
-          <span class="vote-option-label">No — I'll save my energy for the course</span>
-          <span class="vote-option-pct">—</span>
-        </div>
-      </div>
-      <div style="font-size:11px;color:#bbb;margin-top:10px;text-align:right;" id="vote-total-label"></div>
-      <button class="vote-submit-btn" id="vote-btn" onclick="submitVote()" disabled>Cast My Vote</button>
-      <div class="vote-thanks" id="vote-thanks">✓ Vote recorded. Results update in real time.</div>
+<div class="section-head"><span class="section-label">Community Vote</span></div>
+<div class="vote-card">
+  <div class="vote-question">Should we host a Pairing Party before the Invitational?</div>
+  <div class="vote-subtext">A pre-event mixer to meet your team, share a drink, and shake off the nerves. Cast your vote — results are live.</div>
+  <div class="vote-options" id="vote-options">
+    <div class="vote-option" data-option="A" onclick="selectVote(this)">
+      <div class="vote-bar-fill" style="width:0%"></div>
+      <span class="vote-option-label">Yes — let's party before we play</span>
+      <span class="vote-option-pct">—</span>
     </div>
-
-    <div class="section-head"><span class="section-label">Your Scramble Wallet</span></div>
-
-    <!-- WALLET HEADER CARD -->
-    <div style="background:var(--deep-forest);padding:28px 32px;margin-bottom:16px;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:0;right:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--tmac-gold),var(--tmac-blush));"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-        <div>
-          <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:6px;">Tee Elite Invitational 2026</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:#fff;line-height:1;" id="wallet-balance-display">100</div>
-          <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;">Scramble Points</div>
-        </div>
-        <div style="text-align:right;">
-          <div id="wallet-status-badge" style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:6px 14px;display:inline-block;margin-bottom:8px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);">Loading...</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.4);" id="wallet-expiry-label"></div>
-        </div>
-      </div>
-      <div style="margin-top:20px;">
-        <div style="background:rgba(255,255,255,.1);height:4px;border-radius:2px;">
-          <div id="wallet-points-bar" style="height:4px;border-radius:2px;background:linear-gradient(90deg,var(--tmac-gold),var(--tmac-blush));width:100%;transition:width .6s ease;"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-top:6px;">
-          <span style="font-size:10px;color:rgba(255,255,255,.3);">0</span>
-          <span style="font-size:10px;color:rgba(255,255,255,.3);">100 pts</span>
-        </div>
-      </div>
+    <div class="vote-option" data-option="B" onclick="selectVote(this)">
+      <div class="vote-bar-fill" style="width:0%"></div>
+      <span class="vote-option-label">No — I'll save my energy for the course</span>
+      <span class="vote-option-pct">—</span>
     </div>
+  </div>
+  <div style="font-size:11px;color:#bbb;margin-top:10px;text-align:right;" id="vote-total-label"></div>
+  <button class="vote-submit-btn" id="vote-btn" onclick="submitVote()" disabled>Cast My Vote</button>
+  <div class="vote-thanks" id="vote-thanks">✓ Vote recorded. Results update in real time.</div>
+</div>
 
-    <!-- PRE-ACTIVE NOTICE -->
-    <div id="wallet-locked-notice" style="display:none;background:rgba(201,168,108,.08);border:1px solid rgba(201,168,108,.2);padding:16px 20px;margin-bottom:16px;">
-      <div style="font-size:13px;color:var(--charcoal);line-height:1.7;">Your Scramble Wallet unlocks on <strong>April 18, 2026</strong> — event day. Browse the marketplace below and add items to your wishlist. Your selections help us plan and prepare.</div>
-    </div>
+<!-- ══ SCRAMBLE WALLET ══ -->
+<div class="section-head"><span class="section-label">Your Scramble Wallet</span></div>
 
-    <!-- MARKETPLACE -->
-    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(166,124,82,.15);">Scramble Marketplace</div>
-    <div id="marketplace-grid" style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
-      <div style="text-align:center;padding:32px;color:#aaa;font-size:13px;">Loading your marketplace...</div>
+<!-- Wallet header card -->
+<div style="background:var(--deep-forest);padding:28px 32px;margin-bottom:16px;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:0;right:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--tmac-gold),var(--tmac-blush));"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:6px;">Tee Elite Invitational 2026</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:#fff;line-height:1;" id="wallet-balance-display">100</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;">Scramble Points</div>
     </div>
+    <div style="text-align:right;">
+      <div id="wallet-status-badge" style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:6px 14px;display:inline-block;margin-bottom:8px;background:rgba(201,168,108,.15);color:var(--tmac-gold);">Unlocks April 18</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.4);" id="wallet-expiry-label">Browse &amp; wishlist below</div>
+    </div>
+  </div>
+  <div style="margin-top:20px;">
+    <div style="background:rgba(255,255,255,.1);height:4px;border-radius:2px;">
+      <div id="wallet-points-bar" style="height:4px;border-radius:2px;background:linear-gradient(90deg,var(--tmac-gold),var(--tmac-blush));width:100%;transition:width .6s ease;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:6px;">
+      <span style="font-size:10px;color:rgba(255,255,255,.3);">0</span>
+      <span style="font-size:10px;color:rgba(255,255,255,.3);">100 pts</span>
+    </div>
+  </div>
+</div>
 
-    <!-- REDEMPTION CONFIRMATION MODAL -->
-    <div class="modal-overlay" id="redeem-confirm-modal" onclick="closeModalOnBg(event,'redeem-confirm-modal')">
-      <div class="modal-box" style="max-width:460px;">
-        <button class="modal-close" onclick="closeModal('redeem-confirm-modal')">&#x2715;</button>
-        <div id="redeem-confirm-content"></div>
-      </div>
-    </div>
+<!-- Pre-active notice -->
+<div id="wallet-locked-notice" style="background:rgba(201,168,108,.08);border:1px solid rgba(201,168,108,.2);padding:16px 20px;margin-bottom:16px;">
+  <div style="font-size:13px;color:var(--charcoal);line-height:1.7;">Your Scramble Wallet unlocks on <strong>April 18, 2026</strong> — event day. Browse the marketplace below and add items to your wishlist. Your selections help us plan and prepare.</div>
+</div>
 
-    </div>
+<!-- Marketplace -->
+<div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(166,124,82,.15);">Scramble Marketplace</div>
+<div id="marketplace-grid" style="display:flex;flex-direction:column;gap:1px;margin-bottom:28px;border:1px solid rgba(0,0,0,.06);">
+  <div style="text-align:center;padding:32px;color:#aaa;font-size:13px;">Loading your marketplace...</div>
+</div>
 
-    <div class="section-head"><span class="section-label">Announcements</span></div>
-    <div class="announce-card" id="announce-list">
-      <div class="announce-item">
-        <div class="announce-dot new"></div>
-        <div class="announce-content">
-          <div class="announce-title">Welcome to the Invitational Hub!</div>
-          <div class="announce-text">Your registration is confirmed. Explore your swag bag, link your GHIN handicap, and get ready for an exceptional day on the green.</div>
-          <div class="announce-date">Just posted</div>
-        </div>
-      </div>
-      <div class="announce-item">
-        <div class="announce-dot"></div>
-        <div class="announce-content">
-          <div class="announce-title">Mulligan packages now available</div>
-          <div class="announce-text">Purchase mulligans in advance for $5 each. Max 2 per player. Available at registration and on-course via CashApp.</div>
-          <div class="announce-date">Today</div>
-        </div>
-      </div>
+<!-- ══ END SCRAMBLE WALLET ══ -->
+
+<div class="section-head"><span class="section-label">Announcements</span></div>
+<div class="announce-card" id="announce-list">
+  <div class="announce-item">
+    <div class="announce-dot new"></div>
+    <div class="announce-content">
+      <div class="announce-title">Welcome to the Invitational Hub!</div>
+      <div class="announce-text">Your registration is confirmed. Explore your swag bag, link your GHIN handicap, and get ready for an exceptional day on the green.</div>
+      <div class="announce-date">Just posted</div>
     </div>
+  </div>
+  <div class="announce-item">
+    <div class="announce-dot"></div>
+    <div class="announce-content">
+      <div class="announce-title">Mulligan packages now available</div>
+      <div class="announce-text">Purchase mulligans in advance for $5 each. Max 2 per player. Available at registration and on-course via CashApp.</div>
+      <div class="announce-date">Today</div>
+    </div>
+  </div>
+</div>
+```
+
   </main>
 
   <nav class="pwa-bottom-nav">
@@ -390,16 +391,17 @@
   </nav>
 
   <!-- MODALS -->
+
   <div class="modal-overlay" id="swag-modal" onclick="closeModalOnBg(event,'swag-modal')">
     <div class="modal-box">
       <button class="modal-close" onclick="closeModal('swag-modal')">✕</button>
       <div class="modal-eyebrow">Your Digital Swag Bag</div>
       <div class="modal-title">Everything you've got.</div>
       <div class="modal-body" style="line-height:2.2;">
-        <strong>3 Drink Tickets</strong> — show QR code at the bar<br>
+        <strong>1 Drink Ticket</strong> — show QR code at the bar<br>
         <strong>Mulligans</strong> — purchased amount shown in your bag<br>
         <strong>Scramble Rules Sheet</strong> — digital, no paper needed<br>
-        <strong>4 On-Course Contests</strong> — Closest to Pin (×2), Longest Drive (×2)<br>
+        <strong>4 On-Course Contests</strong> — Closest to Pin (×4), Longest Drive (×1)<br>
         <strong>Event Playbook PDF</strong> — full agenda and course map<br>
         <strong>Dress Code</strong> — White attire + gold or green accent
       </div>
@@ -417,7 +419,7 @@
         <div class="qr-note">Staff will scan or enter your code.<br>Each scan redeems 1 ticket.</div>
       </div>
       <div class="modal-body" style="margin-top:16px;">
-        You have <strong id="drink-remaining">3</strong> drink ticket(s) remaining.
+        You have <strong id="drink-remaining">1</strong> drink ticket(s) remaining.
       </div>
     </div>
   </div>
@@ -428,7 +430,6 @@
       <div class="modal-eyebrow">Mulligan Packages</div>
       <div class="modal-title">Take the shot again.</div>
       <div class="modal-body">$5 each. Max 1 on the front 9, max 1 on the back 9. Not valid on contest holes. Non-transferable.</div>
-
       <div class="mulligan-packages">
         <div class="mulligan-pkg" onclick="selectMulligan(this,1,5)">
           <div class="mulligan-count">1</div>
@@ -443,14 +444,12 @@
           <div class="mulligan-price-sub">1 front · 1 back</div>
         </div>
       </div>
-
       <div id="cashapp-pay" style="display:none;margin-top:24px;text-align:center;">
         <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:12px;">Pay via CashApp</div>
         <img src="/images/CashApp.jpg" alt="CashApp QR Code" style="width:180px;height:180px;object-fit:cover;display:block;margin:0 auto 12px;">
         <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--charcoal);margin-bottom:6px;">$TMacinspired</div>
         <div style="font-size:12px;color:#888;line-height:1.7;">Scan the QR code or search <strong>$TMacinspired</strong> in CashApp.<br>Show your receipt to a volunteer or at the registration desk.</div>
       </div>
-
       <button class="mulligan-buy-btn" id="mulligan-buy-btn" disabled onclick="showCashApp()">Select a Package</button>
     </div>
   </div>
@@ -561,6 +560,15 @@
     </div>
   </div>
 
+  <!-- WALLET REDEMPTION CONFIRMATION MODAL -->
+
+  <div class="modal-overlay" id="redeem-confirm-modal" onclick="closeModalOnBg(event,'redeem-confirm-modal')">
+    <div class="modal-box" style="max-width:460px;">
+      <button class="modal-close" onclick="closeModal('redeem-confirm-modal')">✕</button>
+      <div id="redeem-confirm-content"></div>
+    </div>
+  </div>
+
   <script>
     let memberData = null;
     let mulliganSelected = null;
@@ -573,16 +581,15 @@
         document.getElementById('member-name').textContent = memberData.name || 'Player';
         document.getElementById('user-initials').textContent = getInitials(memberData.name);
         const mulligans = memberData.mulligans_purchased || 0;
-        document.getElementById('mulligan-badge').textContent = mulligans;
         document.getElementById('mulligan-count-display').textContent = mulligans ? mulligans + ' owned' : 'Add more';
         const tickets = memberData.drink_tickets ?? 1;
-        document.getElementById('drink-badge').textContent = tickets;
         document.getElementById('drink-count-display').textContent = tickets + ' remaining';
         document.getElementById('drink-remaining').textContent = tickets;
         if (memberData.ghin) updateChecklistItem('ghin', true);
         if (mulligans > 0) updateChecklistItem('mulligans', true);
         buildDrinkQR();
         loadTeam();
+        loadWallet();
       } catch (e) {
         window.location.href = '/member-login.html';
       }
@@ -672,14 +679,7 @@
       const container = document.getElementById('checklist-items');
       container.innerHTML = CHECKLIST.map(item => {
         const done = s[item.id] ?? false;
-        return `<div class="checklist-item" onclick="${item.locked ? '' : item.action ? 'handleCL("'+item.id+'")' : 'toggleCL("'+item.id+'")'}">
-          <div class="checklist-check ${done ? 'done' : ''}"></div>
-          <div class="checklist-text">
-            <div class="checklist-text-main ${done ? 'done' : ''}">${item.label}</div>
-            <div class="checklist-text-sub">${item.sub}</div>
-          </div>
-          ${item.action && !done ? '<span class="checklist-action">→</span>' : ''}
-        </div>`;
+        return '<div class="checklist-item" onclick="' + (item.locked ? '' : item.action ? 'handleCL(\'' + item.id + '\')' : 'toggleCL(\'' + item.id + '\')') + '"><div class="checklist-check ' + (done ? 'done' : '') + '"></div><div class="checklist-text"><div class="checklist-text-main ' + (done ? 'done' : '') + '">' + item.label + '</div><div class="checklist-text-sub">' + item.sub + '</div></div>' + (item.action && !done ? '<span class="checklist-action">\u2192</span>' : '') + '</div>';
       }).join('');
       const doneCount = CHECKLIST.filter(i => s[i.id]).length;
       const pct = Math.round(doneCount / CHECKLIST.length * 100);
@@ -688,7 +688,7 @@
       document.getElementById('checklist-progress-text').textContent = doneCount + ' of ' + CHECKLIST.length + ' done';
     }
 
-    function handleCL(id) { const item = CHECKLIST.find(i => i.id === id); if (item?.action) item.action(); }
+    function handleCL(id) { const item = CHECKLIST.find(i => i.id === id); if (item && item.action) item.action(); }
     function toggleCL(id) { const s = getChecklistState(); s[id] = !s[id]; setChecklistState(s); renderChecklist(); }
 
     const POLL_ID = 'pairing-party-2026';
@@ -721,9 +721,7 @@
           document.getElementById('vote-btn').style.display = 'none';
           document.getElementById('vote-thanks').style.display = 'block';
         } else if (data.total > 0) {
-          // Show live tallies even before voting so it feels alive
           renderVoteTallies(data.counts, data.total, null);
-          // But re-enable clicking so they can still vote
           document.querySelectorAll('.vote-option').forEach(opt => {
             opt.classList.remove('voted');
             opt.onclick = () => selectVote(opt);
@@ -746,7 +744,7 @@
       if (!selectedVote || hasVoted) return;
       const btn = document.getElementById('vote-btn');
       btn.disabled = true;
-      btn.textContent = 'Submitting…';
+      btn.textContent = 'Submitting\u2026';
       try {
         const res = await fetch('/api/vote', {
           method: 'POST',
@@ -770,20 +768,20 @@
       const canvas = document.getElementById('drink-qr');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      const token = memberData?.id ? 'TEI-' + String(memberData.id).padStart(4, '0') : 'TEI-XXXX';
+      const token = memberData && memberData.id ? 'TEI-' + String(memberData.id).padStart(4, '0') : 'TEI-XXXX';
       document.getElementById('drink-token').textContent = token;
       ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 160, 160);
       let seed = token.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
       function rng() { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; }
       const s = 10;
       ctx.fillStyle = '#1a2f23';
-      // Corner markers
-      [[0,0],[13,0],[0,13]].forEach(([cx,cy]) => {
+      [[0,0],[13,0],[0,13]].forEach(function(pos) {
+        var cx = pos[0], cy = pos[1];
         ctx.fillRect(cx*s, cy*s, 3*s, 3*s);
         ctx.fillStyle = '#fff'; ctx.fillRect((cx+1)*s, (cy+1)*s, s, s);
         ctx.fillStyle = '#1a2f23';
       });
-      for (let r = 3; r < 13; r++) for (let c = 3; c < 16; c++) {
+      for (var r = 3; r < 13; r++) for (var c = 3; c < 16; c++) {
         if (rng() > 0.5) ctx.fillRect(c*s, r*s, s, s);
       }
     }
@@ -791,7 +789,7 @@
     function selectMulligan(el, count, price) {
       document.querySelectorAll('.mulligan-pkg').forEach(p => p.style.boxShadow = '');
       el.style.boxShadow = '0 0 0 2px var(--tmac-bronze)';
-      mulliganSelected = { count, price };
+      mulliganSelected = { count: count, price: price };
       const btn = document.getElementById('mulligan-buy-btn');
       btn.textContent = 'Pay $' + price + ' via CashApp';
       btn.disabled = false;
@@ -801,8 +799,7 @@
     function showCashApp() {
       if (!mulliganSelected) return;
       document.getElementById('cashapp-pay').style.display = 'block';
-      const btn = document.getElementById('mulligan-buy-btn');
-      btn.style.display = 'none';
+      document.getElementById('mulligan-buy-btn').style.display = 'none';
     }
 
     async function submitGHIN(e) {
@@ -813,7 +810,7 @@
         const res = await fetch('/api/members/update-ghin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ghin })
+          body: JSON.stringify({ ghin: ghin })
         });
         if (res.ok) {
           document.getElementById('ghin-success').style.display = 'block';
@@ -822,7 +819,7 @@
           updateChecklistItem('ghin', true);
           setTimeout(() => closeModal('ghin-modal'), 1800);
         }
-      } catch(e) { console.error(e); }
+      } catch(err) { console.error(err); }
     }
 
     function openModal(id) {
@@ -854,7 +851,7 @@
       this.classList.toggle('active');
       document.getElementById('mobile-nav').classList.toggle('open');
     });
-    document.getElementById('logout-link').addEventListener('click', async (e) => {
+    document.getElementById('logout-link').addEventListener('click', async function(e) {
       e.preventDefault();
       await fetch('/api/auth/logout', { method: 'POST' });
       window.location.href = '/member-login.html';
@@ -867,28 +864,27 @@
       } catch(e) {}
     }
 
+    // ══ SCRAMBLE WALLET ══════════════════════════════════════════════
+    var walletData = null;
 
-    // ── SCRAMBLE WALLET ──────────────────────────────────────────────
-    let walletData = null;
+    var WALLET_ITEMS = [
+      { id: 'playlist',    name: 'Curated Confidence Playlist',          points: 10, cap: null, icon: '&#127925;', tagline: 'Pre-tee confidence playlist, a private audio message from Dr. TMac, and the Pre-Tee Ritual guide.' },
+      { id: 'priority',   name: 'Priority Access to Future Events',      points: 20, cap: null, icon: '&#11088;',  tagline: 'Early access window, private registration tier, and advance notice before public release.' },
+      { id: 'vault',      name: 'Influence on the Course Mini Vault',    points: 25, cap: null, icon: '&#128194;', tagline: 'The 9-Hole Networking Flow, Fairway Follow-Up Scripts, Wealth While You Golf Blueprint, Sponsorship Pitch Template, and the Bogey Bounce-Back System.' },
+      { id: 'ray',        name: 'Tee Elite Performance Clinic with Ray', points: 30, cap: 12,   icon: '&#9971;',   tagline: 'A 90-minute in-person performance session designed to improve scoring, confidence, and course strategy. Recording available if you cannot attend.' },
+      { id: 'roundtable', name: 'Executive Roundtable',                  points: 60, cap: 12,   icon: '&#128081;', tagline: 'Small group, 90-minute strategic session led by Dr. TMac. Sunday, May 3 \u00b7 6:00\u20137:30pm.' },
+      { id: 'sprint',     name: 'Strategy Sprint with Dr. TMac',         points: 75, cap: 8,    icon: '&#127919;', tagline: 'One focused 45-minute session. You choose: business clarity, visibility, confidence reset, income activation, or personal brand alignment.' }
+    ];
 
-    const ITEM_META = {
-      playlist:    { icon: '🎵', tagline: 'Pre-tee confidence playlist + private audio message from Dr. TMac + Pre-Tee Ritual guide.' },
-      priority:    { icon: '⭐', tagline: 'Early access window, private registration tier, and advance notice before public release for future events.' },
-      vault:       { icon: '📂', tagline: 'The 9-Hole Networking Flow, Fairway Follow-Up Scripts, Wealth While You Golf Blueprint, Sponsorship Pitch Template, and the Bogey Bounce-Back System.' },
-      ray:         { icon: '⛳', tagline: 'A 90-minute in-person performance session designed to improve scoring, confidence, and course strategy. Recording available for those unable to attend.' },
-      roundtable:  { icon: '👑', tagline: 'Small group (6–8 women max). 90-minute strategic session led by Dr. TMac. Sunday, May 3 · 6:00–7:30pm.' },
-      sprint:      { icon: '🎯', tagline: 'One focused 45-minute session. You choose the lane: business clarity, visibility, confidence reset, income activation, or personal brand alignment.' }
-    };
-
-    const CONFIRM_COPY = {
+    var CONFIRM_COPY = {
       playlist: {
         title: 'Confidence Playlist Unlocked',
-        body: 'Your Curated Confidence Playlist is now active. Check your email for your private audio message from Dr. TMac and the Pre-Tee Ritual guide. This is your mindset foundation — use it before every tee time.',
+        body: 'Your Curated Confidence Playlist is now active. Check your email for your private audio message from Dr. TMac and the Pre-Tee Ritual guide. This is your mindset foundation \u2014 use it before every tee time.',
         cta: null
       },
       priority: {
         title: 'Priority Access Secured',
-        body: 'You have locked in early access to future Tee Elite events. You will receive advance notice before public registration opens — including private registration tiers unavailable to the general list.',
+        body: 'You have locked in early access to future Tee Elite events. You will receive advance notice before public registration opens \u2014 including private registration tiers unavailable to the general list.',
         cta: null
       },
       vault: {
@@ -898,176 +894,175 @@
       },
       ray: {
         title: 'Priority Performance Access Confirmed',
-        body: `You've successfully secured Priority Access to the Tee Elite Performance Clinic with Ray.
-
-This is a 90-minute in-person performance session designed to improve scoring, confidence, and course strategy.
-
-As a Priority participant, you will receive:
-• Reserved front-range positioning
-• Guaranteed live swing observation
-• Direct feedback during the session
-
-Date and time will be announced soon. Please plan to attend in person if possible. The live session is where the real value happens.
-
-If you are unable to attend, a recording will be made available inside the Digital Swag Vault.
-
-You're locked in.`,
+        body: 'You have successfully secured Priority Access to the Tee Elite Performance Clinic with Ray.\n\nThis is a 90-minute in-person performance session designed to improve scoring, confidence, and course strategy.\n\nAs a Priority participant, you will receive:\n\u2022 Reserved front-range positioning\n\u2022 Guaranteed live swing observation\n\u2022 Direct feedback during the session\n\nDate and time will be announced soon. Please plan to attend in person if possible. The live session is where the real value happens.\n\nIf you are unable to attend, a recording will be made available inside the Digital Swag Vault.\n\nYou\'re locked in.',
         cta: null
       },
       roundtable: {
-        title: 'Executive Roundtable — Seat Reserved',
-        body: 'Your seat at the Executive Roundtable is confirmed. Sunday, May 3 · 6:00–7:30pm. Dr. TMac will add you to the calendar invite and Google will send you a confirmation. This is a small room — 12 women maximum. Expect depth, not volume.',
+        title: 'Executive Roundtable \u2014 Seat Reserved',
+        body: 'Your seat at the Executive Roundtable is confirmed. Sunday, May 3 \u00b7 6:00\u20137:30pm. Dr. TMac will add you to the calendar invite and Google will send you a confirmation. This is a small room \u2014 12 women maximum. Expect depth, not volume.',
         cta: null
       },
       sprint: {
         title: 'Strategy Sprint Confirmed',
-        body: 'Your 45-minute Strategy Sprint with Dr. TMac is reserved. Use the link below to select your time. Come with one clear challenge — leave with a path forward.',
+        body: 'Your 45-minute Strategy Sprint with Dr. TMac is reserved. Use the link below to select your time. Come with one clear challenge \u2014 leave with a path forward.',
         cta: { label: 'Book Your Time Slot', url: 'https://calendar.app.google/U1Fxvr7UtL3YGtW77' }
       }
     };
 
     async function loadWallet() {
       try {
-        const res = await fetch('/api/wallet');
-        if (!res.ok) return;
+        var res = await fetch('/api/wallet');
+        if (!res.ok) { renderWalletFallback(); return; }
         walletData = await res.json();
         renderWallet();
-      } catch(e) { console.error('Wallet load error', e); }
+      } catch(e) { renderWalletFallback(); }
+    }
+
+    function renderWalletFallback() {
+      // Show pre-activation state using static data
+      var grid = document.getElementById('marketplace-grid');
+      if (!grid) return;
+      grid.innerHTML = WALLET_ITEMS.map(function(item) {
+        return renderMarketplaceItem(item, false, false, false, null);
+      }).join('');
     }
 
     function renderWallet() {
       if (!walletData) return;
-      const { points_balance, is_active, days_left, items } = walletData;
+      var bal = walletData.points_balance;
+      var isActive = walletData.is_active;
+      var daysLeft = walletData.days_left;
 
-      // Balance display
-      document.getElementById('wallet-balance-display').textContent = points_balance;
-      const pct = (points_balance / 100) * 100;
+      document.getElementById('wallet-balance-display').textContent = bal;
+      var pct = (bal / 100) * 100;
       document.getElementById('wallet-points-bar').style.width = pct + '%';
 
-      // Status badge
-      const badge = document.getElementById('wallet-status-badge');
-      const expiry = document.getElementById('wallet-expiry-label');
-      if (is_active) {
+      var badge = document.getElementById('wallet-status-badge');
+      var expiry = document.getElementById('wallet-expiry-label');
+      var notice = document.getElementById('wallet-locked-notice');
+
+      if (isActive) {
         badge.textContent = 'Active';
         badge.style.background = 'rgba(76,175,80,.2)';
         badge.style.color = '#81c784';
-        expiry.textContent = days_left > 0 ? 'Expires in ' + days_left + ' days' : 'Expired';
-        document.getElementById('wallet-locked-notice').style.display = 'none';
+        expiry.textContent = daysLeft > 0 ? 'Expires in ' + daysLeft + ' days' : 'Expired';
+        if (notice) notice.style.display = 'none';
       } else {
         badge.textContent = 'Unlocks April 18';
         badge.style.background = 'rgba(201,168,108,.15)';
         badge.style.color = 'var(--tmac-gold)';
         expiry.textContent = 'Browse & wishlist below';
-        document.getElementById('wallet-locked-notice').style.display = 'block';
+        if (notice) notice.style.display = 'block';
       }
 
-      // Marketplace
-      const grid = document.getElementById('marketplace-grid');
-      grid.innerHTML = items.map(item => renderMarketplaceItem(item, is_active)).join('');
+      var grid = document.getElementById('marketplace-grid');
+      var capacity = {};
+      walletData.items.forEach(function(item) {
+        capacity[item.id] = { slots_left: item.slots_left, available: item.available, is_redeemed: item.is_redeemed, is_wishlisted: item.is_wishlisted };
+      });
+
+      grid.innerHTML = WALLET_ITEMS.map(function(item) {
+        var cap = capacity[item.id] || {};
+        return renderMarketplaceItem(item, isActive, cap.is_redeemed, cap.is_wishlisted, cap.slots_left !== undefined ? cap.slots_left : (item.cap || null), cap.available !== false, bal);
+      }).join('');
     }
 
-    function renderMarketplaceItem(item, isActive) {
-      const meta = ITEM_META[item.id] || {};
-      const isSoldOut = item.cap && !item.available;
-      const isRedeemed = item.is_redeemed;
-      const isWishlisted = item.is_wishlisted;
-      const canAfford = walletData && walletData.points_balance >= item.points;
-      const slotsText = item.slots_left !== null ? item.slots_left + ' spot' + (item.slots_left !== 1 ? 's' : '') + ' left' : 'Unlimited';
-      const slotsColor = item.slots_left !== null && item.slots_left <= 3 ? '#c62828' : '#aaa';
+    function renderMarketplaceItem(item, isActive, isRedeemed, isWishlisted, slotsLeft, available, balance) {
+      if (available === undefined) available = true;
+      var isSoldOut = item.cap && !available;
+      var canAfford = balance >= item.points;
+      var slotsText = slotsLeft !== null && slotsLeft !== undefined ? slotsLeft + ' spot' + (slotsLeft !== 1 ? 's' : '') + ' left' : 'Unlimited';
+      var slotsColor = slotsLeft !== null && slotsLeft !== undefined && slotsLeft <= 3 ? '#c62828' : '#aaa';
 
-      let actionBtn = '';
+      var actionHtml = '';
       if (isRedeemed) {
-        actionBtn = `<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4caf50;padding:10px 0;font-weight:500;">✓ Redeemed</div>`;
+        actionHtml = '<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4caf50;padding:10px 0;font-weight:500;">\u2713 Redeemed</div>';
       } else if (isSoldOut) {
-        actionBtn = `<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ccc;padding:10px 0;">Sold Out</div>`;
+        actionHtml = '<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ccc;padding:10px 0;">Sold Out</div>';
       } else if (isActive) {
-        actionBtn = `<button onclick="redeemItem('${item.id}')" style="background:${canAfford ? 'var(--deep-forest)' : '#ddd'};color:${canAfford ? 'var(--tmac-blush)' : '#999'};border:none;padding:10px 20px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:${canAfford ? 'pointer' : 'default'};font-family:inherit;transition:opacity .2s;white-space:nowrap;" ${canAfford ? '' : 'disabled'}>Redeem ${item.points} pts</button>`;
+        var btnStyle = canAfford
+          ? 'background:var(--deep-forest);color:var(--tmac-blush);cursor:pointer;'
+          : 'background:#ddd;color:#999;cursor:default;';
+        actionHtml = '<button onclick="redeemItem(\'' + item.id + '\')" style="' + btnStyle + 'border:none;padding:10px 20px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:inherit;white-space:nowrap;" ' + (canAfford ? '' : 'disabled') + '>Redeem ' + item.points + ' pts</button>';
       } else {
-        const wlStyle = isWishlisted
+        var wlStyle = isWishlisted
           ? 'background:var(--tmac-bronze);color:#fff;border:1px solid var(--tmac-bronze);'
           : 'background:#fff;color:var(--tmac-bronze);border:1px solid var(--tmac-bronze);';
-        actionBtn = `<button onclick="toggleWishlist('${item.id}')" style="${wlStyle}padding:10px 18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:all .2s;" id="wl-btn-${item.id}">${isWishlisted ? '✓ Wishlisted' : '+ Wishlist'}</button>`;
+        actionHtml = '<button onclick="toggleWishlist(\'' + item.id + '\')" id="wl-btn-' + item.id + '" style="' + wlStyle + 'padding:10px 18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;">' + (isWishlisted ? '\u2713 Wishlisted' : '+ Wishlist') + '</button>';
       }
 
-      return `<div style="background:#fff;border:1px solid ${isRedeemed ? 'rgba(76,175,80,.3)' : 'rgba(0,0,0,.06)'};padding:20px 24px;display:flex;align-items:flex-start;gap:16px;transition:box-shadow .2s;" ${!isRedeemed && !isSoldOut ? 'onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow='none'"' : ''}>
-        <div style="font-size:28px;flex-shrink:0;margin-top:2px;">${meta.icon || '•'}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
-            <div style="font-size:15px;font-weight:500;color:var(--charcoal);">${item.name}</div>
-            <div style="font-size:13px;font-weight:600;color:var(--tmac-bronze);white-space:nowrap;">${item.points} pts</div>
-          </div>
-          <div style="font-size:12px;color:#888;line-height:1.6;margin-bottom:10px;">${meta.tagline || ''}</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-            <div style="font-size:11px;color:${slotsColor};">${slotsText}</div>
-            ${actionBtn}
-          </div>
-        </div>
-      </div>`;
+      return '<div class="wallet-item' + (isRedeemed ? ' redeemed' : '') + (isSoldOut ? ' soldout' : '') + '">'
+        + '<div style="font-size:28px;flex-shrink:0;margin-top:2px;">' + item.icon + '</div>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">'
+        + '<div style="font-size:15px;font-weight:500;color:var(--charcoal);">' + item.name + '</div>'
+        + '<div style="font-size:13px;font-weight:600;color:var(--tmac-bronze);white-space:nowrap;">' + item.points + ' pts</div>'
+        + '</div>'
+        + '<div style="font-size:12px;color:#888;line-height:1.6;margin-bottom:10px;">' + item.tagline + '</div>'
+        + '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">'
+        + '<div style="font-size:11px;color:' + slotsColor + ';">' + slotsText + '</div>'
+        + actionHtml
+        + '</div>'
+        + '</div>'
+        + '</div>';
     }
 
     async function toggleWishlist(itemId) {
       try {
-        const res = await fetch('/api/wallet', {
+        var res = await fetch('/api/wallet', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'wishlist', item_id: itemId })
         });
-        if (res.ok) {
-          const data = await res.json();
-          if (walletData) {
-            const item = walletData.items.find(i => i.id === itemId);
-            if (item) item.is_wishlisted = data.wishlisted;
-            if (data.wishlisted && !walletData.wishlist.includes(itemId)) walletData.wishlist.push(itemId);
-            else walletData.wishlist = walletData.wishlist.filter(id => id !== itemId);
-          }
-          renderWallet();
-        }
+        if (res.ok) { await loadWallet(); }
       } catch(e) { console.error('Wishlist error', e); }
     }
 
     async function redeemItem(itemId) {
-      if (!walletData?.is_active) return;
-      const item = walletData.items.find(i => i.id === itemId);
-      if (!item || item.is_redeemed || !item.available) return;
-      if (walletData.points_balance < item.points) return;
-
+      if (!walletData || !walletData.is_active) return;
+      var item = WALLET_ITEMS.find(function(i) { return i.id === itemId; });
+      if (!item) return;
       try {
-        const res = await fetch('/api/wallet', {
+        var res = await fetch('/api/wallet', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'redeem', item_id: itemId })
         });
-        const data = await res.json();
+        var data = await res.json();
         if (res.ok && data.success) {
           walletData.points_balance = data.new_balance;
-          const wi = walletData.items.find(i => i.id === itemId);
-          if (wi) { wi.is_redeemed = true; wi.slots_left = wi.slots_left !== null ? wi.slots_left - 1 : null; }
+          var wi = walletData.items.find(function(i) { return i.id === itemId; });
+          if (wi) { wi.is_redeemed = true; if (wi.slots_left !== null) wi.slots_left = Math.max(0, wi.slots_left - 1); }
           renderWallet();
-          showRedemptionConfirm(itemId, data);
+          showRedemptionConfirm(itemId);
         }
       } catch(e) { console.error('Redeem error', e); }
     }
 
-    function showRedemptionConfirm(itemId, data) {
-      const copy = CONFIRM_COPY[itemId];
+    function showRedemptionConfirm(itemId) {
+      var copy = CONFIRM_COPY[itemId];
       if (!copy) return;
-      const bodyLines = copy.body.split('\n').map(l => l.startsWith('•') ? `<div style="padding-left:12px;margin:4px 0;">${l}</div>` : `<p style="margin:0 0 10px;">${l}</p>`).join('');
-      const ctaHtml = copy.cta ? `<a href="${copy.cta.url}" target="_blank" style="display:block;text-align:center;background:var(--deep-forest);color:var(--tmac-blush);padding:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:20px;">${copy.cta.label} →</a>` : '';
-      document.getElementById('redeem-confirm-content').innerHTML = `
-        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:8px;">Redeemed — ${data.item?.points || ''} Points</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--charcoal);margin-bottom:16px;">${copy.title}</div>
-        <div style="font-size:13px;color:#555;line-height:1.8;">${bodyLines}</div>
-        ${ctaHtml}`;
+      var bodyHtml = copy.body.split('\n').map(function(line) {
+        if (line.startsWith('\u2022')) return '<div style="padding-left:12px;margin:4px 0;">' + line + '</div>';
+        return '<p style="margin:0 0 10px;">' + line + '</p>';
+      }).join('');
+      var ctaHtml = copy.cta
+        ? '<a href="' + copy.cta.url + '" target="_blank" style="display:block;text-align:center;background:var(--deep-forest);color:var(--tmac-blush);padding:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:20px;">' + copy.cta.label + ' \u2192</a>'
+        : '';
+      document.getElementById('redeem-confirm-content').innerHTML =
+        '<div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:8px;">Points Redeemed</div>'
+        + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:var(--charcoal);margin-bottom:16px;">' + copy.title + '</div>'
+        + '<div style="font-size:13px;color:#555;line-height:1.8;">' + bodyHtml + '</div>'
+        + ctaHtml;
       openModal('redeem-confirm-modal');
     }
-
-    // ── END SCRAMBLE WALLET ───────────────────────────────────────────
+    // ══ END SCRAMBLE WALLET ══════════════════════════════════════════
 
     renderChecklist();
     loadMember();
     checkLive();
     loadVote();
-    loadWallet();
   </script>
+
 </body>
 </html>
