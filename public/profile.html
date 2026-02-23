@@ -3,710 +3,396 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
-  <title>Profile — The Tee Elite Circle</title>
+  <title>My Profile — Tee Elite Invitational</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- PWA Meta Tags -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#1a2e1a">
+  <meta name="theme-color" content="#163326">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tee Elite">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <meta name="msapplication-TileColor" content="#1a2e1a">
-  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pwa-nav.css">
   <style>
-    .profile-layout {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 48px;
+    :root{
+      --green:#163326;--green2:#1E3A2B;--gold:#A87C28;--gold2:#C9A24A;
+      --gold-lt:#EDD9A3;--white:#FFFFFF;--off:#F8F7F4;--ink:#163326;
+      --body:#2C2C2C;--muted:#555555;--line:rgba(0,0,0,.12);
+      --serif:"Cormorant Garamond",Georgia,serif;
+      --sans:"Jost",ui-sans-serif,system-ui,sans-serif;
+      --tmac-bronze:#A87C28;--tmac-gold:#C9A24A;--tmac-blush:#e8ccc8;
+      --tmac-blush-light:#f7f0ef;--deep-forest:#163326;--charcoal:#2C2C2C;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{font-family:var(--sans);background:var(--white);color:var(--body);-webkit-font-smoothing:antialiased;}
+
+    .page-container{max-width:800px;margin:0 auto;padding:40px 24px 120px}
+
+    /* ── BACK LINK ── */
+    .back-link{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:13px;color:var(--gold);text-decoration:none;
+      margin-bottom:32px;font-weight:400;
+      display:none;
+    }
+    .back-link:hover{text-decoration:underline}
+    body.viewing-other .back-link{display:inline-flex}
+
+    /* ── PHOTO SECTION ── */
+    .photo-section{text-align:center;margin-bottom:40px}
+    .profile-photo-wrap{position:relative;display:inline-block}
+    .profile-photo{
+      width:120px;height:120px;border-radius:50%;
+      background:var(--tmac-blush-light);
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;margin:0 auto;
+    }
+    .profile-photo img{width:100%;height:100%;object-fit:cover}
+    .profile-photo .initials{
+      font-family:var(--serif);font-size:48px;
+      color:var(--gold);opacity:.7;
+    }
+    .photo-upload-btn{
+      position:absolute;bottom:4px;right:4px;
+      background:var(--green);color:var(--tmac-blush);
+      border:none;width:36px;height:36px;border-radius:50%;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 12px rgba(0,0,0,.2);transition:all .2s;
+    }
+    .photo-upload-btn:hover{transform:scale(1.08)}
+    .photo-upload-btn svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none}
+    .profile-name-display{
+      font-family:var(--serif);font-size:28px;font-weight:400;
+      color:var(--ink);margin-top:16px;margin-bottom:4px;
+    }
+    .profile-email-display{font-size:13px;color:var(--muted);font-weight:300}
+
+    /* ── CARD ── */
+    .profile-card{
+      background:var(--white);border:1px solid var(--line);
+      border-radius:20px;padding:32px;margin-bottom:24px;
+    }
+    .card-title{
+      font-family:var(--serif);font-size:22px;font-weight:400;
+      color:var(--ink);margin-bottom:24px;padding-bottom:14px;
+      border-bottom:1px solid var(--line);
     }
 
-    /* Sidebar */
-    .profile-sidebar {
-      position: sticky;
-      top: 100px;
+    /* ── FORM ── */
+    .form-group{margin-bottom:22px}
+    .form-label{
+      display:block;font-size:11px;letter-spacing:.15em;
+      text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:500;
     }
-
-    .profile-photo-wrap {
-      position: relative;
-      margin-bottom: 24px;
-      width: 200px;
-      height: 200px;
-      margin-left: auto;
-      margin-right: auto;
+    .form-input,.form-textarea{
+      width:100%;padding:14px 18px;
+      font-family:var(--sans);font-size:14px;font-weight:300;
+      color:var(--ink);
+      border:1.5px solid rgba(22,51,38,.18);border-radius:999px;
+      outline:none;transition:border-color .2s;background:var(--white);
     }
+    .form-textarea{border-radius:16px;min-height:120px;resize:vertical}
+    .form-input:focus,.form-textarea:focus{border-color:var(--gold2)}
+    .form-input:disabled{background:var(--off);color:var(--muted);cursor:not-allowed}
+    .form-help{font-size:12px;color:#aaa;margin-top:6px;font-weight:300}
 
-    .profile-photo {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: var(--tmac-blush-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+    /* ── SCORECARD PREVIEW ── */
+    .scorecard-preview{
+      background:var(--off);border:1px solid var(--line);
+      border-radius:16px;padding:20px 24px;margin-bottom:22px;
     }
-
-    .profile-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .scorecard-preview-label{
+      font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:10px;
     }
+    .scorecard-preview-text{font-size:15px;color:var(--ink);line-height:1.8;font-style:italic;font-weight:300}
+    .scorecard-empty{font-size:13px;color:#bbb;font-style:normal}
 
-    .profile-photo .initials {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 72px;
-      color: var(--tmac-bronze);
-      opacity: 0.5;
+    /* ── BUTTONS ── */
+    .btn-gold{
+      display:inline-block;padding:15px 40px;
+      background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);
+      color:var(--green);border:none;border-radius:999px;
+      font-family:var(--sans);font-size:12px;letter-spacing:.14em;
+      text-transform:uppercase;font-weight:700;cursor:pointer;
+      box-shadow:0 8px 24px rgba(168,124,40,.26);transition:all .2s;
     }
-
-    .photo-upload-btn {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background: var(--deep-forest);
-      color: var(--tmac-blush);
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    .btn-gold:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(168,124,40,.34)}
+    .btn-gold:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .save-message{
+      display:inline-block;margin-left:14px;
+      font-size:13px;color:#4caf50;
+      opacity:0;transition:opacity .3s;vertical-align:middle;
     }
+    .save-message.visible{opacity:1}
 
-    .photo-upload-btn:hover {
-      background: var(--charcoal);
-      transform: scale(1.05);
+    /* ── VIEW-ONLY MODE ── */
+    .edit-only{display:block}
+    .view-only{display:none}
+    body.viewing-other .edit-only{display:none}
+    body.viewing-other .view-only{display:block}
+
+    .view-field{margin-bottom:20px}
+    .view-field-label{
+      font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:6px;
     }
+    .view-field-value{font-size:15px;color:var(--ink);line-height:1.7;font-weight:300}
+    .view-field-empty{font-size:14px;color:#bbb;font-style:italic}
 
-    .photo-upload-btn svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-    }
-
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
-      padding: 6px 14px;
-      border-radius: 20px;
-      margin-bottom: 24px;
-    }
-
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.9);
-      margin: 0;
-    }
-
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      color: #fff;
-      margin: 0;
-    }
-
-    .profile-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      color: var(--charcoal);
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .profile-email {
-      font-size: 13px;
-      color: #888;
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .profile-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      text-align: left;
-    }
-
-    .profile-nav-link {
-      display: block;
-      font-size: 13px;
-      color: #666;
-      text-decoration: none;
-      padding: 12px 16px;
-      transition: all 0.3s ease;
-    }
-
-    .profile-nav-link:hover,
-    .profile-nav-link.active {
-      background: var(--tmac-blush-light);
-      color: var(--charcoal);
-    }
-
-    .logout-btn {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 12px;
-      color: #888;
-      background: none;
-      border: none;
-      padding: 12px 16px;
-      cursor: pointer;
-      text-align: left;
-      margin-top: 16px;
-    }
-
-    .logout-btn:hover {
-      color: var(--charcoal);
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--tmac-bronze);
-      text-decoration: none;
-      margin-bottom: 24px;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-    }
-
-    /* Main Content */
-    .profile-main {
-      max-width: 600px;
-    }
-
-    .profile-section {
-      margin-bottom: 48px;
-    }
-
-    .profile-section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      color: var(--charcoal);
-      margin-bottom: 24px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-    }
-
-    .form-group {
-      margin-bottom: 24px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #666;
-      margin-bottom: 8px;
-    }
-
-    .form-input,
-    .form-textarea {
-      width: 100%;
-      padding: 14px 16px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 14px;
-      border: 1px solid rgba(0,0,0,0.1);
-      outline: none;
-      transition: border-color 0.3s ease;
-    }
-
-    .form-input:focus,
-    .form-textarea:focus {
-      border-color: var(--tmac-blush);
-    }
-
-    .form-textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .form-help {
-      font-size: 12px;
-      color: #999;
-      margin-top: 8px;
-    }
-
-    .save-btn {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      background: var(--tmac-blush);
-      border: none;
-      padding: 14px 32px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .save-btn:hover {
-      background: var(--tmac-blush-light);
-    }
-
-    .save-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .save-message {
-      display: inline-block;
-      margin-left: 16px;
-      font-size: 13px;
-      color: #4CAF50;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .save-message.visible {
-      opacity: 1;
-    }
-
-    /* Scorecard Section */
-    .scorecard-preview {
-      background: linear-gradient(135deg, var(--tmac-blush-light) 0%, #fff 100%);
-      border: 1px solid rgba(232, 204, 200, 0.3);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .scorecard-preview-label {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 12px;
-    }
-
-    .scorecard-preview-text {
-      font-size: 15px;
-      color: var(--charcoal);
-      line-height: 1.8;
-      font-style: italic;
-    }
-
-    .scorecard-empty {
-      font-size: 14px;
-      color: #999;
-    }
-
-    /* View-only profile styles */
-    .view-only-field {
-      margin-bottom: 24px;
-    }
-
-    .view-only-label {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #666;
-      margin-bottom: 8px;
-    }
-
-    .view-only-value {
-      font-size: 15px;
-      color: var(--charcoal);
-      line-height: 1.7;
-    }
-
-    .view-only-empty {
-      font-size: 14px;
-      color: #999;
-      font-style: italic;
-    }
-
-    /* Hide elements based on view mode */
-    .edit-only {
-      display: block;
-    }
-
-    .view-only {
-      display: none;
-    }
-
-    body.viewing-other .edit-only {
-      display: none;
-    }
-
-    body.viewing-other .view-only {
-      display: block;
-    }
-
-    @media (max-width: 900px) {
-      .profile-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .profile-sidebar {
-        position: static;
-        text-align: center;
-        padding-bottom: 32px;
-        border-bottom: 1px solid rgba(0,0,0,0.06);
-        margin-bottom: 32px;
-      }
-
-      .profile-nav {
-        display: none;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .member-main {
-        padding-bottom: 120px;
-      }
+    @media(max-width:600px){
+      .page-container{padding-bottom:120px}
+      .btn-gold{width:100%;text-align:center}
     }
   </style>
 </head>
 <body class="member-body">
-  
-  <!-- HEADER -->
+
   <header class="member-header">
     <div class="header-inner">
       <a href="/home.html" class="header-logo">
         <img src="images/tmac-logo.png" alt="TMac Inspired">
-        <span>The Tee Elite Circle</span>
       </a>
       <nav class="header-nav">
-        <a href="/home.html" class="nav-link">Home</a>
-        <a href="/members.html" class="nav-link">The Circle</a>
-        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/home.html" class="nav-link">Hub</a>
         <a href="/tee-room.html" class="nav-link">Tee Room</a>
-        <a href="/fairway.html" class="nav-link">Fairway</a>
+        <a href="/members.html" class="nav-link">The Circle</a>
+        <a href="/tee-elite-invitational.html" class="nav-link">The Invitational</a>
       </nav>
       <div class="header-user">
         <a href="/profile.html" class="user-avatar active" id="user-avatar">
-          <span id="user-initials">FM</span>
+          <span id="user-initials">TM</span>
         </a>
       </div>
       <button class="mobile-menu-btn" id="mobile-menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
-  <!-- MOBILE NAV (hidden by pwa-nav.css on mobile) -->
   <div class="mobile-nav" id="mobile-nav">
-    <a href="/home.html" class="mobile-nav-link">Home</a>
-    <a href="/members.html" class="mobile-nav-link">The Circle</a>
-    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/home.html" class="mobile-nav-link">Hub</a>
     <a href="/tee-room.html" class="mobile-nav-link">Tee Room</a>
-    <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
+    <a href="/members.html" class="mobile-nav-link">The Circle</a>
+    <a href="/tee-elite-invitational.html" class="mobile-nav-link">The Invitational</a>
     <a href="/profile.html" class="mobile-nav-link active">My Profile</a>
-    <a href="#" class="mobile-nav-link logout-link" id="logout-link-mobile">Log Out</a>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <main class="member-main">
-    <!-- Back link (only shown when viewing another player) -->
-    <a href="/members.html" class="back-link view-only">← Back to The Circle</a>
+  <main class="page-container">
 
-    <div class="profile-layout">
-      <!-- SIDEBAR -->
-      <aside class="profile-sidebar">
-        <div class="profile-photo-wrap">
-          <div class="profile-photo" id="profile-photo">
-            <span class="initials" id="photo-initials">FM</span>
+    <a href="/members.html" class="back-link">← Back to The Circle</a>
+
+    <!-- PHOTO + NAME -->
+    <div class="photo-section">
+      <div class="profile-photo-wrap">
+        <div class="profile-photo" id="profile-photo">
+          <span class="initials" id="photo-initials">TM</span>
+        </div>
+        <button class="photo-upload-btn edit-only" id="photo-upload-btn" title="Change photo">
+          <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+        <input type="file" id="photo-input" accept="image/*" style="display:none">
+      </div>
+      <div class="profile-name-display" id="profile-name-display">Loading…</div>
+      <div class="profile-email-display edit-only" id="profile-email-display"></div>
+      <!-- view-only name handled by profile-name-display -->
+    </div>
+
+    <!-- EDIT MODE: PROFILE FORM -->
+    <div class="edit-only">
+      <form id="profile-form">
+
+        <div class="profile-card">
+          <div class="card-title">Basic Info</div>
+
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="name" name="name" placeholder="Your name">
           </div>
-          <button class="photo-upload-btn edit-only" id="photo-upload-btn">
-            <svg viewBox="0 0 24 24">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-              <circle cx="12" cy="13" r="4"></circle>
-            </svg>
-          </button>
-          <input type="file" id="photo-input" accept="image/*" style="display: none;">
+
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="email" name="email" disabled>
+            <p class="form-help">Contact support to change your email.</p>
+          </div>
         </div>
 
+        <div class="profile-card">
+          <div class="card-title">Golf Profile</div>
+
+          <div class="form-group">
+            <label class="form-label">Handicap Index</label>
+            <input type="text" class="form-input" id="handicap" name="handicap" placeholder="e.g. 14.2">
+            <p class="form-help">Your official GHIN handicap index. Visible to other members.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Favorite Course</label>
+            <input type="text" class="form-input" id="favorite_course" name="favorite_course" placeholder="e.g. Summerfield Crossing">
+            <p class="form-help">Visible to other members on The Circle page.</p>
+          </div>
         </div>
 
-        <!-- Name shown when viewing another player -->
-        <h2 class="profile-name view-only" id="view-profile-name"></h2>
+        <div class="profile-card">
+          <div class="card-title">The Finished Scorecard</div>
 
-        <nav class="profile-nav edit-only">
-          <a href="#info" class="profile-nav-link active">Basic Info</a>
-          <a href="#about" class="profile-nav-link">About Me</a>
-          <a href="#scorecard" class="profile-nav-link">The Finished Scorecard</a>
-          <a href="#password" class="profile-nav-link">Change Password</a>
-        </nav>
-
-        <button class="logout-btn edit-only" id="logout-link">Log Out</button>
-      </aside>
-
-      <!-- MAIN FORM (Edit mode - own profile) -->
-      <div class="profile-main edit-only">
-        <form id="profile-form">
-          <!-- BASIC INFO -->
-          <section class="profile-section" id="info">
-            <h2 class="profile-section-title">Basic Info</h2>
-            
-            <div class="form-group">
-              <label class="form-label">Full Name</label>
-              <input type="text" class="form-input" id="name" name="name" placeholder="Your name">
+          <div class="scorecard-preview">
+            <div class="scorecard-preview-label">Your Vision</div>
+            <div class="scorecard-preview-text" id="scorecard-preview">
+              <span class="scorecard-empty">You haven't set your vision yet. What does your win look like?</span>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-input" id="email" name="email" placeholder="your@email.com" disabled>
-              <p class="form-help">Contact support to change your email.</p>
-            </div>
-          </section>
+          <div class="form-group">
+            <label class="form-label">What Does Your Win Look Like?</label>
+            <textarea class="form-textarea" id="finished_scorecard" name="finished_scorecard" placeholder="Play from the end. You've already won. Describe it in vivid detail..."></textarea>
+            <p class="form-help">Write as if it's already happened. This is the vision you're playing toward.</p>
+          </div>
+        </div>
 
-          <!-- ABOUT -->
-          <section class="profile-section" id="about">
-            <h2 class="profile-section-title">About Me</h2>
-            
-            <div class="form-group">
-              <label class="form-label">Bio</label>
-              <textarea class="form-textarea" id="bio" name="bio" placeholder="Tell the circle about yourself..."></textarea>
-              <p class="form-help">This will appear on your player profile.</p>
-            </div>
+        <button type="submit" class="btn-gold" id="save-btn">Save Changes</button>
+        <span class="save-message" id="save-message">Saved</span>
 
-            <div class="form-group">
-              <label class="form-label">What I Offer</label>
-              <input type="text" class="form-input" id="offering" name="offering" placeholder="Your expertise, connections, resources...">
-            </div>
+      </form>
+    </div>
 
-            <div class="form-group">
-              <label class="form-label">What I'm Looking For</label>
-              <input type="text" class="form-input" id="looking_for" name="looking_for" placeholder="Collaborations, introductions, advice...">
-            </div>
-          </section>
-
-          <!-- THE FINISHED SCORECARD -->
-          <section class="profile-section" id="scorecard">
-            <h2 class="profile-section-title">The Finished Scorecard</h2>
-            
-            <div class="scorecard-preview">
-              <p class="scorecard-preview-label">Your Vision</p>
-              <p class="scorecard-preview-text" id="scorecard-preview">
-                <span class="scorecard-empty">You haven't set your vision yet. What does your win look like?</span>
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">What Does Your Win Look Like?</label>
-              <textarea class="form-textarea" id="finished_scorecard" name="finished_scorecard" placeholder="Play from the end. You've already won. Describe it in vivid detail..."></textarea>
-              <p class="form-help">Write as if it's already happened. This is the vision you're playing toward.</p>
-            </div>
-          </section>
-
-          <button type="submit" class="save-btn" id="save-btn">Save Changes</button>
-          <span class="save-message" id="save-message">Saved successfully!</span>
-        </form>
-
-        <!-- PASSWORD SECTION -->
-        <section class="profile-section" id="password">
-          <h2 class="profile-section-title">Change Password</h2>
-          
-          <form id="password-form">
-            <div class="form-group">
-              <label class="form-label">Current Password</label>
-              <input type="password" class="form-input" id="current_password" name="current_password">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">New Password</label>
-              <input type="password" class="form-input" id="new_password" name="new_password">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Confirm New Password</label>
-              <input type="password" class="form-input" id="confirm_password" name="confirm_password">
-            </div>
-
-            <button type="submit" class="save-btn">Update Password</button>
-          </form>
-        </section>
+    <!-- VIEW-ONLY MODE (viewing another player) -->
+    <div class="view-only">
+      <div class="profile-card">
+        <div class="card-title">Golf Profile</div>
+        <div class="view-field">
+          <div class="view-field-label">Handicap</div>
+          <div class="view-field-value" id="view-handicap"><span class="view-field-empty">Not set yet.</span></div>
+        </div>
+        <div class="view-field">
+          <div class="view-field-label">Favorite Course</div>
+          <div class="view-field-value" id="view-favorite-course"><span class="view-field-empty">Not set yet.</span></div>
+        </div>
       </div>
 
-      <!-- VIEW-ONLY CONTENT (viewing another player) -->
-      <div class="profile-main view-only">
-        <section class="profile-section">
-          <h2 class="profile-section-title">About</h2>
-          
-          <div class="view-only-field">
-            <p class="view-only-label">Bio</p>
-            <p class="view-only-value" id="view-bio"><span class="view-only-empty">No bio added yet.</span></p>
+      <div class="profile-card">
+        <div class="card-title">The Finished Scorecard</div>
+        <div class="scorecard-preview">
+          <div class="scorecard-preview-label">Their Vision</div>
+          <div class="scorecard-preview-text" id="view-scorecard">
+            <span class="scorecard-empty">This player hasn't set their vision yet.</span>
           </div>
-
-          <div class="view-only-field">
-            <p class="view-only-label">What I Offer</p>
-            <p class="view-only-value" id="view-offering"><span class="view-only-empty">Not specified.</span></p>
-          </div>
-
-          <div class="view-only-field">
-            <p class="view-only-label">What I'm Looking For</p>
-            <p class="view-only-value" id="view-looking-for"><span class="view-only-empty">Not specified.</span></p>
-          </div>
-        </section>
-
-        <section class="profile-section">
-          <h2 class="profile-section-title">The Finished Scorecard</h2>
-          <div class="scorecard-preview">
-            <p class="scorecard-preview-label">Their Vision</p>
-            <p class="scorecard-preview-text" id="view-scorecard">
-              <span class="scorecard-empty">This player hasn't set their vision yet.</span>
-            </p>
-          </div>
-        </section>
+        </div>
       </div>
     </div>
+
   </main>
 
-  <!-- FOOTER -->
-  <footer class="member-footer">
-    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
-  </footer>
+  <nav class="pwa-bottom-nav">
+    <div class="pwa-bottom-nav-inner">
+      <a href="/home.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Hub
+      </a>
+      <a href="/tee-room.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tee Room
+      </a>
+      <a href="/members.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Circle
+      </a>
+      <a href="/profile.html" class="pwa-nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+      </a>
+    </div>
+  </nav>
 
-<script>
-    let currentPlayer = null;
-    let viewingPlayerId = null;
-
-    // Check if viewing another player's profile
+  <script>
     const urlParams = new URLSearchParams(window.location.search);
-    viewingPlayerId = urlParams.get('id');
+    const viewingPlayerId = urlParams.get('id');
 
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileNav = document.getElementById('mobile-nav');
-    
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileNav.classList.toggle('open');
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      this.classList.toggle('active');
+      document.getElementById('mobile-nav').classList.toggle('open');
     });
 
-    // Logout
-    document.querySelectorAll('#logout-link, #logout-link-mobile').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        try {
-          await fetch('/api/auth/logout', { method: 'POST' });
-        } catch (err) {
-          console.error('Logout error:', err);
-        }
-        window.location.href = '/member-login.html';
-      });
-    });
-
-    // Load member data
     async function loadPlayer() {
       try {
-        // First, get current logged-in user for header initials
         const meRes = await fetch('/api/members/me');
-        if (!meRes.ok) {
-          window.location.href = '/member-login.html';
-          return;
-        }
+        if (!meRes.ok) { window.location.href = '/member-login.html'; return; }
         const me = await meRes.json();
-        document.getElementById('user-initials').textContent = getInitials(me.name);
 
-        // If viewing another player
+        const initials = getInitials(me.name);
+        document.getElementById('user-initials').textContent = initials;
+
         if (viewingPlayerId && viewingPlayerId != me.id) {
+          // Viewing someone else's profile
           document.body.classList.add('viewing-other');
-          document.title = 'Player Profile — The Tee Elite Circle';
+          document.title = 'Player Profile — Tee Elite';
           await loadOtherPlayer(viewingPlayerId);
         } else {
-          // Viewing own profile
-          currentPlayer = me;
-          populateForm(currentPlayer);
+          // Own profile
+          populateForm(me);
         }
       } catch (err) {
-        console.error('Error loading member:', err);
+        console.error('Error loading profile:', err);
+        window.location.href = '/member-login.html';
       }
     }
 
-    async function loadOtherPlayer(memberId) {
+    async function loadOtherPlayer(id) {
       try {
-        const res = await fetch(`/api/members/get?id=${memberId}`);
-        if (!res.ok) {
-          window.location.href = '/members.html';
-          return;
-        }
-        const players = await res.json();
-        const player = Array.isArray(members) ? players.find(m => m.id == memberId) : members;
-        
-        if (!player) {
-          window.location.href = '/members.html';
-          return;
-        }
-
+        const res = await fetch('/api/members/get?id=' + id);
+        if (!res.ok) { window.location.href = '/members.html'; return; }
+        const player = await res.json();
+        if (!player) { window.location.href = '/members.html'; return; }
         populateViewOnly(player);
       } catch (err) {
-        console.error('Error loading member:', err);
         window.location.href = '/members.html';
       }
     }
 
-    function populateViewOnly(player) {
-      document.getElementById('view-profile-name').textContent = member.name || 'Member';
-      document.getElementById('photo-initials').textContent = getInitials(member.name);
-
-      if (member.photo_url) {
-        document.getElementById('profile-photo').innerHTML = `<img src="${member.photo_url}" alt="${member.name}">`;
-      }
-
-      // Populate view-only fields
-      document.getElementById('view-bio').innerHTML = member.bio || '<span class="view-only-empty">No bio added yet.</span>';
-      document.getElementById('view-offering').innerHTML = member.offering || '<span class="view-only-empty">Not specified.</span>';
-      document.getElementById('view-looking-for').innerHTML = member.looking_for || '<span class="view-only-empty">Not specified.</span>';
-      document.getElementById('view-scorecard').innerHTML = member.finished_scorecard || '<span class="scorecard-empty">This member hasn\'t set their vision yet.</span>';
-
-      document.title = `${member.name} — The Tee Elite Circle`;
-    }
-
     function populateForm(member) {
+      document.getElementById('profile-name-display').textContent = member.name || '';
+      document.getElementById('profile-email-display').textContent = member.email || '';
+      document.getElementById('photo-initials').textContent = getInitials(member.name);
       document.getElementById('name').value = member.name || '';
       document.getElementById('email').value = member.email || '';
-      document.getElementById('bio').value = member.bio || '';
-      document.getElementById('offering').value = member.offering || '';
-      document.getElementById('looking_for').value = member.looking_for || '';
+      document.getElementById('handicap').value = member.handicap || '';
+      document.getElementById('favorite_course').value = member.favorite_course || '';
       document.getElementById('finished_scorecard').value = member.finished_scorecard || '';
-
-      const initials = getInitials(member.name);
-      document.getElementById('user-initials').textContent = initials;
-      document.getElementById('photo-initials').textContent = initials;
 
       if (member.photo_url) {
         document.getElementById('profile-photo').innerHTML = `<img src="${member.photo_url}" alt="${member.name}">`;
       }
-
       if (member.finished_scorecard) {
         document.getElementById('scorecard-preview').innerHTML = member.finished_scorecard;
       }
     }
 
-    // Save profile
+    function populateViewOnly(player) {
+      document.getElementById('profile-name-display').textContent = player.name || 'Member';
+      document.getElementById('photo-initials').textContent = getInitials(player.name);
+      document.title = (player.name || 'Player') + ' — Tee Elite';
+
+      if (player.photo_url) {
+        document.getElementById('profile-photo').innerHTML = `<img src="${player.photo_url}" alt="${player.name}">`;
+      }
+      document.getElementById('view-handicap').innerHTML =
+        player.handicap ? player.handicap : '<span class="view-field-empty">Not set yet.</span>';
+      document.getElementById('view-favorite-course').innerHTML =
+        player.favorite_course ? player.favorite_course : '<span class="view-field-empty">Not set yet.</span>';
+      document.getElementById('view-scorecard').innerHTML =
+        player.finished_scorecard ? player.finished_scorecard : '<span class="scorecard-empty">This player hasn\'t set their vision yet.</span>';
+    }
+
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       const btn = document.getElementById('save-btn');
-      const message = document.getElementById('save-message');
+      const msg = document.getElementById('save-message');
       btn.disabled = true;
-      btn.textContent = 'Saving...';
+      btn.textContent = 'Saving…';
 
       const formData = {
         name: document.getElementById('name').value,
-        bio: document.getElementById('bio').value,
-        offering: document.getElementById('offering').value,
-        looking_for: document.getElementById('looking_for').value,
+        handicap: document.getElementById('handicap').value,
+        favorite_course: document.getElementById('favorite_course').value,
         finished_scorecard: document.getElementById('finished_scorecard').value
       };
 
@@ -718,16 +404,21 @@
         });
 
         if (res.ok) {
-          message.classList.add('visible');
-          setTimeout(() => message.classList.remove('visible'), 3000);
-          
+          // Update displayed name
+          document.getElementById('profile-name-display').textContent = formData.name;
+          document.getElementById('user-initials').textContent = getInitials(formData.name);
+          document.getElementById('photo-initials').textContent = getInitials(formData.name);
           // Update scorecard preview
           if (formData.finished_scorecard) {
             document.getElementById('scorecard-preview').innerHTML = formData.finished_scorecard;
           }
+          msg.classList.add('visible');
+          setTimeout(() => msg.classList.remove('visible'), 3000);
+        } else {
+          alert('Failed to save. Please try again.');
         }
       } catch (err) {
-        console.error('Error saving profile:', err);
+        alert('Error saving profile.');
       }
 
       btn.disabled = false;
@@ -742,110 +433,38 @@
     document.getElementById('photo-input').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-
       const formData = new FormData();
       formData.append('photo', file);
-
       try {
-        const res = await fetch('/api/members/upload-photo', {
-          method: 'POST',
-          body: formData
-        });
-
+        const res = await fetch('/api/members/upload-photo', { method: 'POST', body: formData });
         if (res.ok) {
           const data = await res.json();
           document.getElementById('profile-photo').innerHTML = `<img src="${data.photo_url}" alt="Profile">`;
         } else {
-          const err = await res.json();
-          alert('Upload failed: ' + (err.error || 'Unknown error'));
+          alert('Upload failed. Please try again.');
         }
       } catch (err) {
-        console.error('Error uploading photo:', err);
-        alert('Error uploading photo');
-      }
-    });
-
-    // Change password
-    document.getElementById('password-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const current = document.getElementById('current_password').value;
-      const newPass = document.getElementById('new_password').value;
-      const confirm = document.getElementById('confirm_password').value;
-
-      if (newPass !== confirm) {
-        alert('New passwords do not match');
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/auth/change-password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            current_password: current,
-            new_password: newPass 
-          })
-        });
-
-        if (res.ok) {
-          alert('Password updated successfully');
-          document.getElementById('password-form').reset();
-        } else {
-          const data = await res.json();
-          alert(data.error || 'Failed to update password');
-        }
-      } catch (err) {
-        console.error('Error changing password:', err);
+        alert('Error uploading photo.');
       }
     });
 
     function getInitials(name) {
-      if (!name) return 'FM';
+      if (!name) return 'TM';
       return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     }
 
-    // Initialize
     loadPlayer();
   </script>
-  <script src="/member-common.js"></script>
-  <!-- PWA BOTTOM NAV -->
-  <nav class="pwa-bottom-nav">
-    <div class="pwa-bottom-nav-inner">
-      <a href="/home.html" class="pwa-nav-item">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        <span>Home</span>
-      </a>
-      <a href="/resources.html" class="pwa-nav-item">
-        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-        <span>Tee Room</span>
-      </a>
-      <a href="/profile.html" class="pwa-nav-item active">
-        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span>Profile</span>
-      </a>
-      <a href="/admin.html" class="pwa-nav-item" id="admin-nav-link" style="display: none;">
-        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        <span>Admin</span>
-      </a>
-    </div>
-  </nav>
 
-  <!-- PWA Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('ServiceWorker registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-          });
+          .then(r => console.log('SW registered:', r.scope))
+          .catch(e => console.log('SW failed:', e));
       });
     }
-    checkAdminAccess();
   </script>
-  <script src="/pwa-nav.js"></script>
+
 </body>
 </html>
