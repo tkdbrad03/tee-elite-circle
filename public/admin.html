@@ -3124,51 +3124,54 @@ async function sendRetreatCampaign(event, retreatType) {
 }
 
     async function loadWalletAdmin() {
-      try {
-        const res = await fetch('/api/wallet-items-public.js');
-        if (!res.ok) return;
-        const data = await res.json();
-        const s = data.summary;
-        document.getElementById('ws-wallets').textContent = s.total_wallets;
-        document.getElementById('ws-redemptions').textContent = s.total_redemptions;
-        document.getElementById('ws-points').textContent = s.total_points_spent;
-        document.getElementById('ws-rate').textContent = s.redemption_rate + '%';
+  try {
+    const res = await fetch('/api/admin/wallet');
+    if (!res.ok) return;
+    const data = await res.json();
+    const s = data.summary;
 
-        const itemRows = document.getElementById('wallet-item-rows');
-        if (itemRows) itemRows.innerHTML = data.items.map(item => {
-          const slotsLeft = item.slots_left !== null ? item.slots_left : '∞';
-          const slotsColor = item.slots_left !== null && item.slots_left <= 3 ? 'color:#c62828;font-weight:600;' : '';
-          return `<tr style="border-bottom:1px solid #f5f5f5;">
-            <td style="padding:12px 16px;color:#333;">${item.name}</td>
-            <td style="padding:12px 8px;text-align:center;color:#888;">${item.points}</td>
-            <td style="padding:12px 8px;text-align:center;font-weight:600;color:#1a2f23;">${item.wishlist_count}</td>
-            <td style="padding:12px 8px;text-align:center;font-weight:600;color:#1a2f23;">${item.redemption_count}</td>
-            <td style="padding:12px 8px;text-align:center;${slotsColor}">${slotsLeft}</td>
-            <td style="padding:12px 8px;font-size:12px;color:#666;">${item.redeemers.join(', ') || '—'}</td>
-          </tr>`;
-        }).join('');
+    document.getElementById('ws-wallets').textContent = s.total_wallets;
+    document.getElementById('ws-redemptions').textContent = s.total_redemptions;
+    document.getElementById('ws-points').textContent = s.total_points_spent;
+    document.getElementById('ws-rate').textContent = s.redemption_rate + '%';
 
-        const memberRows = document.getElementById('wallet-member-rows');
-        if (memberRows) memberRows.innerHTML = data.member_timing.length ? data.member_timing.map(m => {
-          const firstDate = m.first_redemption ? new Date(m.first_redemption).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : 'No redemptions';
-          return `<tr style="border-bottom:1px solid #f5f5f5;">
-            <td style="padding:12px 16px;"><div style="font-weight:500;">${m.name}</div><div style="font-size:11px;color:#aaa;">${m.email}</div></td>
-            <td style="padding:12px 8px;text-align:center;">${m.items_redeemed || 0}</td>
-            <td style="padding:12px 8px;text-align:center;">${m.points_spent || 0}</td>
-            <td style="padding:12px 8px;text-align:center;font-weight:600;color:#1a2f23;">${m.remaining_balance ?? 100}</td>
-            <td style="padding:12px 8px;font-size:12px;color:#666;">${firstDate}</td>
-          </tr>`;
-        }).join('') : '<tr><td colspan="5" style="text-align:center;padding:24px;color:#aaa;">No wallets active yet</td></tr>';
+    const itemRows = document.getElementById('wallet-item-rows');
+    if (itemRows) itemRows.innerHTML = data.items.map(item => {
+      const slotsLeft = item.slots_left !== null ? item.slots_left : '∞';
+      const slotsColor = item.slots_left !== null && item.slots_left <= 3 ? 'color:#c62828;font-weight:600;' : '';
+      return `<tr style="border-bottom:1px solid #f5f5f5;">
+        <td style="padding:12px 16px;color:#333;">${item.name}</td>
+        <td style="padding:12px 8px;text-align:center;color:#888;">${item.points}</td>
+        <td style="padding:12px 8px;text-align:center;font-weight:600;color:#1a2f23;">${item.wishlist_count}</td>
+        <td style="padding:12px 8px;text-align:center;font-weight:600;color:#1a2f23;">${item.redemption_count}</td>
+        <td style="padding:12px 8px;text-align:center;${slotsColor}">${slotsLeft}</td>
+        <td style="padding:12px 8px;font-size:12px;color:#666;">${item.redeemers.join(', ') || '—'}</td>
+      </tr>`;
+    }).join('');
 
-      } catch(e) { console.error('Admin wallet error', e); }
+    const memberRows = document.getElementById('wallet-member-rows');
+    memberRows.innerHTML = data.member_timing.length ? data.member_timing.map(m => {
+      const firstDate = m.first_redemption ? new Date(m.first_redemption).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : 'No redemptions';
+      return `<tr style="border-bottom:1px solid #f5f5f5;">
+        <td style="padding:12px 16px;"><div style="font-weight:500;">${m.name}</div><div style="font-size:11px;color:#aaa;">${m.email}</div></td>
+        <td style="padding:12px 8px;text-align:center;">${m.items_redeemed || 0}</td>
+        <td style="padding:12px 8px;text-align:center;">${m.points_spent || 0}</td>
+        <td style="padding:12px 8px;text-align:center;font-weight:600;color:#1a2f23;">${m.remaining_balance ?? 100}</td>
+        <td style="padding:12px 8px;font-size:12px;color:#666;">${firstDate}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="5" style="text-align:center;padding:24px;color:#aaa;">No wallets active yet</td></tr>';
 
-      // Also load marketplace items manager
-      loadWalletItemsAdmin();
-    }
+  } catch(e) {
+    console.error('Admin wallet error', e);
+  }
+
+  // Also load marketplace items manager
+  loadWalletItemsAdmin();
+}
 
     async function loadWalletItemsAdmin() {
       try {
-        const res = await fetch('/api/wallet-items-admin.js', {
+        const res = await fetch('/api/wallet-items-admin', {
           headers: { 'x-admin-secret': 'TeeElite2026Admin' }
         });
         if (!res.ok) return;
@@ -3224,7 +3227,7 @@ async function sendRetreatCampaign(event, retreatType) {
       if (!id || !name || !points) { msg.style.color = '#c62828'; msg.textContent = 'ID, Name, and Points are required.'; return; }
 
       try {
-        const res = await fetch('/api/wallet-items-admin.js', {
+        const res = await fetch('/api/wallet-items-admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
           body: JSON.stringify({ id, name, tagline, points, cap: cap || null, available_now, drive_url: drive_url || null })
@@ -3244,7 +3247,7 @@ async function sendRetreatCampaign(event, retreatType) {
     }
 
     async function toggleAvailableNow(id, newVal) {
-      await fetch('/api/wallet-items-admin.js', {
+      await fetch('/api/wallet-items-admin', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
         body: JSON.stringify({ id, available_now: newVal })
@@ -3253,7 +3256,7 @@ async function sendRetreatCampaign(event, retreatType) {
     }
 
     async function saveDriveUrl(id, url) {
-      await fetch('/api/wallet-items-admin.js', {
+      await fetch('/api/wallet-items-admin', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
         body: JSON.stringify({ id, drive_url: url || null })
@@ -3262,7 +3265,7 @@ async function sendRetreatCampaign(event, retreatType) {
 
     async function deleteWalletItem(id) {
       if (!confirm('Remove "' + id + '" from the marketplace? This cannot be undone.')) return;
-      await fetch('/api/wallet-items-admin.js', {
+      await fetch('/api/wallet-items-admin', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
         body: JSON.stringify({ id })
