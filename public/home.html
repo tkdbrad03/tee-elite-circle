@@ -667,10 +667,11 @@
 
     const CHECKLIST = [
       { id: 'registration', label: 'Registration complete', sub: "You're confirmed!", locked: true },
-      { id: 'ghin', label: 'Link your GHIN handicap', sub: 'Required for scramble scoring', action: () => openModal('ghin-modal') },
+      { id: 'ghin', label: 'Link your GHIN handicap(if you have one)', sub: 'Required for scramble scoring', action: () => openModal('ghin-modal') },
       { id: 'team', label: 'Meet your team', sub: 'Assignments coming soon', action: () => location.href='/members.html' },
       { id: 'rules', label: 'Review scramble rules', sub: '5 min read — know before you go', action: () => openModal('rules-modal') },
       { id: 'dress', label: 'Pack your outfit', sub: 'White + gold or green accent', action: () => openModal('dress-modal') },
+      { id: 'playbook', label: 'Review the Event Playbook', sub: 'Schedule, flow, and expectations', action: () => openPlaybookAndMark() },
       { id: 'mulligans', label: 'Consider mulligan package', sub: 'Purchase in advance or at registration', action: () => openModal('mulligan-modal') },
     ];
 
@@ -778,6 +779,11 @@
         console.error('Vote submit error', e);
       }
     }
+    
+    function openPlaybookAndMark() {
+  updateChecklistItem('playbook', true);
+  window.location.href = '/playbook.html';
+}
 
     function buildDrinkQR() {
       const canvas = document.getElementById('drink-qr');
