@@ -3171,7 +3171,7 @@ async function sendRetreatCampaign(event, retreatType) {
 
     async function loadWalletItemsAdmin() {
       try {
-        const res = await fetch('/api/wallet-items-admin', {
+        const res = await fetch('/api/admin/wallet-items-admin', {
           headers: { 'x-admin-secret': 'TeeElite2026Admin' }
         });
         if (!res.ok) return;
@@ -3227,7 +3227,7 @@ async function sendRetreatCampaign(event, retreatType) {
       if (!id || !name || !points) { msg.style.color = '#c62828'; msg.textContent = 'ID, Name, and Points are required.'; return; }
 
       try {
-        const res = await fetch('/api/wallet-items-admin', {
+        const res = await fetch('/api/admin/wallet-items-admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
           body: JSON.stringify({ id, name, tagline, points, cap: cap || null, available_now, drive_url: drive_url || null })
@@ -3247,7 +3247,7 @@ async function sendRetreatCampaign(event, retreatType) {
     }
 
     async function toggleAvailableNow(id, newVal) {
-      await fetch('/api/wallet-items-admin', {
+      await fetch('/api/admin/wallet-items-admin', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
         body: JSON.stringify({ id, available_now: newVal })
@@ -3256,7 +3256,7 @@ async function sendRetreatCampaign(event, retreatType) {
     }
 
     async function saveDriveUrl(id, url) {
-      await fetch('/api/wallet-items-admin', {
+      await fetch('/api/admin/wallet-items-admin', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
         body: JSON.stringify({ id, drive_url: url || null })
@@ -3265,7 +3265,7 @@ async function sendRetreatCampaign(event, retreatType) {
 
     async function deleteWalletItem(id) {
       if (!confirm('Remove "' + id + '" from the marketplace? This cannot be undone.')) return;
-      await fetch('/api/wallet-items-admin', {
+      await fetch('/api/admin/wallet-items-admin', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
         body: JSON.stringify({ id })
