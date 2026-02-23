@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
 
     await client.connect();
 
-    // Get member from session
     const sessionResult = await client.query(
       'SELECT member_id FROM sessions WHERE token = $1 AND expires_at > NOW()',
       [sessionToken]
@@ -32,9 +31,10 @@ module.exports = async (req, res) => {
 
     const memberId = sessionResult.rows[0].member_id;
 
-    // Get member data
     const memberResult = await client.query(
-      'SELECT id, email, name, bio, photo_url, looking_for, offering, finished_scorecard, ghin, mulligans_purchased, drink_tickets FROM members WHERE id = $1',
+      `SELECT id, email, name, photo_url, handicap, favorite_course,
+              finished_scorecard, ghin, mulligans_purchased, drink_tickets
+       FROM members WHERE id = $1`,
       [memberId]
     );
 
