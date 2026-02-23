@@ -41,39 +41,94 @@
 
     .player-card{
       background:var(--white);border:1px solid var(--line);border-radius:20px;
-      overflow:hidden;transition:all .25s ease;text-align:center;padding:32px 24px;
+      overflow:hidden;transition:all .25s ease;text-align:center;padding:28px 20px 0;
+      display:flex;flex-direction:column;
     }
     .player-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(0,0,0,.08)}
 
     .player-photo{
-      width:100px;height:100px;border-radius:50%;
+      width:90px;height:90px;border-radius:50%;
       background:var(--tmac-blush-light);display:flex;align-items:center;
-      justify-content:center;overflow:hidden;margin:0 auto 20px;
+      justify-content:center;overflow:hidden;margin:0 auto 16px;flex-shrink:0;
     }
     .player-photo img{width:100%;height:100%;object-fit:cover}
-    .player-photo .initials{font-family:var(--serif);font-size:36px;color:var(--gold);opacity:.7}
+    .player-photo .initials{font-family:var(--serif);font-size:32px;color:var(--gold);opacity:.7}
 
-    .player-name{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:8px}
+    .player-name{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--ink);margin-bottom:10px}
 
-    .player-bio{
-      font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-weight:300;
-      display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+    .player-handicap{
+      display:inline-block;
+      background:var(--off);border:1px solid var(--line);
+      border-radius:999px;padding:4px 14px;
+      font-size:12px;font-weight:500;color:var(--ink);
+      margin-bottom:8px;
     }
+    .player-handicap span{color:var(--gold);font-weight:600}
 
-    .player-tags{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line);text-align:left}
-    .player-tag{font-size:12px;color:var(--muted)}
-    .player-tag strong{color:var(--ink);font-weight:500}
+    .player-course{
+      font-size:12px;color:var(--muted);font-weight:300;
+      margin-bottom:16px;line-height:1.5;
+    }
+    .player-course strong{color:var(--ink);font-weight:500}
 
-    .view-profile-btn{
+    .player-spacer{flex:1}
+
+    .send-msg-btn{
       display:block;text-align:center;padding:14px;
       font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-      color:var(--gold);text-decoration:none;
-      border-top:1px solid var(--line);
-      margin:20px -24px -32px;transition:all .2s ease;font-weight:500;
+      font-weight:600;color:var(--green);
+      background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);
+      border:none;cursor:pointer;
+      margin:0 -20px;width:calc(100% + 40px);
+      transition:all .2s ease;font-family:var(--sans);
+      border-top:1px solid rgba(168,124,40,.2);
     }
-    .view-profile-btn:hover{background:var(--off);color:var(--ink)}
+    .send-msg-btn:hover{opacity:.88}
 
     .loading-state{text-align:center;padding:80px 24px;color:var(--muted);grid-column:1/-1;font-weight:300}
+
+    /* Message modal */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,.45);
+      display:none;align-items:center;justify-content:center;
+      padding:24px;z-index:9999;backdrop-filter:blur(4px);
+    }
+    .modal-backdrop.open{display:flex}
+    .modal{
+      width:100%;max-width:440px;background:var(--white);
+      border:1px solid var(--line);border-radius:20px;padding:32px 28px;
+      animation:fadeUp .25s ease both;
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .modal h3{font-family:var(--serif);font-weight:400;color:var(--ink);font-size:28px;margin-bottom:6px}
+    .modal p{font-size:14px;color:var(--muted);margin-bottom:20px;font-weight:300}
+    .modal textarea{
+      width:100%;padding:14px 18px;
+      border:1.5px solid rgba(22,51,38,.18);border-radius:16px;
+      font-family:var(--sans);font-size:14px;font-weight:300;
+      color:var(--ink);resize:vertical;min-height:120px;outline:none;
+      transition:border-color .2s;
+    }
+    .modal textarea:focus{border-color:var(--gold2)}
+    .modal-actions{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+    .btn-gold{
+      display:block;width:100%;padding:15px;
+      background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);
+      color:var(--green);border:none;border-radius:999px;
+      font-family:var(--sans);font-size:12px;letter-spacing:.14em;
+      text-transform:uppercase;font-weight:700;cursor:pointer;
+      box-shadow:0 8px 24px rgba(168,124,40,.26);transition:all .2s;
+    }
+    .btn-gold:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(168,124,40,.34)}
+    .btn-outline{
+      display:block;width:100%;padding:15px;
+      background:transparent;border:1.5px solid rgba(22,51,38,.22);
+      border-radius:999px;color:var(--green);
+      font-family:var(--sans);font-size:12px;letter-spacing:.14em;
+      text-transform:uppercase;font-weight:500;cursor:pointer;transition:all .2s;
+    }
+    .btn-outline:hover{border-color:rgba(22,51,38,.4)}
+    .msg-status{font-size:13px;color:var(--muted);text-align:center;margin-top:8px;min-height:20px}
 
     @media(max-width:900px){.players-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:600px){
@@ -112,14 +167,13 @@
     <a href="/members.html" class="mobile-nav-link active">The Circle</a>
     <a href="/tee-elite-invitational.html" class="mobile-nav-link">The Invitational</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
-    <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
   </div>
 
   <main class="page-container">
     <div class="page-header">
       <div class="page-label">Tee Elite Invitational 2026</div>
       <h1 class="page-title">The <em>Players</em></h1>
-      <p class="page-subtitle">Meet the women joining you on the green. Connect, collaborate, and come ready to play.</p>
+      <p class="page-subtitle">Meet the women joining you on the green. Connect before April 18.</p>
     </div>
 
     <div class="players-grid" id="players-grid">
@@ -144,16 +198,26 @@
     </div>
   </nav>
 
+  <!-- SEND MESSAGE MODAL -->
+  <div class="modal-backdrop" id="msg-modal">
+    <div class="modal">
+      <h3 id="msg-modal-name">Send a Message</h3>
+      <p>Your message will be sent to their registration email.</p>
+      <textarea id="msg-body" placeholder="Write your message..."></textarea>
+      <div class="msg-status" id="msg-status"></div>
+      <div class="modal-actions">
+        <button class="btn-gold" onclick="sendMessage()">Send Message</button>
+        <button class="btn-outline" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    let currentRecipient = null;
+
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
       this.classList.toggle('active');
       document.getElementById('mobile-nav').classList.toggle('open');
-    });
-
-    document.getElementById('logout-link').addEventListener('click', async (e) => {
-      e.preventDefault();
-      try { await fetch('/api/auth/logout', { method: 'POST' }); } catch(err) {}
-      window.location.href = '/member-login.html';
     });
 
     async function loadPlayers() {
@@ -165,10 +229,12 @@
         }
         const players = await res.json();
         const grid = document.getElementById('players-grid');
+
         if (players.length === 0) {
           grid.innerHTML = '<div class="loading-state">No members yet.</div>';
           return;
         }
+
         grid.innerHTML = players.map(player => `
           <div class="player-card">
             <div class="player-photo">
@@ -177,16 +243,18 @@
                 : `<span class="initials">${getInitials(player.name)}</span>`}
             </div>
             <h3 class="player-name">${player.name}</h3>
-            ${player.bio ? `<p class="player-bio">${player.bio}</p>` : ''}
-            <div class="player-tags">
-              ${player.offering ? `<p class="player-tag"><strong>I offer:</strong> ${player.offering}</p>` : ''}
-              ${player.looking_for ? `<p class="player-tag"><strong>Looking for:</strong> ${player.looking_for}</p>` : ''}
-            </div>
-            <a href="/profile.html?id=${player.id}" class="view-profile-btn">View Profile</a>
+            ${player.handicap
+              ? `<div class="player-handicap">Handicap <span>${player.handicap}</span></div>`
+              : ''}
+            ${player.favorite_course
+              ? `<div class="player-course"><strong>Favorite course:</strong> ${player.favorite_course}</div>`
+              : ''}
+            <div class="player-spacer"></div>
+            <button class="send-msg-btn" onclick="openModal('${player.name}', ${player.id})">Send Message</button>
           </div>
         `).join('');
 
-        // Update user initials from session
+        // Update user initials
         const meRes = await fetch('/api/members/me');
         if (meRes.ok) {
           const me = await meRes.json();
@@ -202,6 +270,52 @@
     function getInitials(name) {
       if (!name) return 'TM';
       return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function openModal(name, id) {
+      currentRecipient = { name, id };
+      document.getElementById('msg-modal-name').textContent = 'Message ' + name.split(' ')[0];
+      document.getElementById('msg-body').value = '';
+      document.getElementById('msg-status').textContent = '';
+      document.getElementById('msg-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('msg-modal').classList.remove('open');
+      document.body.style.overflow = '';
+      currentRecipient = null;
+    }
+
+    document.getElementById('msg-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    async function sendMessage() {
+      if (!currentRecipient) return;
+      const body = document.getElementById('msg-body').value.trim();
+      if (!body) { document.getElementById('msg-status').textContent = 'Please write a message.'; return; }
+
+      const status = document.getElementById('msg-status');
+      status.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/api/members/send-message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recipient_id: currentRecipient.id, message: body })
+        });
+
+        if (res.ok) {
+          status.textContent = 'Message sent!';
+          setTimeout(() => closeModal(), 1500);
+        } else {
+          const data = await res.json();
+          status.textContent = data.error || 'Something went wrong. Try again.';
+        }
+      } catch (err) {
+        status.textContent = 'Something went wrong. Try again.';
+      }
     }
 
     loadPlayers();
