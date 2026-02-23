@@ -146,24 +146,58 @@ module.exports = async (req, res) => {
 
       // WISHLIST TOGGLE
       if (action === 'wishlist') {
-        const exists = await client.query(
-          'SELECT id FROM scramble_wishlist WHERE member_id = $1 AND item_id = $2',
-          [memberId, item_id]
-        );
-        if (exists.rows.length > 0) {
-          await client.query(
-            'DELETE FROM scramble_wishlist WHERE member_id = $1 AND item_id = $2',
-            [memberId, item_id]
-          );
-          return res.status(200).json({ wishlisted: false });
-        } else {
-          await client.query(
-            'INSERT INTO scramble_wishlist (member_id, item_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
-            [memberId, item_id]
-          );
-          return res.status(200).json({ wishlisted: true });
-        }
-      }
+
+  const wallet = await getOrCreateWallet(client, memberId);
+
+  const exists = await client.query(
+    'SELECT id FROM scramble_wishlist WHERE member_id = $1 AND item_id = $2',
+    [memberId, item_id]
+  );
+
+  // If already wishlisted → remove and REFUND points
+  if (exists.rows.length > 0) {
+
+    await client.query(
+      'DELETE FROM scramble_wishlist WHERE member_id = $1 AND item_id = $2',
+      [memberId, item_id]
+    );
+
+    await client.query(
+      'UPDATE scramble_wallet SET points_balance = points_balance + $1 WHERE member_id = $2',
+      [item.points, memberId]
+    );
+
+  } else {
+
+    // Check enough points before wishlist
+    if (wallet.points_balance < item.points) {
+      return res.status(400).json({ error: 'Insufficient points' });
+    }
+
+    await client.query(
+      'INSERT INTO scramble_wishlist (member_id, item_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [memberId, item_id]
+    );
+
+    await client.query(
+      'UPDATE scramble_wallet SET points_balance = points_balance - $1 WHERE member_id = $2',
+      [item.points, memberId]
+    );
+  }
+
+  // Return full updated wallet state
+  const updatedWallet = await getOrCreateWallet(client, memberId);
+  const wlRes = await client.query(
+    'SELECT item_id FROM scramble_wishlist WHERE member_id = $1',
+    [memberId]
+  );
+  const wishlist = wlRes.rows.map(r => r.item_id);
+
+  return res.status(200).json({
+    points_balance: updatedWallet.points_balance,
+    wishlist
+  });
+}
 
       // REDEEM
       if (action === 'redeem') {
