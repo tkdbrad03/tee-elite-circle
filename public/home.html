@@ -388,7 +388,7 @@
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
           <div>
             <div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:#fff;line-height:1;" id="wallet-balance-display">100</div>
-            <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;">Scramble Points</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;">Scramble Points <span id="wallet-spent-display" style="display:none;color:rgba(201,168,108,.7);margin-left:6px;"></span></div>
           </div>
           <div style="text-align:right;">
             <div id="wallet-status-badge" style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:6px 14px;display:inline-block;margin-bottom:8px;background:rgba(201,168,108,.15);color:var(--tmac-gold);border-radius:999px;">Unlocks April 18</div>
@@ -882,14 +882,39 @@
     // ══ SCRAMBLE WALLET ══════════════════════════════════════════════
     var walletData = null;
 
-    var WALLET_ITEMS = [
-      { id: 'playlist',    name: 'Curated Confidence Playlist',          points: 10, cap: null, icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', tagline: 'Pre-tee confidence playlist, a private audio message from Dr. TMac, and the Pre-Tee Ritual guide.' },
-      { id: 'priority',   name: 'Priority Access to Future Events',      points: 20, cap: null, icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', tagline: 'Early access window, private registration tier, and advance notice before public release.' },
-      { id: 'vault',      name: 'Influence on the Course Mini Vault',    points: 25, cap: null, icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><circle cx="12" cy="12" r="1"/></svg>', tagline: 'The 9-Hole Networking Flow, Fairway Follow-Up Scripts, Wealth While You Golf Blueprint, Sponsorship Pitch Template, and the Bogey Bounce-Back System.' },
-      { id: 'ray',        name: 'Tee Elite Performance Clinic with Ray', points: 30, cap: 12,   icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', tagline: 'A 90-minute in-person performance session designed to improve scoring, confidence, and course strategy. Recording available if you cannot attend.' },
-      { id: 'roundtable', name: 'Executive Roundtable',                  points: 60, cap: 12,   icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', tagline: 'Small group, 90-minute strategic session led by Dr. TMac. Sunday, May 3 \u00b7 6:00\u20137:30pm.' },
-      { id: 'sprint',     name: 'Strategy Sprint with Dr. TMac',         points: 75, cap: 8,    icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>', tagline: 'One focused 45-minute session. You choose: business clarity, visibility, confidence reset, income activation, or personal brand alignment.' }
-    ];
+    var WALLET_ITEMS = []; // loaded from DB via /api/wallet-items
+
+    // SVG icons keyed by item id (fallback for items without custom icons)
+    var ITEM_ICONS = {
+      playlist:    '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+      priority:    '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      vault:       '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><circle cx="12" cy="12" r="1"/></svg>',
+      ray:         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      roundtable:  '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      sprint:      '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>',
+      _default:    '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    };
+
+    async function loadWalletItems() {
+      try {
+        var res = await fetch('/api/wallet-items');
+        if (res.ok) {
+          var items = await res.json();
+          WALLET_ITEMS = items.map(function(item) {
+            return {
+              id: item.id,
+              name: item.name,
+              tagline: item.tagline || '',
+              points: item.points,
+              cap: item.cap || null,
+              available_now: item.available_now || false,
+              drive_url: item.drive_url || null,
+              icon: ITEM_ICONS[item.id] || ITEM_ICONS._default
+            };
+          });
+        }
+      } catch(e) { console.error('Failed to load wallet items', e); }
+    }
 
     var CONFIRM_COPY = {
       playlist: {
@@ -926,6 +951,7 @@
 
     async function loadWallet() {
       try {
+        await loadWalletItems();
         var res = await fetch('/api/wallet');
         if (!res.ok) { renderWalletFallback(); return; }
         walletData = await res.json();
@@ -934,11 +960,10 @@
     }
 
     function renderWalletFallback() {
-      // Show pre-activation state using static data
       var grid = document.getElementById('marketplace-grid');
       if (!grid) return;
       grid.innerHTML = WALLET_ITEMS.map(function(item) {
-        return renderMarketplaceItem(item, false, false, false, null);
+        return renderMarketplaceItem(item, false, false, false, item.cap || null, true, 100);
       }).join('');
     }
 
@@ -949,6 +974,16 @@
       var daysLeft = walletData.days_left;
 
       document.getElementById('wallet-balance-display').textContent = bal;
+      var spent = 100 - bal;
+      var spentEl = document.getElementById('wallet-spent-display');
+      if (spentEl) {
+        if (spent > 0) {
+          spentEl.textContent = '(' + spent + ' pts wishlisted)';
+          spentEl.style.display = 'inline';
+        } else {
+          spentEl.style.display = 'none';
+        }
+      }
       var pct = (bal / 100) * 100;
       document.getElementById('wallet-points-bar').style.width = pct + '%';
 
@@ -989,28 +1024,46 @@
       var slotsText = slotsLeft !== null && slotsLeft !== undefined ? slotsLeft + ' spot' + (slotsLeft !== 1 ? 's' : '') + ' left' : 'Unlimited';
       var slotsColor = slotsLeft !== null && slotsLeft !== undefined && slotsLeft <= 3 ? '#c62828' : '#aaa';
 
+      // "Available Now" badge
+      var availableBadge = item.available_now
+        ? '<span style="display:inline-block;background:rgba(76,175,80,.12);color:#2e7d32;border:1px solid rgba(76,175,80,.25);border-radius:999px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 10px;margin-left:8px;vertical-align:middle;">Available Now</span>'
+        : '';
+
       var actionHtml = '';
       if (isRedeemed) {
-        actionHtml = '<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4caf50;padding:10px 0;font-weight:500;">\u2713 Redeemed</div>';
+        var openHtml = (item.available_now && item.drive_url)
+          ? ' <a href="' + item.drive_url + '" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tmac-bronze);text-decoration:none;margin-left:12px;">Open \u2197</a>'
+          : '';
+        actionHtml = '<div style="display:flex;align-items:center;">'
+          + '<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4caf50;padding:10px 0;font-weight:500;">\u2713 Redeemed</div>'
+          + openHtml + '</div>';
       } else if (isSoldOut) {
         actionHtml = '<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ccc;padding:10px 0;">Sold Out</div>';
       } else if (isActive) {
         var btnStyle = canAfford
           ? 'background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);cursor:pointer;border-radius:999px;font-weight:700;'
-          : 'background:#ddd;color:#999;cursor:default;';
+          : 'background:#ddd;color:#999;cursor:default;border-radius:999px;';
         actionHtml = '<button onclick="redeemItem(\'' + item.id + '\')" style="' + btnStyle + 'border:none;padding:10px 20px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:inherit;white-space:nowrap;" ' + (canAfford ? '' : 'disabled') + '>Redeem ' + item.points + ' pts</button>';
       } else {
+        // Pre-active: wishlist button. If available_now AND wishlisted, also show Open link
         var wlStyle = isWishlisted
-          ? 'background:var(--tmac-bronze);color:#fff;border:1px solid var(--tmac-bronze);'
-          : 'background:#fff;color:var(--tmac-bronze);border:1px solid var(--tmac-bronze);';
-        actionHtml = '<button onclick="toggleWishlist(\'' + item.id + '\')" id="wl-btn-' + item.id + '" style="' + wlStyle + 'padding:10px 18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;">' + (isWishlisted ? '\u2713 Wishlisted' : '+ Wishlist') + '</button>';
+          ? 'background:var(--tmac-bronze);color:#fff;border:1px solid var(--tmac-bronze);border-radius:999px;'
+          : 'background:#fff;color:var(--tmac-bronze);border:1px solid var(--tmac-bronze);border-radius:999px;';
+        var wlOnclick = item.available_now && item.drive_url && !isWishlisted
+          ? 'toggleWishlistAndOpen(\'' + item.id + '\',\'' + item.drive_url + '\')'
+          : 'toggleWishlist(\'' + item.id + '\')';
+        actionHtml = '<div style="display:flex;align-items:center;gap:10px;">'
+          + '<button onclick="' + wlOnclick + '" id="wl-btn-' + item.id + '" style="' + wlStyle + 'padding:10px 18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;">'
+          + (isWishlisted ? '\u2713 Wishlisted' : '+ Wishlist') + '</button>'
+          + (item.available_now && item.drive_url && isWishlisted ? '<a href="' + item.drive_url + '" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tmac-bronze);text-decoration:none;">Open \u2197</a>' : '')
+          + '</div>';
       }
 
       return '<div class="wallet-item' + (isRedeemed ? ' redeemed' : '') + (isSoldOut ? ' soldout' : '') + '">'
         + '<div style="flex-shrink:0;margin-top:2px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">' + item.icon + '</div>'
         + '<div style="flex:1;min-width:0;">'
         + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">'
-        + '<div style="font-size:15px;font-weight:500;color:var(--charcoal);">' + item.name + '</div>'
+        + '<div style="font-size:15px;font-weight:500;color:var(--charcoal);">' + item.name + availableBadge + '</div>'
         + '<div style="font-size:13px;font-weight:600;color:var(--tmac-bronze);white-space:nowrap;">' + item.points + ' pts</div>'
         + '</div>'
         + '<div style="font-size:12px;color:#888;line-height:1.6;margin-bottom:10px;">' + item.tagline + '</div>'
@@ -1031,6 +1084,11 @@
         });
         if (res.ok) { await loadWallet(); updateWishlistSummary(); }
       } catch(e) { console.error('Wishlist error', e); }
+    }
+
+    async function toggleWishlistAndOpen(itemId, driveUrl) {
+      await toggleWishlist(itemId);
+      if (driveUrl) window.open(driveUrl, '_blank', 'noopener');
     }
     function updateWishlistSummary() {
       if (!walletData) return;
