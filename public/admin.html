@@ -1592,6 +1592,74 @@
     </div>
   </div>
 
+<!-- ══ WALLET ITEMS TAB ══ -->
+<div class="tab-content" id="wallet-tab">
+  <div class="content-section">
+    <h2>Scramble Wallet — Marketplace Manager</h2>
+    <div style="font-size:13px;color:#888;margin-bottom:24px;">Add, remove, or edit marketplace items. Toggle availability and paste Google Drive links members can access instantly.</div>
+
+    <!-- ADD NEW ITEM FORM -->
+    <div style="background:#f9f9f9;border:1px solid #eee;padding:24px;margin-bottom:32px;border-radius:8px;">
+      <h3 style="font-size:14px;font-weight:600;color:#1a2f23;margin-bottom:16px;">Add New Item</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em;">Item ID (no spaces)</label>
+          <input type="text" id="wi-id" placeholder="e.g. coaching_call" style="width:100%;padding:10px 12px;border:1px solid #ddd;font-family:inherit;font-size:13px;border-radius:4px;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em;">Display Name</label>
+          <input type="text" id="wi-name" placeholder="e.g. 1-on-1 Coaching Call" style="width:100%;padding:10px 12px;border:1px solid #ddd;font-family:inherit;font-size:13px;border-radius:4px;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em;">Points Cost</label>
+          <input type="number" id="wi-points" placeholder="e.g. 25" min="1" style="width:100%;padding:10px 12px;border:1px solid #ddd;font-family:inherit;font-size:13px;border-radius:4px;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em;">Capacity (blank = unlimited)</label>
+          <input type="number" id="wi-cap" placeholder="e.g. 12" min="1" style="width:100%;padding:10px 12px;border:1px solid #ddd;font-family:inherit;font-size:13px;border-radius:4px;outline:none;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em;">Tagline / Description</label>
+          <input type="text" id="wi-tagline" placeholder="Short description visible to members" style="width:100%;padding:10px 12px;border:1px solid #ddd;font-family:inherit;font-size:13px;border-radius:4px;outline:none;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em;">Google Drive URL (for Available Now items)</label>
+          <input type="url" id="wi-drive" placeholder="https://drive.google.com/..." style="width:100%;padding:10px 12px;border:1px solid #ddd;font-family:inherit;font-size:13px;border-radius:4px;outline:none;">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <input type="checkbox" id="wi-available" style="width:16px;height:16px;accent-color:#1a2f23;">
+          <label for="wi-available" style="font-size:13px;color:#333;">Available Now (members can open immediately)</label>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button onclick="addWalletItem()" style="background:#1a2f23;color:#e8ccc8;border:none;padding:12px 24px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:4px;">Add Item</button>
+        <span id="wi-msg" style="font-size:13px;color:#4caf50;"></span>
+      </div>
+    </div>
+
+    <!-- CURRENT ITEMS TABLE -->
+    <h3 style="font-size:14px;font-weight:600;color:#1a2f23;margin-bottom:16px;">Current Marketplace Items</h3>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#f5f5f5;">
+            <th style="text-align:left;padding:12px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Item</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Pts</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Cap</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Available Now</th>
+            <th style="text-align:left;padding:12px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Drive URL</th>
+            <th style="text-align:center;padding:12px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#888;font-weight:500;border-bottom:1px solid #eee;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="wallet-items-tbody">
+          <tr><td colspan="6" style="text-align:center;padding:32px;color:#aaa;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ══ END WALLET ITEMS TAB ══ -->
+
   <script>
     // Firebase Configuration
     const firebaseConfig = {
@@ -3067,7 +3135,7 @@ async function sendRetreatCampaign(event, retreatType) {
         document.getElementById('ws-rate').textContent = s.redemption_rate + '%';
 
         const itemRows = document.getElementById('wallet-item-rows');
-        itemRows.innerHTML = data.items.map(item => {
+        if (itemRows) itemRows.innerHTML = data.items.map(item => {
           const slotsLeft = item.slots_left !== null ? item.slots_left : '∞';
           const slotsColor = item.slots_left !== null && item.slots_left <= 3 ? 'color:#c62828;font-weight:600;' : '';
           return `<tr style="border-bottom:1px solid #f5f5f5;">
@@ -3081,7 +3149,7 @@ async function sendRetreatCampaign(event, retreatType) {
         }).join('');
 
         const memberRows = document.getElementById('wallet-member-rows');
-        memberRows.innerHTML = data.member_timing.length ? data.member_timing.map(m => {
+        if (memberRows) memberRows.innerHTML = data.member_timing.length ? data.member_timing.map(m => {
           const firstDate = m.first_redemption ? new Date(m.first_redemption).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : 'No redemptions';
           return `<tr style="border-bottom:1px solid #f5f5f5;">
             <td style="padding:12px 16px;"><div style="font-weight:500;">${m.name}</div><div style="font-size:11px;color:#aaa;">${m.email}</div></td>
@@ -3093,7 +3161,116 @@ async function sendRetreatCampaign(event, retreatType) {
         }).join('') : '<tr><td colspan="5" style="text-align:center;padding:24px;color:#aaa;">No wallets active yet</td></tr>';
 
       } catch(e) { console.error('Admin wallet error', e); }
+
+      // Also load marketplace items manager
+      loadWalletItemsAdmin();
     }
+
+    async function loadWalletItemsAdmin() {
+      try {
+        const res = await fetch('/api/admin/wallet-items', {
+          headers: { 'x-admin-secret': 'TeeElite2026Admin' }
+        });
+        if (!res.ok) return;
+        const items = await res.json();
+        const tbody = document.getElementById('wallet-items-tbody');
+        if (!tbody) return;
+
+        if (items.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#aaa;">No items yet. Add one above.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = items.map(item => `
+          <tr style="border-bottom:1px solid #f5f5f5;" id="wirow-${item.id}">
+            <td style="padding:12px 14px;">
+              <div style="font-weight:500;color:#1a2f23;font-size:14px;">${item.name}</div>
+              <div style="font-size:11px;color:#aaa;margin-top:2px;">${item.id} · ${item.tagline ? item.tagline.substring(0,60) + '…' : 'No tagline'}</div>
+            </td>
+            <td style="padding:12px 8px;text-align:center;font-weight:600;color:#a67c52;">${item.points}</td>
+            <td style="padding:12px 8px;text-align:center;color:#888;">${item.cap || '∞'}</td>
+            <td style="padding:12px 8px;text-align:center;">
+              <button onclick="toggleAvailableNow('${item.id}', ${!item.available_now})"
+                style="padding:6px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:999px;border:1px solid ${item.available_now ? '#2e7d32' : '#ddd'};background:${item.available_now ? 'rgba(76,175,80,.1)' : '#fff'};color:${item.available_now ? '#2e7d32' : '#999'};">
+                ${item.available_now ? '✓ Yes' : 'No'}
+              </button>
+            </td>
+            <td style="padding:12px 14px;font-size:12px;max-width:200px;overflow:hidden;">
+              <input type="url" value="${item.drive_url || ''}" placeholder="Paste Drive URL..."
+                onblur="saveDriveUrl('${item.id}', this.value)"
+                style="width:100%;padding:6px 10px;border:1px solid #ddd;font-size:12px;font-family:inherit;border-radius:4px;outline:none;">
+            </td>
+            <td style="padding:12px 8px;text-align:center;">
+              <button onclick="deleteWalletItem('${item.id}')"
+                style="padding:6px 12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:inherit;border:1px solid #ffcdd2;background:#fff;color:#c62828;border-radius:4px;">
+                Remove
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch(e) { console.error('Load wallet items error', e); }
+    }
+
+    async function addWalletItem() {
+      const id = document.getElementById('wi-id').value.trim();
+      const name = document.getElementById('wi-name').value.trim();
+      const points = document.getElementById('wi-points').value;
+      const cap = document.getElementById('wi-cap').value;
+      const tagline = document.getElementById('wi-tagline').value.trim();
+      const drive_url = document.getElementById('wi-drive').value.trim();
+      const available_now = document.getElementById('wi-available').checked;
+      const msg = document.getElementById('wi-msg');
+
+      if (!id || !name || !points) { msg.style.color = '#c62828'; msg.textContent = 'ID, Name, and Points are required.'; return; }
+
+      try {
+        const res = await fetch('/api/admin/wallet-items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
+          body: JSON.stringify({ id, name, tagline, points, cap: cap || null, available_now, drive_url: drive_url || null })
+        });
+        if (res.ok) {
+          msg.style.color = '#4caf50';
+          msg.textContent = 'Item added!';
+          ['wi-id','wi-name','wi-points','wi-cap','wi-tagline','wi-drive'].forEach(f => document.getElementById(f).value = '');
+          document.getElementById('wi-available').checked = false;
+          setTimeout(() => { msg.textContent = ''; }, 3000);
+          loadWalletItemsAdmin();
+        } else {
+          const d = await res.json();
+          msg.style.color = '#c62828'; msg.textContent = d.error || 'Failed to add item.';
+        }
+      } catch(e) { msg.style.color = '#c62828'; msg.textContent = 'Error. Try again.'; }
+    }
+
+    async function toggleAvailableNow(id, newVal) {
+      await fetch('/api/admin/wallet-items', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
+        body: JSON.stringify({ id, available_now: newVal })
+      });
+      loadWalletItemsAdmin();
+    }
+
+    async function saveDriveUrl(id, url) {
+      await fetch('/api/admin/wallet-items', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
+        body: JSON.stringify({ id, drive_url: url || null })
+      });
+    }
+
+    async function deleteWalletItem(id) {
+      if (!confirm('Remove "' + id + '" from the marketplace? This cannot be undone.')) return;
+      await fetch('/api/admin/wallet-items', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
+        body: JSON.stringify({ id })
+      });
+      loadWalletItemsAdmin();
+    }
+
+
 
 </script>
   <script src="/pwa-nav.js"></script>
