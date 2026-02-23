@@ -30,9 +30,19 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Session expired' });
     }
 
+    // If a specific member id is requested (for profile view)
+    const memberId = req.query.id;
+    if (memberId) {
+      const result = await client.query(
+        'SELECT id, name, photo_url, handicap, favorite_course FROM members WHERE id = $1',
+        [memberId]
+      );
+      return res.status(200).json(result.rows[0] || null);
+    }
+
     // Get all members
     const result = await client.query(
-      'SELECT id, name, bio, photo_url, looking_for, offering FROM members ORDER BY name ASC'
+      'SELECT id, name, photo_url, handicap, favorite_course FROM members ORDER BY name ASC'
     );
 
     return res.status(200).json(result.rows);
