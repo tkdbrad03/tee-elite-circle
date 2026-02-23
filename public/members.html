@@ -3,236 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
-  <title>The Circle — The Tee Elite Circle</title>
+  <title>The Circle — Tee Elite Invitational</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- PWA Meta Tags -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#1a2e1a">
+  <meta name="theme-color" content="#163326">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tee Elite">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <meta name="msapplication-TileColor" content="#1a2e1a">
-  <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pwa-nav.css">
   <style>
-    .page-header {
-      margin-bottom: 48px;
+    :root{
+      --green:#163326;--green2:#1E3A2B;--gold:#A87C28;--gold2:#C9A24A;
+      --gold-lt:#EDD9A3;--white:#FFFFFF;--off:#F8F7F4;--ink:#163326;
+      --body:#2C2C2C;--muted:#555555;--line:rgba(0,0,0,.12);
+      --serif:"Cormorant Garamond",Georgia,serif;
+      --sans:"Jost",ui-sans-serif,system-ui,sans-serif;
+      --tmac-bronze:#A87C28;--tmac-gold:#C9A24A;--tmac-blush:#e8ccc8;
+      --tmac-blush-light:#f7f0ef;--deep-forest:#163326;--charcoal:#2C2C2C;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{font-family:var(--sans);background:var(--white);color:var(--body);-webkit-font-smoothing:antialiased;}
+
+    .page-container{max-width:900px;margin:0 auto;padding:40px 24px 120px}
+
+    .page-header{margin-bottom:40px}
+    .page-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+    .page-title{font-family:var(--serif);font-size:clamp(32px,5vw,48px);font-weight:400;color:var(--ink);margin-bottom:10px}
+    .page-title em{font-style:italic;color:var(--gold)}
+    .page-subtitle{font-size:14px;color:var(--muted);max-width:500px;line-height:1.7;font-weight:300}
+
+    .players-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+
+    .player-card{
+      background:var(--white);border:1px solid var(--line);border-radius:20px;
+      overflow:hidden;transition:all .25s ease;text-align:center;padding:32px 24px;
+    }
+    .player-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(0,0,0,.08)}
+
+    .player-photo{
+      width:100px;height:100px;border-radius:50%;
+      background:var(--tmac-blush-light);display:flex;align-items:center;
+      justify-content:center;overflow:hidden;margin:0 auto 20px;
+    }
+    .player-photo img{width:100%;height:100%;object-fit:cover}
+    .player-photo .initials{font-family:var(--serif);font-size:36px;color:var(--gold);opacity:.7}
+
+    .player-name{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:8px}
+
+    .player-bio{
+      font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-weight:300;
+      display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
     }
 
-    .page-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 8px;
+    .player-tags{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line);text-align:left}
+    .player-tag{font-size:12px;color:var(--muted)}
+    .player-tag strong{color:var(--ink);font-weight:500}
+
+    .view-profile-btn{
+      display:block;text-align:center;padding:14px;
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--gold);text-decoration:none;
+      border-top:1px solid var(--line);
+      margin:20px -24px -32px;transition:all .2s ease;font-weight:500;
     }
+    .view-profile-btn:hover{background:var(--off);color:var(--ink)}
 
-    .page-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 400;
-      color: var(--charcoal);
-      margin-bottom: 12px;
-    }
+    .loading-state{text-align:center;padding:80px 24px;color:var(--muted);grid-column:1/-1;font-weight:300}
 
-    .page-subtitle {
-      font-size: 14px;
-      color: #666;
-      max-width: 500px;
-    }
-
-    .players-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    /* CHANGE: Added rounded corners */
-    .player-card {
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.06);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      text-align: center;
-      padding: 32px 24px;
-    }
-
-    .player-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.08);
-    }
-
-    .player-photo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: var(--tmac-blush-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      margin: 0 auto 20px;
-    }
-
-    .player-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .player-photo .initials {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 40px;
-      color: var(--tmac-bronze);
-      opacity: 0.5;
-    }
-
-      display: inline-block;
-      background: linear-gradient(135deg, #c9a86c 0%, #a67c52 100%);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #fff;
-      font-weight: 500;
-      margin-bottom: 12px;
-    }
-
-    .player-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--charcoal);
-      margin-bottom: 8px;
-    }
-
-    .player-bio {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.7;
-      margin-bottom: 16px;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .player-tags {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(0,0,0,0.06);
-      text-align: left;
-    }
-
-    .player-tag {
-      font-size: 11px;
-      color: #888;
-    }
-
-    .player-tag strong {
-      color: var(--charcoal);
-      font-weight: 500;
-    }
-
-    .view-profile-btn {
-      display: block;
-      text-align: center;
-      padding: 14px;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--tmac-bronze);
-      text-decoration: none;
-      border-top: 1px solid rgba(0,0,0,0.06);
-      margin-top: 20px;
-      margin-left: -24px;
-      margin-right: -24px;
-      margin-bottom: -32px;
-      transition: all 0.3s ease;
-    }
-
-    .view-profile-btn:hover {
-      background: var(--tmac-blush-light);
-      color: var(--charcoal);
-    }
-
-    .loading-state {
-      text-align: center;
-      padding: 80px 24px;
-      color: #888;
-      grid-column: 1 / -1;
-    }
-
-    @media (max-width: 900px) {
-      .players-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .players-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .member-main {
-        padding-bottom: 120px;
-      }
+    @media(max-width:900px){.players-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){
+      .players-grid{grid-template-columns:1fr}
+      .page-container{padding-bottom:120px}
     }
   </style>
 </head>
 <body class="member-body">
-  
-  <!-- HEADER -->
+
   <header class="member-header">
     <div class="header-inner">
       <a href="/home.html" class="header-logo">
         <img src="images/tmac-logo.png" alt="TMac Inspired">
-        <span>The Tee Elite Circle</span>
       </a>
       <nav class="header-nav">
-        <a href="/home.html" class="nav-link">Home</a>
-        <a href="/members.html" class="nav-link active">The Players</a>
-        <a href="/retreats.html" class="nav-link">Retreats</a>
+        <a href="/home.html" class="nav-link">Hub</a>
         <a href="/tee-room.html" class="nav-link">Tee Room</a>
-        <a href="/fairway.html" class="nav-link">Fairway</a>
+        <a href="/members.html" class="nav-link active">The Circle</a>
+        <a href="/tee-elite-invitational.html" class="nav-link">The Invitational</a>
       </nav>
       <div class="header-user">
         <a href="/profile.html" class="user-avatar" id="user-avatar">
-          <span id="user-initials">FM</span>
+          <span id="user-initials">TM</span>
         </a>
       </div>
       <button class="mobile-menu-btn" id="mobile-menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
-  <!-- MOBILE NAV (hidden by pwa-nav.css on mobile) -->
   <div class="mobile-nav" id="mobile-nav">
-    <a href="/home.html" class="mobile-nav-link">Home</a>
-    <a href="/members.html" class="mobile-nav-link active">The Players</a>
-    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    <a href="/home.html" class="mobile-nav-link">Hub</a>
     <a href="/tee-room.html" class="mobile-nav-link">Tee Room</a>
-    <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
+    <a href="/members.html" class="mobile-nav-link active">The Circle</a>
+    <a href="/tee-elite-invitational.html" class="mobile-nav-link">The Invitational</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
-    <a href="#" class="mobile-nav-link logout-link" id="logout-link">Log Out</a>
+    <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <main class="member-main">
+  <main class="page-container">
     <div class="page-header">
-      <h1 class="page-title">The Players</h1>
+      <div class="page-label">Tee Elite Invitational 2026</div>
+      <h1 class="page-title">The <em>Players</em></h1>
+      <p class="page-subtitle">Meet the women joining you on the green. Connect, collaborate, and come ready to play.</p>
     </div>
 
     <div class="players-grid" id="players-grid">
@@ -240,59 +127,54 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="member-footer">
-    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
-  </footer>
+  <nav class="pwa-bottom-nav">
+    <div class="pwa-bottom-nav-inner">
+      <a href="/home.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Hub
+      </a>
+      <a href="/tee-room.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tee Room
+      </a>
+      <a href="/members.html" class="pwa-nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Circle
+      </a>
+      <a href="/profile.html" class="pwa-nav-item">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+      </a>
+    </div>
+  </nav>
 
-<script>
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileNav = document.getElementById('mobile-nav');
-    
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileNav.classList.toggle('open');
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      this.classList.toggle('active');
+      document.getElementById('mobile-nav').classList.toggle('open');
     });
 
-    // Logout
     document.getElementById('logout-link').addEventListener('click', async (e) => {
       e.preventDefault();
-      try {
-        await fetch('/api/auth/logout', { method: 'POST' });
-      } catch (err) {
-        console.error('Logout error:', err);
-      }
+      try { await fetch('/api/auth/logout', { method: 'POST' }); } catch(err) {}
       window.location.href = '/member-login.html';
     });
 
-    // Load members
     async function loadPlayers() {
       try {
         const res = await fetch('/api/members/get');
         if (!res.ok) {
-          if (res.status === 401) {
-            window.location.href = '/member-login.html';
-            return;
-          }
+          if (res.status === 401) { window.location.href = '/member-login.html'; return; }
           throw new Error('Failed to load members');
         }
-        
         const players = await res.json();
         const grid = document.getElementById('players-grid');
-        
         if (players.length === 0) {
           grid.innerHTML = '<div class="loading-state">No members yet.</div>';
           return;
         }
-
         grid.innerHTML = players.map(player => `
           <div class="player-card">
             <div class="player-photo">
-              ${player.photo_url 
+              ${player.photo_url
                 ? `<img src="${player.photo_url}" alt="${player.name}">`
-                : `<span class="initials">${getInitials(player.name)}</span>`
-              }
+                : `<span class="initials">${getInitials(player.name)}</span>`}
             </div>
             <h3 class="player-name">${player.name}</h3>
             ${player.bio ? `<p class="player-bio">${player.bio}</p>` : ''}
@@ -303,59 +185,37 @@
             <a href="/profile.html?id=${player.id}" class="view-profile-btn">View Profile</a>
           </div>
         `).join('');
+
+        // Update user initials from session
+        const meRes = await fetch('/api/members/me');
+        if (meRes.ok) {
+          const me = await meRes.json();
+          document.getElementById('user-initials').textContent = getInitials(me.name);
+        }
       } catch (err) {
         console.error('Error loading members:', err);
-        document.getElementById('players-grid').innerHTML = 
+        document.getElementById('players-grid').innerHTML =
           '<div class="loading-state">Error loading members. Please refresh.</div>';
       }
     }
 
     function getInitials(name) {
-      if (!name) return 'FM';
+      if (!name) return 'TM';
       return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     }
 
-    // Initialize
     loadPlayers();
   </script>
-  <script src="/member-common.js"></script>
-  <!-- PWA BOTTOM NAV -->
-  <nav class="pwa-bottom-nav">
-    <div class="pwa-bottom-nav-inner">
-      <a href="/home.html" class="pwa-nav-item">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        <span>Home</span>
-      </a>
-      <a href="/resources.html" class="pwa-nav-item">
-        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-        <span>Tee Room</span>
-      </a>
-      <a href="/profile.html" class="pwa-nav-item">
-        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span>Profile</span>
-      </a>
-      <a href="/admin.html" class="pwa-nav-item" id="admin-nav-link" style="display: none;">
-        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        <span>Admin</span>
-      </a>
-    </div>
-  </nav>
 
-  <!-- PWA Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('ServiceWorker registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-          });
+          .then(r => console.log('SW registered:', r.scope))
+          .catch(e => console.log('SW failed:', e));
       });
     }
-    checkAdminAccess();
   </script>
-  <script src="/pwa-nav.js"></script>
+
 </body>
 </html>
