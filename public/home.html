@@ -17,6 +17,17 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pwa-nav.css">
   <style>
+    /* ── STICKY PROGRESS ── */
+    .sticky-progress{
+      position:sticky;top:66px;z-index:100;
+      background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      padding:10px 24px;display:flex;align-items:center;gap:14px;
+      margin:0 -24px 28px;
+    }
+    .sp-bar-bg{flex:1;height:4px;background:var(--tmac-blush-light);border-radius:2px}
+    .sp-bar{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .5s ease;width:0%}
+    .sp-label{font-size:11px;color:var(--muted);white-space:nowrap;letter-spacing:.05em}
     :root{
       --green:#163326;--green2:#1E3A2B;--gold:#A87C28;--gold2:#C9A24A;
       --gold-lt:#EDD9A3;--white:#FFFFFF;--off:#F8F7F4;--ink:#163326;
@@ -225,6 +236,10 @@
       </div>
       <span class="live-join">Join Now →</span>
     </a>
+    <div class="sticky-progress" id="sticky-progress">
+  <div class="sp-bar-bg"><div class="sp-bar" id="sp-bar"></div></div>
+  <div class="sp-label" id="sp-label">0 of 6 ready</div>
+</div>
 
 <div class="welcome-strip">
   <div>
@@ -320,46 +335,7 @@
   <div class="vote-thanks" id="vote-thanks">✓ Vote recorded. Results update in real time.</div>
 </div>
 
-<!-- ══ SCRAMBLE WALLET ══ -->
-<div class="section-head"><span class="section-label">Your Scramble Wallet</span></div>
 
-<!-- Wallet header card -->
-<div style="background:var(--deep-forest);padding:28px 32px;margin-bottom:16px;position:relative;overflow:hidden;">
-  <div style="position:absolute;top:0;right:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--tmac-gold),var(--tmac-blush));"></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-    <div>
-      <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:6px;">Tee Elite Invitational 2026</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:#fff;line-height:1;" id="wallet-balance-display">100</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;">Scramble Points</div>
-    </div>
-    <div style="text-align:right;">
-      <div id="wallet-status-badge" style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:6px 14px;display:inline-block;margin-bottom:8px;background:rgba(201,168,108,.15);color:var(--tmac-gold);">Unlocks April 18</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.4);" id="wallet-expiry-label">Browse &amp; wishlist below</div>
-    </div>
-  </div>
-  <div style="margin-top:20px;">
-    <div style="background:rgba(255,255,255,.1);height:4px;border-radius:2px;">
-      <div id="wallet-points-bar" style="height:4px;border-radius:2px;background:linear-gradient(90deg,var(--tmac-gold),var(--tmac-blush));width:100%;transition:width .6s ease;"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;margin-top:6px;">
-      <span style="font-size:10px;color:rgba(255,255,255,.3);">0</span>
-      <span style="font-size:10px;color:rgba(255,255,255,.3);">100 pts</span>
-    </div>
-  </div>
-</div>
-
-<!-- Pre-active notice -->
-<div id="wallet-locked-notice" style="background:rgba(201,168,108,.08);border:1px solid rgba(201,168,108,.2);padding:16px 20px;margin-bottom:16px;">
-  <div style="font-size:13px;color:var(--charcoal);line-height:1.7;">Your Scramble Wallet unlocks on <strong>April 18, 2026</strong> — event day. Browse the marketplace below and add items to your wishlist. Your selections help us plan and prepare.</div>
-</div>
-
-<!-- Marketplace -->
-<div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(166,124,82,.15);">Scramble Marketplace</div>
-<div id="marketplace-grid" style="display:flex;flex-direction:column;gap:1px;margin-bottom:28px;border:1px solid rgba(0,0,0,.06);">
-  <div style="text-align:center;padding:32px;color:#aaa;font-size:13px;">Loading your marketplace...</div>
-</div>
-
-<!-- ══ END SCRAMBLE WALLET ══ -->
 
 <div class="section-head"><span class="section-label">Announcements</span></div>
 <div class="announce-card" id="announce-list">
@@ -403,17 +379,43 @@
   <!-- MODALS -->
 
   <div class="modal-overlay" id="swag-modal" onclick="closeModalOnBg(event,'swag-modal')">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal('swag-modal')">✕</button>
-      <div class="modal-eyebrow">Your Digital Swag Bag</div>
-      <div class="modal-title">Everything you've got.</div>
-      <div class="modal-body" style="line-height:2.2;">
-        <strong>1 Drink Ticket</strong> — show QR code at the bar<br>
-        <strong>Mulligans</strong> — purchased amount shown in your bag<br>
-        <strong>Scramble Rules Sheet</strong> — digital, no paper needed<br>
-        <strong>4 On-Course Contests</strong> — Closest to Pin (×4), Longest Drive (×1)<br>
-        <strong>Event Playbook PDF</strong> — full agenda and course map<br>
-        <strong>Dress Code</strong> — White attire + gold or green accent
+    <div class="modal-box" style="max-width:580px;padding:0;overflow:hidden;">
+      <button class="modal-close" onclick="closeModal('swag-modal')" style="top:16px;right:16px;z-index:2;">✕</button>
+      <!-- Wallet header -->
+      <div style="background:var(--deep-forest);padding:28px 32px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;right:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--tmac-gold),var(--tmac-blush));"></div>
+        <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:6px;">Tee Elite Invitational 2026</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:#fff;line-height:1;" id="wallet-balance-display">100</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;">Scramble Points</div>
+          </div>
+          <div style="text-align:right;">
+            <div id="wallet-status-badge" style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:6px 14px;display:inline-block;margin-bottom:8px;background:rgba(201,168,108,.15);color:var(--tmac-gold);border-radius:999px;">Unlocks April 18</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.4);" id="wallet-expiry-label">Browse &amp; wishlist below</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <div style="background:rgba(255,255,255,.1);height:4px;border-radius:2px;">
+            <div id="wallet-points-bar" style="height:4px;border-radius:2px;background:linear-gradient(90deg,var(--tmac-gold),var(--tmac-blush));width:100%;transition:width .6s ease;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Locked notice -->
+      <div id="wallet-locked-notice" style="background:rgba(201,168,108,.08);border-bottom:1px solid rgba(201,168,108,.2);padding:14px 32px;">
+        <div style="font-size:13px;color:var(--charcoal);line-height:1.7;">Unlocks on <strong>April 18, 2026</strong>. Browse below and wishlist what you want — your picks help us prepare.</div>
+      </div>
+      <!-- Wishlist summary -->
+      <div id="wishlist-summary" style="display:none;padding:12px 32px;background:rgba(22,51,38,.04);border-bottom:1px solid var(--line);">
+        <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Your Wishlist</div>
+        <div id="wishlist-summary-items" style="font-size:13px;color:var(--charcoal);line-height:1.8;"></div>
+      </div>
+      <!-- Marketplace -->
+      <div style="padding:20px 32px 32px;max-height:50vh;overflow-y:auto;">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(166,124,82,.15);">Scramble Marketplace</div>
+        <div id="marketplace-grid" style="display:flex;flex-direction:column;gap:1px;border:1px solid rgba(0,0,0,.06);">
+          <div style="text-align:center;padding:32px;color:#aaa;font-size:13px;">Loading your marketplace...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -595,7 +597,7 @@
         const tickets = memberData.drink_tickets ?? 1;
         document.getElementById('drink-count-display').textContent = tickets + ' remaining';
         document.getElementById('drink-remaining').textContent = tickets;
-        if (memberData.ghin) updateChecklistItem('ghin', true);
+        
         if (mulligans > 0) updateChecklistItem('mulligans', true);
         buildDrinkQR();
         loadTeam();
@@ -684,7 +686,6 @@
     function renderChecklist() {
       const s = getChecklistState();
       s.registration = true;
-      if (memberData?.ghin) s.ghin = true;
       if (memberData?.mulligans_purchased > 0) s.mulligans = true;
       const container = document.getElementById('checklist-items');
       container.innerHTML = CHECKLIST.map(item => {
@@ -696,6 +697,10 @@
       document.getElementById('checklist-bar').style.width = pct + '%';
       document.getElementById('checklist-pct').textContent = pct === 100 ? '100% ready — see you on the green.' : pct + '% ready — keep going!';
       document.getElementById('checklist-progress-text').textContent = doneCount + ' of ' + CHECKLIST.length + ' done';
+      var spBar = document.getElementById('sp-bar');
+      var spLabel = document.getElementById('sp-label');
+      if (spBar) spBar.style.width = pct + '%';
+      if (spLabel) spLabel.textContent = doneCount + ' of ' + CHECKLIST.length + ' ready';
     }
 
     function handleCL(id) { const item = CHECKLIST.find(i => i.id === id); if (item && item.action) item.action(); }
@@ -878,12 +883,12 @@
     var walletData = null;
 
     var WALLET_ITEMS = [
-      { id: 'playlist',    name: 'Curated Confidence Playlist',          points: 10, cap: null, icon: '&#127925;', tagline: 'Pre-tee confidence playlist, a private audio message from Dr. TMac, and the Pre-Tee Ritual guide.' },
-      { id: 'priority',   name: 'Priority Access to Future Events',      points: 20, cap: null, icon: '&#11088;',  tagline: 'Early access window, private registration tier, and advance notice before public release.' },
-      { id: 'vault',      name: 'Influence on the Course Mini Vault',    points: 25, cap: null, icon: '&#128194;', tagline: 'The 9-Hole Networking Flow, Fairway Follow-Up Scripts, Wealth While You Golf Blueprint, Sponsorship Pitch Template, and the Bogey Bounce-Back System.' },
-      { id: 'ray',        name: 'Tee Elite Performance Clinic with Ray', points: 30, cap: 12,   icon: '&#9971;',   tagline: 'A 90-minute in-person performance session designed to improve scoring, confidence, and course strategy. Recording available if you cannot attend.' },
-      { id: 'roundtable', name: 'Executive Roundtable',                  points: 60, cap: 12,   icon: '&#128081;', tagline: 'Small group, 90-minute strategic session led by Dr. TMac. Sunday, May 3 \u00b7 6:00\u20137:30pm.' },
-      { id: 'sprint',     name: 'Strategy Sprint with Dr. TMac',         points: 75, cap: 8,    icon: '&#127919;', tagline: 'One focused 45-minute session. You choose: business clarity, visibility, confidence reset, income activation, or personal brand alignment.' }
+      { id: 'playlist',    name: 'Curated Confidence Playlist',          points: 10, cap: null, icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', tagline: 'Pre-tee confidence playlist, a private audio message from Dr. TMac, and the Pre-Tee Ritual guide.' },
+      { id: 'priority',   name: 'Priority Access to Future Events',      points: 20, cap: null, icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', tagline: 'Early access window, private registration tier, and advance notice before public release.' },
+      { id: 'vault',      name: 'Influence on the Course Mini Vault',    points: 25, cap: null, icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><circle cx="12" cy="12" r="1"/></svg>', tagline: 'The 9-Hole Networking Flow, Fairway Follow-Up Scripts, Wealth While You Golf Blueprint, Sponsorship Pitch Template, and the Bogey Bounce-Back System.' },
+      { id: 'ray',        name: 'Tee Elite Performance Clinic with Ray', points: 30, cap: 12,   icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', tagline: 'A 90-minute in-person performance session designed to improve scoring, confidence, and course strategy. Recording available if you cannot attend.' },
+      { id: 'roundtable', name: 'Executive Roundtable',                  points: 60, cap: 12,   icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', tagline: 'Small group, 90-minute strategic session led by Dr. TMac. Sunday, May 3 \u00b7 6:00\u20137:30pm.' },
+      { id: 'sprint',     name: 'Strategy Sprint with Dr. TMac',         points: 75, cap: 8,    icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--tmac-bronze)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>', tagline: 'One focused 45-minute session. You choose: business clarity, visibility, confidence reset, income activation, or personal brand alignment.' }
     ];
 
     var CONFIRM_COPY = {
@@ -1002,7 +1007,7 @@
       }
 
       return '<div class="wallet-item' + (isRedeemed ? ' redeemed' : '') + (isSoldOut ? ' soldout' : '') + '">'
-        + '<div style="font-size:28px;flex-shrink:0;margin-top:2px;">' + item.icon + '</div>'
+        + '<div style="flex-shrink:0;margin-top:2px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">' + item.icon + '</div>'
         + '<div style="flex:1;min-width:0;">'
         + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">'
         + '<div style="font-size:15px;font-weight:500;color:var(--charcoal);">' + item.name + '</div>'
@@ -1024,8 +1029,21 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'wishlist', item_id: itemId })
         });
-        if (res.ok) { await loadWallet(); }
+        if (res.ok) { await loadWallet(); updateWishlistSummary(); }
       } catch(e) { console.error('Wishlist error', e); }
+    }
+    function updateWishlistSummary() {
+      if (!walletData) return;
+      var wishlisted = walletData.items.filter(function(i) { return i.is_wishlisted; });
+      var summary = document.getElementById('wishlist-summary');
+      var summaryItems = document.getElementById('wishlist-summary-items');
+      if (!summary || !summaryItems) return;
+      if (wishlisted.length === 0) { summary.style.display = 'none'; return; }
+      summary.style.display = 'block';
+      summaryItems.innerHTML = wishlisted.map(function(wi) {
+        var item = WALLET_ITEMS.find(function(i) { return i.id === wi.id; });
+        return item ? '<span style="display:inline-block;background:var(--off);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:12px;margin:2px 4px 2px 0;">' + item.name + ' <span style="color:var(--gold);">' + item.points + ' pts</span></span>' : '';
+      }).join('');
     }
 
     async function redeemItem(itemId) {
