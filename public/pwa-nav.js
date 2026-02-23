@@ -50,26 +50,24 @@
     
     // Insert the nav
     document.body.insertAdjacentHTML('beforeend', navHTML);
-    
-    if (member.email === 'info@tmacmastermind.com') {
-  addAdminLink();
-}
+    checkAdminAccess();
   });
 
   // Show admin link for admin only
-  async function checkAdminAccess() {
-    try {
-      const res = await fetch('/api/members/me');
-      if (res.ok) {
-        const member = await res.json();
-          const adminLink = document.getElementById('admin-nav-link');
-          if (adminLink && member.email === 'info@tmacmastermind.com') adminLink.style.display = 'flex';
-        }
+async function checkAdminAccess() {
+  try {
+    const res = await fetch('/api/members/me');
+    if (res.ok) {
+      const member = await res.json();
+      const adminLink = document.getElementById('admin-nav-link');
+      if (adminLink && member.email === 'info@tmacmastermind.com') {
+        adminLink.style.display = 'flex';
       }
-    } catch (err) {
-      // Not logged in or error - admin link stays hidden
     }
+  } catch (err) {
+    // Not logged in or error - admin link stays hidden
   }
+}
 
   // Register service worker
   if ('serviceWorker' in navigator) {
