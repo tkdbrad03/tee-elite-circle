@@ -271,24 +271,44 @@
       </div>
 
       <div class="card">
-        <h2>Get into the hub</h2>
-        <p>
-          Use the email you used at checkout. If you used a different email, use the password reset link on the login page.
-        </p>
+  <h2>Get into the hub</h2>
+  <p>Enter the email you used at checkout and we'll take you straight in.</p>
 
-        <div class="actions">
-          <a class="btn btn-gold" href="/member-login.html">Invitational Hub Login</a>
-          <a class="btn btn-outline" href="/tee-elite-invitational.html">View the Invitational Page</a>
-        </div>
+  <div class="actions">
+    <input id="hubEmail" type="email" placeholder="you@email.com"
+      style="width:100%;padding:14px 18px;border:1.5px solid rgba(22,51,38,.22);border-radius:999px;font-family:var(--sans);font-size:14px;outline:none;color:var(--ink);">
+    <button class="btn btn-gold" onclick="enterHub()">Enter the Invitational Hub</button>
+    <a class="btn btn-outline" href="/tee-elite-invitational.html">View the Invitational Page</a>
+  </div>
 
-        <p class="fine">
-          If you have questions, reply to your confirmation email.
-        </p>
-      </div>
+  <p class="fine" id="hub-msg"></p>
+  <p class="fine">If you have questions, reply to your confirmation email.</p>
+</div>
     </section>
   </main>
 
   <script>
+    async function enterHub() {
+  var email = document.getElementById('hubEmail').value.trim();
+  var msg = document.getElementById('hub-msg');
+  if (!email) { msg.textContent = 'Please enter your email.'; return; }
+  msg.textContent = 'One moment...';
+  try {
+    var res = await fetch('/api/invitational-auto-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, code: 'TEE418' })
+    });
+    var data = await res.json();
+    if (res.ok) {
+      window.location.href = '/tee-elite-invitational.html';
+    } else {
+      msg.textContent = data.error || 'Email not found. Reply to your confirmation email for help.';
+    }
+  } catch (e) {
+    msg.textContent = 'Something went wrong. Please try again.';
+  }
+}
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
