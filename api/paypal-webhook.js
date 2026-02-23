@@ -31,6 +31,8 @@ module.exports = async (req, res) => {
     //   paid_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     // );
 
+    await client.query(`CREATE TABLE IF NOT EXISTS invitational_payments (email TEXT PRIMARY KEY, paid_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`);
+
     await client.query(
       `INSERT INTO invitational_payments (email, paid_at)
        VALUES ($1, NOW())
