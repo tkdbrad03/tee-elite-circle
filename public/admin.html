@@ -3125,7 +3125,7 @@ async function sendRetreatCampaign(event, retreatType) {
 
     async function loadWalletAdmin() {
       try {
-        const res = await fetch('/api/admin/wallet-items-admin.js');
+        const res = await fetch('/api/wallet-items-public.js');
         if (!res.ok) return;
         const data = await res.json();
         const s = data.summary;
