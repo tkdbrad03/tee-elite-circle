@@ -1085,17 +1085,8 @@
 
     if (!res.ok) return;
 
-    var data = await res.json();
-
-    // 🔥 CRITICAL FIX
-    if (data.wallet) {
-      walletData = data.wallet;
-    } else {
-      walletData = data;
-    }
-
-    renderWallet();
-    updateWishlistSummary();
+    // 🔥 Instead of trusting POST response, reload wallet fresh
+    await loadWallet();
 
   } catch(e) {
     console.error('Wishlist error', e);
@@ -1112,16 +1103,7 @@
 
     if (!res.ok) return;
 
-    var data = await res.json();
-
-    if (data.wallet) {
-      walletData = data.wallet;
-    } else {
-      walletData = data;
-    }
-
-    renderWallet();
-    updateWishlistSummary();
+    await loadWallet();
 
     if (driveUrl) window.open(driveUrl, '_blank', 'noopener');
 
