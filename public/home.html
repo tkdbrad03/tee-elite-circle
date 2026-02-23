@@ -897,7 +897,7 @@
 
     async function loadWalletItems() {
       try {
-        var res = await fetch('/api/wallet-items');
+        var res = await fetch('/api/wallet-items-public');
         if (res.ok) {
           var items = await res.json();
           WALLET_ITEMS = items.map(function(item) {
