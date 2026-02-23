@@ -2107,7 +2107,7 @@
         image_url: document.getElementById('blog-image').value || null,
         video_url: document.getElementById('blog-video').value || null,
         published: isPublished,
-        scheduled_for: (!isPublished && scheduledValue) ? new Date(scheduledValue).toISOString() : null
+        scheduled_for: scheduledValue ? new Date(scheduledValue).toISOString() : null
       };
 
       try {
