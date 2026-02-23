@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
 
     await client.connect();
 
-    // Get member from session
     const sessionCheck = await client.query(
       'SELECT member_id FROM sessions WHERE token = $1 AND expires_at > NOW()',
       [sessionToken]
@@ -31,19 +30,17 @@ module.exports = async (req, res) => {
     }
 
     const memberId = sessionCheck.rows[0].member_id;
-    const { name, bio, offering, looking_for, finished_scorecard } = req.body;
+    const { name, handicap, favorite_course, finished_scorecard } = req.body;
 
-    // Update member
     await client.query(
-      `UPDATE members SET 
+      `UPDATE members SET
         name = COALESCE($1, name),
-        bio = $2,
-        offering = $3,
-        looking_for = $4,
-        finished_scorecard = $5,
+        handicap = $2,
+        favorite_course = $3,
+        finished_scorecard = $4,
         updated_at = NOW()
-      WHERE id = $6`,
-      [name, bio, offering, looking_for, finished_scorecard, memberId]
+      WHERE id = $5`,
+      [name, handicap || null, favorite_course || null, finished_scorecard || null, memberId]
     );
 
     return res.status(200).json({ success: true });
