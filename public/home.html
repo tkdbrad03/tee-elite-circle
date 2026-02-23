@@ -6,41 +6,53 @@
   <title>Invitational Hub — Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#1a2f23">
+  <meta name="theme-color" content="#163326">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tee Elite">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pwa-nav.css">
   <style>
+    :root{
+      --green:#163326;--green2:#1E3A2B;--gold:#A87C28;--gold2:#C9A24A;
+      --gold-lt:#EDD9A3;--white:#FFFFFF;--off:#F8F7F4;--ink:#163326;
+      --body:#2C2C2C;--muted:#555555;--line:rgba(0,0,0,.12);
+      --serif:"Cormorant Garamond",Georgia,serif;
+      --sans:"Jost",ui-sans-serif,system-ui,sans-serif;
+      /* legacy aliases so existing classes still resolve */
+      --tmac-bronze:#A87C28;--tmac-gold:#C9A24A;--tmac-blush:#e8ccc8;
+      --tmac-blush-light:#f7f0ef;--deep-forest:#163326;--charcoal:#2C2C2C;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{font-family:var(--sans);background:var(--white);color:var(--body);-webkit-font-smoothing:antialiased;}
     .hub-container{max-width:860px;margin:0 auto;padding:32px 24px 100px}
     .welcome-strip{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
     .welcome-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:4px}
-    .welcome-name{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,34px);font-weight:400;color:var(--charcoal);line-height:1.1}
-    .member-badge{background:var(--deep-forest);color:var(--tmac-blush);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:6px 14px;display:inline-flex;align-items:center;gap:6px}
+    .welcome-name{font-family:var(--serif);font-size:clamp(26px,4vw,34px);font-weight:400;color:var(--charcoal);line-height:1.1}
+    .member-badge{background:var(--green);color:var(--tmac-blush);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:6px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
     .member-badge::before{content:''}
-    .countdown-banner{background:var(--deep-forest);padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden}
+    .countdown-banner{background:var(--green);border-radius:20px;padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden}
     .countdown-banner::before{content:'';position:absolute;top:0;right:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--tmac-gold),var(--tmac-blush))}
     .countdown-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
     .countdown-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-gold);margin-bottom:6px}
-    .countdown-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;margin-bottom:2px}
+    .countdown-title{font-family:var(--serif);font-size:22px;color:#fff;margin-bottom:2px}
     .countdown-date-str{font-size:12px;color:rgba(255,255,255,.5)}
     .countdown-digits{display:flex;gap:20px;flex-shrink:0}
     .cd-unit{text-align:center;min-width:44px}
-    .cd-num{font-family:'Cormorant Garamond',serif;font-size:42px;color:var(--tmac-blush);line-height:1;display:block}
+    .cd-num{font-family:var(--serif);font-size:42px;color:var(--tmac-blush);line-height:1;display:block}
     .cd-label{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px}
     .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px}
     .section-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--tmac-bronze)}
     .section-link{font-size:11px;color:var(--tmac-bronze);text-decoration:none;letter-spacing:.05em}
     .section-link:hover{text-decoration:underline}
-    .team-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
+    .team-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:28px}
     .team-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
     .team-tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:4px}
-    .team-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--charcoal)}
+    .team-name{font-family:var(--serif);font-size:22px;color:var(--charcoal)}
     .team-ready-pill{font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:20px;font-weight:500}
     .pill-good{background:#edf7ed;color:#2e7d32}.pill-warn{background:#fff8e1;color:#a67c00}.pill-alert{background:#fdecea;color:#c62828}
     .team-members-list{display:flex;flex-direction:column;gap:12px}
@@ -54,9 +66,9 @@
     .status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
     .dot-green{background:#4caf50}.dot-yellow{background:#ffc107}.dot-red{background:#f44336}
     .status-text{font-size:11px;color:#888;display:flex;align-items:center}
-    .link-ghin-btn{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--tmac-bronze);text-decoration:none;border:1px solid var(--tmac-bronze);padding:3px 9px;cursor:pointer;background:none;transition:all .2s}
+    .link-ghin-btn{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold);padding:4px 12px;border-radius:999px;cursor:pointer;background:none;transition:all .2s}
     .link-ghin-btn:hover{background:var(--tmac-bronze);color:#fff}
-    .checklist-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
+    .checklist-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:28px}
     .checklist-progress{margin-bottom:20px}
     .checklist-progress-bar-bg{background:var(--tmac-blush-light);height:6px;border-radius:3px;margin-bottom:8px}
     .checklist-progress-bar{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--tmac-gold),var(--tmac-bronze));transition:width .5s ease}
@@ -73,25 +85,25 @@
     .checklist-text-sub{font-size:11px;color:#aaa;margin-top:2px}
     .checklist-action{font-size:11px;color:var(--tmac-bronze);text-decoration:none}
     .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
-    .qa-item{background:#fff;padding:20px 12px;text-align:center;text-decoration:none;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;border:none;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .qa-item{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:20px 12px;text-align:center;text-decoration:none;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
     .qa-item:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
     .qa-icon{font-size:28px;line-height:1}
     .qa-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--charcoal);font-weight:500}
     .qa-sub{font-size:10px;color:#aaa}
     .qa-item.highlight{background:var(--deep-forest)}
     .qa-item.highlight .qa-label,.qa-item.highlight .qa-sub{color:rgba(255,255,255,.8)}
-    .vote-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
-    .vote-question{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--charcoal);margin-bottom:8px}
+    .vote-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:28px}
+    .vote-question{font-family:var(--serif);font-size:20px;color:var(--charcoal);margin-bottom:8px}
     .vote-subtext{font-size:12px;color:#888;margin-bottom:20px}
     .vote-options{display:flex;flex-direction:column;gap:10px}
-    .vote-option{position:relative;border:2px solid rgba(0,0,0,.08);padding:14px 16px;cursor:pointer;transition:all .2s;overflow:hidden;display:flex;align-items:center;justify-content:space-between}
+    .vote-option{position:relative;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s;overflow:hidden;display:flex;align-items:center;justify-content:space-between}
     .vote-option:hover{border-color:var(--tmac-bronze)}
     .vote-option.selected{border-color:var(--tmac-bronze);background:rgba(166,124,82,.04)}
     .vote-bar-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(201,168,108,.12);transition:width .6s ease;pointer-events:none}
     .vote-option-label{font-size:14px;color:var(--charcoal);position:relative;z-index:1;font-weight:500}
     .vote-option-pct{font-size:13px;color:var(--tmac-bronze);position:relative;z-index:1;font-weight:500;display:none}
     .voted .vote-option-pct{display:block}
-    .vote-submit-btn{margin-top:16px;background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:14px 28px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;width:100%;transition:opacity .2s;font-family:'Montserrat',sans-serif}
+    .vote-submit-btn{margin-top:16px;background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);border:none;padding:14px 28px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;width:100%;transition:all .2s;font-family:var(--sans);font-weight:700;border-radius:999px;box-shadow:0 8px 24px rgba(168,124,40,.26)}
     .vote-submit-btn:hover{opacity:.88}
     .vote-submit-btn:disabled{opacity:.4;cursor:default}
     .vote-thanks{text-align:center;padding:20px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--tmac-bronze);display:none}
@@ -107,7 +119,7 @@
     .swag-item-name{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:4px}
     .swag-item-count{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--tmac-blush)}
     .swag-item-qty{font-size:10px;color:rgba(255,255,255,.4)}
-    .rules-card{background:#fff;border:1px solid rgba(0,0,0,.06);padding:28px;margin-bottom:28px}
+    .rules-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:28px}
     .rules-accordion-item{border-bottom:1px solid rgba(0,0,0,.06)}
     .rules-accordion-item:last-child{border-bottom:none}
     .rules-question{display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;font-size:14px;font-weight:500;color:var(--charcoal);user-select:none}
@@ -116,31 +128,31 @@
     .rules-accordion-item.open .rules-chevron{transform:rotate(225deg)}
     .rules-answer{font-size:13px;color:#555;line-height:1.8;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .2s;padding:0}
     .rules-accordion-item.open .rules-answer{max-height:300px;padding-bottom:16px}
-    .mulligan-card{background:linear-gradient(135deg,#faf6f0 0%,#fff 100%);border:1px solid rgba(201,168,108,.25);padding:28px;margin-bottom:28px}
+    .mulligan-card{background:var(--off);border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:28px}
     .mulligan-packages{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
     .mulligan-pkg{border:2px solid rgba(0,0,0,.08);padding:20px 16px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
     .mulligan-pkg:hover{border-color:var(--tmac-gold)}
     .mulligan-pkg.popular{border-color:var(--tmac-bronze)}
     .mulligan-popular-tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--tmac-bronze);color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;white-space:nowrap}
-    .mulligan-count{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--charcoal);line-height:1;margin-bottom:4px}
+    .mulligan-count{font-family:var(--serif);font-size:40px;color:var(--charcoal);line-height:1;margin-bottom:4px}
     .mulligan-word{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:12px}
     .mulligan-price{font-size:18px;font-weight:500;color:var(--charcoal)}
     .mulligan-price-sub{font-size:11px;color:#aaa}
-    .mulligan-buy-btn{margin-top:20px;width:100%;background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif;transition:opacity .2s}
+    .mulligan-buy-btn{margin-top:20px;width:100%;background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);border:none;padding:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:var(--sans);transition:all .2s;font-weight:700;border-radius:999px;box-shadow:0 8px 24px rgba(168,124,40,.26)}
     .mulligan-buy-btn:hover{opacity:.88}
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;padding:24px}
     .modal-overlay.open{display:flex}
-    .modal-box{background:#fff;max-width:420px;width:100%;padding:36px;position:relative;animation:modalIn .25s ease;max-height:90vh;overflow-y:auto}
+    .modal-box{background:var(--white);max-width:420px;width:100%;padding:36px;border-radius:20px;position:relative;animation:modalIn .25s ease;max-height:90vh;overflow-y:auto}
     @keyframes modalIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
     .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;line-height:1}
     .modal-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tmac-bronze);margin-bottom:8px}
-    .modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--charcoal);margin-bottom:8px}
+    .modal-title{font-family:var(--serif);font-size:24px;color:var(--charcoal);margin-bottom:8px}
     .modal-body{font-size:13px;color:#555;line-height:1.8;margin-bottom:20px}
     .qr-display{text-align:center;padding:20px 0}
     .qr-canvas-wrap{background:var(--tmac-blush-light);padding:20px;display:inline-block;margin-bottom:12px}
     .qr-token{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--charcoal);letter-spacing:.1em;margin-bottom:4px}
     .qr-note{font-size:12px;color:#888}
-    .announce-card{background:#fff;border:1px solid rgba(0,0,0,.06);margin-bottom:28px}
+    .announce-card{background:var(--white);border:1px solid var(--line);border-radius:20px;margin-bottom:28px;overflow:hidden}
     .announce-item{padding:18px 24px;border-bottom:1px solid rgba(0,0,0,.05);display:flex;gap:14px}
     .announce-item:last-child{border-bottom:none}
     .announce-dot{width:8px;height:8px;border-radius:50%;background:var(--tmac-bronze);flex-shrink:0;margin-top:6px}
@@ -156,7 +168,7 @@
     .live-label{font-size:13px;color:#fff;font-weight:500}
     .live-join{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8)}
     /* ── WALLET STYLES ── */
-    .wallet-item{background:#fff;border:1px solid rgba(0,0,0,.06);padding:20px 24px;display:flex;align-items:flex-start;gap:16px;transition:box-shadow .2s;margin-bottom:0}
+    .wallet-item{background:var(--white);border:1px solid var(--line);padding:20px 24px;display:flex;align-items:flex-start;gap:16px;transition:box-shadow .2s;margin-bottom:0}
     .wallet-item:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
     .wallet-item.redeemed{border-color:rgba(76,175,80,.3)}
     .wallet-item.soldout{opacity:.6}
@@ -500,7 +512,7 @@
         </div>
       </div>
       <div style="margin-top:16px;">
-        <button onclick="updateChecklistItem('rules',true);closeModal('rules-modal')" style="background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:12px 24px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;width:100%;">
+        <button onclick="updateChecklistItem('rules',true);closeModal('rules-modal')" style="background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);border:none;padding:12px 24px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;width:100%;border-radius:999px;font-weight:700;">
           Mark as Reviewed ✓
         </button>
       </div>
@@ -513,7 +525,7 @@
       <div class="modal-eyebrow">Event Playbook</div>
       <div class="modal-title">Your full day guide</div>
       <div class="modal-body">Everything you need for April 18 — schedule, rules, contest holes, attire, and Dr. TMac's welcome letter.</div>
-      <a href="/playbook.html" style="display:inline-block;background:var(--deep-forest);color:var(--tmac-blush);padding:14px 32px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:8px;">
+      <a href="/playbook.html" style="display:inline-block;background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);padding:14px 32px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;margin-top:8px;border-radius:999px;font-weight:700;">
         Open Playbook
       </a>
     </div>
@@ -532,7 +544,7 @@
         <strong>Shoes:</strong> Soft spikes or spikeless golf shoes<br>
         <strong>Accessories:</strong> The goldie-er the better!
       </div>
-      <button onclick="updateChecklistItem('dress',true);closeModal('dress-modal')" style="background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:12px 24px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;width:100%;">
+      <button onclick="updateChecklistItem('dress',true);closeModal('dress-modal')" style="background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);border:none;padding:12px 24px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;width:100%;border-radius:999px;font-weight:700;">
         Got It — Outfit Packed ✓
       </button>
     </div>
@@ -549,7 +561,7 @@
           <label style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#888;display:block;margin-bottom:6px;">Your GHIN Number</label>
           <input type="text" id="ghin-input" placeholder="e.g. 1234567" style="width:100%;padding:12px 14px;border:1px solid #ddd;font-size:15px;font-family:inherit;outline:none;">
         </div>
-        <button type="submit" style="width:100%;background:var(--deep-forest);color:var(--tmac-blush);border:none;padding:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Link My GHIN</button>
+        <button type="submit" style="width:100%;background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);border:none;padding:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:999px;font-weight:700;">Link My GHIN</button>
         <div style="text-align:center;margin-top:12px;font-size:12px;color:#aaa;">
           No GHIN? <a href="https://www.ghin.com" target="_blank" style="color:var(--tmac-bronze);">Register at ghin.com</a>
         </div>
@@ -979,7 +991,7 @@
         actionHtml = '<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ccc;padding:10px 0;">Sold Out</div>';
       } else if (isActive) {
         var btnStyle = canAfford
-          ? 'background:var(--deep-forest);color:var(--tmac-blush);cursor:pointer;'
+          ? 'background:linear-gradient(135deg,#C8A84B 0%,#E8D48A 35%,#F0E09A 50%,#D4A84A 70%,#B8922E 100%);color:var(--green);cursor:pointer;border-radius:999px;font-weight:700;'
           : 'background:#ddd;color:#999;cursor:default;';
         actionHtml = '<button onclick="redeemItem(\'' + item.id + '\')" style="' + btnStyle + 'border:none;padding:10px 20px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:inherit;white-space:nowrap;" ' + (canAfford ? '' : 'disabled') + '>Redeem ' + item.points + ' pts</button>';
       } else {
