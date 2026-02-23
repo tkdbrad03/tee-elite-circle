@@ -1076,19 +1076,31 @@
     }
 
     async function toggleWishlist(itemId) {
-      try {
-        var res = await fetch('/api/wallet', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'wishlist', item_id: itemId })
-        });
-        if (res.ok) {
-  walletData = await res.json();
-  renderWallet();
-  updateWishlistSummary();
-}
-      } catch(e) { console.error('Wishlist error', e); }
+  try {
+    var res = await fetch('/api/wallet', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'wishlist', item_id: itemId })
+    });
+
+    if (!res.ok) return;
+
+    var data = await res.json();
+
+    // 🔥 CRITICAL FIX
+    if (data.wallet) {
+      walletData = data.wallet;
+    } else {
+      walletData = data;
     }
+
+    renderWallet();
+    updateWishlistSummary();
+
+  } catch(e) {
+    console.error('Wishlist error', e);
+  }
+}
 
     async function toggleWishlistAndOpen(itemId, driveUrl) {
   try {
@@ -1097,13 +1109,25 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'wishlist', item_id: itemId })
     });
-    if (res.ok) {
-      walletData = await res.json();
-      renderWallet();
-      updateWishlistSummary();
-      if (driveUrl) window.open(driveUrl, '_blank', 'noopener');
+
+    if (!res.ok) return;
+
+    var data = await res.json();
+
+    if (data.wallet) {
+      walletData = data.wallet;
+    } else {
+      walletData = data;
     }
-  } catch(e) { console.error('Wishlist error', e); }
+
+    renderWallet();
+    updateWishlistSummary();
+
+    if (driveUrl) window.open(driveUrl, '_blank', 'noopener');
+
+  } catch(e) {
+    console.error('Wishlist error', e);
+  }
 }
     function updateWishlistSummary() {
       if (!walletData) return;
