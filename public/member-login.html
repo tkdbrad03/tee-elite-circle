@@ -5,331 +5,370 @@
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
   <title>Member Login — The Tee Elite Circle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- PWA Meta Tags -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#1a2e1a">
+  <meta name="theme-color" content="#163326">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tee Elite">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <meta name="msapplication-TileColor" content="#1a2e1a">
+  <meta name="msapplication-TileColor" content="#163326">
   <meta name="msapplication-TileImage" content="/images/tee-elite-favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --tmac-blush: #e8ccc8;
-      --tmac-bronze: #a67c52;
-      --tmac-blush-light: #f7f0ef;
-      --deep-forest: #1a2f23;
-      --soft-cream: #FAF8F5;
-      --charcoal: #2C2C2C;
+      --green:   #163326;
+      --green2:  #1E3A2B;
+      --gold:    #A87C28;
+      --gold2:   #C9A24A;
+      --gold-lt: #EDD9A3;
+      --white:   #FFFFFF;
+      --off:     #F8F7F4;
+      --ink:     #163326;
+      --body:    #2C2C2C;
+      --muted:   #555555;
+      --line:    rgba(0,0,0,.12);
+      --serif:   "Cormorant Garamond", Georgia, serif;
+      --sans:    "Jost", ui-sans-serif, system-ui, sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--deep-forest);
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--body);
+      background: var(--white);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* NAV */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255,255,255,.97);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    .nav-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 66px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+    }
+    .nav-logo { height: 46px; width: auto; }
+
+    /* MAIN */
+    .wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px 80px;
     }
 
     .login-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
     }
 
-    .logo-area {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-
-    .logo-area img {
-      height: 40px;
-      margin-bottom: 16px;
-    }
-
-    .logo-area h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      font-weight: 400;
-      color: #fff;
-      letter-spacing: 0.1em;
-    }
-
-    .logo-area p {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--tmac-blush);
-      margin-top: 8px;
-    }
-
-    .login-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(232, 204, 200, 0.2);
-      padding: 40px 32px;
-    }
-
-    .login-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 400;
-      color: #fff;
+    /* HEADING */
+    .login-heading {
       text-align: center;
       margin-bottom: 32px;
     }
-
-    .form-group {
-      margin-bottom: 20px;
+    .login-heading h1 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 42px;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .login-heading h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .login-heading p {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 300;
     }
 
+    /* CARD */
+    .login-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--white);
+      padding: 32px 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
     .form-label {
       display: block;
       font-size: 10px;
-      letter-spacing: 0.2em;
+      letter-spacing: .18em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--muted);
+      font-weight: 500;
       margin-bottom: 8px;
     }
-
     .form-input {
       width: 100%;
-      padding: 14px 16px;
-      font-family: 'Montserrat', sans-serif;
+      padding: 14px 18px;
+      border: 1.5px solid rgba(22,51,38,.18);
+      border-radius: 999px;
+      font-family: var(--sans);
       font-size: 14px;
       font-weight: 300;
-      color: #fff;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(232, 204, 200, 0.2);
+      color: var(--ink);
+      background: var(--white);
       outline: none;
-      transition: all 0.3s ease;
+      transition: border-color .2s ease;
     }
+    .form-input::placeholder { color: rgba(44,44,44,.35); }
+    .form-input:focus { border-color: var(--gold2); }
 
-    .form-input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    .form-input:focus {
-      border-color: var(--tmac-blush);
-      background: rgba(255,255,255,0.05);
-    }
-
-    .login-btn {
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      padding: 16px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.25em;
+      padding: 16px 30px;
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--charcoal);
-      background: var(--tmac-blush);
-      border: none;
+      font-weight: 600;
+      border-radius: 999px;
       cursor: pointer;
-      transition: all 0.4s ease;
-      margin-top: 24px;
+      transition: all .2s ease;
+      border: none;
+      text-align: center;
     }
-
-    .login-btn:hover {
-      background: var(--tmac-blush-light);
-      transform: translateY(-2px);
+    .btn-gold {
+      background: linear-gradient(135deg, #C8A84B 0%, #E8D48A 35%, #F0E09A 50%, #D4A84A 70%, #B8922E 100%);
+      color: var(--green);
+      box-shadow: 0 8px 24px rgba(168,124,40,.26);
+      font-weight: 700;
+      margin-top: 8px;
     }
-
-    .login-btn:disabled {
-      opacity: 0.6;
+    .btn-gold:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(168,124,40,.34);
+    }
+    .btn-gold:disabled {
+      opacity: .6;
       cursor: not-allowed;
       transform: none;
     }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid rgba(22,51,38,.22);
+      color: var(--green);
+      margin-top: 10px;
+    }
+    .btn-outline:hover {
+      border-color: rgba(22,51,38,.4);
+      transform: translateY(-1px);
+    }
 
+    /* ERROR */
     .error-message {
-      background: rgba(180, 80, 80, 0.2);
-      border: 1px solid rgba(180, 80, 80, 0.4);
+      background: rgba(180,80,80,.08);
+      border: 1px solid rgba(180,80,80,.25);
+      border-radius: 12px;
       padding: 12px 16px;
       font-size: 13px;
-      color: #e8c4c4;
-      margin-top: 16px;
+      color: #b94040;
+      margin-top: 14px;
       text-align: center;
       display: none;
     }
+    .error-message.visible { display: block; }
 
-    .error-message.visible {
-      display: block;
-    }
-
-    .forgot-link {
-      display: block;
+    /* LINKS */
+    .fine {
+      font-size: 13px;
+      color: rgba(44,44,44,.55);
+      line-height: 1.7;
+      font-weight: 300;
       text-align: center;
-      margin-top: 24px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      transition: color 0.3s ease;
+      margin-top: 16px;
     }
-
-    .forgot-link:hover {
-      color: var(--tmac-blush);
+    .fine a {
+      color: var(--gold);
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
+    .fine a:hover { color: var(--gold2); }
 
     .back-link {
       display: block;
       text-align: center;
-      margin-top: 32px;
-      font-size: 12px;
-      color: var(--tmac-blush);
-      text-decoration: none;
-      letter-spacing: 0.1em;
-      transition: opacity 0.3s ease;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      transition: color .2s ease;
     }
+    .back-link:hover { color: var(--ink); }
 
-    .back-link:hover {
-      opacity: 0.7;
-    }
-
-    /* App Download Instructions */
+    /* APP INSTALL */
     .app-install {
-      margin-top: 48px;
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
       padding: 24px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(232, 204, 200, 0.15);
       text-align: center;
     }
-
     .app-install-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      color: var(--tmac-blush);
-      margin-bottom: 16px;
-    }
-
-    .app-install-steps {
-      font-size: 12px;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.8;
-    }
-
-    .app-install-steps strong {
-      color: var(--tmac-blush);
-    }
-
-    .app-install-note {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      margin-top: 16px;
-      font-style: italic;
-    }
-  
-    /* Forgot Password Modal */
-    .modal-backdrop{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,0.55);
-      display:none;
-      align-items:center; justify-content:center;
-      padding: 24px;
-      z-index: 9999;
-    }
-    .modal-backdrop.open{ display:flex; }
-    .modal{
-      width: 100%;
-      max-width: 420px;
-      background: rgba(26,47,35,0.98);
-      border: 1px solid rgba(232, 204, 200, 0.25);
-      padding: 28px 22px;
-    }
-    .modal h3{
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 400;
-      color: #fff;
-      font-size: 22px;
-      text-align:center;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--ink);
       margin-bottom: 12px;
     }
-    .modal p{
+    .app-install-steps {
       font-size: 13px;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.8;
-      text-align:center;
-      margin-bottom: 16px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-weight: 300;
     }
-    .modal-actions{
-      display:flex;
-      gap: 10px;
-      margin-top: 14px;
-    }
-    .modal-actions .login-btn{
-      margin-top: 0;
-    }
-    .btn-secondary{
-      width: 100%;
-      padding: 16px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--tmac-blush);
-      background: transparent;
-      border: 1px solid rgba(232, 204, 200, 0.3);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .btn-secondary:hover{
-      border-color: var(--tmac-blush);
-      transform: translateY(-2px);
+    .app-install-steps strong { color: var(--ink); font-weight: 500; }
+    .app-install-note {
+      font-size: 12px;
+      color: rgba(44,44,44,.4);
+      margin-top: 12px;
+      font-style: italic;
     }
 
+    /* FORGOT PASSWORD MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 9999;
+      backdrop-filter: blur(4px);
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: 100%;
+      max-width: 420px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 32px 28px;
+    }
+    .modal h3 {
+      font-family: var(--serif);
+      font-weight: 400;
+      color: var(--ink);
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .modal p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.8;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .login-heading { animation: fadeUp .55s ease both; animation-delay: .05s; }
+    .login-card    { animation: fadeUp .55s ease both; animation-delay: .12s; }
+    .app-install   { animation: fadeUp .55s ease both; animation-delay: .20s; }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="logo-area">
-      <img src="images/tmac-logo.png" alt="TMac Inspired">
-      <h1>The Tee Elite Circle</h1>
-      <p>Member Access</p>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" aria-label="Back to home">
+        <img class="nav-logo" src="/images/tmac-logo.png" alt="TMac Inspired">
+      </a>
     </div>
+  </header>
 
-    <div class="login-card">
-      <h2 class="login-title">Welcome Back</h2>
-      
-      <form id="login-form">
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" name="email" class="form-input" required placeholder="your@email.com">
-        </div>
+  <main class="wrap">
+    <div class="login-container">
 
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" name="password" class="form-input" required placeholder="Enter your password">
-        </div>
-
-        <button type="submit" class="login-btn" id="login-btn">Enter The Circle</button>
-        
-        <div id="error-message" class="error-message"></div>
-      </form>
-
-      <a href="#" class="forgot-link" id="forgot-link">Forgot your password?</a>
-    </div>
-
-    <a href="/" class="back-link">Back to Home</a>
-
-    <!-- App Download Instructions -->
-    <div class="app-install">
-      <h3 class="app-install-title">Add to Home Screen</h3>
-      <div class="app-install-steps">
-        <strong>iPhone:</strong> Tap the Share button, then "Add to Home Screen"<br><br>
-        <strong>Android:</strong> Tap the menu (3 dots), then "Add to Home Screen"
+      <div class="login-heading">
+        <h1>Welcome <em>Back</em></h1>
+        <p>The Tee Elite Circle &nbsp;·&nbsp; Member Access</p>
       </div>
-      <p class="app-install-note">Access The Circle like an app — no download required</p>
+
+      <div class="login-card">
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" required placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-input" required placeholder="Enter your password">
+          </div>
+          <button type="submit" class="btn btn-gold" id="login-btn">Enter The Circle</button>
+          <div id="error-message" class="error-message"></div>
+        </form>
+
+        <p class="fine">
+          <a href="#" id="forgot-link">Forgot your password?</a>
+        </p>
+      </div>
+
+      <a href="/" class="back-link">← Back to Home</a>
+
+      <div class="app-install">
+        <h3 class="app-install-title">Add to Home Screen</h3>
+        <div class="app-install-steps">
+          <strong>iPhone:</strong> Tap the Share button, then "Add to Home Screen"<br><br>
+          <strong>Android:</strong> Tap the menu (3 dots), then "Add to Home Screen"
+        </div>
+        <p class="app-install-note">Access The Circle like an app — no download required</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FORGOT PASSWORD MODAL -->
+  <div class="modal-backdrop" id="forgot-modal">
+    <div class="modal">
+      <h3>Reset Password</h3>
+      <p>Enter your email address and we'll send you a link to reset your password.</p>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="reset-email" class="form-input" placeholder="your@email.com">
+      </div>
+      <div id="reset-message" class="fine"></div>
+      <div class="modal-actions">
+        <button class="btn btn-gold" id="reset-submit-btn">Send Reset Link</button>
+        <button class="btn btn-outline" id="modal-close-btn">Cancel</button>
+      </div>
     </div>
   </div>
 
@@ -342,27 +381,19 @@ document.addEventListener('DOMContentLoaded', function () {
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const formData = new FormData(form);
       const email = formData.get('email');
       const password = formData.get('password');
-
       errorMessage.classList.remove('visible');
       errorMessage.textContent = '';
-
       try {
         const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-
         const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Login failed');
-        }
-
+        if (!response.ok) throw new Error(data.error || 'Login failed');
         window.location.href = '/home.html';
       } catch (err) {
         errorMessage.textContent = err.message;
@@ -371,32 +402,67 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Forgot Password
-  const forgotLink = document.querySelector('.forgot-link');
+  // Forgot Password Modal
+  const forgotLink = document.getElementById('forgot-link');
+  const forgotModal = document.getElementById('forgot-modal');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const resetSubmitBtn = document.getElementById('reset-submit-btn');
+  const resetMessage = document.getElementById('reset-message');
 
   if (forgotLink) {
     forgotLink.addEventListener('click', function (e) {
       e.preventDefault();
-      alert('Password reset system coming next. For now, contact support.');
+      forgotModal.classList.add('open');
+    });
+  }
+  if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', function () {
+      forgotModal.classList.remove('open');
+    });
+  }
+  forgotModal.addEventListener('click', function (e) {
+    if (e.target === forgotModal) forgotModal.classList.remove('open');
+  });
+
+  if (resetSubmitBtn) {
+    resetSubmitBtn.addEventListener('click', async function () {
+      const email = document.getElementById('reset-email').value.trim();
+      if (!email) { resetMessage.textContent = 'Please enter your email.'; return; }
+      resetSubmitBtn.disabled = true;
+      resetMessage.textContent = 'Sending...';
+      try {
+        const res = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          resetMessage.textContent = 'Check your email for a reset link.';
+          resetSubmitBtn.style.display = 'none';
+        } else {
+          resetMessage.textContent = data.error || 'Something went wrong.';
+          resetSubmitBtn.disabled = false;
+        }
+      } catch (err) {
+        resetMessage.textContent = 'Something went wrong. Please try again.';
+        resetSubmitBtn.disabled = false;
+      }
     });
   }
 
 });
-</script>
+  </script>
 
-  <!-- PWA Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('ServiceWorker registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-          });
+          .then(r => console.log('SW registered:', r.scope))
+          .catch(e => console.log('SW failed:', e));
       });
     }
   </script>
+
 </body>
 </html>
