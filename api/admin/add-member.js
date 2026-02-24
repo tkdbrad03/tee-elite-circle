@@ -1,3 +1,11 @@
+function getCookie(req, name) {
+  const raw = req.headers.cookie || '';
+  const parts = raw.split(';').map(p => p.trim());
+  const hit = parts.find(p => p.startsWith(name + '='));
+  return hit ? decodeURIComponent(hit.split('=').slice(1).join('=')) : null;
+}
+
+const SESSION_COOKIE_NAME = 'tec_session'; // <-- SAME cookie name as Step 1
 const { Client } = require("pg");
 
 module.exports = async (req, res) => {
@@ -10,6 +18,23 @@ module.exports = async (req, res) => {
 
   try {
     await client.connect();
+    // Require ADMIN
+const sessionToken = getCookie(req, SESSION_COOKIE_NAME);
+if (!sessionToken) return res.status(401).json({ error: 'Not logged in' });
+
+const s = await client.query(
+  `SELECT member_id FROM sessions WHERE token = $1 AND expires_at > NOW() LIMIT 1`,
+  [sessionToken]
+);
+if (s.rows.length === 0) return res.status(401).json({ error: 'Session expired' });
+
+const m = await client.query(
+  `SELECT member_type FROM members WHERE id = $1 LIMIT 1`,
+  [s.rows[0].member_id]
+);
+
+const type = String(m.rows[0]?.member_type || '').toUpperCase();
+if (type !== 'ADMIN') return res.status(403).json({ error: 'Admins only' });
 
     const {
       full_name,
