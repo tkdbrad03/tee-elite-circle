@@ -202,10 +202,7 @@ module.exports = async (req, res) => {
             [memberId, item_id]
           );
 
-          await client.query(
-            'UPDATE scramble_wallet SET points_balance = points_balance + $1 WHERE member_id = $2',
-            [cost, memberId]
-          );
+          
         } else {
           // add + deduct
           if (wallet.points_balance < cost) {
@@ -215,11 +212,6 @@ module.exports = async (req, res) => {
           await client.query(
             'INSERT INTO scramble_wishlist (member_id, item_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
             [memberId, item_id]
-          );
-
-          await client.query(
-            'UPDATE scramble_wallet SET points_balance = points_balance - $1 WHERE member_id = $2',
-            [cost, memberId]
           );
         }
 
