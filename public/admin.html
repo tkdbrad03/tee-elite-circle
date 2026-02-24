@@ -3209,7 +3209,11 @@ async function sendRetreatCampaign(event, retreatType) {
               <div style="font-weight:500;color:#1a2f23;font-size:14px;">${item.name}</div>
               <div style="font-size:11px;color:#aaa;margin-top:2px;">${item.id} · ${item.tagline ? item.tagline.substring(0,60) + '…' : 'No tagline'}</div>
             </td>
-            <td style="padding:12px 8px;text-align:center;font-weight:600;color:#a67c52;">${item.points}</td>
+            <td style="padding:12px 8px;text-align:center;">
+              <input type="number" value="${item.points}"
+                onblur="savePoints('${item.id}', this.value)"
+                style="width:60px;padding:6px 8px;border:1px solid #ddd;font-size:13px;font-weight:600;color:#a67c52;font-family:inherit;border-radius:4px;outline:none;text-align:center;">
+            </td>
             <td style="padding:12px 8px;text-align:center;color:#888;">${item.cap || '∞'}</td>
             <td style="padding:12px 8px;text-align:center;">
               <button onclick="toggleAvailableNow('${item.id}', ${!item.available_now})"
@@ -3273,7 +3277,14 @@ async function sendRetreatCampaign(event, retreatType) {
       });
       loadWalletItemsAdmin();
     }
-
+    async function savePoints(id, points) {
+      await fetch('/api/admin/wallet-items-admin', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
+        body: JSON.stringify({ id, points: parseInt(points) })
+      });
+      loadWalletItemsAdmin();
+    }
     async function saveDriveUrl(id, url) {
       await fetch('/api/admin/wallet-items-admin', {
         method: 'PUT',
