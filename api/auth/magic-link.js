@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     await client.connect();
 
     const result = await client.query(
-      'SELECT id, email, name FROM members WHERE email = $1',
+      'SELECT id, email, name, active FROM members WHERE email = $1 AND active = true',
       [email.toLowerCase()]
     );
 
