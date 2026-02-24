@@ -1656,7 +1656,28 @@
   </div>
 </div>
 <!-- ══ END WALLET ITEMS TAB ══ -->
+<script>
+(async function adminGuard(){
+  try {
+    const res = await fetch('/api/auth/me', { credentials: 'include' });
+    const data = await res.json();
 
+    if (!res.ok) throw new Error('Not logged in');
+
+    const type = String(data.member?.member_type || '').toUpperCase();
+    if (type !== 'ADMIN') {
+      // Not an admin -> kick out
+      window.location.href = '/home.html';
+      return;
+    }
+
+    // If ADMIN, continue loading admin page normally
+  } catch (e) {
+    // No session -> send to member login
+    window.location.href = '/member-login.html';
+  }
+})();
+</script>
   <script>
     // Firebase Configuration
     const firebaseConfig = {
