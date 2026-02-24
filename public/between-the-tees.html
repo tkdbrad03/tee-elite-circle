@@ -3,74 +3,239 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
-  <title>Between the Tees — The Tee Elite Circle</title>
+  <title>Between the Tees — Tee Elite Invitational</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#163326">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="pwa-nav.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <script src="/firebase-upload.js"></script>
   <style>
-    .page-header {
-      margin-bottom: 32px;
+    :root {
+      --green:  #163326;
+      --gold:   #A87C28;
+      --gold2:  #C9A24A;
+      --gold3:  #E8D48A;
+      --white:  #FFFFFF;
+      --off:    #F8F7F4;
+      --ink:    #163326;
+      --muted:  #7a7a6e;
+      --line:   rgba(0,0,0,.10);
+      --serif:  "Cormorant Garamond", Georgia, serif;
+      --sans:   "Jost", ui-sans-serif, system-ui, sans-serif;
     }
 
-    .page-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .top-bar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .top-bar-logo img {
+      height: 32px;
+      width: auto;
+    }
+
+    .top-bar-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .top-bar-nav a {
+      font-size: 11px;
+      letter-spacing: .18em;
       text-transform: uppercase;
-      color: var(--tmac-bronze);
-      margin-bottom: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color .2s;
     }
 
-    .page-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 400;
-      color: var(--charcoal);
+    .top-bar-nav a:hover,
+    .top-bar-nav a.active { color: var(--gold); }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--off);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .mobile-menu-btn span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--ink);
+      transition: all .3s;
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 60px;
+      left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      padding: 20px 28px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mobile-nav.open { display: flex; }
+
+    .mobile-nav a {
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a.active,
+    .mobile-nav a:hover { color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .top-bar-nav { display: none; }
+      .mobile-menu-btn { display: flex; }
+    }
+
+    /* ── PAGE ── */
+    .page-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── HERO ── */
+    .page-hero {
+      margin-bottom: 40px;
+    }
+
+    .page-eyebrow {
+      font-size: 10px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--gold);
       margin-bottom: 12px;
     }
 
-    .page-subtitle {
-      font-size: 14px;
-      color: #666;
-      max-width: 500px;
+    .page-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 16px;
     }
 
-    .discussion-intro {
-      background: var(--deep-forest);
-      padding: 32px;
+    .page-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* ── INTRO CARD ── */
+    .intro-card {
+      background: var(--green);
+      border-radius: 16px;
+      padding: 28px 32px;
       margin-bottom: 32px;
     }
 
-    .discussion-intro p {
+    .intro-card p {
       font-size: 15px;
-      color: rgba(255,255,255,0.8);
-      line-height: 1.8;
-      max-width: 700px;
+      color: rgba(255,255,255,.8);
+      line-height: 1.85;
+      font-weight: 300;
+      font-style: italic;
+      font-family: var(--serif);
     }
 
+    /* ── NEW THREAD BTN ── */
     .new-thread-btn {
-      display: inline-block;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      background: var(--tmac-blush);
-      padding: 14px 28px;
-      text-decoration: none;
-      margin-bottom: 32px;
-      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, var(--gold3) 100%);
       border: none;
-      font-family: 'Montserrat', sans-serif;
-      transition: all 0.3s ease;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--green);
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+      margin-bottom: 32px;
     }
 
-    .new-thread-btn:hover {
-      background: var(--tmac-blush-light);
-    }
+    .new-thread-btn:hover { opacity: .88; transform: translateY(-1px); }
 
-    /* Thread List */
+    /* ── THREAD LIST ── */
     .threads-list {
       display: flex;
       flex-direction: column;
@@ -78,534 +243,467 @@
     }
 
     .thread-card-wrapper {
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.06);
-      transition: all 0.3s ease;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: box-shadow .2s;
     }
 
     .thread-card-wrapper:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-    }
-
-    .thread-card-wrapper .thread-card {
-      border: none;
-      box-shadow: none;
-    }
-
-    .thread-card-wrapper .thread-card:hover {
-      transform: none;
-      box-shadow: none;
-    }
-
-    .thread-card-wrapper .thread-actions {
-      padding: 0 24px 16px;
-      border-top: 1px solid rgba(0,0,0,0.04);
-      margin-top: -8px;
-      padding-top: 12px;
+      box-shadow: 0 8px 24px rgba(22,51,38,.07);
     }
 
     .thread-card {
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.06);
-      padding: 24px;
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 24px;
+      gap: 20px;
       align-items: start;
-      transition: all 0.3s ease;
+      padding: 24px;
       text-decoration: none;
       color: inherit;
     }
 
-    .thread-card:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      transform: translateY(-2px);
-    }
-
-    .thread-content {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .thread-content { display: flex; flex-direction: column; gap: 6px; }
 
     .thread-category {
       font-size: 10px;
-      letter-spacing: 0.15em;
+      letter-spacing: .18em;
       text-transform: uppercase;
-      color: var(--tmac-bronze);
+      color: var(--gold);
     }
 
     .thread-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--serif);
       font-size: 22px;
-      color: var(--charcoal);
+      font-weight: 400;
+      color: var(--ink);
       line-height: 1.3;
     }
 
     .thread-preview {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.6;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 300;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    .thread-preview a {
-      color: var(--tmac-bronze);
-      text-decoration: underline;
-    }
-
-    .thread-preview a:hover {
-      color: var(--deep-forest);
-    }
+    .thread-preview a { color: var(--gold); text-decoration: underline; }
 
     .thread-meta {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       margin-top: 8px;
     }
 
     .thread-author {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
     }
 
     .thread-author-avatar {
-      width: 24px;
-      height: 24px;
+      width: 22px; height: 22px;
       border-radius: 50%;
-      background: var(--tmac-blush);
+      background: var(--off);
+      border: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .thread-author-avatar span {
-      font-size: 10px;
-      color: var(--deep-forest);
+      font-size: 9px;
+      color: var(--green);
+      font-weight: 600;
     }
 
-    .thread-author-name {
-      font-size: 12px;
-      color: #888;
-    }
-
-    .thread-date {
-      font-size: 12px;
-      color: #aaa;
-    }
+    .thread-author-name { font-size: 12px; color: var(--muted); }
+    .thread-date { font-size: 12px; color: #bbb; }
 
     .thread-stats {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 8px;
+      gap: 6px;
     }
 
     .thread-replies {
-      background: var(--tmac-blush-light);
-      padding: 8px 16px;
+      background: var(--off);
+      border-radius: 8px;
+      padding: 8px 14px;
       text-align: center;
+      min-width: 52px;
     }
 
     .thread-replies-count {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      color: var(--charcoal);
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--ink);
       line-height: 1;
     }
 
     .thread-replies-label {
-      font-size: 10px;
-      letter-spacing: 0.1em;
+      font-size: 9px;
+      letter-spacing: .1em;
       text-transform: uppercase;
-      color: #888;
+      color: var(--muted);
     }
 
-    .thread-last-activity {
-      font-size: 11px;
-      color: #aaa;
+    .thread-attachment { margin-top: 10px; }
+    .thread-attachment img,
+    .thread-attachment video {
+      max-width: 100%;
+      max-height: 280px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
     }
 
-    /* New Thread Modal */
+    .thread-doc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--off);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .thread-doc-link svg { width: 20px; height: 20px; stroke: var(--gold); }
+    .doc-name { font-weight: 500; }
+    .doc-type { font-size: 10px; text-transform: uppercase; color: var(--muted); }
+
+    .thread-actions {
+      display: flex;
+      gap: 8px;
+      padding: 0 24px 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      margin-top: -6px;
+    }
+
+    .thread-action-btn {
+      padding: 6px 16px;
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s;
+      font-weight: 500;
+    }
+
+    .edit-btn {
+      background: var(--off);
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    .edit-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .delete-btn {
+      background: none;
+      border: 1px solid #e0b0b0;
+      color: #c0392b;
+    }
+
+    .delete-btn:hover { background: #c0392b; color: #fff; border-color: #c0392b; }
+
+    /* ── EMPTY STATE ── */
+    .empty-threads {
+      background: var(--off);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .empty-threads p {
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .empty-threads span {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ── MODALS ── */
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.6);
+      inset: 0;
+      background: rgba(22,51,38,.6);
       z-index: 1000;
       align-items: center;
       justify-content: center;
       padding: 24px;
     }
 
-    .modal-overlay.open {
-      display: flex;
-    }
+    .modal-overlay.open { display: flex; }
 
     .modal-content {
-      background: #fff;
+      background: var(--white);
       width: 100%;
-      max-width: 600px;
+      max-width: 580px;
       max-height: 90vh;
       overflow-y: auto;
+      border-radius: 20px;
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 24px;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--line);
     }
 
     .modal-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--serif);
       font-size: 24px;
-      color: var(--charcoal);
+      font-weight: 400;
+      color: var(--ink);
     }
 
     .modal-close {
       background: none;
       border: none;
-      font-size: 24px;
-      color: #888;
+      font-size: 22px;
+      color: var(--muted);
       cursor: pointer;
+      line-height: 1;
     }
 
-    .modal-body {
-      padding: 24px;
-    }
+    .modal-body { padding: 24px 28px; }
 
-    .form-group {
-      margin-bottom: 20px;
-    }
+    .form-group { margin-bottom: 20px; }
 
     .form-label {
       display: block;
-      font-size: 11px;
-      letter-spacing: 0.15em;
+      font-size: 10px;
+      letter-spacing: .18em;
       text-transform: uppercase;
-      color: #666;
-      margin-bottom: 8px;
+      color: var(--gold);
+      margin-bottom: 7px;
     }
 
     .form-input,
     .form-select,
     .form-textarea {
       width: 100%;
-      padding: 14px 16px;
-      font-family: 'Montserrat', sans-serif;
+      padding: 12px 16px;
+      font-family: var(--sans);
       font-size: 14px;
-      border: 1px solid rgba(0,0,0,0.1);
+      border: 1px solid var(--line);
+      border-radius: 10px;
       outline: none;
+      color: var(--ink);
+      background: var(--white);
+      transition: border-color .2s;
     }
 
     .form-input:focus,
     .form-select:focus,
-    .form-textarea:focus {
-      border-color: var(--tmac-blush);
-    }
+    .form-textarea:focus { border-color: var(--gold2); }
 
-    .form-textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
+    .form-textarea { min-height: 140px; resize: vertical; }
 
     .modal-footer {
-      padding: 24px;
-      border-top: 1px solid rgba(0,0,0,0.06);
+      padding: 20px 28px;
+      border-top: 1px solid var(--line);
       display: flex;
       justify-content: flex-end;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn-secondary {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #666;
-      background: none;
-      border: 1px solid #ddd;
       padding: 12px 24px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: none;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
       cursor: pointer;
+      transition: border-color .2s;
     }
+
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
 
     .btn-primary {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      background: var(--tmac-blush);
-      border: none;
       padding: 12px 24px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, var(--gold3) 100%);
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--green);
+      font-weight: 700;
       cursor: pointer;
+      transition: opacity .2s;
     }
 
-    .empty-threads {
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.06);
-      padding: 60px 24px;
-      text-align: center;
-    }
+    .btn-primary:hover { opacity: .85; }
 
-    .empty-threads p {
-      font-size: 15px;
-      color: #888;
-      margin-bottom: 8px;
-    }
-
-    .empty-threads span {
-      font-size: 13px;
-      color: #aaa;
-    }
-
-    /* Upload Area */
+    /* upload area */
     .upload-area {
-      border: 1px dashed #ddd;
+      border: 1px dashed rgba(168,124,40,.3);
+      border-radius: 10px;
       padding: 16px;
-      text-align: center;
+      background: var(--off);
     }
 
-    .attachment-dropdown {
-      position: relative;
-      display: inline-block;
-    }
+    .attachment-dropdown { position: relative; display: inline-block; }
 
     .attachment-toggle {
-      padding: 12px 24px;
-      background: var(--tmac-blush-light);
-      border: 1px solid #ddd;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 13px;
-      color: var(--charcoal);
+      padding: 10px 20px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--muted);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: border-color .2s;
     }
 
-    .attachment-toggle:hover {
-      background: var(--tmac-blush);
-    }
+    .attachment-toggle:hover { border-color: var(--gold); color: var(--gold); }
 
     .attachment-menu {
       display: none;
       position: absolute;
       top: 100%;
       left: 0;
-      right: 0;
-      background: #fff;
-      border: 1px solid #ddd;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 6px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.1);
       z-index: 10;
+      overflow: hidden;
+      min-width: 160px;
     }
 
-    .attachment-menu.show {
-      display: block;
-    }
+    .attachment-menu.show { display: block; }
 
     .attachment-option {
       display: block;
       width: 100%;
-      padding: 12px 16px;
+      padding: 11px 16px;
       background: none;
       border: none;
-      border-bottom: 1px solid #eee;
-      font-family: 'Montserrat', sans-serif;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--sans);
       font-size: 13px;
-      color: var(--charcoal);
+      color: var(--ink);
       cursor: pointer;
       text-align: left;
+      transition: background .15s;
     }
 
-    .attachment-option:last-child {
-      border-bottom: none;
-    }
-
-    .attachment-option:hover {
-      background: var(--tmac-blush-light);
-    }
+    .attachment-option:last-child { border-bottom: none; }
+    .attachment-option:hover { background: var(--off); }
 
     .upload-preview img,
     .upload-preview video {
       max-width: 100%;
       max-height: 200px;
-      margin-bottom: 12px;
-      border-radius: 4px;
+      margin-bottom: 10px;
+      border-radius: 8px;
     }
 
-    .upload-preview.has-media .attachment-dropdown {
-      display: none;
-    }
+    .upload-preview.has-media .attachment-dropdown { display: none; }
 
     .media-actions {
       display: flex;
-      gap: 12px;
-      justify-content: center;
+      gap: 10px;
       margin-top: 8px;
     }
 
-    .change-media-btn {
-      padding: 8px 16px;
-      background: none;
-      border: 1px solid #ddd;
-      font-family: 'Montserrat', sans-serif;
+    .change-media-btn,
+    .remove-media-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: var(--sans);
       font-size: 11px;
-      color: #666;
       cursor: pointer;
     }
 
-    .remove-media-btn {
-      padding: 8px 16px;
-      background: none;
-      border: none;
-      font-size: 11px;
-      color: #c0392b;
-      cursor: pointer;
-    }
+    .change-media-btn { background: var(--off); border: 1px solid var(--line); color: var(--muted); }
+    .remove-media-btn { background: none; border: none; color: #c0392b; }
 
     .upload-status {
       font-size: 12px;
-      color: #888;
-      padding: 20px;
+      color: var(--muted);
+      padding: 16px;
+      text-align: center;
     }
 
-    /* Thread attachment display */
-    .thread-attachment {
-      margin-top: 12px;
-    }
-
-    .thread-attachment img,
-    .thread-attachment video {
-      max-width: 100%;
-      max-height: 300px;
-      border-radius: 8px;
-      border: 1px solid rgba(0,0,0,0.1);
-    }
-
-    .doc-preview,
-    .thread-doc-link {
+    .doc-preview {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 16px;
-      background: #f8f8f8;
-      border: 1px solid #eee;
+      padding: 10px 14px;
+      background: var(--off);
+      border: 1px solid var(--line);
       border-radius: 8px;
-      text-decoration: none;
-      color: var(--charcoal);
       font-size: 13px;
-      transition: all 0.3s ease;
+      color: var(--ink);
     }
 
-    .doc-preview:hover,
-    .thread-doc-link:hover {
-      background: #f0f0f0;
-      border-color: var(--tmac-blush);
-    }
-
-    .doc-preview svg,
-    .thread-doc-link svg {
-      width: 24px;
-      height: 24px;
-      stroke: var(--tmac-bronze);
-    }
-
-    .doc-name {
-      font-weight: 500;
-    }
-
-    .doc-type {
-      font-size: 10px;
-      text-transform: uppercase;
-      color: #888;
-      letter-spacing: 0.05em;
-    }
-
-    /* Post Action Buttons */
-    .thread-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .thread-action-btn {
-      padding: 6px 12px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .thread-action-btn.edit-btn {
-      background: var(--tmac-blush-light);
-      color: var(--charcoal);
-    }
-
-    .thread-action-btn.edit-btn:hover {
-      background: var(--tmac-blush);
-    }
-
-    .thread-action-btn.delete-btn {
-      background: none;
-      color: #c0392b;
-      border: 1px solid #c0392b;
-    }
-
-    .thread-action-btn.delete-btn:hover {
-      background: #c0392b;
-      color: #fff;
-    }
-
-    /* Delete Confirmation Modal */
+    /* ── CONFIRM MODAL ── */
     .confirm-modal {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.6);
+      inset: 0;
+      background: rgba(22,51,38,.6);
       z-index: 1001;
       align-items: center;
       justify-content: center;
       padding: 24px;
     }
 
-    .confirm-modal.open {
-      display: flex;
-    }
+    .confirm-modal.open { display: flex; }
 
     .confirm-content {
-      background: #fff;
+      background: var(--white);
       width: 100%;
       max-width: 400px;
-      padding: 32px;
+      padding: 36px;
       text-align: center;
+      border-radius: 20px;
     }
 
     .confirm-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      color: var(--charcoal);
-      margin-bottom: 12px;
+      font-family: var(--serif);
+      font-size: 26px;
+      color: var(--ink);
+      margin-bottom: 10px;
     }
 
     .confirm-text {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.65;
+      font-weight: 300;
     }
 
     .confirm-buttons {
@@ -614,71 +712,71 @@
       gap: 12px;
     }
 
-    @media (max-width: 600px) {
-      .thread-card {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
+    /* ── FOOTER ── */
+    .page-footer {
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 10px;
+      color: #ccc;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--line);
+    }
 
-      .thread-stats {
-        flex-direction: row;
-        align-items: center;
-      }
+    @media (max-width: 600px) {
+      .thread-card { grid-template-columns: 1fr; gap: 12px; }
+      .thread-stats { flex-direction: row; align-items: center; }
+      .page-wrap { padding: 32px 18px 80px; }
     }
   </style>
-  
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-  <script src="firebase-upload.js"></script>
 </head>
-<body class="member-body">
-  
-  <!-- HEADER -->
-  <header class="member-header">
-    <div class="header-inner">
-      <a href="/home.html" class="header-logo">
-        <img src="images/tmac-logo.png" alt="TMac Inspired">
-        <span>The Tee Elite Circle</span>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <a href="/home.html" class="top-bar-logo">
+      <img src="/images/tmac-logo.png" alt="TMac Inspired">
+    </a>
+    <nav class="top-bar-nav">
+      <a href="/home.html">Hub</a>
+      <a href="/between-the-tees.html" class="active">Between the Tees</a>
+      <a href="/members.html">The Circle</a>
+      <a href="/invitational.html">The Invitational</a>
+    </nav>
+    <div class="top-bar-right">
+      <a href="/profile.html" class="user-avatar" id="user-avatar">
+        <span id="user-initials">FM</span>
       </a>
-      <a href="/home.html" class="nav-link">Hub</a>
-        <a href="/between-the-tees.html" class="nav-link active">Between the Tees</a>
-        <a href="/members.html" class="nav-link">The Circle</a>
-        <a href="/invitational.html" class="nav-link">The Invitational</a>
-      <div class="header-user">
-        <a href="/profile.html" class="user-avatar" id="user-avatar">
-          <span id="user-initials">FM</span>
-        </a>
-      </div>
       <button class="mobile-menu-btn" id="mobile-menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
-  </header>
+  </div>
 
   <!-- MOBILE NAV -->
   <div class="mobile-nav" id="mobile-nav">
-    <a href="/home.html" class="mobile-nav-link">Hub</a>
-    <a href="/between-the-tees.html" class="mobile-nav-link">Between the Tees</a>
-    <a href="/members.html" class="mobile-nav-link">The Circle</a>
-    <a href="/invitational.html" class="mobile-nav-link">The Invitational</a>
-    <a href="/profile.html" class="mobile-nav-link">My Profile</a>
+    <a href="/home.html">Hub</a>
+    <a href="/between-the-tees.html" class="active">Between the Tees</a>
+    <a href="/members.html">The Circle</a>
+    <a href="/invitational.html">The Invitational</a>
+    <a href="/profile.html">My Profile</a>
+    <a href="#" id="logout-link">Log Out</a>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <main class="member-main">
-    <div class="page-header">
-      <p class="page-label">The Space Where Growth Happens</p>
-      <h1 class="page-title">Between the Tees</h1>
+  <!-- PAGE -->
+  <div class="page-wrap">
+    <div class="page-hero">
+      <h1 class="page-title">Between <em>the Tees</em></h1>
     </div>
 
-    <div class="discussion-intro">
-      <p>This is where the magic happens between retreats. Ask questions. Share challenges. Get perspectives from women who understand the game you're playing. What's said here stays here.</p>
+    <div class="intro-card">
+      <p>Ask questions. Share challenges. Get perspectives from women who understand the game you're playing. What's said here stays here.</p>
     </div>
 
-    <button class="new-thread-btn" id="new-thread-btn">Start a Discussion</button>
+    <button class="new-thread-btn" id="new-thread-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Start a Discussion
+    </button>
 
     <div class="threads-list" id="threads-list">
       <div class="empty-threads">
@@ -686,7 +784,10 @@
         <span>Be the first to start a conversation with the circle.</span>
       </div>
     </div>
-  </main>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">The Tee Elite Circle — A TMac Inspired Experience</div>
 
   <!-- NEW THREAD MODAL -->
   <div class="modal-overlay" id="modal-overlay">
@@ -699,10 +800,7 @@
         <div class="form-group">
           <label class="form-label">Category</label>
           <select class="form-select" id="thread-category">
-            <option value="business">Business & Strategy</option>
-            <option value="money">Money & Wealth</option>
             <option value="golf">Golf & Game</option>
-            <option value="life">Life & Legacy</option>
             <option value="general">General Discussion</option>
           </select>
         </div>
@@ -717,10 +815,10 @@
         <div class="form-group">
           <label class="form-label">Attach Media (optional)</label>
           <div class="upload-area" id="upload-area">
-            <input type="file" id="thread-image" accept="image/*" style="display: none;">
-            <input type="file" id="thread-video" accept="video/mp4,video/quicktime,video/x-m4v,video/mov,video/*,.mp4,.mov,.m4v" style="display: none;">
-            <input type="file" id="thread-video-record" accept="video/*" capture="environment" style="display: none;">
-            <input type="file" id="thread-doc" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,application/pdf" style="display: none;">
+            <input type="file" id="thread-image" accept="image/*" style="display:none;">
+            <input type="file" id="thread-video" accept="video/mp4,video/quicktime,video/x-m4v,video/mov,video/*,.mp4,.mov,.m4v" style="display:none;">
+            <input type="file" id="thread-video-record" accept="video/*" capture="environment" style="display:none;">
+            <input type="file" id="thread-doc" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,application/pdf" style="display:none;">
             <div class="upload-preview" id="upload-preview">
               <div class="attachment-dropdown">
                 <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
@@ -759,10 +857,7 @@
         <div class="form-group">
           <label class="form-label">Category</label>
           <select class="form-select" id="edit-thread-category">
-            <option value="business">Business & Strategy</option>
-            <option value="money">Money & Wealth</option>
             <option value="golf">Golf & Game</option>
-            <option value="life">Life & Legacy</option>
             <option value="general">General Discussion</option>
           </select>
         </div>
@@ -790,18 +885,13 @@
       <input type="hidden" id="delete-thread-id" value="">
       <div class="confirm-buttons">
         <button class="btn-secondary" id="cancel-delete">Cancel</button>
-        <button class="btn-primary" style="background: #c0392b; color: #fff;" id="confirm-delete">Delete</button>
+        <button class="btn-primary" style="background:#c0392b;color:#fff;" id="confirm-delete">Delete</button>
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="member-footer">
-    <p>The Tee Elite Circle — A TMac Inspired Experience</p>
-  </footer>
-
   <script>
-    // Firebase Configuration
+    // Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyA-9xRyX8yOSoejgmq-7ZEdCzQg__ntuHs",
       authDomain: "tee-elite.firebaseapp.com",
@@ -810,31 +900,34 @@
       messagingSenderId: "59306538414",
       appId: "1:59306538414:web:5fbf03f74663775074c43f"
     };
-    
-    // Initialize Firebase
     initializeFirebase(firebaseConfig);
-    
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileNav = document.getElementById('mobile-nav');
-    
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileNav.classList.toggle('open');
+
+    // Mobile menu
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-nav').classList.toggle('open');
     });
 
     // Logout
     document.getElementById('logout-link').addEventListener('click', async (e) => {
       e.preventDefault();
-      try {
-        await fetch('/api/auth/logout', { method: 'POST' });
-      } catch (err) {
-        console.error('Logout error:', err);
-      }
+      try { await fetch('/api/auth/logout', { method: 'POST' }); } catch(err) {}
       window.location.href = '/member-login.html';
     });
 
-    // Attachment dropdown toggle
+    // Load current member
+    async function loadCurrentMember() {
+      try {
+        const res = await fetch('/api/members/me');
+        if (res.ok) {
+          const member = await res.json();
+          currentMemberId = member.id;
+          const initials = (member.name || 'FM').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+          document.getElementById('user-initials').textContent = initials;
+        }
+      } catch(err) { console.error('Member load error', err); }
+    }
+
+    // Attachment dropdown
     const attachmentToggle = document.getElementById('attachment-toggle');
     const attachmentMenu = document.getElementById('attachment-menu');
 
@@ -849,247 +942,126 @@
       }
     });
 
-    // Handle attachment option clicks
     document.querySelectorAll('.attachment-option').forEach(option => {
       option.addEventListener('click', () => {
         const type = option.dataset.type;
         attachmentMenu.classList.remove('show');
-        if (type === 'image') {
-          document.getElementById('thread-image').click();
-        } else if (type === 'video') {
-          document.getElementById('thread-video').click();
-        } else if (type === 'record') {
-          document.getElementById('thread-video-record').click();
-        } else if (type === 'document') {
-          document.getElementById('thread-doc').click();
-        }
+        if (type === 'image') document.getElementById('thread-image').click();
+        else if (type === 'video') document.getElementById('thread-video').click();
+        else if (type === 'record') document.getElementById('thread-video-record').click();
+        else if (type === 'document') document.getElementById('thread-doc').click();
       });
     });
 
-    // Image upload handler
+    // File upload handlers
     document.getElementById('thread-image').addEventListener('change', async (e) => {
       const file = e.target.files[0];
-      if (!file) return;
-      await handleMediaUpload(file, 'image');
+      if (file) await handleMediaUpload(file, 'image');
     });
 
-    // Video upload handler (from library)
     document.getElementById('thread-video').addEventListener('change', async (e) => {
       const file = e.target.files[0];
-      if (!file) return;
-      
-      await handleMediaUpload(file, 'video');
+      if (file) await handleMediaUpload(file, 'video');
     });
 
-    // Video record handler (capture new video)
     document.getElementById('thread-video-record').addEventListener('change', async (e) => {
       const file = e.target.files[0];
-      if (!file) return;
-      
-      // Check file size
-      await handleMediaUpload(file, 'video');
+      if (file) await handleMediaUpload(file, 'video');
     });
 
-    // Document upload handler
     document.getElementById('thread-doc').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      
-      // Check file size (100MB limit)
-      if (file.size > 100 * 1024 * 1024) {
-        alert('Document must be under 100MB');
-        return;
-      }
-      
+      if (file.size > 100 * 1024 * 1024) { alert('Document must be under 100MB'); return; }
       await handleMediaUpload(file, 'document', file.name);
     });
 
-async function handleMediaUpload(file, type, fileName = '') {
-  const preview = document.getElementById('upload-preview');
-  
-  // Show file size in upload status
-  const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
-  preview.innerHTML = `<div class="upload-status">Uploading ${type}... (${sizeMB}MB)<br>Please wait.</div>`;
+    async function handleMediaUpload(file, type, fileName = '') {
+      const preview = document.getElementById('upload-preview');
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+      preview.innerHTML = `<div class="upload-status">Uploading ${type}... (${sizeMB}MB)<br>Please wait.</div>`;
 
-  try {
-    console.log('Uploading file:', file.name, 'Type:', file.type, 'Size:', sizeMB + 'MB');
-    
-    let blobUrl;
-    
-    // Use Firebase for videos and large files, Vercel Blob for images/small files
-    if (shouldUseFirebase(file, type)) {
-      console.log('Using Firebase Storage for large file/video');
-      
-      // Upload to Firebase with progress
-      const result = await uploadToFirebase(file, 'discussion-media', (progress) => {
-        preview.innerHTML = `<div class="upload-status">Uploading ${type}... ${Math.round(progress)}%<br>Please wait.</div>`;
-      });
-      
-      blobUrl = result.url;
-      console.log('✅ Uploaded to Firebase:', blobUrl);
-    } else {
-      console.log('Using Vercel Blob for small file');
-      
-      // Use existing Vercel Blob upload for small files
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': file.type || 'application/octet-stream',
-          'X-Filename': encodeURIComponent(file.name)
-        },
-        body: file
-      });
+      try {
+        let blobUrl;
+        if (shouldUseFirebase(file, type)) {
+          const result = await uploadToFirebase(file, 'discussion-media', (progress) => {
+            preview.innerHTML = `<div class="upload-status">Uploading ${type}... ${Math.round(progress)}%<br>Please wait.</div>`;
+          });
+          blobUrl = result.url;
+        } else {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: {
+              'Content-Type': file.type || 'application/octet-stream',
+              'X-Filename': encodeURIComponent(file.name)
+            },
+            body: file
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Upload failed');
+          blobUrl = data.url;
+        }
 
-      const data = await res.json();
-      
-      if (!res.ok) {
-        throw new Error(data.error || 'Upload failed');
+        document.getElementById('thread-media-type').value = type;
+        if (type === 'image') document.getElementById('thread-image-url').value = blobUrl;
+        else if (type === 'video') document.getElementById('thread-video-url').value = blobUrl;
+        else {
+          document.getElementById('thread-doc-url').value = blobUrl;
+          document.getElementById('thread-doc-name').value = fileName || file.name;
+        }
+
+        let mediaElement = '';
+        if (type === 'image') {
+          mediaElement = `<img src="${blobUrl}" alt="Preview" style="max-width:100%;border-radius:10px;">`;
+        } else if (type === 'video') {
+          mediaElement = `<video src="${blobUrl}" controls style="max-width:100%;border-radius:10px;"></video>`;
+        } else {
+          const ext = (fileName || file.name).split('.').pop().toUpperCase();
+          mediaElement = `<div class="doc-preview"><strong>${fileName || file.name}</strong><br>${ext} Document</div>`;
+        }
+
+        preview.innerHTML = `${mediaElement}<div class="media-actions"><button type="button" class="change-media-btn" onclick="showUploadButtons()">Change</button><button type="button" class="remove-media-btn" onclick="removeMedia()">Remove</button></div>`;
+        preview.classList.add('has-media');
+      } catch(err) {
+        let errorMsg = err.message;
+        if (errorMsg.includes('PayloadTooLarge') || errorMsg.includes('too large')) {
+          errorMsg = 'File too large. Please use a smaller file.';
+        }
+        preview.innerHTML = `<div class="upload-status" style="color:#c0392b;">Upload failed: ${errorMsg}<br><button type="button" onclick="showUploadButtons()" style="margin-top:10px;">Try Again</button></div>`;
       }
-      
-      blobUrl = data.url;
-      console.log('✅ Uploaded to Vercel Blob:', blobUrl);
-    }
-
-    document.getElementById('thread-media-type').value = type;
-    if (type === 'image') document.getElementById('thread-image-url').value = blobUrl;
-    else if (type === 'video') document.getElementById('thread-video-url').value = blobUrl;
-    else {
-      document.getElementById('thread-doc-url').value = blobUrl;
-      document.getElementById('thread-doc-name').value = fileName || file.name;
-    }
-
-    let mediaElement = '';
-    if (type === 'image') {
-      mediaElement = `<img src="${blobUrl}" alt="Preview" style="max-width:100%;border-radius:10px;">`;
-    } else if (type === 'video') {
-      mediaElement = `<video src="${blobUrl}" controls style="max-width:100%;border-radius:10px;"></video>`;
-    } else {
-      const ext = (fileName || file.name).split('.').pop().toUpperCase();
-      mediaElement = `
-        <div class="doc-preview">
-          <strong>${fileName || file.name}</strong><br>${ext} Document
-        </div>`;
-    }
-
-    preview.innerHTML = `
-      ${mediaElement}
-      <div class="media-actions">
-        <button type="button" onclick="showUploadButtons()">Change</button>
-        <button type="button" onclick="removeMedia()">Remove</button>
-      </div>`;
-    preview.classList.add('has-media');
-  } catch (err) {
-    console.error('Upload error:', err);
-    let errorMsg = err.message;
-    if (errorMsg.includes('PayloadTooLarge') || errorMsg.includes('too large')) {
-      errorMsg = 'File too large. Please use a smaller file.';
-    }
-    preview.innerHTML = `
-      <div class="upload-status" style="color:#c0392b;">
-        Upload failed: ${errorMsg}<br>
-        <button type="button" onclick="showUploadButtons()" style="margin-top:10px;">Try Again</button>
-      </div>`;
-  }
-}
-
-
-    function showUploadError(preview) {
-      preview.innerHTML = `
-        <div class="upload-status" style="color: #c0392b;">Upload failed. Try again.</div>
-        <div class="attachment-dropdown">
-          <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
-          <div class="attachment-menu" id="attachment-menu">
-            <button type="button" class="attachment-option" data-type="image">Photo</button>
-            <button type="button" class="attachment-option" data-type="video">Video</button>
-            <button type="button" class="attachment-option" data-type="document">Document</button>
-          </div>
-        </div>
-      `;
-      // Rebind event listeners
-      const toggle = document.getElementById('attachment-toggle');
-      const menu = document.getElementById('attachment-menu');
-      
-      toggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        menu.classList.toggle('show');
-      });
-      
-      document.querySelectorAll('.attachment-option').forEach(option => {
-        option.addEventListener('click', () => {
-          const type = option.dataset.type;
-          menu.classList.remove('show');
-          if (type === 'image') {
-            document.getElementById('thread-image').click();
-          } else if (type === 'video') {
-            document.getElementById('thread-video').click();
-          } else if (type === 'document') {
-            document.getElementById('thread-doc').click();
-          }
-        });
-      });
     }
 
     function showUploadButtons() {
       const preview = document.getElementById('upload-preview');
       preview.classList.remove('has-media');
-      preview.innerHTML = `
-        <div class="attachment-dropdown">
-          <button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button>
-          <div class="attachment-menu" id="attachment-menu">
-            <button type="button" class="attachment-option" data-type="image">Photo</button>
-            <button type="button" class="attachment-option" data-type="video">Video</button>
-            <button type="button" class="attachment-option" data-type="document">Document</button>
-          </div>
-        </div>
-      `;
-      // Rebind event listeners
+      preview.innerHTML = `<div class="attachment-dropdown"><button type="button" class="attachment-toggle" id="attachment-toggle">Add attachment</button><div class="attachment-menu" id="attachment-menu"><button type="button" class="attachment-option" data-type="image">Photo</button><button type="button" class="attachment-option" data-type="video">Video</button><button type="button" class="attachment-option" data-type="document">Document</button></div></div>`;
       const toggle = document.getElementById('attachment-toggle');
       const menu = document.getElementById('attachment-menu');
-      
-      toggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        menu.classList.toggle('show');
-      });
-      
-      document.querySelectorAll('.attachment-option').forEach(option => {
-        option.addEventListener('click', () => {
-          const type = option.dataset.type;
+      toggle.addEventListener('click', (e) => { e.preventDefault(); menu.classList.toggle('show'); });
+      document.querySelectorAll('.attachment-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          const type = opt.dataset.type;
           menu.classList.remove('show');
-          if (type === 'image') {
-            document.getElementById('thread-image').click();
-          } else if (type === 'video') {
-            document.getElementById('thread-video').click();
-          } else if (type === 'document') {
-            document.getElementById('thread-doc').click();
-          }
+          if (type === 'image') document.getElementById('thread-image').click();
+          else if (type === 'video') document.getElementById('thread-video').click();
+          else if (type === 'document') document.getElementById('thread-doc').click();
         });
       });
     }
 
     function removeMedia() {
-      document.getElementById('thread-image-url').value = '';
-      document.getElementById('thread-video-url').value = '';
-      document.getElementById('thread-doc-url').value = '';
-      document.getElementById('thread-doc-name').value = '';
-      document.getElementById('thread-media-type').value = '';
-      document.getElementById('thread-image').value = '';
-      document.getElementById('thread-video').value = '';
-      document.getElementById('thread-doc').value = '';
+      ['thread-image-url','thread-video-url','thread-doc-url','thread-doc-name','thread-media-type','thread-image','thread-video','thread-doc'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
       showUploadButtons();
     }
 
-    // Modal
+    // Modal controls
     const modal = document.getElementById('modal-overlay');
-    const newThreadBtn = document.getElementById('new-thread-btn');
-    const modalClose = document.getElementById('modal-close');
-    const modalCancel = document.getElementById('modal-cancel');
-
-    newThreadBtn.addEventListener('click', () => modal.classList.add('open'));
-    modalClose.addEventListener('click', () => modal.classList.remove('open'));
-    modalCancel.addEventListener('click', () => modal.classList.remove('open'));
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.remove('open');
-    });
+    document.getElementById('new-thread-btn').addEventListener('click', () => modal.classList.add('open'));
+    document.getElementById('modal-close').addEventListener('click', () => modal.classList.remove('open'));
+    document.getElementById('modal-cancel').addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
 
     // Submit thread
     document.getElementById('submit-thread').addEventListener('click', async () => {
@@ -1100,24 +1072,14 @@ async function handleMediaUpload(file, type, fileName = '') {
       const videoUrl = document.getElementById('thread-video-url').value;
       const docUrl = document.getElementById('thread-doc-url').value;
 
-      if (!title || !content) {
-        alert('Please fill in all fields');
-        return;
-      }
+      if (!title || !content) { alert('Please fill in all fields'); return; }
 
       try {
         const res = await fetch('/api/posts/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            title,
-            content, 
-            category,
-            image_url: imageUrl || videoUrl || docUrl,
-            post_type: 'discussion' 
-          })
+          body: JSON.stringify({ title, content, category, image_url: imageUrl || videoUrl || docUrl, post_type: 'discussion' })
         });
-
         if (res.ok) {
           modal.classList.remove('open');
           document.getElementById('thread-title').value = '';
@@ -1125,42 +1087,20 @@ async function handleMediaUpload(file, type, fileName = '') {
           removeMedia();
           loadThreads();
         }
-      } catch (err) {
-        console.error('Error creating thread:', err);
-      }
+      } catch(err) { console.error('Error creating thread:', err); }
     });
 
     // Load threads
     let currentMemberId = null;
 
-    // Get current member ID
-    async function getCurrentMember() {
-      try {
-        const res = await fetch('/api/members/me');
-        if (res.ok) {
-          const member = await res.json();
-          currentMemberId = member.id;
-        }
-      } catch (err) {
-        console.error('Error getting current member:', err);
-      }
-    }
-
     async function loadThreads() {
-      // Make sure we have current member ID
-      if (!currentMemberId) {
-        await getCurrentMember();
-      }
-
+      if (!currentMemberId) await loadCurrentMember();
       try {
         const res = await fetch('/api/posts/get?type=discussion');
         if (!res.ok) return;
-        
         const threads = await res.json();
         const list = document.getElementById('threads-list');
-        
         if (threads.length === 0) return;
-
         list.innerHTML = threads.map(thread => {
           const isOwner = thread.member_id === currentMemberId;
           return `
@@ -1173,9 +1113,7 @@ async function handleMediaUpload(file, type, fileName = '') {
                 ${thread.image_url ? `<div class="thread-attachment">${getMediaElement(thread.image_url)}</div>` : ''}
                 <div class="thread-meta">
                   <div class="thread-author">
-                    <div class="thread-author-avatar">
-                      <span>${getInitials(thread.author_name)}</span>
-                    </div>
+                    <div class="thread-author-avatar"><span>${getInitials(thread.author_name)}</span></div>
                     <span class="thread-author-name">${thread.author_name}</span>
                   </div>
                   <span class="thread-date">${formatDate(thread.created_at)}</span>
@@ -1192,29 +1130,19 @@ async function handleMediaUpload(file, type, fileName = '') {
             <div class="thread-actions">
               <button class="thread-action-btn edit-btn" onclick="openEditModal(${thread.id}, '${escapeForAttr(thread.title)}', '${escapeForAttr(thread.content)}', '${thread.category || 'general'}')">Edit</button>
               <button class="thread-action-btn delete-btn" onclick="openDeleteModal(${thread.id})">Delete</button>
-            </div>
-            ` : ''}
-          </div>
-        `}).join('');
-      } catch (err) {
-        console.error('Error loading threads:', err);
-      }
+            </div>` : ''}
+          </div>`;
+        }).join('');
+      } catch(err) { console.error('Error loading threads:', err); }
     }
 
-    // Escape strings for HTML attributes
     function escapeForAttr(str) {
       if (!str) return '';
       return str.replace(/'/g, "\\'").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
     }
 
     function formatCategory(cat) {
-      const labels = {
-        business: 'Business & Strategy',
-        money: 'Money & Wealth',
-        golf: 'Golf & Game',
-        life: 'Life & Legacy',
-        general: 'General'
-      };
+      const labels = { golf: 'Golf & Game', general: 'General' };
       return labels[cat] || 'General';
     }
 
@@ -1224,70 +1152,45 @@ async function handleMediaUpload(file, type, fileName = '') {
     }
 
     function formatDate(dateStr) {
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
-    // Convert URLs in text to clickable links
     function linkify(text) {
       if (!text) return '';
-      const urlPattern = /(https?:\/\/[^\s<]+)/g;
-      return text.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener" onclick="event.stopPropagation()">$1</a>');
+      return text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" onclick="event.stopPropagation()">$1</a>');
     }
 
-    // Check if URL is a video
     function isVideo(url) {
       if (!url) return false;
-      const videoExtensions = ['.mp4', '.webm', '.mov', '.avi', '.mkv'];
-      return videoExtensions.some(ext => url.toLowerCase().includes(ext));
+      return ['.mp4','.webm','.mov','.avi','.mkv'].some(ext => url.toLowerCase().includes(ext));
     }
 
-    // Check if URL is a document
     function isDocument(url) {
       if (!url) return false;
-      const docExtensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt'];
-      return docExtensions.some(ext => url.toLowerCase().includes(ext));
+      return ['.pdf','.doc','.docx','.xls','.xlsx','.ppt','.pptx','.txt'].some(ext => url.toLowerCase().includes(ext));
     }
 
-    // Get file extension
     function getFileExt(url) {
       const match = url.match(/\.([a-zA-Z0-9]+)(?:\?|$)/);
       return match ? match[1].toUpperCase() : 'FILE';
     }
 
-    // Get appropriate media element for URL
     function getMediaElement(url) {
       if (isVideo(url)) {
-        return `<video src="${url}" controls onclick="event.stopPropagation(); event.preventDefault();"></video>`;
+        return `<video src="${url}" controls onclick="event.stopPropagation();event.preventDefault();"></video>`;
       } else if (isDocument(url)) {
         const ext = getFileExt(url);
-        return `
-          <a href="${url}" target="_blank" class="thread-doc-link" onclick="event.stopPropagation();">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-            </svg>
-            <div>
-              <div class="doc-name">View Document</div>
-              <div class="doc-type">${ext}</div>
-            </div>
-          </a>
-        `;
+        return `<a href="${url}" target="_blank" class="thread-doc-link" onclick="event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><div><div class="doc-name">View Document</div><div class="doc-type">${ext}</div></div></a>`;
       } else {
         return `<img src="${url}" alt="Attachment">`;
       }
     }
 
-    // Edit Modal
+    // Edit modal
     const editModal = document.getElementById('edit-modal-overlay');
-    const editModalClose = document.getElementById('edit-modal-close');
-    const editModalCancel = document.getElementById('edit-modal-cancel');
-
-    editModalClose.addEventListener('click', () => editModal.classList.remove('open'));
-    editModalCancel.addEventListener('click', () => editModal.classList.remove('open'));
-    editModal.addEventListener('click', (e) => {
-      if (e.target === editModal) editModal.classList.remove('open');
-    });
+    document.getElementById('edit-modal-close').addEventListener('click', () => editModal.classList.remove('open'));
+    document.getElementById('edit-modal-cancel').addEventListener('click', () => editModal.classList.remove('open'));
+    editModal.addEventListener('click', (e) => { if (e.target === editModal) editModal.classList.remove('open'); });
 
     function openEditModal(id, title, content, category) {
       document.getElementById('edit-thread-id').value = id;
@@ -1297,80 +1200,49 @@ async function handleMediaUpload(file, type, fileName = '') {
       editModal.classList.add('open');
     }
 
-    // Save edited thread
     document.getElementById('save-edit-thread').addEventListener('click', async () => {
       const postId = document.getElementById('edit-thread-id').value;
       const title = document.getElementById('edit-thread-title').value.trim();
       const content = document.getElementById('edit-thread-content').value.trim();
       const category = document.getElementById('edit-thread-category').value;
-
-      if (!title || !content) {
-        alert('Please fill in all fields');
-        return;
-      }
-
+      if (!title || !content) { alert('Please fill in all fields'); return; }
       try {
         const res = await fetch('/api/posts/update', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ post_id: parseInt(postId), title, content, category })
         });
-
-        if (res.ok) {
-          editModal.classList.remove('open');
-          loadThreads();
-        } else {
-          const data = await res.json();
-          alert(data.error || 'Failed to update post');
-        }
-      } catch (err) {
-        console.error('Error updating thread:', err);
-        alert('Error updating post');
-      }
+        if (res.ok) { editModal.classList.remove('open'); loadThreads(); }
+        else { const data = await res.json(); alert(data.error || 'Failed to update post'); }
+      } catch(err) { alert('Error updating post'); }
     });
 
-    // Delete Modal
+    // Delete modal
     const deleteModal = document.getElementById('delete-confirm-modal');
-    const cancelDelete = document.getElementById('cancel-delete');
-
-    cancelDelete.addEventListener('click', () => deleteModal.classList.remove('open'));
-    deleteModal.addEventListener('click', (e) => {
-      if (e.target === deleteModal) deleteModal.classList.remove('open');
-    });
+    document.getElementById('cancel-delete').addEventListener('click', () => deleteModal.classList.remove('open'));
+    deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) deleteModal.classList.remove('open'); });
 
     function openDeleteModal(id) {
       document.getElementById('delete-thread-id').value = id;
       deleteModal.classList.add('open');
     }
 
-    // Confirm delete
     document.getElementById('confirm-delete').addEventListener('click', async () => {
       const postId = document.getElementById('delete-thread-id').value;
-
       try {
         const res = await fetch('/api/posts/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ post_id: parseInt(postId) })
         });
-
-        if (res.ok) {
-          deleteModal.classList.remove('open');
-          loadThreads();
-        } else {
-          const data = await res.json();
-          alert(data.error || 'Failed to delete post');
-        }
-      } catch (err) {
-        console.error('Error deleting thread:', err);
-        alert('Error deleting post');
-      }
+        if (res.ok) { deleteModal.classList.remove('open'); loadThreads(); }
+        else { const data = await res.json(); alert(data.error || 'Failed to delete post'); }
+      } catch(err) { alert('Error deleting post'); }
     });
 
-    // Initialize
+    // Init
+    loadCurrentMember();
     loadThreads();
   </script>
-  <script src="/member-common.js"></script>
-  <script src="/pwa-nav.js"></script>
 </body>
 </html>
