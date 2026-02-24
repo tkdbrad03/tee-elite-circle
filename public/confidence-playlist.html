@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>TMac's Confidence Playlist — Tee Elite Invitational</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#163326">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #163326;
+      --gold: #A87C28;
+      --gold2: #C9A24A;
+      --white: #FFFFFF;
+      --off: #F8F7F4;
+      --ink: #163326;
+      --muted: #666666;
+      --line: rgba(0,0,0,.10);
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity .2s;
+    }
+    .back-btn:hover { opacity: .7; }
+    .back-btn svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+    .top-bar-label {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 24px 40px;
+      text-align: center;
+    }
+
+    .hero-kicker {
+      font-size: 10px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-byline {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 32px;
+      letter-spacing: .04em;
+    }
+
+    /* ── DIVIDER ── */
+    .gold-divider {
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 32px;
+    }
+
+    /* ── NOTE FROM DR. TMAC ── */
+    .note-card {
+      max-width: 640px;
+      margin: 0 auto 48px;
+      background: var(--off);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 36px 40px;
+      text-align: left;
+      position: relative;
+    }
+
+    .note-label {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .note-text {
+      font-family: var(--serif);
+      font-size: 19px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.85;
+      font-style: italic;
+    }
+
+    .note-sig {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .note-sig strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* decorative quote mark */
+    .note-card::before {
+      content: '\201C';
+      font-family: var(--serif);
+      font-size: 120px;
+      color: var(--gold);
+      opacity: .10;
+      position: absolute;
+      top: 8px;
+      left: 24px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ── PLAYER ── */
+    .player-section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+
+    .player-section-label {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .player-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 32px rgba(22,51,38,.08);
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+      background: #000;
+    }
+
+    .player-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .player-instruction {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    /* ── TRACK LIST ── */
+    .tracklist-section {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .tracklist-label {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .tracklist {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .track {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      transition: background .18s;
+    }
+
+    .track:last-child { border-bottom: none; }
+    .track:hover { background: var(--off); }
+
+    .track-num {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--gold);
+      opacity: .5;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+      font-style: italic;
+    }
+
+    .track-info { flex: 1; min-width: 0; }
+
+    .track-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-artist {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 2px;
+    }
+
+    .track-duration {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 11px;
+      color: #ccc;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 600px) {
+      .note-card { padding: 28px 24px; }
+      .hero { padding: 40px 20px 32px; }
+      .track { padding: 14px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <a href="/home.html" class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Hub
+    </a>
+    <div class="top-bar-label">Tee Elite Invitational 2026</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-kicker">Your Scramble Wallet · Available Now</div>
+    <h1 class="hero-title">TMac's <em>Confidence</em> Playlist</h1>
+    <div class="hero-byline">Curated by Dr. Tasha McCray · Updated regularly</div>
+    <div class="gold-divider"></div>
+  </div>
+
+  <!-- NOTE FROM DR. TMAC -->
+  <div style="padding: 0 24px;">
+    <div class="note-card">
+      <div class="note-label">A Note from Dr. TMac</div>
+      <div class="note-text">
+        Press play before you tee off! Every track in this collection is intentional &amp; curated to shift your posture, and remind you exactly who you are. Play it loud. Walk different. Play like you belong. Welcome to your sound.
+      </div>
+      <div class="note-sig">— <strong>Dr. Tasha McCray</strong> · TMac Inspired</div>
+    </div>
+  </div>
+
+  <!-- EMBEDDED PLAYLIST -->
+  <div class="player-section">
+    <div class="player-section-label">Listen Now</div>
+    <div class="player-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PL_Mmhj5YtNWUFEbfYiJksWCLCt5U6OlQG&autoplay=0&rel=0&modestbranding=1&color=white"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        title="TMac's Confidence Playlist">
+      </iframe>
+    </div>
+    <div class="player-instruction">Press play · Turn it up · Walk on that course like you own it</div>
+  </div>
+
+
+
+  <!-- FOOTER -->
+  <div class="page-footer">The Tee Elite Circle — A TMac Inspired Experience</div>
+
+</body>
+</html>
