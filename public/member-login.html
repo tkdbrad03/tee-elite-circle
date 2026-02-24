@@ -323,23 +323,18 @@
       </div>
 
       <div class="login-card">
-        <form id="login-form">
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-input" required placeholder="your@email.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-input" required placeholder="Enter your password">
-          </div>
-          <button type="submit" class="btn btn-gold" id="login-btn">Enter The Circle</button>
-          <div id="error-message" class="error-message"></div>
-        </form>
+        <form id="magic-form">
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="email" id="magic-email" class="form-input" required placeholder="your@email.com">
+  </div>
 
-        <p class="fine">
-          <a href="#" id="forgot-link">Forgot your password?</a>
-        </p>
-      </div>
+  <button type="submit" class="btn btn-gold" id="magic-btn">
+    Send Magic Link
+  </button>
+
+  <div id="magic-message" class="error-message"></div>
+</form>
 
       <a href="/" class="back-link">← Back to Home</a>
 
@@ -355,114 +350,53 @@
     </div>
   </main>
 
-  <!-- FORGOT PASSWORD MODAL -->
-  <div class="modal-backdrop" id="forgot-modal">
-    <div class="modal">
-      <h3>Reset Password</h3>
-      <p>Enter your email address and we'll send you a link to reset your password.</p>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" id="reset-email" class="form-input" placeholder="your@email.com">
-      </div>
-      <div id="reset-message" class="fine"></div>
-      <div class="modal-actions">
-        <button class="btn btn-gold" id="reset-submit-btn">Send Reset Link</button>
-        <button class="btn btn-outline" id="modal-close-btn">Cancel</button>
-      </div>
-    </div>
-  </div>
 
-  <script>
+
+ <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-  const form = document.getElementById('login-form');
-  const errorMessage = document.getElementById('error-message');
+  const form = document.getElementById('magic-form');
+  const message = document.getElementById('magic-message');
+  const button = document.getElementById('magic-btn');
 
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const formData = new FormData(form);
-      const email = formData.get('email');
-      const password = formData.get('password');
-      errorMessage.classList.remove('visible');
-      errorMessage.textContent = '';
+
+      const email = document.getElementById('magic-email').value.trim();
+      if (!email) return;
+
+      button.disabled = true;
+      button.textContent = 'Sending...';
+      message.classList.remove('visible');
+      message.textContent = '';
+
       try {
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Login failed');
-        window.location.href = '/home.html';
-      } catch (err) {
-        errorMessage.textContent = err.message;
-        errorMessage.classList.add('visible');
-      }
-    });
-  }
-
-  // Forgot Password Modal
-  const forgotLink = document.getElementById('forgot-link');
-  const forgotModal = document.getElementById('forgot-modal');
-  const modalCloseBtn = document.getElementById('modal-close-btn');
-  const resetSubmitBtn = document.getElementById('reset-submit-btn');
-  const resetMessage = document.getElementById('reset-message');
-
-  if (forgotLink) {
-    forgotLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      forgotModal.classList.add('open');
-    });
-  }
-  if (modalCloseBtn) {
-    modalCloseBtn.addEventListener('click', function () {
-      forgotModal.classList.remove('open');
-    });
-  }
-  forgotModal.addEventListener('click', function (e) {
-    if (e.target === forgotModal) forgotModal.classList.remove('open');
-  });
-
-  if (resetSubmitBtn) {
-    resetSubmitBtn.addEventListener('click', async function () {
-      const email = document.getElementById('reset-email').value.trim();
-      if (!email) { resetMessage.textContent = 'Please enter your email.'; return; }
-      resetSubmitBtn.disabled = true;
-      resetMessage.textContent = 'Sending...';
-      try {
-        const res = await fetch('/api/auth/forgot-password', {
+        const res = await fetch('/api/auth/magic-link', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
         });
+
         const data = await res.json();
-        if (res.ok) {
-          resetMessage.textContent = 'Check your email for a reset link.';
-          resetSubmitBtn.style.display = 'none';
-        } else {
-          resetMessage.textContent = data.error || 'Something went wrong.';
-          resetSubmitBtn.disabled = false;
-        }
+
+        if (!res.ok) throw new Error(data.error || 'Failed to send link.');
+
+        message.textContent = 'Check your email for your login link.';
+        message.classList.add('visible');
+        button.style.display = 'none';
+
       } catch (err) {
-        resetMessage.textContent = 'Something went wrong. Please try again.';
-        resetSubmitBtn.disabled = false;
+        message.textContent = err.message;
+        message.classList.add('visible');
+        button.disabled = false;
+        button.textContent = 'Send Magic Link';
       }
     });
   }
 
 });
-  </script>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(r => console.log('SW registered:', r.scope))
-          .catch(e => console.log('SW failed:', e));
-      });
-    }
-  </script>
+</script>
 
 </body>
 </html>
