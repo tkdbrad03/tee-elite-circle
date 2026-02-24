@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/tee-elite-favicon.png">
+  <title>Priority Access — Tee Elite Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#163326">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green:  #163326;
+      --gold:   #A87C28;
+      --gold2:  #C9A24A;
+      --gold3:  #E8D48A;
+      --white:  #FFFFFF;
+      --off:    #F8F7F4;
+      --ink:    #163326;
+      --muted:  #7a7a6e;
+      --line:   rgba(0,0,0,.10);
+      --serif:  "Cormorant Garamond", Georgia, serif;
+      --sans:   "Jost", ui-sans-serif, system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity .2s;
+    }
+    .back-btn:hover { opacity: .65; }
+    .back-btn svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+    .top-bar-label {
+      font-size: 10px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 72px 24px 56px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-lines {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(180deg, transparent, var(--gold));
+      animation: lineGrow 1.2s ease forwards;
+    }
+
+    @keyframes lineGrow {
+      from { height: 0; opacity: 0; }
+      to   { height: 60px; opacity: 1; }
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      animation: fadeUp .8s .3s both ease;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(48px, 9vw, 88px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -.01em;
+      color: var(--ink);
+      margin-bottom: 12px;
+      animation: fadeUp .8s .5s both ease;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: .08em;
+      animation: fadeUp .8s .7s both ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── BADGE SEAL ── */
+    .badge-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 0 24px 64px;
+      animation: fadeUp .8s .9s both ease;
+    }
+
+    .badge {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      opacity: .35;
+      animation: spinSlow 20s linear infinite;
+    }
+
+    .badge-ring-2 {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(168,124,40,.25);
+      animation: spinSlow 30s linear infinite reverse;
+    }
+
+    .badge-inner {
+      position: absolute;
+      inset: 24px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 40% 30%, rgba(201,162,74,.10), transparent 70%), var(--off);
+      border: 1px solid rgba(168,124,40,.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .badge::before, .badge::after {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px;
+      background: var(--gold2);
+      border-radius: 50%;
+      opacity: .6;
+    }
+    .badge::before { top: 18px; left: 50%; transform: translateX(-50%); }
+    .badge::after  { bottom: 18px; left: 50%; transform: translateX(-50%); }
+
+    .badge-label {
+      font-size: 8px;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: .8;
+    }
+
+    .badge-number {
+      font-family: var(--serif);
+      font-size: 52px;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .badge-unit {
+      font-size: 9px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .badge-divider {
+      width: 32px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 4px 0;
+    }
+
+    .badge-name {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: .04em;
+    }
+
+    /* ── TIMELINE ── */
+    .section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .timeline { display: flex; flex-direction: column; }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 48px 1px 1fr;
+      gap: 0 20px;
+      animation: fadeUp .6s both ease;
+    }
+
+    .tl-item:nth-child(1) { animation-delay: .1s; }
+    .tl-item:nth-child(2) { animation-delay: .2s; }
+    .tl-item:nth-child(3) { animation-delay: .3s; }
+    .tl-item:nth-child(4) { animation-delay: .4s; }
+
+    .tl-num {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--gold);
+      opacity: .4;
+      text-align: right;
+      padding-top: 2px;
+      line-height: 1;
+    }
+
+    .tl-line {
+      background: linear-gradient(180deg, var(--gold), transparent);
+      opacity: .15;
+      width: 1px;
+      margin: 8px auto 0;
+    }
+
+    .tl-item:last-child .tl-line { opacity: 0; }
+
+    .tl-body { padding-bottom: 40px; }
+
+    .tl-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .tl-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+      letter-spacing: .02em;
+    }
+
+    /* ── ENDORSE CARD ── */
+    .endorse-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 40px;
+      background: var(--off);
+    }
+
+    .endorse-title {
+      font-family: var(--serif);
+      font-size: 26px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .endorse-sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+
+    .endorse-tag {
+      display: inline-block;
+      padding: 10px 28px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── CADDIE ── */
+    .caddie-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      z-index: 200;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(168,124,40,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .caddie-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 12px 32px rgba(168,124,40,.45);
+    }
+
+    .caddie-btn svg {
+      width: 22px; height: 22px;
+      stroke: var(--green);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .caddie-panel {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
+      z-index: 200;
+      width: 340px;
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.12);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      animation: panelIn .25s ease;
+    }
+
+    .caddie-panel.open { display: flex; }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: scale(.92) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .caddie-head {
+      background: var(--green);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .caddie-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--green);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .caddie-head-text h5 {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .caddie-head-text p {
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+    }
+
+    .caddie-body {
+      padding: 20px;
+      background: var(--off);
+    }
+
+    .caddie-intro {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .caddie-field { margin-bottom: 12px; }
+
+    .caddie-field label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 5px;
+    }
+
+    .caddie-field input,
+    .caddie-field textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--ink);
+      background: var(--white);
+      outline: none;
+      resize: none;
+      transition: border-color .2s;
+    }
+
+    .caddie-field input:focus,
+    .caddie-field textarea:focus { border-color: var(--gold2); }
+
+    .caddie-send {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, var(--gold3) 100%);
+      border: none;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--green);
+      cursor: pointer;
+      transition: opacity .2s;
+      margin-top: 4px;
+    }
+
+    .caddie-send:hover { opacity: .85; }
+    .caddie-send:disabled { opacity: .4; cursor: default; }
+
+    .caddie-sent {
+      display: none;
+      text-align: center;
+      padding: 32px 20px;
+      background: var(--off);
+    }
+
+    .caddie-sent-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(22,51,38,.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .caddie-sent-icon svg {
+      width: 20px; height: 20px;
+      stroke: var(--green);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .caddie-sent h6 {
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .caddie-sent p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 10px;
+      color: #ccc;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 56px 20px 40px; }
+      .badge { width: 220px; height: 220px; }
+      .badge-number { font-size: 42px; }
+      .endorse-card { padding: 28px 22px; }
+      .caddie-panel { width: calc(100vw - 32px); right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <a href="/home.html" class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Hub
+    </a>
+    <div class="top-bar-label">Tee Elite Invitational</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-lines"></div>
+    <div class="hero-eyebrow">Scramble Wallet · Redeemed</div>
+    <h1 class="hero-title">
+      Priority
+      <em>Access</em>
+    </h1>
+    <div class="hero-sub">Future Invitational Events · Tee Elite Circle</div>
+  </div>
+
+  <!-- BADGE SEAL -->
+  <div class="badge-wrap">
+    <div class="badge">
+      <div class="badge-ring"></div>
+      <div class="badge-ring-2"></div>
+      <div class="badge-inner">
+        <div class="badge-label">Priority Window</div>
+        <div class="badge-number">48</div>
+        <div class="badge-unit">Hours Early</div>
+        <div class="badge-divider"></div>
+        <div class="badge-name" id="badge-member-name">Elite Member</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT THIS MEANS -->
+  <div class="section">
+    <div class="section-label">What This Means For You</div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-num">I</div>
+        <div class="tl-line"></div>
+        <div class="tl-body">
+          <div class="tl-title">You Hear First</div>
+          <div class="tl-desc">When the next Tee Elite Invitational is announced, you receive private notification before any public announcement. Before social media. Before the waitlist.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-num">II</div>
+        <div class="tl-line"></div>
+        <div class="tl-body">
+          <div class="tl-title">Your Private Window</div>
+          <div class="tl-desc">A private registration link — issued to you exclusively — opens 48 hours before general registration. This window is not advertised. It is not public. It is yours.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-num">III</div>
+        <div class="tl-line"></div>
+        <div class="tl-body">
+          <div class="tl-title">Reserved Before the Rush</div>
+          <div class="tl-desc">By the time the general public registers, your spot is already secured. Priority members from past events have never been shut out. That record holds.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-num" style="font-size:11px;letter-spacing:.08em;opacity:1;padding-top:8px;">NEXT</div>
+        <div class="tl-line"></div>
+        <div class="tl-body">
+          <div class="tl-title">Streamsong Resort</div>
+          <div class="tl-desc">Oct 9–10, 2026 · Bowling Green, FL — Your private access window opens before this event is announced to the public.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ENDORSE A GUEST -->
+  <div class="section" style="padding-bottom:80px;">
+    <div class="section-label">Endorse a Guest</div>
+    <div class="endorse-card">
+      <div class="endorse-title">Extend Your Privilege</div>
+      <div class="endorse-sub">Extend your priority registration window to one guest for the Streamsong Invitational — Oct 9–10, 2026. Your endorsement is your word.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+        <input type="email" id="guest-email" placeholder="guest@email.com" style="flex:1;min-width:200px;padding:14px 18px;border:1px solid var(--line);border-radius:999px;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none;transition:border-color .2s;">
+        <button onclick="endorseGuest()" id="endorse-btn" style="padding:14px 28px;background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 50%,var(--gold3) 100%);border:none;border-radius:999px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green);cursor:pointer;white-space:nowrap;">Sponsor</button>
+      </div>
+      <div id="endorse-confirm" style="display:none;font-size:13px;color:var(--gold);letter-spacing:.04em;">✓ Endorsement sent. We'll take it from here.</div>
+      <div id="endorse-error" style="display:none;font-size:12px;color:#e57373;margin-top:4px;">Please enter a valid email address.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">The Tee Elite Circle — A TMac Inspired Experience</div>
+
+  <!-- CADDIE BUTTON -->
+  <button class="caddie-btn" onclick="toggleCaddie()" title="Contact Dr. TMac's Team" aria-label="Open Concierge">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
+
+  <!-- CADDIE PANEL -->
+  <div class="caddie-panel" id="caddie-panel">
+    <div class="caddie-head">
+      <div class="caddie-avatar">T</div>
+      <div class="caddie-head-text">
+        <h5>Concierge</h5>
+        <p>Dr. TMac's Team · Tee Elite</p>
+      </div>
+    </div>
+
+    <div id="caddie-form-wrap">
+      <div class="caddie-body">
+        <div class="caddie-intro">Have a question about your priority access or a future event? Send us a message and we'll respond within 24 hours.</div>
+        <div class="caddie-field">
+          <label>Your Name</label>
+          <input type="text" id="caddie-name" placeholder="First name">
+        </div>
+        <div class="caddie-field">
+          <label>Message</label>
+          <textarea id="caddie-msg" rows="4" placeholder="Ask us anything about priority access, upcoming events, or your membership…"></textarea>
+        </div>
+        <button class="caddie-send" id="caddie-send-btn" onclick="sendCaddieMessage()">Send Message</button>
+      </div>
+    </div>
+
+    <div class="caddie-sent" id="caddie-sent">
+      <div class="caddie-sent-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 12 4 10"/><polyline points="20 6 9 12 9 22"/></svg>
+      </div>
+      <h6>Message Received</h6>
+      <p>Dr. TMac's team will be in touch within 24 hours.</p>
+    </div>
+  </div>
+
+  <script>
+    var memberSession = null;
+    var caddieOpen = false;
+
+    async function init() {
+      try {
+        var res = await fetch('/api/members/me');
+        if (res.ok) {
+          memberSession = await res.json();
+          var badgeName = document.getElementById('badge-member-name');
+          if (memberSession.name) badgeName.textContent = memberSession.name.split(' ')[0];
+          var caddieNameInput = document.getElementById('caddie-name');
+          if (memberSession.name) caddieNameInput.value = memberSession.name.split(' ')[0];
+        }
+      } catch(e) { console.error('Session error', e); }
+    }
+
+    function toggleCaddie() {
+      var panel = document.getElementById('caddie-panel');
+      caddieOpen = !caddieOpen;
+      panel.classList.toggle('open', caddieOpen);
+    }
+
+    document.addEventListener('click', function(e) {
+      var panel = document.getElementById('caddie-panel');
+      var btn = document.querySelector('.caddie-btn');
+      if (caddieOpen && !panel.contains(e.target) && !btn.contains(e.target)) {
+        caddieOpen = false;
+        panel.classList.remove('open');
+      }
+    });
+
+    async function sendCaddieMessage() {
+      var name = document.getElementById('caddie-name').value.trim();
+      var msg = document.getElementById('caddie-msg').value.trim();
+      var sendBtn = document.getElementById('caddie-send-btn');
+      if (!msg) return;
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending…';
+      try {
+        await fetch('/api/members/send-message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to_email: 'tmac@tmacmastermind.com',
+            sender_name: name || memberSession?.name || 'Priority Member',
+            sender_email: memberSession?.email || 'unknown',
+            message: msg,
+            subject: 'Priority Access Concierge Message'
+          })
+        });
+        document.getElementById('caddie-form-wrap').style.display = 'none';
+        document.getElementById('caddie-sent').style.display = 'block';
+      } catch(e) {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send Message';
+      }
+    }
+
+    init();
+    async function endorseGuest() {
+      var email = document.getElementById('guest-email').value.trim();
+      var btn = document.getElementById('endorse-btn');
+      var confirm = document.getElementById('endorse-confirm');
+      var error = document.getElementById('endorse-error');
+
+      error.style.display = 'none';
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        error.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        await fetch('/api/members/send-message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to_email: 'tmac@tmacmastermind.com',
+            sender_name: memberSession?.name || 'Priority Member',
+            sender_email: memberSession?.email || 'unknown',
+            message: 'Guest endorsement for Streamsong Invitational (Oct 9–10, 2026).\n\nGuest email: ' + email,
+            subject: 'Guest Endorsement — Streamsong Invitational'
+          })
+        });
+        btn.style.display = 'none';
+        document.getElementById('guest-email').style.display = 'none';
+        confirm.style.display = 'block';
+      } catch(e) {
+        btn.disabled = false;
+        btn.textContent = 'Sponsor';
+        error.textContent = 'Something went wrong. Try again.';
+        error.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
