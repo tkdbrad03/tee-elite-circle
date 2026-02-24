@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
     await client.connect();
 
     const result = await client.query(
-      'SELECT id FROM members WHERE id = $1',
+      'SELECT id FROM members WHERE id = $1 AND active = true',
       [decoded.memberId]
     );
 
