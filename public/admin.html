@@ -3206,15 +3206,24 @@ async function sendRetreatCampaign(event, retreatType) {
         tbody.innerHTML = items.map(item => `
           <tr style="border-bottom:1px solid #f5f5f5;" id="wirow-${item.id}">
             <td style="padding:12px 14px;">
-              <div style="font-weight:500;color:#1a2f23;font-size:14px;">${item.name}</div>
-              <div style="font-size:11px;color:#aaa;margin-top:2px;">${item.id} · ${item.tagline ? item.tagline.substring(0,60) + '…' : 'No tagline'}</div>
+              <input type="text" value="${item.name}"
+                onblur="saveField('${item.id}', 'name', this.value)"
+                style="width:100%;padding:5px 8px;border:1px solid #ddd;font-size:14px;font-weight:500;color:#1a2f23;font-family:inherit;border-radius:4px;outline:none;margin-bottom:4px;">
+              <div style="font-size:11px;color:#aaa;margin-bottom:3px;">${item.id}</div>
+              <input type="text" value="${item.tagline || ''}" placeholder="Tagline..."
+                onblur="saveField('${item.id}', 'tagline', this.value)"
+                style="width:100%;padding:4px 8px;border:1px solid #ddd;font-size:11px;color:#888;font-family:inherit;border-radius:4px;outline:none;">
             </td>
             <td style="padding:12px 8px;text-align:center;">
               <input type="number" value="${item.points}"
-                onblur="savePoints('${item.id}', this.value)"
+                onblur="saveField('${item.id}', 'points', this.value)"
                 style="width:60px;padding:6px 8px;border:1px solid #ddd;font-size:13px;font-weight:600;color:#a67c52;font-family:inherit;border-radius:4px;outline:none;text-align:center;">
             </td>
-            <td style="padding:12px 8px;text-align:center;color:#888;">${item.cap || '∞'}</td>
+            <td style="padding:12px 8px;text-align:center;">
+              <input type="number" value="${item.cap || ''}" placeholder="∞"
+                onblur="saveField('${item.id}', 'cap', this.value)"
+                style="width:56px;padding:6px 8px;border:1px solid #ddd;font-size:13px;color:#888;font-family:inherit;border-radius:4px;outline:none;text-align:center;">
+            </td>
             <td style="padding:12px 8px;text-align:center;">
               <button onclick="toggleAvailableNow('${item.id}', ${!item.available_now})"
                 style="padding:6px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:999px;border:1px solid ${item.available_now ? '#2e7d32' : '#ddd'};background:${item.available_now ? 'rgba(76,175,80,.1)' : '#fff'};color:${item.available_now ? '#2e7d32' : '#999'};">
@@ -3277,13 +3286,16 @@ async function sendRetreatCampaign(event, retreatType) {
       });
       loadWalletItemsAdmin();
     }
-    async function savePoints(id, points) {
+    async function saveField(id, field, value) {
+      const payload = { id };
+      if (field === 'points') payload.points = parseInt(value);
+      else if (field === 'cap') payload.cap = value ? parseInt(value) : null;
+      else payload[field] = value;
       await fetch('/api/admin/wallet-items-admin', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'TeeElite2026Admin' },
-        body: JSON.stringify({ id, points: parseInt(points) })
+        body: JSON.stringify(payload)
       });
-      loadWalletItemsAdmin();
     }
     async function saveDriveUrl(id, url) {
       await fetch('/api/admin/wallet-items-admin', {
