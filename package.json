@@ -11,6 +11,7 @@
     "@vercel/blob": "latest",
     "bcryptjs": "^2.4.3",
     "nodemailer": "^6.9.7",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.3",
     "web-push": "^3.6.7"
   },
