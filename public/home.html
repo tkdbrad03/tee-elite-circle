@@ -1055,13 +1055,11 @@
         var wlStyle = isWishlisted
           ? 'background:var(--tmac-bronze);color:#fff;border:1px solid var(--tmac-bronze);border-radius:999px;'
           : 'background:#fff;color:var(--tmac-bronze);border:1px solid var(--tmac-bronze);border-radius:999px;';
-        var wlOnclick = item.available_now && item.drive_url && !isWishlisted
-          ? 'toggleWishlistAndOpen(\'' + item.id + '\',\'' + item.drive_url + '\')'
-          : 'toggleWishlist(\'' + item.id + '\')';
+        var wlOnclick = 'toggleWishlist(\'' + item.id + '\')';
         actionHtml = '<div style="display:flex;align-items:center;gap:10px;">'
           + '<button onclick="' + wlOnclick + '" id="wl-btn-' + item.id + '" style="' + wlStyle + 'padding:10px 18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit;">'
           + (isWishlisted ? '\u2713 Wishlisted' : '+ Wishlist') + '</button>'
-          + (item.available_now && item.drive_url && isWishlisted ? '<a href="' + item.drive_url + '" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tmac-bronze);text-decoration:none;">Open \u2197</a>' : '')
+          + (item.available_now && item.drive_url ? '<a href="' + item.drive_url + '" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tmac-bronze);text-decoration:none;">Open \u2197</a>' : '')
           + '</div>';
       }
 
