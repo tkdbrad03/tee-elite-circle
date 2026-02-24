@@ -192,25 +192,14 @@
     }
 
     .player-wrap {
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  box-shadow: 0 8px 32px rgba(22,51,38,.08);
-  position: relative;
-  padding-top: 56.25%;
-  background: #000;
-}
-.player-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200px;
-  height: 60px;
-  background: #000;
-  z-index: 2;
-  border-radius: 0 0 0 20px;
-}
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 32px rgba(22,51,38,.08);
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+      background: #000;
+    }
 
     .player-wrap iframe {
       position: absolute;
@@ -352,7 +341,7 @@
     <div class="player-section-label">Listen Now</div>
     <div class="player-wrap">
       <iframe
-        src="https://www.youtube.com/embed/videoseries?list=PL_Mmhj5YtNWUFEbfYiJksWCLCt5U6OlQG&autoplay=0&rel=0&modestbranding=1&color=white&controls=1&iv_load_policy=3&disablekb=0"
+        src="https://www.youtube.com/embed/videoseries?list=PL_Mmhj5YtNWUFEbfYiJksWCLCt5U6OlQG&autoplay=0&rel=0&modestbranding=1&color=white"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
         title="TMac's Confidence Playlist">
