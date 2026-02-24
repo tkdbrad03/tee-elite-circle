@@ -32,7 +32,6 @@
             line-height: 1.6;
             margin: 0;
             padding-bottom: 60px;
-            font-size: 16px;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -99,7 +98,7 @@
             background: none;
             border: none;
             color: var(--muted);
-            padding: 18px 18px;
+            padding: 16px 20px;
             cursor: pointer;
             font-family: var(--sans);
             font-weight: 500;
@@ -119,7 +118,7 @@
         }
 
         /* ── LAYOUT ── */
-        .container { max-width: 780px; margin: 0 auto; padding: 24px 18px; }
+        .container { max-width: 780px; margin: 0 auto; padding: 40px 24px; }
 
         section { display: none; animation: fadeIn 0.35s ease forwards; }
         section.active { display: block; }
@@ -134,7 +133,7 @@
             background: var(--white);
             border: 1px solid var(--line);
             border-radius: 20px;
-            padding: 22px 20px;
+            padding: 28px 32px;
             margin-bottom: 20px;
             box-shadow: 0 4px 16px rgba(22,51,38,.04);
         }
@@ -236,7 +235,7 @@
         input[type="text"],
         textarea {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border: 1px solid var(--line);
             border-radius: 10px;
             font-family: var(--sans);
@@ -260,7 +259,7 @@
             background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, var(--gold3) 100%);
             color: var(--green);
             border: none;
-            padding: 16px 24px;
+            padding: 14px 24px;
             border-radius: 999px;
             cursor: pointer;
             width: 100%;
@@ -340,14 +339,21 @@
         /* ── GRID HELPERS ── */
         .grid-2 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 16px;
         }
 
         .grid-2-btn {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 10px;
+        }
+
+        @media (min-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-2-btn { grid-template-columns: 1fr 1fr; }
+            .card { padding: 28px 32px; }
+            .container { padding: 40px 24px; }
         }
 
         /* ── PRINT ── */
@@ -357,12 +363,6 @@
             .card { border: 1px solid #ddd; break-inside: avoid; box-shadow: none; }
             body { background: white; }
             .container { max-width: 100%; padding: 0; }
-        }
-
-        @media (min-width: 600px) {
-            .card { padding: 28px 32px; }
-            .grid-2, .grid-2-btn { grid-template-columns: 1fr 1fr; }
-            .container { padding: 40px 24px; }
         }
     </style>
 </head>
@@ -492,14 +492,39 @@
         </div>
     </section>
 
-    <!-- SILENT Wealth Caddie -->
+    <!-- WEALTH CADDIE -->
     <section id="radar">
         <h2>The Wealth <em style="font-style:italic;color:var(--gold);">Caddie</em></h2>
+
+        <!-- ROUND SETUP -->
+        <div class="card" style="margin-bottom:20px;">
+            <h3 style="margin-bottom:16px;">Round Setup</h3>
+            <div class="grid-2">
+                <div>
+                    <label>Their Name</label>
+                    <input type="text" id="setup-their-name" placeholder="e.g. Jordan" oninput="saveSetup()">
+                </div>
+                <div>
+                    <label>Their Phone</label>
+                    <input type="text" id="setup-their-phone" placeholder="e.g. 555-000-1234" oninput="saveSetup()">
+                </div>
+                <div>
+                    <label>Your Name</label>
+                    <input type="text" id="setup-your-name" placeholder="e.g. Dr. TMac" oninput="saveSetup()">
+                </div>
+                <div>
+                    <label>Your Phone</label>
+                    <input type="text" id="setup-your-phone" placeholder="e.g. 555-000-5678" oninput="saveSetup()">
+                </div>
+            </div>
+        </div>
+
+        <!-- QUESTIONS -->
         <div class="card gold-border">
             <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Answer based on what you observed this round. No overthinking.</p>
-
             <div id="radar-questions"></div>
 
+            <!-- RESULT -->
             <div id="radar-result" style="display:none;margin-top:24px;">
                 <div style="background:var(--green);border-radius:14px;padding:20px 24px;margin-bottom:20px;text-align:center;">
                     <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;">Round Type</div>
@@ -526,20 +551,72 @@
                     <p id="radar-move" style="margin:0;font-size:14px;color:var(--ink);font-weight:400;"></p>
                 </div>
 
+                <!-- FOLLOW-UP MESSAGES -->
                 <div class="card gold-border" style="margin-bottom:20px;padding:22px 24px;">
-                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">48-Hour Follow-Up Message</div>
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">48-Hour Follow-Up — Email Version</div>
                     <p id="radar-followup" style="white-space:pre-wrap;font-family:var(--serif);font-size:16px;color:var(--ink);line-height:1.8;margin:0 0 12px;"></p>
-                    <button class="copy-btn" onclick="copyContent('radar-followup')">Copy Message</button>
+                    <button class="copy-btn" onclick="copyContent('radar-followup')">Copy Email</button>
+                </div>
+
+                <div id="radar-sms-wrap" class="card" style="margin-bottom:20px;padding:22px 24px;display:none;">
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Text Version (SMS)</div>
+                    <p id="radar-sms" style="white-space:pre-wrap;font-family:var(--serif);font-size:15px;color:var(--ink);line-height:1.7;margin:0 0 12px;"></p>
+                    <button class="copy-btn" onclick="copyContent('radar-sms')">Copy Text</button>
                 </div>
 
                 <button class="primary-btn" onclick="lockMove()" style="margin-bottom:12px;">🔒 Lock My Move</button>
-                <div id="lock-confirm" style="display:none;background:var(--off);border-radius:12px;padding:16px 20px;text-align:center;">
+                <div id="lock-confirm" style="display:none;background:var(--off);border-radius:12px;padding:16px 20px;text-align:center;margin-bottom:16px;">
                     <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:4px;">Move Locked</div>
                     <div style="font-size:12px;color:var(--muted);">Send your follow-up within 24–48 hours.</div>
                 </div>
             </div>
+
+            <!-- ACTION BUTTONS -->
+            <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+                <button class="primary-btn" style="flex:1;min-width:140px;" onclick="startNewRound()">Start New Round</button>
+                <button class="primary-btn" style="flex:1;min-width:140px;background:var(--green);color:var(--gold2);" onclick="showFullResetModal()">Full Reset</button>
+            </div>
+            <div id="new-round-confirm" style="display:none;text-align:center;margin-top:12px;font-size:12px;color:var(--green);letter-spacing:.1em;text-transform:uppercase;font-weight:600;">New round ready.</div>
+        </div>
+
+        <!-- ROUND HISTORY -->
+        <div class="card" style="margin-top:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+                <h3 style="margin:0;">Round History</h3>
+                <button class="copy-btn" onclick="showExportModal()">Export Summary</button>
+            </div>
+            <div id="round-history-list">
+                <p style="font-size:13px;color:var(--muted);text-align:center;padding:20px 0;">No rounds saved yet.</p>
+            </div>
         </div>
     </section>
+
+    <!-- FULL RESET MODAL -->
+    <div id="reset-modal" style="display:none;position:fixed;inset:0;background:rgba(22,51,38,.6);z-index:1000;align-items:center;justify-content:center;padding:24px;">
+        <div style="background:var(--white);border-radius:20px;padding:36px;max-width:380px;width:100%;text-align:center;">
+            <h3 style="margin-bottom:10px;">Full Reset?</h3>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:24px;">This will clear all rounds, profile fields, and saved data. This cannot be undone.</p>
+            <div style="display:flex;gap:10px;justify-content:center;">
+                <button class="btn-secondary" onclick="hideResetModal()" style="padding:12px 24px;border-radius:999px;border:1px solid var(--line);background:none;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;">Cancel</button>
+                <button class="primary-btn" style="width:auto;padding:12px 24px;background:#8B0000;color:#fff;" onclick="fullReset()">Clear Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXPORT MODAL -->
+    <div id="export-modal" style="display:none;position:fixed;inset:0;background:rgba(22,51,38,.6);z-index:1000;align-items:center;justify-content:center;padding:24px;">
+        <div style="background:var(--white);border-radius:20px;padding:32px;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h3 style="margin:0;">Round History Summary</h3>
+                <button onclick="hideExportModal()" style="background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;">&times;</button>
+            </div>
+            <div id="export-content" style="font-size:13px;color:var(--ink);line-height:1.9;"></div>
+            <div style="margin-top:20px;display:flex;gap:10px;">
+                <button class="copy-btn" onclick="copyExport()">Copy All</button>
+                <button class="primary-btn" style="width:auto;padding:12px 24px;" onclick="window.print()">Print</button>
+            </div>
+        </div>
+    </div>
 
     <!-- GENERATOR -->
     <section id="generator">
@@ -590,6 +667,11 @@
 </div>
 
 <script>
+    // ── STORAGE KEY ──
+    const STORE = 'teeElite_SwagBag';
+    function getStore() { return JSON.parse(localStorage.getItem(STORE) || '{}'); }
+    function setStore(data) { localStorage.setItem(STORE, JSON.stringify(data)); }
+
     // ── RADAR DATA ──
     const radarQuestions = [
         { id: 'q1', text: 'Did they mention liquidity or idle capital?' },
@@ -656,20 +738,20 @@
 
     function renderRadar() {
         const container = document.getElementById('radar-questions');
-        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        const stored = getStore();
         const savedAnswers = stored.radarAnswers || {};
 
-        container.innerHTML = radarQuestions.map((q, i) => {
+        container.innerHTML = radarQuestions.map((q) => {
             const val = savedAnswers[q.id];
             return `
             <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);">
                 <span style="font-size:14px;color:var(--ink);font-weight:300;flex:1;">${q.text}</span>
                 <div style="display:flex;gap:8px;flex-shrink:0;">
-                    <button onclick="setRadarAnswer('${q.id}', true)" id="btn-${q.id}-yes"
+                    <button onclick="setRadarAnswer('${q.id}', true)"
                         style="padding:8px 18px;border-radius:999px;border:1px solid var(--line);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;
                         background:${val === true ? 'var(--green)' : 'var(--white)'};
                         color:${val === true ? 'var(--white)' : 'var(--muted)'};">Yes</button>
-                    <button onclick="setRadarAnswer('${q.id}', false)" id="btn-${q.id}-no"
+                    <button onclick="setRadarAnswer('${q.id}', false)"
                         style="padding:8px 18px;border-radius:999px;border:1px solid var(--line);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;
                         background:${val === false ? '#8B0000' : 'var(--white)'};
                         color:${val === false ? 'var(--white)' : 'var(--muted)'};">No</button>
@@ -677,17 +759,16 @@
             </div>`;
         }).join('');
 
-        // Show result if all answered
         if (Object.keys(savedAnswers).length === 5) {
             showRadarResult(savedAnswers);
         }
     }
 
     function setRadarAnswer(id, value) {
-        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        const stored = getStore();
         if (!stored.radarAnswers) stored.radarAnswers = {};
         stored.radarAnswers[id] = value;
-        localStorage.setItem('teeElite_SwagBag', JSON.stringify(stored));
+        setStore(stored);
         renderRadar();
     }
 
@@ -695,27 +776,76 @@
         const answerArr = radarQuestions.map(q => answers[q.id] === true);
         const category = categorizeRound(answerArr);
         const blueprint = radarBlueprints[category];
+        const setup = getStore().setup || {};
+        const theirName = setup.theirName || '';
+        const yourName = setup.yourName || '';
+        const yourPhone = setup.yourPhone || '';
+        const theirPhone = setup.theirPhone || '';
+
+        const greeting = theirName ? `Hi ${theirName},` : 'Hi,';
+        const sign = yourName ? `– ${yourName}${yourPhone ? '\n' + yourPhone : ''}` : '';
+        let emailMsg = blueprint.followup.replace(/^Hi,/, greeting);
+        if (sign) {
+            emailMsg = emailMsg.replace(/\n(Speak soon\.|Let me know\.|More soon\.|Talk soon!|No rush — just keeping the door open\.)$/, (m, ending) => `\n${ending}\n\n${sign}`);
+            if (!emailMsg.includes(sign)) emailMsg += `\n\n${sign}`;
+        }
 
         document.getElementById('radar-category').textContent = category;
         document.getElementById('radar-signals').textContent = blueprint.signals;
         document.getElementById('radar-not').textContent = blueprint.not;
         document.getElementById('radar-bridge').textContent = blueprint.bridge;
         document.getElementById('radar-move').textContent = blueprint.move;
-        document.getElementById('radar-followup').textContent = blueprint.followup;
+        document.getElementById('radar-followup').textContent = emailMsg;
         document.getElementById('radar-result').style.display = 'block';
         document.getElementById('lock-confirm').style.display = 'none';
+
+        const smsWrap = document.getElementById('radar-sms-wrap');
+        if (theirPhone) {
+            const smsName = theirName || 'Hey';
+            const smsSign = yourName ? `– ${yourName}${yourPhone ? ', ' + yourPhone : ''}` : '';
+            document.getElementById('radar-sms').textContent = `${smsName}, enjoyed our round. You mentioned ${category.toLowerCase()} — I have something that might be helpful. ${smsSign}`;
+            smsWrap.style.display = 'block';
+        } else {
+            smsWrap.style.display = 'none';
+        }
     }
 
+    // ── ROUND SETUP ──
+    function saveSetup() {
+        const stored = getStore();
+        stored.setup = {
+            theirName: document.getElementById('setup-their-name').value,
+            theirPhone: document.getElementById('setup-their-phone').value,
+            yourName: document.getElementById('setup-your-name').value,
+            yourPhone: document.getElementById('setup-your-phone').value
+        };
+        setStore(stored);
+    }
+
+    function loadSetup() {
+        const setup = getStore().setup || {};
+        if (setup.theirName) document.getElementById('setup-their-name').value = setup.theirName;
+        if (setup.theirPhone) document.getElementById('setup-their-phone').value = setup.theirPhone;
+        if (setup.yourName) document.getElementById('setup-your-name').value = setup.yourName;
+        if (setup.yourPhone) document.getElementById('setup-your-phone').value = setup.yourPhone;
+    }
+
+    // ── LOCK MOVE ──
     function lockMove() {
-        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        const stored = getStore();
+        const setup = stored.setup || {};
         stored.lockedMove = {
             category: document.getElementById('radar-category').textContent,
             bridge: document.getElementById('radar-bridge').textContent,
             followup: document.getElementById('radar-followup').textContent,
+            sms: document.getElementById('radar-sms').textContent || '',
+            theirName: setup.theirName || '',
+            yourName: setup.yourName || '',
+            yourPhone: setup.yourPhone || '',
             reminder: 'Send within 24–48 hours',
             lockedAt: new Date().toISOString()
         };
-        localStorage.setItem('teeElite_SwagBag', JSON.stringify(stored));
+        setStore(stored);
         document.getElementById('lock-confirm').style.display = 'block';
         updateStrategyCard(stored.lockedMove);
     }
@@ -724,6 +854,7 @@
         if (!move) return;
         const card = document.getElementById('strategy-card');
         const content = document.getElementById('strategy-card-content');
+        if (!card || !content) return;
         content.innerHTML = `
             <div style="margin-bottom:8px;"><strong>Opportunity Type:</strong> ${move.category}</div>
             <div style="margin-bottom:8px;"><strong>Bridge Line:</strong> <em>${move.bridge}</em></div>
@@ -732,6 +863,112 @@
         card.style.display = 'block';
     }
 
+    // ── START NEW ROUND ──
+    function startNewRound() {
+        const stored = getStore();
+        const hasData = stored.radarAnswers && Object.keys(stored.radarAnswers).length > 0;
+        if (hasData) {
+            if (!stored.roundHistory) stored.roundHistory = [];
+            stored.roundHistory.unshift({
+                id: Date.now(),
+                timestamp: new Date().toLocaleString(),
+                theirName: stored.setup?.theirName || 'Unknown',
+                category: document.getElementById('radar-category').textContent || '',
+                bridge: document.getElementById('radar-bridge').textContent || '',
+                followup: document.getElementById('radar-followup').textContent || '',
+                sms: document.getElementById('radar-sms').textContent || ''
+            });
+        }
+        delete stored.radarAnswers;
+        delete stored.lockedMove;
+        // Clear their name for new round but keep your own info
+        if (stored.setup) {
+            stored.setup.theirName = '';
+            stored.setup.theirPhone = '';
+        }
+        setStore(stored);
+
+        document.getElementById('radar-result').style.display = 'none';
+        document.getElementById('lock-confirm').style.display = 'none';
+        document.getElementById('radar-sms-wrap').style.display = 'none';
+        document.getElementById('setup-their-name').value = '';
+        document.getElementById('setup-their-phone').value = '';
+        renderRadar();
+        renderHistory();
+
+        const confirm = document.getElementById('new-round-confirm');
+        confirm.style.display = 'block';
+        setTimeout(() => confirm.style.display = 'none', 3000);
+    }
+
+    // ── FULL RESET ──
+    function showFullResetModal() { document.getElementById('reset-modal').style.display = 'flex'; }
+    function hideResetModal() { document.getElementById('reset-modal').style.display = 'none'; }
+    function fullReset() { localStorage.removeItem(STORE); location.reload(); }
+
+    // ── ROUND HISTORY ──
+    function renderHistory() {
+        const stored = getStore();
+        const history = stored.roundHistory || [];
+        const container = document.getElementById('round-history-list');
+        if (history.length === 0) {
+            container.innerHTML = '<p style="font-size:13px;color:var(--muted);text-align:center;padding:20px 0;">No rounds saved yet.</p>';
+            return;
+        }
+        container.innerHTML = history.map(r => `
+            <div style="border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                    <div>
+                        <div style="font-size:13px;font-weight:500;color:var(--ink);">${r.theirName || 'Unknown'}</div>
+                        <div style="font-size:11px;color:var(--muted);">${r.timestamp}</div>
+                    </div>
+                    <div style="background:var(--off);border-radius:20px;padding:4px 12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:500;">${r.category}</div>
+                </div>
+                <div style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;">${r.bridge}</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="copy-btn" style="margin-top:0;" onclick="copyText(roundHistoryText(${r.id}))">Copy Follow-Up</button>
+                    <button onclick="deleteRound(${r.id})" style="padding:8px 16px;border-radius:999px;border:1px solid #ffcdd2;background:none;color:#c62828;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function roundHistoryText(id) {
+        const stored = getStore();
+        const r = (stored.roundHistory || []).find(x => x.id === id);
+        return r ? r.followup : '';
+    }
+
+    function deleteRound(id) {
+        const stored = getStore();
+        stored.roundHistory = (stored.roundHistory || []).filter(r => r.id !== id);
+        setStore(stored);
+        renderHistory();
+    }
+
+    // ── EXPORT ──
+    function showExportModal() {
+        const stored = getStore();
+        const history = stored.roundHistory || [];
+        const content = document.getElementById('export-content');
+        if (history.length === 0) {
+            content.innerHTML = '<p style="color:var(--muted);">No rounds in history yet.</p>';
+        } else {
+            content.innerHTML = history.map(r => `
+                <div style="border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:20px;">
+                    <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">${r.theirName || 'Unknown'} — ${r.timestamp}</div>
+                    <div style="color:var(--gold);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">${r.category}</div>
+                    <div style="font-style:italic;color:var(--ink);margin-bottom:8px;">${r.bridge}</div>
+                    <div style="white-space:pre-wrap;color:var(--muted);font-size:13px;">${r.followup}</div>
+                </div>
+            `).join('');
+        }
+        document.getElementById('export-modal').style.display = 'flex';
+    }
+
+    function hideExportModal() { document.getElementById('export-modal').style.display = 'none'; }
+    function copyExport() { copyText(document.getElementById('export-content').innerText); }
+
     // ── NAV ──
     function navTo(id) {
         document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
@@ -739,7 +976,7 @@
         document.getElementById(id).classList.add('active');
         event.target.classList.add('active');
         window.scrollTo(0, 0);
-        if (id === 'radar') renderRadar();
+        if (id === 'radar') { renderRadar(); renderHistory(); loadSetup(); }
     }
 
     // ── ROI ──
@@ -774,8 +1011,7 @@
     }
 
     // ── COPY ──
-    function copyContent(id) {
-        const text = document.getElementById(id).innerText;
+    function copyText(text) {
         const el = document.createElement('textarea');
         el.value = text;
         document.body.appendChild(el);
@@ -785,26 +1021,29 @@
         alert("Copied to clipboard!");
     }
 
+    function copyContent(id) {
+        copyText(document.getElementById(id).innerText);
+    }
+
     // ── SAVE / LOAD ──
     function saveAll() {
-        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        const stored = getStore();
         stored.mainNotes = document.getElementById('mainNotes').value;
         stored.checks = {};
         for (let i = 1; i <= 9; i++) {
             stored.checks[`check${i}`] = document.getElementById(`check${i}`).checked;
         }
-        localStorage.setItem('teeElite_SwagBag', JSON.stringify(stored));
+        setStore(stored);
     }
 
     function loadAll() {
-        const stored = localStorage.getItem('teeElite_SwagBag');
-        if (!stored) return;
-        const data = JSON.parse(stored);
+        const data = getStore();
         if (data.mainNotes) document.getElementById('mainNotes').value = data.mainNotes;
         for (let i = 1; i <= 9; i++) {
             if (data.checks && data.checks[`check${i}`]) document.getElementById(`check${i}`).checked = true;
         }
         if (data.lockedMove) updateStrategyCard(data.lockedMove);
+        loadSetup();
     }
 
     function syncProgress() { saveAll(); }
