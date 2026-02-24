@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influence on the Golf Course | Tee Elite Invitational</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green:    #163326;
+            --gold:     #A87C28;
+            --gold2:    #C9A24A;
+            --gold3:    #E8D48A;
+            --white:    #FFFFFF;
+            --off:      #F8F7F4;
+            --ink:      #163326;
+            --muted:    #7a7a6e;
+            --line:     rgba(0,0,0,.10);
+            --serif:    "Cormorant Garamond", Georgia, serif;
+            --sans:     "Jost", ui-sans-serif, system-ui, sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: var(--sans);
+            background-color: var(--white);
+            color: var(--ink);
+            line-height: 1.6;
+            margin: 0;
+            padding-bottom: 60px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: var(--green);
+            color: var(--white);
+            padding: 48px 24px 40px;
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 32px;
+            background: linear-gradient(180deg, transparent, var(--gold));
+        }
+
+        header h1 {
+            margin: 0;
+            font-family: var(--serif);
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 300;
+            letter-spacing: .01em;
+            line-height: 1.1;
+        }
+
+        header h1 em {
+            font-style: italic;
+            color: var(--gold2);
+        }
+
+        header p {
+            margin: 10px 0 0;
+            opacity: .85;
+            font-size: 12px;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(12px);
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            z-index: 100;
+            border-bottom: 1px solid var(--line);
+            scrollbar-width: none;
+        }
+
+        nav::-webkit-scrollbar { display: none; }
+
+        nav button {
+            background: none;
+            border: none;
+            color: var(--muted);
+            padding: 16px 20px;
+            cursor: pointer;
+            font-family: var(--sans);
+            font-weight: 500;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav button:hover { color: var(--gold); }
+
+        nav button.active {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        /* ── LAYOUT ── */
+        .container { max-width: 780px; margin: 0 auto; padding: 40px 24px; }
+
+        section { display: none; animation: fadeIn 0.35s ease forwards; }
+        section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(22,51,38,.04);
+        }
+
+        .gold-border  { border-left: 4px solid var(--gold); border-radius: 0 20px 20px 0; }
+        .green-border { border-left: 4px solid var(--green); border-radius: 0 20px 20px 0; }
+
+        h2 {
+            font-family: var(--serif);
+            font-size: 32px;
+            font-weight: 300;
+            color: var(--ink);
+            margin: 0 0 24px;
+        }
+
+        h3 {
+            font-family: var(--serif);
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--ink);
+            margin: 0 0 12px;
+        }
+
+        .accent-text { color: var(--gold); }
+
+        p { font-size: 14px; font-weight: 300; color: var(--muted); margin: 0 0 12px; }
+        p strong { color: var(--ink); font-weight: 500; }
+
+        ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        ul li {
+            font-size: 14px;
+            font-weight: 300;
+            color: var(--muted);
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        ul li strong { color: var(--ink); font-weight: 500; }
+        ul li em { color: var(--gold); font-style: italic; }
+
+        blockquote {
+            border-left: 3px solid var(--gold);
+            padding-left: 18px;
+            font-family: var(--serif);
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink);
+            margin: 20px 0;
+        }
+
+        /* ── CHECKLIST ── */
+        .checklist-group { margin-bottom: 8px; }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .checklist-item:last-child { border-bottom: none; }
+
+        .checklist-item input[type="checkbox"] {
+            margin-top: 3px;
+            width: 17px;
+            height: 17px;
+            accent-color: var(--green);
+            flex-shrink: 0;
+        }
+
+        .checklist-item label {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--ink);
+            text-transform: none;
+            letter-spacing: 0;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* ── FORMS ── */
+        label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            font-family: var(--sans);
+            font-size: 14px;
+            color: var(--ink);
+            background: var(--off);
+            margin-bottom: 18px;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        select:focus,
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        textarea:focus { border-color: var(--gold2); background: var(--white); }
+
+        textarea { resize: vertical; min-height: 100px; }
+
+        /* ── BUTTONS ── */
+        button.primary-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, var(--gold3) 100%);
+            color: var(--green);
+            border: none;
+            padding: 14px 24px;
+            border-radius: 999px;
+            cursor: pointer;
+            width: 100%;
+            font-family: var(--sans);
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            transition: opacity .2s, transform .2s;
+        }
+
+        button.primary-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+        .copy-btn {
+            background: var(--green);
+            color: var(--gold2);
+            border: none;
+            padding: 10px 20px;
+            font-size: 11px;
+            font-family: var(--sans);
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            border-radius: 999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            transition: opacity .2s;
+        }
+
+        .copy-btn:hover { opacity: .85; }
+
+        /* ── ROI / OUTPUT ── */
+        .roi-display {
+            background: var(--off);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 24px;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .roi-display h4 {
+            font-family: var(--serif);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--ink);
+            margin: 0 0 6px;
+        }
+
+        /* ── SCENARIO META ── */
+        .scenario-meta {
+            font-size: 13px;
+            font-weight: 300;
+            background: var(--off);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .scenario-meta strong { color: var(--ink); font-weight: 500; }
+
+        /* ── FOOTER ── */
+        .disclaimer {
+            text-align: center;
+            font-size: 11px;
+            color: #ccc;
+            padding: 32px 24px;
+            border-top: 1px solid var(--line);
+            letter-spacing: .08em;
+        }
+
+        /* ── GRID HELPERS ── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-2-btn {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            nav, .copy-btn, .primary-btn, header { display: none !important; }
+            section { display: block !important; opacity: 1 !important; transform: none !important; }
+            .card { border: 1px solid #ddd; break-inside: avoid; box-shadow: none; }
+            body { background: white; }
+            .container { max-width: 100%; padding: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .card { padding: 22px 20px; }
+            .grid-2, .grid-2-btn { grid-template-columns: 1fr; }
+            .container { padding: 28px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Influence on the <em>Golf Course</em></h1>
+    <p>Tee Elite Invitational · Effortless Wealth Plays</p>
+</header>
+
+<nav id="mainNav">
+    <button onclick="navTo('start')" class="active">Start Here</button>
+    <button onclick="navTo('flow')">9-Hole Flow</button>
+    <button onclick="navTo('plays')">Plays</button>
+    <button onclick="navTo('generator')">Follow-Up</button>
+    <button onclick="navTo('notes')">My Notes</button>
+</nav>
+
+<div class="container">
+
+    <!-- START HERE -->
+    <section id="start" class="active">
+        <div class="card gold-border">
+            <h3>Quick Start Walkthrough (60s)</h3>
+            <p>Master the round by managing the energy, not just the score.</p>
+            <ul>
+                <li><strong>Pre-Round:</strong> Research your group. Identify one "Resource Gap" you might fill.</li>
+                <li><strong>Holes 1–3:</strong> <em>Connection.</em> Low stakes, high rapport. Family, travel, gear.</li>
+                <li><strong>Holes 4–6:</strong> <em>Discovery.</em> Deploy the Industry Shift question. Listen 80%.</li>
+                <li><strong>Holes 7–9:</strong> <em>Vision.</em> Align your resources with their 3-year goals.</li>
+                <li><strong>19th Hole:</strong> <em>Soft Close.</em> The "Bridge Move"—set the follow-up expectation.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>The Wealth Arbitrage Concept</h3>
+            <p>High-performers spend 4 hours in a cart to escape the noise. This is your chance to move from a "vendor" or "peer" to a <strong>Strategic Ally</strong>. Wealth is built in the spaces between the shots.</p>
+            <p><strong>The Golden Rule:</strong> Ask 2x more questions than you give answers. If you're talking about yourself, you aren't learning their price of entry.</p>
+        </div>
+
+        <div class="card green-border">
+            <h3>Social Capital ROI Calculator</h3>
+            <div class="grid-2">
+                <div>
+                    <label>Round Cost ($)</label>
+                    <input type="number" id="roundCost" value="250">
+                </div>
+                <div>
+                    <label>Trip/Travel ($)</label>
+                    <input type="number" id="tripCost" value="2500">
+                </div>
+            </div>
+
+            <label>Estimated Value of Relationship</label>
+            <select id="relValue">
+                <option value="10000">$10,000 (Intro / Small Project)</option>
+                <option value="50000">$50,000 (Strategic Partnership)</option>
+                <option value="250000">$250,000 (Major Contract / Investment)</option>
+                <option value="1000000">$1M+ (Acquisition / Enterprise Lead)</option>
+            </select>
+
+            <button class="primary-btn" onclick="calculateROI()">Calculate Potential ROI</button>
+            <div id="roiOutput" class="roi-display" style="display:none;"></div>
+        </div>
+    </section>
+
+    <!-- 9-HOLE FLOW -->
+    <section id="flow">
+        <h2>9-Hole Networking Flow</h2>
+
+        <div class="card">
+            <h3 class="accent-text">Holes 1–3: Connection Phase</h3>
+            <p><small>Goal: Build rapport, no business talk. Be the person they want to spend 4 hours with.</small></p>
+            <div class="checklist-group">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check1" onchange="syncProgress()">
+                    <label for="check1">Hole 1: Establish group etiquette & vibe (the "Easy Start")</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check2" onchange="syncProgress()">
+                    <label for="check2">Hole 2: Identify one personal passion (Family, Cars, Travel)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check3" onchange="syncProgress()">
+                    <label for="check3">Hole 3: Share a vulnerable "mishap" (Humanize yourself)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="accent-text">Holes 4–6: Discovery Phase</h3>
+            <p><small>Goal: Industry mapping. Understand their current friction points.</small></p>
+            <blockquote>"What is the biggest shift you're seeing in your sector right now?"</blockquote>
+            <div class="checklist-group">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check4" onchange="syncProgress()">
+                    <label for="check4">Hole 4: Deploy the "Biggest Shift" Power Question</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check5" onchange="syncProgress()">
+                    <label for="check5">Hole 5: Active Listening (Identify their 'Resource Gap')</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check6" onchange="syncProgress()">
+                    <label for="check6">Hole 6: Verify the pain (Repeat back what you heard)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="accent-text">Holes 7–9: Vision Phase</h3>
+            <p><small>Goal: Future state & the partnership pivot.</small></p>
+            <div class="checklist-group">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check7" onchange="syncProgress()">
+                    <label for="check7">Hole 7: Ask "Where are you taking this in 3 years?"</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check8" onchange="syncProgress()">
+                    <label for="check8">Hole 8: Align a resource you have to that vision</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check9" onchange="syncProgress()">
+                    <label for="check9">Hole 9: Confirm the 'Bridge Move' (Follow-up item)</label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLAYS -->
+    <section id="plays">
+        <h2>Interactive Scenario Plays</h2>
+        <div id="playsContainer"></div>
+    </section>
+
+    <!-- GENERATOR -->
+    <section id="generator">
+        <div class="card gold-border">
+            <h3>Anchor Method Follow-Up</h3>
+            <p><small>Timing: Send within 24–48 hours. Reference a specific hole moment.</small></p>
+
+            <label>Recipient Name</label>
+            <input type="text" id="followupName" placeholder="e.g. Marcus">
+
+            <label>Follow-Up Type</label>
+            <select id="followupType">
+                <option value="tactical">Tactical Anchor (Pain Point Solution)</option>
+                <option value="cultural">Cultural Anchor (Shared Synergy)</option>
+                <option value="referral">Peer Referral (Double Intro)</option>
+            </select>
+
+            <label>The Course Moment (Reference a Hole)</label>
+            <input type="text" id="courseRef" placeholder="e.g. our chat on the 5th green about AI">
+
+            <button class="primary-btn" onclick="createFollowUp()">Generate Message</button>
+
+            <div id="msgResult" class="roi-display" style="display:none; text-align:left;">
+                <p id="msgText" style="white-space:pre-wrap; font-family:var(--serif); font-size:16px; color:var(--ink); line-height:1.8;"></p>
+                <button class="copy-btn" onclick="copyContent('msgText')">Copy Message</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOTES -->
+    <section id="notes">
+        <h2>My Playbook Notes</h2>
+        <div class="card">
+            <label>Key Insights & Intel</label>
+            <textarea id="mainNotes" placeholder="What were their main goals? Who do they need to meet? What was their 'Resource Gap'?" oninput="saveAll()"></textarea>
+
+            <div class="grid-2-btn">
+                <button class="primary-btn" onclick="exportNotes()">Download .txt</button>
+                <button class="primary-btn" style="background:var(--green);color:var(--gold2);" onclick="window.print()">Print Summary</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="disclaimer">
+        This is educational content for the Tee Elite Invitational. Use it wisely.
+    </footer>
+</div>
+
+<script>
+    const playsData = [
+        { id: 1, title: "The Favors Bank Play", setup: "They mention a personal bottleneck (e.g., kid's internship or vacation home fix).", action: "Offer a 'no-ask' intro to a specialist in your network.", roi: "High emotional equity for future business favors.", move: "Send intro email before you leave the club parking lot." },
+        { id: 2, title: "The Industry Intel Play", setup: "Partner asks about a competitor or a market trend you know well.", action: "Share a macro-insight that doesn't breach NDA but shows depth.", roi: "Establishes you as a domain authority, not just a golfer.", move: "Offer to send a proprietary 'one-sheet' report on the topic." },
+        { id: 3, title: "The Operational Shortcut", setup: "They complain about a specific tech or hiring friction in their office.", action: "Explain a 3-step framework you used to solve that exact issue.", roi: "Demonstrates immediate utility and ROI mindset.", move: "Suggest a 15-minute 'screen share' next Tuesday." },
+        { id: 4, title: "The Talent Scout Play", setup: "They are looking for a specific high-level role (C-Suite).", action: "Identify someone in your network who is an 'A-Player' and vouch for them.", roi: "Increases your value to both the candidate and the partner.", move: "Text the candidate to see if they are open to an anonymous intro." },
+        { id: 5, title: "The Quiet Acquisition Play", setup: "They mention being 'tired' of a certain business line or looking to exit.", action: "Ask clarifying questions about their 'Ideal Exit' without being predatory.", roi: "Creates deal flow and M&A opportunities.", move: "Suggest a private lunch to discuss 'Strategic Options'." }
+    ];
+
+    function navTo(id) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function calculateROI() {
+        const cost = Number(document.getElementById('roundCost').value) + Number(document.getElementById('tripCost').value);
+        const value = Number(document.getElementById('relValue').value);
+        const roi = (value / cost).toFixed(1);
+
+        const out = document.getElementById('roiOutput');
+        out.style.display = 'block';
+        out.innerHTML = `
+            <h4>Calculated Potential</h4>
+            <div style="font-family:var(--serif);font-size:3rem;font-weight:300;color:var(--gold);line-height:1;margin:8px 0;">${roi}x ROI</div>
+            <p style="margin:0;"><small>By leveraging this round for a <strong>${roi}x</strong> return, your focus must remain on identifying their specific <strong>Vision Phase</strong> needs by Hole 9.</small></p>
+        `;
+    }
+
+    function renderPlays() {
+        const container = document.getElementById('playsContainer');
+        playsData.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'card green-border';
+            div.innerHTML = `
+                <h3 class="accent-text">${p.title}</h3>
+                <div class="scenario-meta"><strong>Setup:</strong> ${p.setup}</div>
+                <div class="scenario-meta"><strong>Action:</strong> ${p.action}</div>
+                <div class="scenario-meta"><strong>19th Hole Move:</strong> ${p.move}</div>
+
+                <label>What I heard (Notes)</label>
+                <textarea id="pNote-${p.id}" placeholder="Note specific details here..." oninput="saveAll()"></textarea>
+
+                <label>My Bridge Move</label>
+                <select id="pMove-${p.id}" onchange="saveAll()">
+                    <option value="">Select an action...</option>
+                    <option value="Resource Link">Send Resource Link</option>
+                    <option value="Direct Intro">Make Direct Introduction</option>
+                    <option value="Strategy Session">Invite to Strategy Session</option>
+                    <option value="Physical Gift">Send Thoughtful Gift</option>
+                </select>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function createFollowUp() {
+        const name = document.getElementById('followupName').value || "Friend";
+        const type = document.getElementById('followupType').value;
+        const ref = document.getElementById('courseRef').value || "our time on the course";
+        let body = "";
+
+        if (type === 'tactical') {
+            body = `Hi ${name},\n\nGreat round today—really enjoyed our walk. I was thinking back to ${ref}. We actually navigated a similar challenge last quarter and built a small framework for it. Would it be helpful if I sent that over for you to peek at? \n\nLet me know!`;
+        } else if (type === 'cultural') {
+            body = `Hi ${name},\n\nThanks again for the game today. I'm still reflecting on ${ref}. It's rare to meet someone who shares that specific outlook on the industry. Let's make sure we don't wait another six months to grab a coffee or lunch? \n\nBest,`;
+        } else {
+            body = `Hi ${name},\n\nEnjoyed the back nine today. After ${ref}, I realized you absolutely need to meet a contact of mine who is specialized in that space. I'll send a separate intro email shortly to connect you two. \n\nTalk soon!`;
+        }
+
+        document.getElementById('msgText').innerText = body;
+        document.getElementById('msgResult').style.display = 'block';
+    }
+
+    function copyContent(id) {
+        const text = document.getElementById(id).innerText;
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        alert("Copied to clipboard!");
+    }
+
+    function saveAll() {
+        const data = {
+            mainNotes: document.getElementById('mainNotes').value,
+            checks: {},
+            plays: {}
+        };
+        for (let i = 1; i <= 9; i++) {
+            data.checks[`check${i}`] = document.getElementById(`check${i}`).checked;
+        }
+        playsData.forEach(p => {
+            data.plays[`pNote-${p.id}`] = document.getElementById(`pNote-${p.id}`).value;
+            data.plays[`pMove-${p.id}`] = document.getElementById(`pMove-${p.id}`).value;
+        });
+        localStorage.setItem('teeElite_SwagBag', JSON.stringify(data));
+    }
+
+    function loadAll() {
+        const stored = localStorage.getItem('teeElite_SwagBag');
+        if (!stored) return;
+        const data = JSON.parse(stored);
+
+        if (data.mainNotes) document.getElementById('mainNotes').value = data.mainNotes;
+
+        for (let i = 1; i <= 9; i++) {
+            if (data.checks[`check${i}`]) document.getElementById(`check${i}`).checked = true;
+        }
+
+        playsData.forEach(p => {
+            if (data.plays[`pNote-${p.id}`]) document.getElementById(`pNote-${p.id}`).value = data.plays[`pNote-${p.id}`];
+            if (data.plays[`pMove-${p.id}`]) document.getElementById(`pMove-${p.id}`).value = data.plays[`pMove-${p.id}`];
+        });
+    }
+
+    function syncProgress() { saveAll(); }
+
+    function exportNotes() {
+        const data = JSON.parse(localStorage.getItem('teeElite_SwagBag')) || {};
+        let content = "TEE ELITE INVITATIONAL: GOLF WEALTH PLAYBOOK\n";
+        content += "==============================================\n\n";
+        content += "MAIN NOTES:\n" + (data.mainNotes || "None") + "\n\n";
+        content += "PLAY NOTES:\n";
+        playsData.forEach(p => {
+            content += `- ${p.title}: ${data.plays[`pNote-${p.id}`] || "No notes"} (Action: ${data.plays[`pMove-${p.id}`] || "None"})\n`;
+        });
+
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "TeeElite_Playbook_Notes.txt";
+        a.click();
+    }
+
+    // Initialize
+    renderPlays();
+    loadAll();
+</script>
+
+</body>
+</html>
