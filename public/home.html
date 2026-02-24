@@ -846,6 +846,7 @@
     function openModal(id) {
       document.getElementById(id).classList.add('open');
       document.body.style.overflow = 'hidden';
+      if (id === 'swag-modal') loadWallet();
     }
     function closeModal(id) {
       document.getElementById(id).classList.remove('open');
