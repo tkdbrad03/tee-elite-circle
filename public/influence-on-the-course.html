@@ -71,7 +71,7 @@
 
         header p {
             margin: 10px 0 0;
-            opacity: .85;
+            opacity: .6;
             font-size: 12px;
             letter-spacing: .22em;
             text-transform: uppercase;
@@ -375,7 +375,7 @@
 <nav id="mainNav">
     <button onclick="navTo('start')" class="active">Start Here</button>
     <button onclick="navTo('flow')">9-Hole Flow</button>
-    <button onclick="navTo('plays')">Plays</button>
+    <button onclick="navTo('wealth caddie')">Wealth Caddie</button>
     <button onclick="navTo('generator')">Follow-Up</button>
     <button onclick="navTo('notes')">My Notes</button>
 </nav>
@@ -491,10 +491,54 @@
         </div>
     </section>
 
-    <!-- PLAYS -->
-    <section id="plays">
-        <h2>Interactive Scenario Plays</h2>
-        <div id="playsContainer"></div>
+    <!-- SILENT WEALTH RADAR -->
+    <section id="radar">
+        <h2>Silent Wealth <em style="font-style:italic;color:var(--gold);">Radar</em></h2>
+
+        <div class="card gold-border">
+            <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Answer based on what you observed this round. No overthinking.</p>
+
+            <div id="radar-questions"></div>
+
+            <div id="radar-result" style="display:none;margin-top:24px;">
+                <div style="background:var(--green);border-radius:14px;padding:20px 24px;margin-bottom:20px;text-align:center;">
+                    <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;">Round Type</div>
+                    <div id="radar-category" style="font-family:var(--serif);font-size:26px;font-weight:300;color:var(--white);"></div>
+                </div>
+
+                <div class="card" style="margin-bottom:16px;padding:22px 24px;">
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">What This Signals</div>
+                    <p id="radar-signals" style="margin:0;font-size:14px;color:var(--ink);font-weight:400;"></p>
+                </div>
+
+                <div class="card" style="margin-bottom:16px;padding:22px 24px;">
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">What NOT To Do</div>
+                    <p id="radar-not" style="margin:0;font-size:14px;color:var(--ink);font-weight:400;"></p>
+                </div>
+
+                <div class="card green-border" style="margin-bottom:16px;padding:22px 24px;">
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Subtle Bridge Line</div>
+                    <p id="radar-bridge" style="margin:0;font-family:var(--serif);font-size:18px;font-style:italic;color:var(--ink);"></p>
+                </div>
+
+                <div class="card" style="margin-bottom:16px;padding:22px 24px;">
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">19th Hole Move</div>
+                    <p id="radar-move" style="margin:0;font-size:14px;color:var(--ink);font-weight:400;"></p>
+                </div>
+
+                <div class="card gold-border" style="margin-bottom:20px;padding:22px 24px;">
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">48-Hour Follow-Up Message</div>
+                    <p id="radar-followup" style="white-space:pre-wrap;font-family:var(--serif);font-size:16px;color:var(--ink);line-height:1.8;margin:0 0 12px;"></p>
+                    <button class="copy-btn" onclick="copyContent('radar-followup')">Copy Message</button>
+                </div>
+
+                <button class="primary-btn" onclick="lockMove()" style="margin-bottom:12px;">🔒 Lock My Move</button>
+                <div id="lock-confirm" style="display:none;background:var(--off);border-radius:12px;padding:16px 20px;text-align:center;">
+                    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:4px;">Move Locked</div>
+                    <div style="font-size:12px;color:var(--muted);">Send your follow-up within 24–48 hours.</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- GENERATOR -->
@@ -532,10 +576,11 @@
             <label>Key Insights & Intel</label>
             <textarea id="mainNotes" placeholder="What were their main goals? Who do they need to meet? What was their 'Resource Gap'?" oninput="saveAll()"></textarea>
 
-            <div class="grid-2-btn">
-                <button class="primary-btn" onclick="exportNotes()">Download .txt</button>
+            <div id="strategy-card" style="display:none;background:var(--off);border-radius:14px;padding:20px 24px;margin-bottom:16px;">
+                    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Round Strategy Card</div>
+                    <div id="strategy-card-content" style="font-size:13px;color:var(--ink);line-height:1.8;"></div>
+                </div>
                 <button class="primary-btn" style="background:var(--green);color:var(--gold2);" onclick="window.print()">Print Summary</button>
-            </div>
         </div>
     </section>
 
@@ -545,27 +590,163 @@
 </div>
 
 <script>
-    const playsData = [
-        { id: 1, title: "The Favors Bank Play", setup: "They mention a personal bottleneck (e.g., kid's internship or vacation home fix).", action: "Offer a 'no-ask' intro to a specialist in your network.", roi: "High emotional equity for future business favors.", move: "Send intro email before you leave the club parking lot." },
-        { id: 2, title: "The Industry Intel Play", setup: "Partner asks about a competitor or a market trend you know well.", action: "Share a macro-insight that doesn't breach NDA but shows depth.", roi: "Establishes you as a domain authority, not just a golfer.", move: "Offer to send a proprietary 'one-sheet' report on the topic." },
-        { id: 3, title: "The Operational Shortcut", setup: "They complain about a specific tech or hiring friction in their office.", action: "Explain a 3-step framework you used to solve that exact issue.", roi: "Demonstrates immediate utility and ROI mindset.", move: "Suggest a 15-minute 'screen share' next Tuesday." },
-        { id: 4, title: "The Talent Scout Play", setup: "They are looking for a specific high-level role (C-Suite).", action: "Identify someone in your network who is an 'A-Player' and vouch for them.", roi: "Increases your value to both the candidate and the partner.", move: "Text the candidate to see if they are open to an anonymous intro." },
-        { id: 5, title: "The Quiet Acquisition Play", setup: "They mention being 'tired' of a certain business line or looking to exit.", action: "Ask clarifying questions about their 'Ideal Exit' without being predatory.", roi: "Creates deal flow and M&A opportunities.", move: "Suggest a private lunch to discuss 'Strategic Options'." }
+    // ── RADAR DATA ──
+    const radarQuestions = [
+        { id: 'q1', text: 'Did they mention liquidity or idle capital?' },
+        { id: 'q2', text: 'Did they complain about systems or inefficiency?' },
+        { id: 'q3', text: 'Did they mention hiring or staffing challenges?' },
+        { id: 'q4', text: 'Did they talk about expansion, acquisition, or growth?' },
+        { id: 'q5', text: 'Did they repeat a pain point more than once?' }
     ];
 
+    const radarBlueprints = {
+        'Capital Opportunity': {
+            signals: 'They have money in motion and are looking for a place to put it. They are not looking for a pitch — they are looking for a trusted filter.',
+            not: 'Do not present a deck or send unsolicited materials. Premature pitches kill deals that proximity would have closed.',
+            bridge: '"I know someone navigating a similar allocation decision — might be worth a quiet conversation."',
+            move: 'Identify one introduction in your network that positions you as a connector, not an asker.',
+            followup: 'Hi,\n\nReally valued our time on the course today. I\'ve been thinking about the conversation we had — there\'s someone in my network I\'d love to quietly introduce you to when the timing feels right.\n\nNo agenda. Just the right room.\n\nSpeak soon.'
+        },
+        'Operational Arbitrage': {
+            signals: 'They are bleeding efficiency somewhere and they know it. The frustration is real. The solution budget is likely already allocated — they just haven\'t found the right fit.',
+            not: 'Do not immediately offer your services or quote a price. That turns a peer relationship into a vendor conversation.',
+            bridge: '"We ran into something similar last year — took us a quarter to figure out the fix. Happy to share what we learned."',
+            move: 'Send a brief, value-first resource — a framework, a tool, or a contact — with no ask attached.',
+            followup: 'Hi,\n\nStill thinking about what you mentioned today. We dealt with a very similar friction point and found a path through it.\n\nI put together a quick outline of what worked. Happy to send it over — no strings, just useful.\n\nLet me know.'
+        },
+        'Talent Leverage': {
+            signals: 'They have a gap at the table. The right introduction would make you invaluable — not as a recruiter, but as a connector with taste.',
+            not: 'Do not forward resumes or mention a placement fee. Position this as a relationship, not a transaction.',
+            bridge: '"I may know exactly who you\'re describing. Let me think on it and get back to you."',
+            move: 'Identify one A-Player in your network who fits their profile. Text them privately before making any intro.',
+            followup: 'Hi,\n\nAfter our round today, someone immediately came to mind based on what you shared. I want to make sure it\'s the right fit before I connect you two.\n\nGive me a couple days. If it tracks, I\'ll make the introduction personally.\n\nMore soon.'
+        },
+        'Expansion Play': {
+            signals: 'They are building. This is the highest-energy conversation you can be in — growth creates budget, urgency, and need for trusted partners.',
+            not: 'Do not rush to position yourself as a vendor. Be a thinking partner first. Vendors get replaced. Allies get called.',
+            bridge: '"The markets you\'re eyeing — I have a few people already operating there. Worth a conversation before you move."',
+            move: 'Follow up with a soft market intelligence note — one insight, one connection, nothing that requires a response.',
+            followup: 'Hi,\n\nThe direction you\'re moving is one I\'ve been watching closely. A few people in my network are already operating in that space and navigating the same questions.\n\nWould love to make a quiet intro when you\'re ready to think out loud.\n\nNo rush — just keeping the door open.'
+        },
+        'Long-Term Relationship Asset': {
+            signals: 'No immediate transaction is visible, but the relationship itself is the asset. Patience here is a competitive advantage — most people move too fast.',
+            not: 'Do not force a follow-up with business intent. The moment you bring an agenda, you lose the relationship equity you just built.',
+            bridge: '"I genuinely enjoyed today — let\'s not make this a one-time thing."',
+            move: 'Send something personal and thoughtful within 48 hours. A book recommendation, a shared article, or a simple note. No pitch.',
+            followup: 'Hi,\n\nToday was one of those rare rounds where the conversation was just as good as the game.\n\nNo agenda — I just wanted to say I genuinely enjoyed it. Let\'s do it again before too long.\n\nTalk soon.'
+        },
+        'Social Only (Non-Strategic Round)': {
+            signals: 'This was a relationship maintenance round. That has real value — not every round needs to be a transaction. Presence is strategy too.',
+            not: 'Do not manufacture urgency or try to make this something it wasn\'t. Forced pivots read as desperation.',
+            bridge: '"Good people are worth staying close to — no reason needed."',
+            move: 'Send a warm, brief follow-up. Keep it light. Stay in the rotation.',
+            followup: 'Hi,\n\nGreat round today — really enjoyed the company.\n\nLet\'s not wait too long to do it again.\n\nSpeak soon.'
+        }
+    };
+
+    function categorizeRound(answers) {
+        const [q1, q2, q3, q4, q5] = answers;
+        if (q1) return 'Capital Opportunity';
+        if (q4) return 'Expansion Play';
+        if (q2) return 'Operational Arbitrage';
+        if (q3) return 'Talent Leverage';
+        if (q5) return 'Long-Term Relationship Asset';
+        return 'Social Only (Non-Strategic Round)';
+    }
+
+    function renderRadar() {
+        const container = document.getElementById('radar-questions');
+        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        const savedAnswers = stored.radarAnswers || {};
+
+        container.innerHTML = radarQuestions.map((q, i) => {
+            const val = savedAnswers[q.id];
+            return `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);">
+                <span style="font-size:14px;color:var(--ink);font-weight:300;flex:1;">${q.text}</span>
+                <div style="display:flex;gap:8px;flex-shrink:0;">
+                    <button onclick="setRadarAnswer('${q.id}', true)" id="btn-${q.id}-yes"
+                        style="padding:8px 18px;border-radius:999px;border:1px solid var(--line);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;
+                        background:${val === true ? 'var(--green)' : 'var(--white)'};
+                        color:${val === true ? 'var(--white)' : 'var(--muted)'};">Yes</button>
+                    <button onclick="setRadarAnswer('${q.id}', false)" id="btn-${q.id}-no"
+                        style="padding:8px 18px;border-radius:999px;border:1px solid var(--line);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;
+                        background:${val === false ? '#8B0000' : 'var(--white)'};
+                        color:${val === false ? 'var(--white)' : 'var(--muted)'};">No</button>
+                </div>
+            </div>`;
+        }).join('');
+
+        // Show result if all answered
+        if (Object.keys(savedAnswers).length === 5) {
+            showRadarResult(savedAnswers);
+        }
+    }
+
+    function setRadarAnswer(id, value) {
+        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        if (!stored.radarAnswers) stored.radarAnswers = {};
+        stored.radarAnswers[id] = value;
+        localStorage.setItem('teeElite_SwagBag', JSON.stringify(stored));
+        renderRadar();
+    }
+
+    function showRadarResult(answers) {
+        const answerArr = radarQuestions.map(q => answers[q.id] === true);
+        const category = categorizeRound(answerArr);
+        const blueprint = radarBlueprints[category];
+
+        document.getElementById('radar-category').textContent = category;
+        document.getElementById('radar-signals').textContent = blueprint.signals;
+        document.getElementById('radar-not').textContent = blueprint.not;
+        document.getElementById('radar-bridge').textContent = blueprint.bridge;
+        document.getElementById('radar-move').textContent = blueprint.move;
+        document.getElementById('radar-followup').textContent = blueprint.followup;
+        document.getElementById('radar-result').style.display = 'block';
+        document.getElementById('lock-confirm').style.display = 'none';
+    }
+
+    function lockMove() {
+        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        stored.lockedMove = {
+            category: document.getElementById('radar-category').textContent,
+            bridge: document.getElementById('radar-bridge').textContent,
+            followup: document.getElementById('radar-followup').textContent,
+            reminder: 'Send within 24–48 hours',
+            lockedAt: new Date().toISOString()
+        };
+        localStorage.setItem('teeElite_SwagBag', JSON.stringify(stored));
+        document.getElementById('lock-confirm').style.display = 'block';
+        updateStrategyCard(stored.lockedMove);
+    }
+
+    function updateStrategyCard(move) {
+        if (!move) return;
+        const card = document.getElementById('strategy-card');
+        const content = document.getElementById('strategy-card-content');
+        content.innerHTML = `
+            <div style="margin-bottom:8px;"><strong>Opportunity Type:</strong> ${move.category}</div>
+            <div style="margin-bottom:8px;"><strong>Bridge Line:</strong> <em>${move.bridge}</em></div>
+            <div style="margin-bottom:8px;"><strong>Reminder:</strong> ${move.reminder}</div>
+        `;
+        card.style.display = 'block';
+    }
+
+    // ── NAV ──
     function navTo(id) {
         document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         event.target.classList.add('active');
         window.scrollTo(0, 0);
+        if (id === 'radar') renderRadar();
     }
 
+    // ── ROI ──
     function calculateROI() {
         const cost = Number(document.getElementById('roundCost').value) + Number(document.getElementById('tripCost').value);
         const value = Number(document.getElementById('relValue').value);
         const roi = (value / cost).toFixed(1);
-
         const out = document.getElementById('roiOutput');
         out.style.display = 'block';
         out.innerHTML = `
@@ -575,39 +756,12 @@
         `;
     }
 
-    function renderPlays() {
-        const container = document.getElementById('playsContainer');
-        playsData.forEach(p => {
-            const div = document.createElement('div');
-            div.className = 'card green-border';
-            div.innerHTML = `
-                <h3 class="accent-text">${p.title}</h3>
-                <div class="scenario-meta"><strong>Setup:</strong> ${p.setup}</div>
-                <div class="scenario-meta"><strong>Action:</strong> ${p.action}</div>
-                <div class="scenario-meta"><strong>19th Hole Move:</strong> ${p.move}</div>
-
-                <label>What I heard (Notes)</label>
-                <textarea id="pNote-${p.id}" placeholder="Note specific details here..." oninput="saveAll()"></textarea>
-
-                <label>My Bridge Move</label>
-                <select id="pMove-${p.id}" onchange="saveAll()">
-                    <option value="">Select an action...</option>
-                    <option value="Resource Link">Send Resource Link</option>
-                    <option value="Direct Intro">Make Direct Introduction</option>
-                    <option value="Strategy Session">Invite to Strategy Session</option>
-                    <option value="Physical Gift">Send Thoughtful Gift</option>
-                </select>
-            `;
-            container.appendChild(div);
-        });
-    }
-
+    // ── FOLLOW-UP GENERATOR ──
     function createFollowUp() {
         const name = document.getElementById('followupName').value || "Friend";
         const type = document.getElementById('followupType').value;
         const ref = document.getElementById('courseRef').value || "our time on the course";
         let body = "";
-
         if (type === 'tactical') {
             body = `Hi ${name},\n\nGreat round today—really enjoyed our walk. I was thinking back to ${ref}. We actually navigated a similar challenge last quarter and built a small framework for it. Would it be helpful if I sent that over for you to peek at? \n\nLet me know!`;
         } else if (type === 'cultural') {
@@ -615,11 +769,11 @@
         } else {
             body = `Hi ${name},\n\nEnjoyed the back nine today. After ${ref}, I realized you absolutely need to meet a contact of mine who is specialized in that space. I'll send a separate intro email shortly to connect you two. \n\nTalk soon!`;
         }
-
         document.getElementById('msgText').innerText = body;
         document.getElementById('msgResult').style.display = 'block';
     }
 
+    // ── COPY ──
     function copyContent(id) {
         const text = document.getElementById(id).innerText;
         const el = document.createElement('textarea');
@@ -631,61 +785,31 @@
         alert("Copied to clipboard!");
     }
 
+    // ── SAVE / LOAD ──
     function saveAll() {
-        const data = {
-            mainNotes: document.getElementById('mainNotes').value,
-            checks: {},
-            plays: {}
-        };
+        const stored = JSON.parse(localStorage.getItem('teeElite_SwagBag') || '{}');
+        stored.mainNotes = document.getElementById('mainNotes').value;
+        stored.checks = {};
         for (let i = 1; i <= 9; i++) {
-            data.checks[`check${i}`] = document.getElementById(`check${i}`).checked;
+            stored.checks[`check${i}`] = document.getElementById(`check${i}`).checked;
         }
-        playsData.forEach(p => {
-            data.plays[`pNote-${p.id}`] = document.getElementById(`pNote-${p.id}`).value;
-            data.plays[`pMove-${p.id}`] = document.getElementById(`pMove-${p.id}`).value;
-        });
-        localStorage.setItem('teeElite_SwagBag', JSON.stringify(data));
+        localStorage.setItem('teeElite_SwagBag', JSON.stringify(stored));
     }
 
     function loadAll() {
         const stored = localStorage.getItem('teeElite_SwagBag');
         if (!stored) return;
         const data = JSON.parse(stored);
-
         if (data.mainNotes) document.getElementById('mainNotes').value = data.mainNotes;
-
         for (let i = 1; i <= 9; i++) {
-            if (data.checks[`check${i}`]) document.getElementById(`check${i}`).checked = true;
+            if (data.checks && data.checks[`check${i}`]) document.getElementById(`check${i}`).checked = true;
         }
-
-        playsData.forEach(p => {
-            if (data.plays[`pNote-${p.id}`]) document.getElementById(`pNote-${p.id}`).value = data.plays[`pNote-${p.id}`];
-            if (data.plays[`pMove-${p.id}`]) document.getElementById(`pMove-${p.id}`).value = data.plays[`pMove-${p.id}`];
-        });
+        if (data.lockedMove) updateStrategyCard(data.lockedMove);
     }
 
     function syncProgress() { saveAll(); }
 
-    function exportNotes() {
-        const data = JSON.parse(localStorage.getItem('teeElite_SwagBag')) || {};
-        let content = "TEE ELITE INVITATIONAL: GOLF WEALTH PLAYBOOK\n";
-        content += "==============================================\n\n";
-        content += "MAIN NOTES:\n" + (data.mainNotes || "None") + "\n\n";
-        content += "PLAY NOTES:\n";
-        playsData.forEach(p => {
-            content += `- ${p.title}: ${data.plays[`pNote-${p.id}`] || "No notes"} (Action: ${data.plays[`pMove-${p.id}`] || "None"})\n`;
-        });
-
-        const blob = new Blob([content], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "TeeElite_Playbook_Notes.txt";
-        a.click();
-    }
-
     // Initialize
-    renderPlays();
     loadAll();
 </script>
 
