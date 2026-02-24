@@ -45,6 +45,22 @@ async function ensureTables(client) {
     )
   `);
 }
+async function getItemsFromDb(client) {
+  const r = await client.query(`
+    SELECT
+      id,
+      name,
+      tagline,
+      points,
+      cap,
+      fulfillment,
+      drive_url AS url,
+      available_now
+    FROM wallet_items
+    ORDER BY created_at ASC
+  `);
+  return r.rows;
+}
 
 async function getMemberId(client, req) {
   const token = getSessionFromRequest(req);
@@ -116,15 +132,18 @@ module.exports = async (req, res) => {
         daysLeft = Math.max(0, Math.ceil((expiresAt - now) / 86400000));
       }
 
-      const items = ITEMS.map(item => ({
-        ...item,
-        redeemed_count: capacity[item.id] || 0,
-        slots_left: item.cap ? item.cap - (capacity[item.id] || 0) : null,
-        is_wishlisted: wishlist.includes(item.id),
-        is_redeemed: !!redeemed[item.id],
-        redeemed_at: redeemed[item.id] || null,
-        available: !item.cap || (capacity[item.id] || 0) < item.cap
-      }));
+      const dbItems = await getItemsFromDb(client);
+
+const items = dbItems.map(item => ({
+  ...item,
+  points: Number(item.points) || 0,
+  redeemed_count: capacity[item.id] || 0,
+  slots_left: item.cap ? item.cap - (capacity[item.id] || 0) : null,
+  is_wishlisted: wishlist.includes(item.id),
+  is_redeemed: !!redeemed[item.id],
+  redeemed_at: redeemed[item.id] || null,
+  available: !item.cap || (capacity[item.id] || 0) < item.cap
+}));
 
       return res.status(200).json({
         points_balance: wallet.points_balance,
@@ -141,8 +160,11 @@ module.exports = async (req, res) => {
     // POST - wishlist or redeem
     if (req.method === 'POST') {
       const { action, item_id } = req.body || {};
-      const item = ITEMS.find(i => i.id === item_id);
+      const dbItems = await getItemsFromDb(client);
+      const item = dbItems.find(i => i.id === item_id);
       if (!item) return res.status(400).json({ error: 'Invalid item' });
+      
+      const cost = Number(item.points) || 0;
 
       // WISHLIST TOGGLE
       if (action === 'wishlist') {
@@ -164,13 +186,13 @@ module.exports = async (req, res) => {
 
     await client.query(
       'UPDATE scramble_wallet SET points_balance = points_balance + $1 WHERE member_id = $2',
-      [item.points, memberId]
+      [cost, memberId]
     );
 
   } else {
 
     // Check enough points before wishlist
-    if (wallet.points_balance < item.points) {
+    if (wallet.points_balance < cost) {
       return res.status(400).json({ error: 'Insufficient points' });
     }
 
@@ -181,7 +203,7 @@ module.exports = async (req, res) => {
 
     await client.query(
       'UPDATE scramble_wallet SET points_balance = points_balance - $1 WHERE member_id = $2',
-      [item.points, memberId]
+      [cost, memberId]
     );
   }
 
@@ -192,10 +214,29 @@ module.exports = async (req, res) => {
     [memberId]
   );
   const wishlist = wlRes.rows.map(r => r.item_id);
+  const capacity = await getCapacity(client);
+  const redeemedRes = await client.query(
+  'SELECT item_id, redeemed_at FROM scramble_redemptions WHERE member_id = $1',
+  [memberId]
+);
+  const redeemed = {};
+  redeemedRes.rows.forEach(r => { redeemed[r.item_id] = r.redeemed_at; });
 
+  const dbItems2 = await getItemsFromDb(client);
+  const items = dbItems2.map(it => ({
+  ...it,
+  points: Number(it.points) || 0,
+  redeemed_count: capacity[it.id] || 0,
+  slots_left: it.cap ? it.cap - (capacity[it.id] || 0) : null,
+  is_wishlisted: wishlist.includes(it.id),
+  is_redeemed: !!redeemed[it.id],
+  redeemed_at: redeemed[it.id] || null,
+  available: !it.cap || (capacity[it.id] || 0) < it.cap
+}));
   return res.status(200).json({
     points_balance: updatedWallet.points_balance,
-    wishlist
+    wishlist,
+    items
   });
 }
 
@@ -204,7 +245,7 @@ module.exports = async (req, res) => {
         if (!isActive) return res.status(400).json({ error: 'Wallet not yet active' });
 
         const wallet = await getOrCreateWallet(client, memberId);
-        if (wallet.points_balance < item.points) {
+        if (wallet.points_balance < cost) {
           return res.status(400).json({ error: 'Insufficient points' });
         }
 
@@ -231,14 +272,14 @@ module.exports = async (req, res) => {
         // Deduct points and record redemption
         await client.query(
           'UPDATE scramble_wallet SET points_balance = points_balance - $1 WHERE member_id = $2',
-          [item.points, memberId]
+          [cost, memberId]
         );
         await client.query(
           'INSERT INTO scramble_redemptions (member_id, item_id, points_spent) VALUES ($1, $2, $3)',
-          [memberId, item_id, item.points]
+          [memberId, item_id, cost]
         );
 
-        const newBalance = wallet.points_balance - item.points;
+        const newBalance = wallet.points_balance - cost;
         return res.status(200).json({
           success: true,
           new_balance: newBalance,
