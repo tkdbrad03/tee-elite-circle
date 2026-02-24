@@ -1568,22 +1568,19 @@
           <input type="text" id="new-member-location" required placeholder="e.g. Atlanta, GA">
         </div>
         <div class="modal-field">
-          <label>Member Number (optional)</label>
-            <option value="">Select pin number...</option>
-            <option value="1">#01</option>
-            <option value="2">#02</option>
-            <option value="3">#03</option>
-            <option value="4">#04</option>
-            <option value="5">#05</option>
-            <option value="6">#06</option>
-            <option value="7">#07</option>
-            <option value="8">#08</option>
-            <option value="9">#09</option>
-            <option value="10">#10</option>
-            <option value="11">#11</option>
-            <option value="12">#12</option>
-          </select>
-        </div>
+  <label>Member Type</label>
+  <select id="new-member-type">
+    <option value="INVITATIONAL">Invitational</option>
+    <option value="CIRCLE" selected>Circle</option>
+    <option value="ADMIN">Admin</option>
+  </select>
+</div>
+
+<div class="modal-field" style="display:flex;align-items:center;gap:10px;">
+  <input type="checkbox" id="new-member-active" checked style="width:18px;height:18px;">
+  <label for="new-member-active" style="margin:0;">Active access</label>
+</div>
+        
         <div class="modal-actions">
           <button type="button" class="form-btn secondary" onclick="closeAddMemberModal()">Cancel</button>
           <button type="submit" class="form-btn primary">Add Player</button>
@@ -1911,6 +1908,9 @@
         email: document.getElementById('new-member-email').value,
         phone: document.getElementById('new-member-phone').value || null,
         location: document.getElementById('new-member-location').value,
+        
+        member_type: document.getElementById('new-member-type').value,
+        active: document.getElementById('new-member-active').checked,
         paid_in_full: true,
         deposit_paid: true,
         interest_level: 'Ready to join',
