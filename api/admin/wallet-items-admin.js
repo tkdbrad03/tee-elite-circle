@@ -48,11 +48,11 @@ module.exports = async (req, res) => {
       await client.query(`
         UPDATE wallet_items SET
           name = COALESCE($2, name),
-          tagline = $3,
+          tagline = COALESCE($3, tagline),
           points = COALESCE($4, points),
-          cap = $5,
+          cap = COALESCE($5, cap),
           available_now = COALESCE($6, available_now),
-          drive_url = $7,
+          drive_url = COALESCE($7, drive_url),
           active = COALESCE($8, active),
           sort_order = COALESCE($9, sort_order),
           updated_at = NOW()
