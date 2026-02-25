@@ -8,5 +8,49 @@
       "maxDuration": 300,
       "memory": 1024
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/home.html",
+      "destination": "/member-login.html",
+      "permanent": false,
+      "missing": [{ "type": "cookie", "key": "tec_session" }]
+    },
+    {
+      "source": "/influence-on-the-course.html",
+      "destination": "/member-login.html",
+      "permanent": false,
+      "missing": [{ "type": "cookie", "key": "tec_session" }]
+    },
+    {
+      "source": "/between-the-tees.html",
+      "destination": "/member-login.html",
+      "permanent": false,
+      "missing": [{ "type": "cookie", "key": "tec_session" }]
+    },
+    {
+      "source": "/members.html",
+      "destination": "/member-login.html",
+      "permanent": false,
+      "missing": [{ "type": "cookie", "key": "tec_session" }]
+    },
+    {
+      "source": "/profile.html",
+      "destination": "/member-login.html",
+      "permanent": false,
+      "missing": [{ "type": "cookie", "key": "tec_session" }]
+    },
+    {
+      "source": "/playbook.html",
+      "destination": "/member-login.html",
+      "permanent": false,
+      "missing": [{ "type": "cookie", "key": "tec_session" }]
+    },
+    {
+      "source": "/tee-elite-invitational.html",
+      "destination": "/member-login.html",
+      "permanent": false,
+      "missing": [{ "type": "cookie", "key": "tec_session" }]
+    }
+  ]
 }
