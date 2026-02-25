@@ -887,14 +887,15 @@
         if (hasData) {
             if (!stored.roundHistory) stored.roundHistory = [];
             stored.roundHistory.unshift({
-                id: Date.now(),
-                timestamp: new Date().toLocaleString(),
-                theirName: stored.setup?.theirName || 'Unknown',
-                category: document.getElementById('radar-category').textContent || '',
-                bridge: document.getElementById('radar-bridge').textContent || '',
-                followup: document.getElementById('radar-followup').textContent || '',
-                sms: document.getElementById('radar-sms').textContent || ''
-            });
+  id: Date.now(),
+  timestamp: new Date().toLocaleString(),
+  theirName: stored.setup?.theirName || 'Unknown',
+  theirPhone: stored.setup?.theirPhone || '',
+  category: document.getElementById('radar-category').textContent || '',
+  bridge: document.getElementById('radar-bridge').textContent || '',
+  followup: document.getElementById('radar-followup').textContent || '',
+  sms: document.getElementById('radar-sms').textContent || ''
+});
         }
         delete stored.radarAnswers;
         delete stored.lockedMove;
@@ -944,7 +945,7 @@
                 <div style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;">${r.bridge}</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
   <button class="copy-btn" style="margin-top:0;" onclick="copyText(roundHistoryText(${r.id}))">Copy Follow-Up</button>
-  <button class="copy-btn" style="margin-top:0;background:var(--white);color:var(--green);border:1px solid var(--line);" onclick="openEditModal(${r.id})">Edit</button>
+  <button class="copy-btn" style="margin-top:0;background:var(--white);color:var(--green);border:1px solid var(--line);" onclick="textRound(${r.id})">Text</button>
   <button onclick="deleteRound(${r.id})" style="padding:8px 16px;border-radius:999px;border:1px solid #ffcdd2;background:none;color:#c62828;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Delete</button>
 </div>
             </div>
@@ -956,6 +957,26 @@
         const r = (stored.roundHistory || []).find(x => x.id === id);
         return r ? r.followup : '';
     }
+    function roundHistoryPhone(id) {
+  const stored = getStore();
+  const r = (stored.roundHistory || []).find(x => x.id === id);
+  return r ? (r.theirPhone || '') : '';
+}
+
+function roundHistorySMS(id) {
+  const stored = getStore();
+  const r = (stored.roundHistory || []).find(x => x.id === id);
+  return r ? (r.sms || '') : '';
+}
+
+function textRound(id) {
+  const phone = (roundHistoryPhone(id) || '').replace(/[^\d+]/g, '');
+  const msg = roundHistorySMS(id) || roundHistoryText(id) || '';
+  if (!phone) return alert('No phone saved for this person.');
+
+  const url = `sms:${phone}?&body=${encodeURIComponent(msg)}`;
+  window.location.href = url;
+}
 
     function deleteRound(id) {
         const stored = getStore();
