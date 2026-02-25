@@ -643,6 +643,8 @@
 
             <label>Recipient Name</label>
             <input type="text" id="followupName" placeholder="e.g. Marcus">
+            <label>Recipient Phone</label>
+            <input id="followupPhone" placeholder="e.g. 555-000-1234" />
 
             <label>Follow-Up Type</label>
             <select id="followupType">
@@ -656,11 +658,25 @@
 
             <button class="primary-btn" onclick="createFollowUp()">Generate Message</button>
 
-            <div id="msgResult" class="roi-display" style="display:none; text-align:left;">
-                <p id="msgText" style="white-space:pre-wrap; font-family:var(--serif); font-size:16px; color:var(--ink); line-height:1.8;"></p>
-                <button class="copy-btn" onclick="copyContent('msgText')">Copy Message</button>
-            </div>
-        </div>
+            <div id="msgResult" style="display:none;">
+  <div id="msgText" class="result-box"></div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+    <button class="copy-btn" onclick="copyGeneratedFollowup()">Copy Message</button>
+
+    <button class="copy-btn"
+      style="background:var(--white);color:var(--green);border:1px solid var(--line);"
+      onclick="textGeneratedFollowup()">Text</button>
+
+    <button class="copy-btn"
+      style="background:var(--white);color:var(--green);border:1px solid var(--line);"
+      onclick="editGeneratedFollowup()">Edit</button>
+
+    <button class="copy-btn"
+      style="background:var(--white);color:var(--green);border:1px solid var(--line);"
+      onclick="saveGeneratedToHistory()">Save to Round History</button>
+  </div>
+</div>
     </section>
     
 
@@ -1073,6 +1089,84 @@ function prefillFollowupFromSetup() {
 
   document.getElementById('msgText').innerText = body;
   document.getElementById('msgResult').style.display = 'block';
+}
+    function prefillFollowupFromSetup() {
+  const setup = getStore().setup || {};
+  const nameEl = document.getElementById('followupName');
+  const phoneEl = document.getElementById('followupPhone');
+
+  if (nameEl && !nameEl.value && setup.theirName) nameEl.value = setup.theirName;
+  if (phoneEl && !phoneEl.value && setup.theirPhone) phoneEl.value = setup.theirPhone;
+}
+
+function getGeneratedFollowupText() {
+  return (document.getElementById('msgText')?.innerText || '').trim();
+}
+
+function copyGeneratedFollowup() {
+  const text = getGeneratedFollowupText();
+  if (!text) return alert('No message generated yet.');
+  navigator.clipboard.writeText(text);
+}
+
+function textGeneratedFollowup() {
+  const phoneRaw = (document.getElementById('followupPhone')?.value || '').trim();
+  const phone = phoneRaw.replace(/[^\d+]/g, '');
+  const msg = getGeneratedFollowupText();
+
+  if (!phone) return alert('No phone saved for this person.');
+  if (!msg) return alert('No message generated yet.');
+
+  window.location.href = `sms:${phone}?&body=${encodeURIComponent(msg)}`;
+}
+
+function editGeneratedFollowup() {
+  const text = getGeneratedFollowupText();
+  if (!text) return alert('No message generated yet.');
+  // Reuse your existing Edit Modal
+  editingRoundId = '__generated__';
+  document.getElementById('edit-followup-text').value = text;
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+
+const _origSaveEditModal = typeof saveEditModal === 'function' ? saveEditModal : null;
+function saveEditModal() {
+  const text = (document.getElementById('edit-followup-text').value || '').trim();
+
+  // If editing the generated Follow-Up (not a saved round)
+  if (editingRoundId === '__generated__') {
+    document.getElementById('msgText').innerText = text;
+    closeEditModal();
+    return;
+  }
+
+  // Otherwise run your existing history edit save logic
+  if (_origSaveEditModal) return _origSaveEditModal();
+}
+
+function saveGeneratedToHistory() {
+  const stored = getStore();
+  stored.roundHistory = stored.roundHistory || [];
+
+  const name = (document.getElementById('followupName')?.value || stored.setup?.theirName || 'Unknown').trim();
+  const phone = (document.getElementById('followupPhone')?.value || stored.setup?.theirPhone || '').trim();
+
+  const followup = getGeneratedFollowupText();
+  if (!followup) return alert('No message generated yet.');
+
+  stored.roundHistory.unshift({
+    id: Date.now(),
+    timestamp: new Date().toLocaleString(),
+    theirName: name,
+    theirPhone: phone,
+    category: 'FOLLOW-UP TAB',
+    bridge: (document.getElementById('courseRef')?.value || '').trim(),
+    followup,
+    sms: followup
+  });
+
+  setStore(stored);
+  alert('Saved to Round History.');
 }
 
     // ── COPY ──
