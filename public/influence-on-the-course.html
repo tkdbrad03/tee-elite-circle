@@ -579,6 +579,7 @@
                     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Text Version (SMS)</div>
                     <p id="radar-sms" style="white-space:pre-wrap;font-family:var(--serif);font-size:15px;color:var(--ink);line-height:1.7;margin:0 0 12px;"></p>
                     <button class="copy-btn" onclick="copyContent('radar-sms')">Copy Text</button>
+<button class="copy-btn" style="margin-left:8px;" onclick="textCurrentSMS()">Text Now</button>
                 </div>
 
                 <button class="primary-btn" onclick="lockMove()" style="margin-bottom:12px;">🔒 Lock My Move</button>
@@ -662,6 +663,7 @@
             </div>
         </div>
     </section>
+    
 
     <!-- NOTES -->
     <section id="notes">
@@ -860,6 +862,7 @@
             yourName: setup.yourName || '',
             yourPhone: setup.yourPhone || '',
             reminder: 'Send within 24–48 hours',
+            theirPhone: setup.theirPhone || '',
             lockedAt: new Date().toISOString()
         };
         setStore(stored);
@@ -1118,6 +1121,17 @@ function saveEditModal() {
 
   closeEditModal();
   renderHistory();
+}
+function textCurrentSMS() {
+  const stored = getStore();
+  const rawPhone = (stored.setup && stored.setup.theirPhone) ? stored.setup.theirPhone : '';
+  const phone = String(rawPhone).replace(/[^\d+]/g, '');
+  const msg = (document.getElementById('radar-sms')?.textContent || '').trim();
+
+  if (!phone) return alert('No phone saved for this person.');
+  if (!msg) return alert('No text message generated yet.');
+
+  window.location.href = `sms:${phone}?&body=${encodeURIComponent(msg)}`;
 }
 </script>
 
