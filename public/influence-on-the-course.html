@@ -366,24 +366,6 @@
         }
     </style>
 </head>
-<!-- EDIT MODAL -->
-<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(22,51,38,.6);z-index:1100;align-items:center;justify-content:center;padding:24px;">
-  <div style="background:var(--white);border-radius:20px;padding:28px;max-width:720px;width:100%;max-height:85vh;overflow:auto;">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;">
-      <h3 style="margin:0;">Edit Follow-Up</h3>
-      <button onclick="closeEditModal()" style="background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;">&times;</button>
-    </div>
-
-    <label style="margin-top:6px;">Follow-Up Text</label>
-    <textarea id="edit-followup-text" style="min-height:220px;"></textarea>
-
-    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
-      <button class="btn-secondary" onclick="closeEditModal()" style="padding:12px 18px;border-radius:999px;border:1px solid var(--line);background:none;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;">Cancel</button>
-      <button class="primary-btn" style="width:auto;padding:12px 18px;" onclick="saveEditModal()">Save</button>
-    </div>
-  </div>
-</div>
-<body>
 
 <header>
     <h1>Influence on the <em>Golf Course</em></h1>
@@ -635,6 +617,23 @@
             </div>
         </div>
     </div>
+    <!-- EDIT MODAL -->
+<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(22,51,38,.6);z-index:1100;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:var(--white);border-radius:20px;padding:28px;max-width:720px;width:100%;max-height:85vh;overflow:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;">
+      <h3 style="margin:0;">Edit Follow-Up</h3>
+      <button onclick="closeEditModal()" style="background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;">&times;</button>
+    </div>
+
+    <label style="margin-top:6px;">Follow-Up Text</label>
+    <textarea id="edit-followup-text" style="min-height:220px;"></textarea>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+      <button class="btn-secondary" onclick="closeEditModal()" style="padding:12px 18px;border-radius:999px;border:1px solid var(--line);background:none;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;">Cancel</button>
+      <button class="primary-btn" style="width:auto;padding:12px 18px;" onclick="saveEditModal()">Save</button>
+    </div>
+  </div>
+</div>
 
     <!-- GENERATOR -->
     <section id="generator">
@@ -948,8 +947,17 @@
                 <div style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;">${r.bridge}</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
   <button class="copy-btn" style="margin-top:0;" onclick="copyText(roundHistoryText(${r.id}))">Copy Follow-Up</button>
-  <button class="copy-btn" style="margin-top:0;background:var(--white);color:var(--green);border:1px solid var(--line);" onclick="textRound(${r.id})">Text</button>
-  <button onclick="deleteRound(${r.id})" style="padding:8px 16px;border-radius:999px;border:1px solid #ffcdd2;background:none;color:#c62828;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Delete</button>
+
+  <button class="copy-btn"
+    style="margin-top:0;background:var(--white);color:var(--green);border:1px solid var(--line);"
+    onclick="openEditModal(${r.id})">Edit</button>
+
+  <button class="copy-btn"
+    style="margin-top:0;background:var(--white);color:var(--green);border:1px solid var(--line);"
+    onclick="textRound(${r.id})">Text</button>
+
+  <button onclick="deleteRound(${r.id})"
+    style="padding:8px 16px;border-radius:999px;border:1px solid #ffcdd2;background:none;color:#c62828;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Delete</button>
 </div>
             </div>
         `).join('');
@@ -1013,13 +1021,16 @@ function textRound(id) {
 
     // ── NAV ──
     function navTo(id) {
-        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        event.target.classList.add('active');
-        window.scrollTo(0, 0);
-        if (id === 'radar') { renderRadar(); renderHistory(); loadSetup(); }
-    }
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (id === 'radar') { renderRadar(); renderHistory(); loadSetup(); }
+  if (id === 'generator') { prefillFollowupFromSetup(); }
+}
+    
 
     // ── ROI ──
     function calculateROI() {
@@ -1034,23 +1045,35 @@ function textRound(id) {
             <p style="margin:0;"><small>By leveraging this round for a <strong>${roi}x</strong> return, your focus must remain on identifying their specific <strong>Vision Phase</strong> needs by Hole 9.</small></p>
         `;
     }
-
+function prefillFollowupFromSetup() {
+  const setup = (getStore().setup || {});
+  const el = document.getElementById('followupName');
+  if (!el) return;
+  if (!el.value && setup.theirName) el.value = setup.theirName;
+}
     // ── FOLLOW-UP GENERATOR ──
     function createFollowUp() {
-        const name = document.getElementById('followupName').value || "Friend";
-        const type = document.getElementById('followupType').value;
-        const ref = document.getElementById('courseRef').value || "our time on the course";
-        let body = "";
-        if (type === 'tactical') {
-            body = `Hi ${name},\n\nGreat round today. I was thinking back to ${ref}. I actually navigated a similar challenge and built a small framework for it. Would it be helpful if I sent that over for you to peek at? \n\nLet me know!`;
-        } else if (type === 'cultural') {
-            body = `Hi ${name},\n\nThanks again for the game today. I'm still reflecting on ${ref}. It's rare to meet someone who shares that specific outlook. Let's make sure we don't wait another six months to grab a coffee or lunch? \n\nBest,`;
-        } else {
-            body = `Hi ${name},\n\nEnjoyed the round today. After ${ref}, I realized you absolutely need to meet a contact of mine who is specialized in that space. I'll send a separate intro emailor text shortly to connect you two. \n\nTalk soon!`;
-        }
-        document.getElementById('msgText').innerText = body;
-        document.getElementById('msgResult').style.display = 'block';
-    }
+  const setup = (getStore().setup || {});
+  const nameEl = document.getElementById('followupName');
+  const typedName = (nameEl?.value || '').trim();
+  const name = typedName || setup.theirName || "Friend";
+  if (nameEl && !typedName && setup.theirName) nameEl.value = setup.theirName;
+
+  const type = document.getElementById('followupType').value;
+  const ref = document.getElementById('courseRef').value || "our time on the course";
+
+  let body = "";
+  if (type === 'tactical') {
+    body = `Hi ${name},\n\nGreat round today. I was thinking back to ${ref}. I actually navigated a similar challenge and built a small framework for it. Would it be helpful if I sent that over for you to peek at? \n\nLet me know!`;
+  } else if (type === 'cultural') {
+    body = `Hi ${name},\n\nThanks again for the game today. I'm still reflecting on ${ref}. It's rare to meet someone who shares that specific outlook. Let's make sure we don't wait another six months to grab a coffee or lunch? \n\nBest,`;
+  } else {
+    body = `Hi ${name},\n\nEnjoyed the round today. After ${ref}, I realized you absolutely need to meet a contact of mine who is specialized in that space. I'll send a separate intro email or text shortly to connect you two. \n\nTalk soon!`;
+  }
+
+  document.getElementById('msgText').innerText = body;
+  document.getElementById('msgResult').style.display = 'block';
+}
 
     // ── COPY ──
     function copyText(text) {
