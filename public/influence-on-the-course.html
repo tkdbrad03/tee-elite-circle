@@ -1042,11 +1042,11 @@ function textRound(id) {
         const ref = document.getElementById('courseRef').value || "our time on the course";
         let body = "";
         if (type === 'tactical') {
-            body = `Hi ${name},\n\nGreat round today—really enjoyed our walk. I was thinking back to ${ref}. We actually navigated a similar challenge last quarter and built a small framework for it. Would it be helpful if I sent that over for you to peek at? \n\nLet me know!`;
+            body = `Hi ${name},\n\nGreat round today. I was thinking back to ${ref}. I actually navigated a similar challenge and built a small framework for it. Would it be helpful if I sent that over for you to peek at? \n\nLet me know!`;
         } else if (type === 'cultural') {
-            body = `Hi ${name},\n\nThanks again for the game today. I'm still reflecting on ${ref}. It's rare to meet someone who shares that specific outlook on the industry. Let's make sure we don't wait another six months to grab a coffee or lunch? \n\nBest,`;
+            body = `Hi ${name},\n\nThanks again for the game today. I'm still reflecting on ${ref}. It's rare to meet someone who shares that specific outlook. Let's make sure we don't wait another six months to grab a coffee or lunch? \n\nBest,`;
         } else {
-            body = `Hi ${name},\n\nEnjoyed the back nine today. After ${ref}, I realized you absolutely need to meet a contact of mine who is specialized in that space. I'll send a separate intro email shortly to connect you two. \n\nTalk soon!`;
+            body = `Hi ${name},\n\nEnjoyed the round today. After ${ref}, I realized you absolutely need to meet a contact of mine who is specialized in that space. I'll send a separate intro emailor text shortly to connect you two. \n\nTalk soon!`;
         }
         document.getElementById('msgText').innerText = body;
         document.getElementById('msgResult').style.display = 'block';
