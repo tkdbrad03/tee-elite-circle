@@ -385,7 +385,7 @@
     <!-- START HERE -->
     <section id="start" class="active">
         <div class="card gold-border">
-            <h3>Quick Start Walkthrough (60s)</h3>
+            <h3>Quick Start Walkthrough (60 Seconds)</h3>
             <p>Master the round by managing the energy, not just the score.</p>
             <ul>
                 <li><strong>Pre-Round:</strong> Research your group. Identify one "Resource Gap" you might fill.</li>
@@ -398,34 +398,36 @@
 
         <div class="card">
             <h3>The Wealth Arbitrage Concept</h3>
-            <p>High-performers spend 4 hours in a cart to escape the noise. This is your chance to move from a "vendor" or "peer" to a <strong>Strategic Ally</strong>. Wealth is built in the spaces between the shots.</p>
+            <p>High-performers spend 4 hours in a cart to escape the noise. This is your chance to become a <strong>Strategic Ally</strong>. Wealth is built in the spaces between the shots.</p>
             <p><strong>The Golden Rule:</strong> Ask 2x more questions than you give answers. If you're talking about yourself, you aren't learning their price of entry.</p>
         </div>
 
         <div class="card green-border">
-            <h3>Social Capital ROI Calculator</h3>
-            <div class="grid-2">
-                <div>
-                    <label>Round Cost ($)</label>
-                    <input type="number" id="roundCost" value="250">
-                </div>
-                <div>
-                    <label>Trip/Travel ($)</label>
-                    <input type="number" id="tripCost" value="2500">
-                </div>
-            </div>
+    <h3>Social Capital ROI Calculator</h3>
 
-            <label>Estimated Value of Relationship</label>
-            <select id="relValue">
-                <option value="10000">$10,000 (Intro / Small Project)</option>
-                <option value="50000">$50,000 (Strategic Partnership)</option>
-                <option value="250000">$250,000 (Major Contract / Investment)</option>
-                <option value="1000000">$1M+ (Acquisition / Enterprise Lead)</option>
-            </select>
-
-            <button class="primary-btn" onclick="calculateROI()">Calculate Potential ROI</button>
-            <div id="roiOutput" class="roi-display" style="display:none;"></div>
+    <div class="grid-2">
+        <div>
+            <label>Round Cost ($)</label>
+            <input type="number" id="roundCost" value="250">
         </div>
+        <div>
+            <label>Trip/Travel ($)</label>
+            <input type="number" id="tripCost" value="2500">
+        </div>
+    </div>
+
+    <label>Value of One Opportunity From This Round</label>
+    <select id="relValue">
+        <option value="5000">$5,000</option>
+        <option value="10000">$10,000</option>
+        <option value="25000">$25,000</option>
+        <option value="50000">$50,000</option>
+    </select>
+
+    <button class="primary-btn" onclick="calculateROI()">Calculate Potential ROI</button>
+
+    <div id="roiOutput" class="roi-display" style="display:none;"></div>
+</div>
     </section>
 
     <!-- 9-HOLE FLOW -->
@@ -1055,17 +1057,35 @@ function textRound(id) {
 
     // ── ROI ──
     function calculateROI() {
-        const cost = Number(document.getElementById('roundCost').value) + Number(document.getElementById('tripCost').value);
-        const value = Number(document.getElementById('relValue').value);
-        const roi = (value / cost).toFixed(1);
-        const out = document.getElementById('roiOutput');
-        out.style.display = 'block';
-        out.innerHTML = `
-            <h4>Calculated Potential</h4>
-            <div style="font-family:var(--serif);font-size:3rem;font-weight:300;color:var(--gold);line-height:1;margin:8px 0;">${roi}x ROI</div>
-            <p style="margin:0;"><small>By leveraging this round for a <strong>${roi}x</strong> return, your focus must remain on identifying their specific <strong>Vision Phase</strong> needs by Hole 9.</small></p>
-        `;
+    const roundCost = parseFloat(document.getElementById('roundCost').value) || 0;
+    const tripCost = parseFloat(document.getElementById('tripCost').value) || 0;
+    const opportunityValue = parseFloat(document.getElementById('relValue').value) || 0;
+
+    const totalInvestment = roundCost + tripCost;
+
+    if (!totalInvestment || !opportunityValue) {
+        alert('Please enter round cost and opportunity value.');
+        return;
     }
+
+    const netGain = opportunityValue - totalInvestment;
+    const roi = ((netGain / totalInvestment) * 100).toFixed(0);
+
+    const output = document.getElementById('roiOutput');
+    output.style.display = 'block';
+    output.innerHTML = `
+        <strong>If this round produces ONE opportunity within 90 days...</strong><br><br>
+
+        You invested: <strong>$${totalInvestment.toLocaleString()}</strong><br>
+        Opportunity value: <strong>$${opportunityValue.toLocaleString()}</strong><br>
+        Net gain: <strong>$${netGain.toLocaleString()}</strong><br>
+        ROI: <strong>${roi}%</strong><br><br>
+
+        <em>If one opportunity per quarter became your normal, what would that do to your income?</em><br><br>
+
+        <strong>Cost of skipping this round:</strong> $${opportunityValue.toLocaleString()} in potential upside.
+    `;
+}
 function prefillFollowupFromSetup() {
   const setup = (getStore().setup || {});
   const el = document.getElementById('followupName');
