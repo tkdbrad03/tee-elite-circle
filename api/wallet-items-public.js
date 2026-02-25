@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     await client.connect();
 
     const result = await client.query(
-      `SELECT id, name, tagline, points, cap, available_now, drive_url
+      `SELECT id, name, tagline, description, points, cap, available_now, drive_url
        FROM wallet_items
        WHERE active = true
        ORDER BY sort_order ASC, created_at ASC`
