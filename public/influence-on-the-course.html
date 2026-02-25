@@ -643,8 +643,13 @@
 
             <label>Recipient Name</label>
             <input type="text" id="followupName" placeholder="e.g. Marcus">
-            <label>Recipient Phone</label>
-            <input id="followupPhone" placeholder="e.g. 555-000-1234" />
+            <label style="display:block;margin-top:18px;">Recipient Phone</label>
+            <input
+              id="followupPhone"
+              type="tel"
+              placeholder="e.g. 555-000-1234"
+              style="width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:#fbfaf7;font-family:var(--serif);font-size:16px;outline:none;"
+            />
 
             <label>Follow-Up Type</label>
             <select id="followupType">
