@@ -366,6 +366,23 @@
         }
     </style>
 </head>
+<!-- EDIT MODAL -->
+<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(22,51,38,.6);z-index:1100;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:var(--white);border-radius:20px;padding:28px;max-width:720px;width:100%;max-height:85vh;overflow:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;">
+      <h3 style="margin:0;">Edit Follow-Up</h3>
+      <button onclick="closeEditModal()" style="background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;">&times;</button>
+    </div>
+
+    <label style="margin-top:6px;">Follow-Up Text</label>
+    <textarea id="edit-followup-text" style="min-height:220px;"></textarea>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+      <button class="btn-secondary" onclick="closeEditModal()" style="padding:12px 18px;border-radius:999px;border:1px solid var(--line);background:none;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;">Cancel</button>
+      <button class="primary-btn" style="width:auto;padding:12px 18px;" onclick="saveEditModal()">Save</button>
+    </div>
+  </div>
+</div>
 <body>
 
 <header>
@@ -926,9 +943,10 @@
                 </div>
                 <div style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;">${r.bridge}</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                    <button class="copy-btn" style="margin-top:0;" onclick="copyText(roundHistoryText(${r.id}))">Copy Follow-Up</button>
-                    <button onclick="deleteRound(${r.id})" style="padding:8px 16px;border-radius:999px;border:1px solid #ffcdd2;background:none;color:#c62828;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Delete</button>
-                </div>
+  <button class="copy-btn" style="margin-top:0;" onclick="copyText(roundHistoryText(${r.id}))">Copy Follow-Up</button>
+  <button class="copy-btn" style="margin-top:0;background:var(--white);color:var(--green);border:1px solid var(--line);" onclick="openEditModal(${r.id})">Edit</button>
+  <button onclick="deleteRound(${r.id})" style="padding:8px 16px;border-radius:999px;border:1px solid #ffcdd2;background:none;color:#c62828;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Delete</button>
+</div>
             </div>
         `).join('');
     }
@@ -1050,6 +1068,36 @@
 
     // Initialize
     loadAll();
+    
+    let editingRoundId = null;
+
+function openEditModal(id) {
+  const stored = getStore();
+  const r = (stored.roundHistory || []).find(x => x.id === id);
+  if (!r) return;
+
+  editingRoundId = id;
+  document.getElementById('edit-followup-text').value = r.followup || '';
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+
+function closeEditModal() {
+  editingRoundId = null;
+  document.getElementById('edit-modal').style.display = 'none';
+}
+
+function saveEditModal() {
+  const text = document.getElementById('edit-followup-text').value || '';
+  const stored = getStore();
+  const idx = (stored.roundHistory || []).findIndex(x => x.id === editingRoundId);
+  if (idx === -1) return;
+
+  stored.roundHistory[idx].followup = text;
+  setStore(stored);
+
+  closeEditModal();
+  renderHistory();
+}
 </script>
 
 </body>
