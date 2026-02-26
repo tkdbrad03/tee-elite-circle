@@ -52,11 +52,6 @@
       "permanent": false,
       "missing": [{ "type": "cookie", "key": "tec_session" }]
     },
-    {
-      "source": "/tee-elite-invitational.html",
-      "destination": "/member-login.html",
-      "permanent": false,
-      "missing": [{ "type": "cookie", "key": "tec_session" }]
-    }
+    
   ]
 }
