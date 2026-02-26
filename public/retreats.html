@@ -350,7 +350,191 @@
                 align-items: flex-start;
                 gap: 0.5rem;
             }
-        }
+        /* =============== */
+/* Streamsong Page */
+/* =============== */
+
+.streamsong-page{
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.streamsong-hero{
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 2rem 2rem 0;
+  background: #0f1712;
+}
+
+.streamsong-hero-img{
+  width: 100%;
+  height: 56vh;
+  min-height: 360px;
+  max-height: 520px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.05);
+}
+
+.streamsong-overlay{
+  position: absolute;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  width: min(92%, 780px);
+  text-align: center;
+  color: #fff;
+  background: rgba(0,0,0,0.38);
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 1.5rem 1.25rem;
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+}
+
+.streamsong-kicker{
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.streamsong-title{
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  margin: 0 0 0.35rem;
+}
+
+.streamsong-meta{
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 0.85rem;
+  opacity: 0.92;
+}
+
+.streamsong-sub{
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.streamsong-band{
+  margin: 0 2rem;
+  background: #1f2a22;
+  color: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+  transform: translateY(-18px);
+}
+
+.streamsong-band-inner{
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.streamsong-band-title{
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 0.35rem;
+}
+
+.streamsong-band-text{
+  margin: 0;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.65;
+  font-size: 0.95rem;
+}
+
+.streamsong-band-right{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+.streamsong-pill{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.streamsong-pill .label{
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+}
+
+.streamsong-pill .value{
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.95);
+  font-weight: 500;
+}
+
+.streamsong-highlights{
+  margin: 0 2rem 3rem;
+  padding-top: 0.5rem;
+}
+
+.streamsong-highlights-inner{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.streamsong-card{
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.streamsong-card h3{
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+}
+
+.streamsong-card p{
+  margin: 0;
+  color: #555;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* Mobile */
+@media (max-width: 900px){
+  .streamsong-hero{ margin: 1.25rem 1rem 0; }
+  .streamsong-band{ margin: 0 1rem; }
+  .streamsong-highlights{ margin: 0 1rem 2.5rem; }
+
+  .streamsong-band-inner{
+    grid-template-columns: 1fr;
+  }
+
+  .streamsong-title{ font-size: 1.9rem; }
+  .streamsong-hero-img{ height: 46vh; min-height: 320px; }
+
+  .streamsong-highlights-inner{
+    grid-template-columns: 1fr;
+  }
+}
     </style>
 </head>
 <body>
@@ -392,55 +576,63 @@
       <a href="#" class="mobile-nav-link" id="logout-link">Log Out</a>
     </div>
 
-    <main class="main-content" style="max-width:1400px; padding:0;">
+    <main class="main-content streamsong-page">
 
-    <!-- HERO IMAGE -->
-    <section style="width:100%; position:relative;">
-        <img src="/images/streamsong.png" 
-             alt="Streamsong Resort"
-             style="width:100%; height:auto; display:block;">
-        
-        <!-- Overlay Text -->
-        <div style="
-            position:absolute;
-            bottom:8%;
-            left:50%;
-            transform:translateX(-50%);
-            text-align:center;
-            color:white;
-            background:rgba(0,0,0,0.35);
-            padding:2rem 3rem;
-            border-radius:8px;
-            backdrop-filter: blur(4px);
-        ">
-            <h1 style="
-                font-family:'Cormorant Garamond', serif;
-                font-size:3rem;
-                font-weight:400;
-                margin-bottom:0.5rem;
-                letter-spacing:0.02em;
-            ">
-                Streamsong Resort
-            </h1>
+  <!-- HERO -->
+  <section class="streamsong-hero" aria-label="Streamsong Resort">
+    <img class="streamsong-hero-img" src="/images/streamsong.png" alt="Streamsong Resort">
+    <div class="streamsong-overlay">
+      <p class="streamsong-kicker">The Tee Elite Circle</p>
+      <h1 class="streamsong-title">Streamsong Resort</h1>
+      <p class="streamsong-meta">Oct 9–10, 2026 · Bowling Green, FL</p>
+      <p class="streamsong-sub">Registration opens soon.</p>
+    </div>
+  </section>
 
-            <p style="
-                font-family:'Montserrat', sans-serif;
-                font-size:1rem;
-                letter-spacing:0.1em;
-                text-transform:uppercase;
-            ">
-                Oct 9–10, 2026 · Bowling Green, FL
-            </p>
+  <!-- INFO BAND -->
+  <section class="streamsong-band" aria-label="Event details">
+    <div class="streamsong-band-inner">
+      <div class="streamsong-band-left">
+        <h2 class="streamsong-band-title">Golf at Streamsong</h2>
+        <p class="streamsong-band-text">
+          Two days, world-class golf, and the kind of room that changes what happens next.
+        </p>
+      </div>
 
-            <p style="
-                margin-top:1.5rem;
-                font-size:0.9rem;
-                opacity:0.9;
-            ">
-                Registration opens soon.
-            </p>
+      <div class="streamsong-band-right">
+        <div class="streamsong-pill">
+          <span class="label">Dates</span>
+          <span class="value">Oct 9–10, 2026</span>
         </div>
-    </section>
+        <div class="streamsong-pill">
+          <span class="label">Location</span>
+          <span class="value">Bowling Green, FL</span>
+        </div>
+        <div class="streamsong-pill">
+          <span class="label">Status</span>
+          <span class="value">Registration opens soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS (NOT schedule / not “what to expect”) -->
+  <section class="streamsong-highlights" aria-label="Highlights">
+    <div class="streamsong-highlights-inner">
+      <div class="streamsong-card">
+        <h3>Stay + Play Energy</h3>
+        <p>Designed for connection, comfort, and a premium golf weekend.</p>
+      </div>
+      <div class="streamsong-card">
+        <h3>Elevated Round Experience</h3>
+        <p>Intentional pairings, on-course moments, and a clean, luxe flow.</p>
+      </div>
+      <div class="streamsong-card">
+        <h3>Details Coming Next</h3>
+        <p>Lodging guidance, tee times, and registration release will post here first.</p>
+      </div>
+    </div>
+  </section>
 
 </main>
     <!-- FOOTER -->
