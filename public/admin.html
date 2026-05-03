@@ -2261,6 +2261,7 @@
               </div>
               <div class="item-actions">
                 <button onclick="copyPostLink(${item.id})" title="Copy direct link">Copy Link</button>
+                <button onclick="copyForSubstack(${item.id})" title="Copy for Substack">Copy for Substack</button>
                 <button onclick="editBlogPost(${item.id})">Edit</button>
                 <button onclick="togglePinPost(${item.id}, ${!item.is_pinned})">${pinBtnText}</button>
                 <button onclick="togglePublish(${item.id}, ${!item.published})">${item.published ? 'Unpublish' : 'Publish Now'}</button>
@@ -2308,6 +2309,30 @@
       });
     }
 
+    function copyForSubstack(id) {
+  const post = window.blogPostsData.find(p => p.id === id);
+  if (!post) return;
+
+  const title = post.title || '';
+  const excerpt = post.excerpt ? post.excerpt + '\n\n' : '';
+  const body = (post.content || '').replace(/<[^>]+>/g, '').trim();
+  const link = `https://tmacmastermind.com/tee-room.html?post=${id}`;
+
+  const text = `${title}\n\n${excerpt}${body}\n\n---\nRead on The Tee Room: ${link}`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.style.background = 'var(--tmac-bronze)';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 1500);
+  }).catch(() => alert('Could not copy. Please copy manually.'));
+}
     async function deleteBlogPost(id) {
       if (!confirm('Delete this post?')) return;
       try {
