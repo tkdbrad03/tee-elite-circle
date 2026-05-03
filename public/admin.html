@@ -2316,8 +2316,7 @@
   const title = post.title || '';
   const excerpt = post.excerpt ? post.excerpt + '\n\n' : '';
   const body = (post.content || '').replace(/<[^>]+>/g, '').trim();
-  const link = `https://tmacmastermind.com/tee-room.html?post=${id}`;
-  const text = `${title}\n\n${excerpt}${body}\n\n---\nRead on The Tee Room: ${link}`;
+  const text = `${title}\n\n${excerpt}${body}`;
 
   const textarea = document.createElement('textarea');
   textarea.value = text;
