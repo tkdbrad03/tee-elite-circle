@@ -225,11 +225,9 @@
 
     /* Blog Grid */
     .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 32px;
-      align-items: start;
-    }
+  display: flex;
+  flex-direction: column;
+}
 
     /* PINNED SECTION — suppressed, brief is the hero */
     .pinned-section {
@@ -513,19 +511,20 @@
     }
 
     .blog-card {
-      background: #fff;
-      border: 1px solid #eee;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: block;
-      cursor: pointer;
-    }
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid #ebebeb;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
 
-    .blog-card:hover {
-      border-color: var(--tmac-blush);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
-      transform: translateY(-4px);
-    }
+.blog-card:hover {
+  opacity: 0.65;
+}
 
     .blog-image {
       aspect-ratio: 16/9;
@@ -1177,6 +1176,73 @@
         padding-left: 16px;
       }
     }
+    .brief-archive-heading {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--tmac-bronze);
+  margin-bottom: 8px;
+}
+    .brief-filter-section {
+  padding-top: 40px;
+  margin-top: 40px;
+  border-top: 1px solid #eee;
+  margin-bottom: 8px;
+}
+
+.brief-filter-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.brief-search-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  color: var(--charcoal);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.brief-search-input:focus {
+  border-color: var(--deep-forest);
+}
+
+.brief-month-select {
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  color: var(--charcoal);
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 150px;
+  transition: border-color 0.2s;
+}
+
+.brief-month-select:focus {
+  border-color: var(--deep-forest);
+}
+
+.brief-filter-results {
+  margin-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.brief-no-results {
+  padding: 32px 0;
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
+}
   </style>
 </head>
 <body>
@@ -1255,30 +1321,45 @@
 
     <!-- FEATURE POSTS SECTION -->
     <section class="feature-posts-section">
-      <p class="feature-section-label">Featured Stories</p>
       <div class="blog-grid" id="blog-grid">
         <div class="blog-empty">
           <p>Loading...</p>
         </div>
       </div>
     </section>
-
+    
+<!-- BRIEF SEARCH / FILTER -->
+<section class="brief-filter-section" id="brief-filter-section" style="display:none;">
+  <div class="brief-filter-bar">
+    <input 
+      type="text" 
+      id="brief-search-input" 
+      class="brief-search-input" 
+      placeholder="Search briefs..."
+      oninput="filterBriefs()"
+    >
+    <select id="brief-month-select" class="brief-month-select" onchange="filterBriefs()">
+      <option value="">All Months</option>
+    </select>
+  </div>
+  <div id="brief-filter-results" class="brief-filter-results" style="display:none;"></div>
+</section>
     <!-- BRIEF ARCHIVE SECTION -->
-    <section class="brief-archive-section" id="brief-archive-section" style="display: none;">
-      <div class="brief-archive-header">
-        <p class="feature-section-label" style="margin: 0;">Brief Archive</p>
-        <button class="brief-archive-toggle" id="brief-archive-toggle" onclick="toggleBriefArchive()">
-          <span id="archive-toggle-text">View Past Briefs</span>
-          <span id="archive-count"></span>
-          <svg id="archive-toggle-icon" viewBox="0 0 24 24" style="transform: rotate(0deg); transition: transform 0.3s ease;">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-      </div>
-      <div class="brief-archive-list" id="brief-archive-list" style="display: none; margin-top: 24px;">
-        <!-- Loaded dynamically -->
-      </div>
-    </section>
+<section class="brief-archive-section" id="brief-archive-section" style="display: none;">
+  <p class="brief-archive-heading">Recent Briefs</p>
+  <div class="brief-archive-list" id="brief-archive-list">
+    <!-- Loaded dynamically -->
+  </div>
+  <div id="brief-archive-more" style="display:none; margin-top: 24px;">
+    <button class="brief-archive-toggle" onclick="toggleBriefArchive()">
+      <span id="archive-toggle-text">View All Past Briefs</span>
+      <svg id="archive-toggle-icon" viewBox="0 0 24 24" style="transform: rotate(0deg); transition: transform 0.3s ease;">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <div id="brief-archive-overflow" style="display:none; margin-top: 16px;"></div>
+  </div>
+</section>
   </main>
 
   <!-- BLOG MODAL -->
@@ -1463,19 +1544,15 @@
           grid.innerHTML = featurePosts.map((post) => {
             const postIndex = posts.findIndex(p => p.id === post.id);
             return `
-              <div class="blog-card" onclick="openBlogModal(${postIndex})">
-                <div class="blog-image">
-                  <img src="${post.image_url}" alt="${post.title}">
-                  ${post.video_url ? `<div class="blog-video-badge"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>Video</div>` : ''}
-                </div>
-                <div class="blog-content">
-                  <p class="blog-date">${new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-                  <h3 class="blog-title">${post.title}</h3>
-                  ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
-                  <span class="blog-read-more">${post.video_url ? 'Watch Now' : 'Read More'} <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-                </div>
-              </div>
-            `;
+  <div class="blog-card" onclick="openBlogModal(${postIndex})">
+    <div class="blog-content">
+      <p class="blog-date">${new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+      <h3 class="blog-title">${post.title}</h3>
+      ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
+    </div>
+    <span class="blog-read-more">${post.video_url ? 'Watch Now' : 'Read More'} <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+  </div>
+`;
           }).join('');
         } else {
           grid.innerHTML = `
@@ -1492,57 +1569,58 @@
         const archiveCount = document.getElementById('archive-count');
         
         if (archiveBriefs.length > 0) {
-          archiveSection.style.display = 'block';
-          archiveCount.textContent = `(${archiveBriefs.length})`;
-          
-          // Group briefs by month/year
-          const briefsByMonth = {};
-          archiveBriefs.forEach(brief => {
-            const dateObj = new Date(brief.scheduled_for || brief.created_at);
-            const monthYear = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-            
-            if (!briefsByMonth[monthYear]) {
-              briefsByMonth[monthYear] = [];
-            }
-            briefsByMonth[monthYear].push(brief);
-          });
-          
-          // Render grouped briefs with accordion
-          archiveList.innerHTML = Object.keys(briefsByMonth).map((monthYear, groupIndex) => {
-            const briefs = briefsByMonth[monthYear];
-            const isFirstGroup = groupIndex === 0;
-            
-            return `
-              <div class="archive-month-group">
-                <button class="archive-month-header" onclick="toggleArchiveMonth(${groupIndex})">
-                  <span class="archive-month-title">${monthYear} (${briefs.length})</span>
-                  <svg class="archive-month-icon" id="archive-month-icon-${groupIndex}" viewBox="0 0 24 24" style="transform: rotate(${isFirstGroup ? '180deg' : '0deg'});">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-                <div class="archive-month-content" id="archive-month-${groupIndex}" style="display: ${isFirstGroup ? 'flex' : 'none'};">
-                  ${briefs.map(brief => {
-                    const briefIndex = posts.findIndex(p => p.id === brief.id);
-                    const dateObj = new Date(brief.scheduled_for || brief.created_at);
-                    const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                    
-                    return `
-                      <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
-                        <div class="brief-archive-date">${dateStr}</div>
-                        <div class="brief-archive-content">
-                          <h3 class="brief-archive-title">${brief.title}</h3>
-                          ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
-                        </div>
-                      </div>
-                    `;
-                  }).join('')}
-                </div>
-              </div>
-            `;
-          }).join('');
-        } else {
-          archiveSection.style.display = 'none';
-        }
+  archiveSection.style.display = 'block';
+
+  const visible = archiveBriefs.slice(0, 5);
+  const overflow = archiveBriefs.slice(5);
+
+  const renderBriefRow = (brief) => {
+    const briefIndex = posts.findIndex(p => p.id === brief.id);
+    const dateStr = new Date(brief.scheduled_for || brief.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return `
+      <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
+        <div class="brief-archive-date">${dateStr}</div>
+        <div class="brief-archive-content">
+          <h3 class="brief-archive-title">${brief.title}</h3>
+          ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
+        </div>
+      </div>
+    `;
+  };
+
+  archiveList.innerHTML = visible.map(renderBriefRow).join('');
+
+  if (overflow.length > 0) {
+    document.getElementById('brief-archive-more').style.display = 'block';
+    document.getElementById('brief-archive-overflow').innerHTML = overflow.map(renderBriefRow).join('');
+  }
+} else {
+  archiveSection.style.display = 'none';
+}
+    // Populate filter if there are archive briefs
+if (archiveBriefs.length > 0) {
+  document.getElementById('brief-filter-section').style.display = 'block';
+
+  // Build month options
+  const months = {};
+  archiveBriefs.forEach(brief => {
+    const d = new Date(brief.scheduled_for || brief.created_at);
+    const key = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    months[key] = true;
+  });
+
+  const select = document.getElementById('brief-month-select');
+  Object.keys(months).forEach(month => {
+    const opt = document.createElement('option');
+    opt.value = month;
+    opt.textContent = month;
+    select.appendChild(opt);
+  });
+
+  // Store all archive briefs on window for filtering
+  window.allArchiveBriefs = archiveBriefs;
+  window.allBriefPosts = posts;
+}    
       } catch (err) {
         console.error('Error loading blog posts:', err);
         document.getElementById('pinned-section').innerHTML = '';
@@ -1558,20 +1636,20 @@
 
     // Toggle Brief Archive
     function toggleBriefArchive() {
-      const archiveList = document.getElementById('brief-archive-list');
-      const toggleText = document.getElementById('archive-toggle-text');
-      const toggleIcon = document.getElementById('archive-toggle-icon');
-      
-      if (archiveList.style.display === 'none') {
-        archiveList.style.display = 'flex';
-        toggleText.textContent = 'Hide Past Briefs';
-        toggleIcon.style.transform = 'rotate(180deg)';
-      } else {
-        archiveList.style.display = 'none';
-        toggleText.textContent = 'View Past Briefs';
-        toggleIcon.style.transform = 'rotate(0deg)';
-      }
-    }
+  const overflow = document.getElementById('brief-archive-overflow');
+  const toggleText = document.getElementById('archive-toggle-text');
+  const toggleIcon = document.getElementById('archive-toggle-icon');
+
+  if (overflow.style.display === 'none') {
+    overflow.style.display = 'block';
+    toggleText.textContent = 'Hide Past Briefs';
+    toggleIcon.style.transform = 'rotate(180deg)';
+  } else {
+    overflow.style.display = 'none';
+    toggleText.textContent = 'View All Past Briefs';
+    toggleIcon.style.transform = 'rotate(0deg)';
+  }
+}
 
     // Toggle Archive Month Group
     function toggleArchiveMonth(groupIndex) {
@@ -1939,6 +2017,52 @@
       div.textContent = text;
       return div.innerHTML;
     }
+
+   function filterBriefs() {
+  const query = document.getElementById('brief-search-input').value.trim().toLowerCase();
+  const month = document.getElementById('brief-month-select').value;
+  const resultsEl = document.getElementById('brief-filter-results');
+
+  const isActive = query.length > 0 || month.length > 0;
+
+  if (!isActive) {
+    resultsEl.style.display = 'none';
+    resultsEl.innerHTML = '';
+    return;
+  }
+
+  const filtered = (window.allArchiveBriefs || []).filter(brief => {
+    const d = new Date(brief.scheduled_for || brief.created_at);
+    const briefMonth = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const matchesMonth = !month || briefMonth === month;
+    const matchesQuery = !query || 
+      brief.title.toLowerCase().includes(query) || 
+      (brief.excerpt || '').toLowerCase().includes(query);
+    return matchesMonth && matchesQuery;
+  });
+
+  if (filtered.length === 0) {
+    resultsEl.style.display = 'block';
+    resultsEl.innerHTML = '<p class="brief-no-results">No briefs match that search.</p>';
+    return;
+  }
+
+  const posts = window.allBriefPosts || [];
+  resultsEl.style.display = 'block';
+  resultsEl.innerHTML = filtered.map(brief => {
+    const briefIndex = posts.findIndex(p => p.id === brief.id);
+    const dateStr = new Date(brief.scheduled_for || brief.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return `
+      <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
+        <div class="brief-archive-date">${dateStr}</div>
+        <div class="brief-archive-content">
+          <h3 class="brief-archive-title">${brief.title}</h3>
+          ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+} 
   </script>
 </body>
 </html>
