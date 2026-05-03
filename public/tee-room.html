@@ -1511,7 +1511,7 @@
       >
       <button type="submit" class="email-capture-btn">Subscribe</button>
     </form>
-    <p class="email-capture-note" id="email-capture-note" style="display:none;">You are in. Check your inbox tomorrow morning.</p>
+    <p class="email-capture-note" id="email-capture-note" style="display:none;">Almost there — confirm your subscription in the tab that just opened.</p>
   </div>
 </section>
     
@@ -2303,29 +2303,18 @@ function updateSaveButton(postId) {
   const mins = Math.max(1, Math.round(words / 200));
   return `${mins} min read`;
 }
-    async function submitEmailCapture(e) {
+    function submitEmailCapture(e) {
   e.preventDefault();
   const email = document.getElementById('email-capture-input').value.trim();
-  const btn = document.querySelector('.email-capture-btn');
-  const note = document.getElementById('email-capture-note');
+  if (!email) return;
 
-  btn.disabled = true;
-  btn.textContent = 'Subscribing...';
-
-  try {
-    await fetch('https://script.google.com/macros/s/AKfycbwHnsGn7A1TmpRJ8eaC6HEopLX9ZQ-4TjwDzvG52gZb-JrXeMHuYSdrrCGdxiQxTROX/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `type=email_subscriber&email=${encodeURIComponent(email)}&source=tee-room`,
-      mode: 'no-cors'
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  // Send to Substack subscribe page with email pre-filled
+  window.open(`https://tmacinspired.substack.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
 
   document.getElementById('email-capture-form').style.display = 'none';
-  note.style.display = 'block';
+  document.getElementById('email-capture-note').style.display = 'block';
 }
+
   </script>
 </body>
 </html>
