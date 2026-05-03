@@ -1243,6 +1243,165 @@
   color: #999;
   font-style: italic;
 }
+    .footer-cta {
+  margin-top: 16px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.05em;
+}
+
+.footer-cta-link {
+  color: var(--tmac-blush);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(232,204,200,0.3);
+  padding-bottom: 1px;
+  transition: border-color 0.2s;
+}
+
+.footer-cta-link:hover {
+  border-color: var(--tmac-blush);
+}
+    .publish-cadence {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--tmac-bronze);
+  margin-top: 12px;
+  opacity: 0.75;
+}
+    .blog-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tmac-bronze);
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.modal-action-btn:hover { opacity: 0.6; }
+
+.modal-action-btn svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.modal-action-btn.saved svg {
+  fill: var(--tmac-bronze);
+}
+
+.share-confirm {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--deep-forest);
+}
+    .email-capture-section {
+  margin: 48px 0;
+  padding: 48px 56px;
+  background: var(--deep-forest);
+}
+
+.email-capture-label {
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--tmac-blush);
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.email-capture-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 3vw, 32px);
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.email-capture-form {
+  display: flex;
+  gap: 0;
+  max-width: 480px;
+}
+
+.email-capture-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-right: none;
+  background: rgba(255,255,255,0.08);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.email-capture-input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.email-capture-input:focus {
+  border-color: rgba(255,255,255,0.5);
+}
+
+.email-capture-btn {
+  padding: 12px 24px;
+  background: var(--tmac-blush);
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.email-capture-btn:hover {
+  background: #fff;
+}
+
+.email-capture-note {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 16px;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .email-capture-section {
+    padding: 36px 24px;
+  }
+  .email-capture-form {
+    flex-direction: column;
+  }
+  .email-capture-input {
+    border-right: 1px solid rgba(255,255,255,0.2);
+    border-bottom: none;
+  }
+}
   </style>
 </head>
 <body>
@@ -1265,7 +1424,7 @@
       <nav class="header-nav member-only" id="member-nav">
         <a href="/home.html" class="nav-link">Home</a>
         <a href="/members.html" class="nav-link">The Circle</a>
-        <a href="/retreats.html" class="nav-link">Retreats</a>
+        
         <a href="/tee-room.html" class="nav-link active">Tee Room</a>
         <a href="/fairway.html" class="nav-link">Fairway</a>
       </nav>
@@ -1294,7 +1453,7 @@
   <div class="mobile-nav" id="mobile-nav-member">
     <a href="/home.html" class="mobile-nav-link">Home</a>
     <a href="/members.html" class="mobile-nav-link">The Circle</a>
-    <a href="/retreats.html" class="mobile-nav-link">Retreats</a>
+    
     <a href="/tee-room.html" class="mobile-nav-link active">Tee Room</a>
     <a href="/fairway.html" class="mobile-nav-link">Fairway</a>
     <a href="/profile.html" class="mobile-nav-link">My Profile</a>
@@ -1306,8 +1465,8 @@
     <div class="page-header">
       <p class="page-label">Insights & Inspiration</p>
       <h1 class="page-title">The Tee Room</h1>
-      <p class="page-subtitle">Where accomplished women get permission to play their own game.</p>
-    </div>
+<p class="page-subtitle">Where accomplished women get permission to play their own game.</p>
+<p class="publish-cadence">Published every morning.</p>    </div>
 
     <!-- PINNED SECTION -->
     <section class="pinned-section" id="pinned-section">
@@ -1344,6 +1503,26 @@
   </div>
   <div id="brief-filter-results" class="brief-filter-results" style="display:none;"></div>
 </section>
+
+    <!-- EMAIL CAPTURE -->
+<section class="email-capture-section">
+  <div class="email-capture-inner">
+    <p class="email-capture-label">The Daily Brief</p>
+    <p class="email-capture-heading">Get it delivered every morning.</p>
+    <form class="email-capture-form" id="email-capture-form" onsubmit="submitEmailCapture(event)">
+      <input 
+        type="email" 
+        id="email-capture-input"
+        class="email-capture-input" 
+        placeholder="Your email address" 
+        required
+      >
+      <button type="submit" class="email-capture-btn">Subscribe</button>
+    </form>
+    <p class="email-capture-note" id="email-capture-note" style="display:none;">You are in. Check your inbox tomorrow morning.</p>
+  </div>
+</section>
+    
     <!-- BRIEF ARCHIVE SECTION -->
 <section class="brief-archive-section" id="brief-archive-section" style="display: none;">
   <p class="brief-archive-heading">Recent Briefs</p>
@@ -1371,10 +1550,24 @@
       <div class="blog-modal-image" id="blog-modal-image"></div>
       <div class="blog-modal-video" id="blog-modal-video" style="display: none;"></div>
       <div class="blog-modal-body">
-        <p class="blog-modal-date" id="blog-modal-date"></p>
-        <h2 class="blog-modal-title" id="blog-modal-title"></h2>
-        <div class="blog-modal-content" id="blog-modal-content"></div>
+  <p class="blog-modal-date" id="blog-modal-date"></p>
+  <h2 class="blog-modal-title" id="blog-modal-title"></h2>
+  <div class="blog-modal-actions">
+    <button class="modal-action-btn" id="save-btn" onclick="toggleSave()">
+      <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+      <span id="save-btn-label">Save</span>
+    </button>
+    <button class="modal-action-btn" onclick="shareBrief()">
+      <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+      Share
+    </button>
+    <span id="share-confirm" class="share-confirm" style="display:none;">Link copied</span>
+  </div>
+  <div class="blog-modal-content" id="blog-modal-content"></div>
         
+        <!-- COMMENT SECTION -->
+        <div id="comments-section-container"></div>
+
         <!-- Apply CTA for visitors -->
         <div class="blog-modal-apply visitor-only" id="blog-modal-apply">
           <p>Ready to be in the room where it happens?</p>
@@ -1390,17 +1583,17 @@
           </p>
           <a href="system-builder.html" class="blog-modal-cta-btn">Start the System Builder →</a>
         </div>
-
-        <!-- COMMENT SECTION -->
-        <div id="comments-section-container"></div>
       </div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <p class="footer-text">The Tee Elite Circle — A TMac Inspired Experience</p>
-  </footer>
+  <p class="footer-text">A TMac Inspired Experience</p>
+  <p class="footer-cta">
+    Ready to be in the room? <a href="/private-circle.html" class="footer-cta-link">Inquire about the Private Circle</a>
+  </p>
+</footer>
 
   <script>
     // Check if user is logged in
@@ -1546,7 +1739,7 @@
             return `
   <div class="blog-card" onclick="openBlogModal(${postIndex})">
     <div class="blog-content">
-      <p class="blog-date">${new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+      <p class="blog-date">${new Date(post.scheduled_for || post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} &nbsp;·&nbsp; ${calcReadTime(post.content)}</p>
       <h3 class="blog-title">${post.title}</h3>
       ${post.excerpt ? `<p class="blog-excerpt">${post.excerpt}</p>` : ''}
     </div>
@@ -1579,7 +1772,7 @@
     const dateStr = new Date(brief.scheduled_for || brief.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return `
       <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
-        <div class="brief-archive-date">${dateStr}</div>
+        <div class="brief-archive-date">${dateStr} &nbsp;·&nbsp; ${calcReadTime(brief.content)}</div>
         <div class="brief-archive-content">
           <h3 class="brief-archive-title">${brief.title}</h3>
           ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
@@ -1753,6 +1946,8 @@ if (archiveBriefs.length > 0) {
       }
       
       document.getElementById('blog-modal').classList.add('open');
+      currentPostIdForActions = post.id;
+      updateSaveButton(post.id);
       document.body.style.overflow = 'hidden';
       
       // Initialize comment system for this post
@@ -2054,7 +2249,7 @@ if (archiveBriefs.length > 0) {
     const dateStr = new Date(brief.scheduled_for || brief.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return `
       <div class="brief-archive-item" onclick="openBlogModal(${briefIndex})">
-        <div class="brief-archive-date">${dateStr}</div>
+        <div class="brief-archive-date">${dateStr} &nbsp;·&nbsp; ${calcReadTime(brief.content)}</div>
         <div class="brief-archive-content">
           <h3 class="brief-archive-title">${brief.title}</h3>
           ${brief.excerpt ? `<p class="brief-archive-excerpt">${brief.excerpt}</p>` : ''}
@@ -2063,6 +2258,82 @@ if (archiveBriefs.length > 0) {
     `;
   }).join('');
 } 
+  let currentPostIdForActions = null;
+
+function shareBrief() {
+  const url = `${window.location.origin}${window.location.pathname}?post=${currentPostIdForActions}`;
+  navigator.clipboard.writeText(url).then(() => {
+    const confirm = document.getElementById('share-confirm');
+    confirm.style.display = 'inline';
+    setTimeout(() => confirm.style.display = 'none', 2500);
+  });
+}
+
+function toggleSave() {
+  const saved = getSavedBriefs();
+  const id = String(currentPostIdForActions);
+  const btn = document.getElementById('save-btn');
+  const label = document.getElementById('save-btn-label');
+
+  if (saved.includes(id)) {
+    const updated = saved.filter(s => s !== id);
+    localStorage.setItem('savedBriefs', JSON.stringify(updated));
+    btn.classList.remove('saved');
+    label.textContent = 'Save';
+  } else {
+    saved.push(id);
+    localStorage.setItem('savedBriefs', JSON.stringify(saved));
+    btn.classList.add('saved');
+    label.textContent = 'Saved';
+  }
+}
+
+function getSavedBriefs() {
+  try {
+    return JSON.parse(localStorage.getItem('savedBriefs') || '[]');
+  } catch { return []; }
+}
+
+function updateSaveButton(postId) {
+  const saved = getSavedBriefs();
+  const btn = document.getElementById('save-btn');
+  const label = document.getElementById('save-btn-label');
+  if (saved.includes(String(postId))) {
+    btn.classList.add('saved');
+    label.textContent = 'Saved';
+  } else {
+    btn.classList.remove('saved');
+    label.textContent = 'Save';
+  }
+}
+    function calcReadTime(content) {
+  const words = (content || '').replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length;
+  const mins = Math.max(1, Math.round(words / 200));
+  return `${mins} min read`;
+}
+    async function submitEmailCapture(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-capture-input').value.trim();
+  const btn = document.querySelector('.email-capture-btn');
+  const note = document.getElementById('email-capture-note');
+
+  btn.disabled = true;
+  btn.textContent = 'Subscribing...';
+
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbwHnsGn7A1TmpRJ8eaC6HEopLX9ZQ-4TjwDzvG52gZb-JrXeMHuYSdrrCGdxiQxTROX/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `type=email_subscriber&email=${encodeURIComponent(email)}&source=tee-room`,
+      mode: 'no-cors'
+    });
+  } catch (err) {
+    console.error(err);
+  }
+
+  document.getElementById('email-capture-form').style.display = 'none';
+  note.style.display = 'block';
+}
   </script>
 </body>
 </html>
